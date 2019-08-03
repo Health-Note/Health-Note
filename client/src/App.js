@@ -21,7 +21,7 @@ function App() {
       .then((data) => {
         console.log(data);
       })
-    })
+    }) 종열 브랜치 테스트
 */
   
    useEffect(() => {
