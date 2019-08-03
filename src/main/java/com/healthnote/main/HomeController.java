@@ -34,7 +34,7 @@ public class HomeController {
 	@ResponseBody
 	public View welcome2(HttpSession request, Model model) {
 		System.out.println("get!!!!!");
-	
+	// jungkwon brench test dddddddddddd
 //		model.addAttribute("emp", 1);
 		
 	return jsonview;
