@@ -24,7 +24,7 @@ public class HomeController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Model model) {
-		
+		// develop 브랜치 테스
 		System.out.println("hihi");
 		
 		return "home";
