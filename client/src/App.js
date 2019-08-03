@@ -3,8 +3,8 @@ import logo from './logo.svg';
 import './App.css';
 
 
-// 디벨롭먼트에 푸쉬 테스트
-function App() {
+// 마스터 테스트!!!!
+// function App() {
 /*
       useEffect(() => {
       fetch("/postTEST",{
