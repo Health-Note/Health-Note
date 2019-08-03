@@ -1,0 +1,51 @@
+
+<전체 흐름도>
+1 client --->		    		DispatcherServlet					---> 10 response
+
+
+				   2↓  3↑       4↓  5↑         6↓  7↑      8↓  9↑ 
+                 |핸들러매핑|   |핸들러컨트롤러|    |뷰 리졸버|    |  뷰  |
+                
+
+<단계별 설명>
+
+1. 브라우저는 특정 URL에 요청을 보낸다. DispatcherServlet은 모든 요청을 처리하는 프런트 컨트롤러이다.
+2. DispatcherServlet은 URI(요청값)을 보고 이를 처리하기 위한 올바른 컨트롤러를 식별해야 한다.
+   올바른 컨트롤러를 찾는데 도움을 주기 위해 핸들러 매핑과 통신한다.	
+   
+Central dispatcher for HTTP request handlers/controllers, e.g. for web UI controllers or HTTP-based remote service exporters.
+Dispatches to registered handlers for processing a web request, providing convenient mapping and exception handling facilities.
+This servlet is very flexible: It can be used with just about any workflow, with the installation of the appropriate adapter classes.
+It offers the following functionality that distinguishes it from other request-driven web MVC frameworks:
+
+HTTP request handlers/controllers 들을 위한 중심의 dispatcher이다. 예를 들어 web UI controllers 혹은 HTTP-based remote service exporters가 있다.
+web request를 처리하기 위해서 기등록된 핸들러에게 요청을 전달하는데 이 과정에서 편리한 mapping과 exception handling 기능을 같이 제공한다.
+이 서블릿은 굉장히 유연하다. 적절한 어댑터 클래스의 설치를 하면 어떤 워크플로우에서도 사용이 가능하다. 
+이것은 아래의 여러가지 기능들을 제공하는데 해당 기능들은 다른 request기반의 web MVC frameworks와 차별화 된다.
+
+간단하게,
+DispatcherServlet가 이렇게 허브 라우터로써 작동할 수 있는 것은 DispatcherServlet 내에 정의가 되어있는 함수들 덕분이다.
+
+- getHandlerMappings()
+  Return the configured HandlerMapping beans that were detected by type in the WebApplicationContext or initialized based
+  on the default set of strategies from DispatcherServlet.properties.
+
+- getHandlerAdapter(Object handler)
+  Return the HandlerAdapter for this handler object.
+
+- resolveViewName(String viewName, Map<String,Object> model, Locale locale, HttpServletRequest request)
+  Resolve the given view name into a View object (to be rendered).
+
+등과 같은 함수들이 내장되어 있기 때문에 라우터로서 작동할 수 있는 것이고 이 해당 함수들의 내부마저 뜯어보기에는 
+시간이 다소 낭비이므로 여기까지만 본다.
+   
+3. 핸들러 매핑은 요청을 처리하는 특정 핸들러 메서드를 리턴한다.   		       
+4. DispatcherServlet은 특정 핸들러 메서드를 호출한다.
+5. 핸들러 메서드는 모델과 뷰를 반환한다. (예시:ModelAndView)
+6. DispatcherServlet에는 논리적 뷰 이름이 있다. 따라서 물리적 뷰 이름을 결정하는 방법을 알아내야한다. 
+   사용할 수 있는 뷰 리졸버가 있는지의 여부를 확인한다. 설정된 뷰 리졸버를 찾는다. 뷰 리졸버를 호출해 논리적 뷰 이름을 입력으로 제공한다.
+7. 뷰 리졸버는 논리적 뷰 이름을 물리적 뷰 이름에 매핑하는 로직을 실행한다. (prefix,suffix)
+8. DispatcherServlet은 뷰를 실행한다. 또한 뷰에서 모델을 사용할 수 있게 한다.
+9. 뷰는 DispatcherServlet으로 보내질 내용을 반환한다.
+10. DispatcherServlet은 응답을 다시 브라우저로 보낸다.
+
