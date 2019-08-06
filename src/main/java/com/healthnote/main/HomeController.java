@@ -22,20 +22,10 @@ public class HomeController {
 	@Autowired
 	private View jsonview;
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Model model) {
-		// develop 브랜치 테스
-		System.out.println("hihi");
-		
-		return "home";
-	}
-	
 	@RequestMapping(value = "/hihi", method = RequestMethod.GET)
 	@ResponseBody
-	public View welcome2(HttpSession request, Model model) {
+	public View welcomeGet(HttpSession request, Model model) {
 		System.out.println("get!!!!!");
-	// jungkwon brench test 기다려봅시다   123123 
-//		model.addAttribute("emp", 1);
 		
 	return jsonview;
 	
@@ -43,7 +33,7 @@ public class HomeController {
 	
 	@RequestMapping(value = "/postTEST", method = RequestMethod.POST)
 	@ResponseBody
-	public View welcome(HttpSession request, Model model) {
+	public View welcomePost(HttpSession request, Model model) {
 		
 		System.out.println("welcome!!!!!!!!!");
 		model.addAttribute("emp1", 1);
