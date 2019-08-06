@@ -10,6 +10,7 @@ public interface ScheduleDAO {
 
 	public ArrayList<ScheduleDTO> getAllWeekSchedule(HashMap<String, String> map);
 	public ArrayList<RoutineDTO> getDailyRoutine(HashMap<String, String> map);
+	public ArrayList<RoutineDTO> getWeekRoutine(HashMap<String, String> map);
 	public String getTest(HashMap<String, String> map);
 	
 }

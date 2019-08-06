@@ -37,9 +37,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select *
 		from routine
 		where 1=1
+			and phonenum = #{memberId}
 			and date = #{today}
-		    and phonenum = #{memberId}
+		    
 	</select>
+		
+	<select id="getWeekRoutine" parameterType="hashmap" resultType="com.healthnote.vo.RoutineDTO" >
+		select *
+		from routine
+		where 1=1
+		    and phonenum = #{memberId}
+		    and date between case when weekday(#{today}) = 0 then #{today}
+									 when weekday(#{today}) = 1 then date_add(#{today}, INTERVAL -1 DAY)
+				                     when weekday(#{today}) = 2 then date_add(#{today}, INTERVAL -2 DAY)
+				                     when weekday(#{today}) = 3 then date_add(#{today}, INTERVAL -3 DAY)
+				                     when weekday(#{today}) = 4 then date_add(#{today}, INTERVAL -4 DAY)
+				                     when weekday(#{today}) = 5 then date_add(#{today}, INTERVAL -5 DAY)
+				                     when weekday(#{today}) = 6 then date_add(#{today}, INTERVAL -6 DAY)
+				                     else ''
+				                     end
+				                     
+				                     and
+				                      
+				                case when weekday(#{today}) = 0 then date_add(#{today}, INTERVAL 6 DAY)
+									 when weekday(#{today}) = 1 then date_add(#{today}, INTERVAL 5 DAY)
+				                     when weekday(#{today}) = 2 then date_add(#{today}, INTERVAL 4 DAY)
+				                     when weekday(#{today}) = 3 then date_add(#{today}, INTERVAL 3 DAY)
+				                     when weekday(#{today}) = 4 then date_add(#{today}, INTERVAL 2 DAY)
+				                     when weekday(#{today}) = 5 then date_add(#{today}, INTERVAL 1 DAY)
+				                     when weekday(#{today}) = 6 then #{today}
+				                     else ''
+				                     end
+        order by date asc
+	</select>
+	
 	
 	<select id="getTest" resultType="String">
 		select email from trainer where email=#{email}	

@@ -5,6 +5,8 @@ import com.healthnote.vo.RoutineDTO;
 import com.healthnote.vo.ScheduleDTO;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import javax.servlet.http.HttpSession;
 
@@ -60,11 +62,27 @@ public class ScheduleController {
 		return jsonview;
 	}
 	
+	/*
+	날 짜 : 2019. 08. 06.
+	작성자 : 김 정 권
+	기 능 : 특정 수강생의 아이디와 날짜를 받아서 해당 날짜가 포함된 주의 월요일부터 일요일까지의 해당 수강생의 모든 운동 루틴을 가져옴 
+	*/
+	@RequestMapping(value = "/getWeekRoutine", method = RequestMethod.GET)
+	public View getWeekRoutine(HttpSession session, Model model, String memberId) {
+	
+		System.out.println("getWeekRoutine started");
+		String today = (String) session.getAttribute("today");
+		
+		HashMap<String, ArrayList<RoutineDTO>> resultmap = ScheduleService.getWeekRoutine(memberId, today);
+		model.addAttribute("resultmap", resultmap);
+		
+		return jsonview;
+	}
+	
 	
 	@RequestMapping(value = "/getTest", method = RequestMethod.GET)
 	public View test(HttpSession session, Model model, String email) {
 	
-			
 		String tmp = ScheduleService.getTest(email);
 		model.addAttribute("temp", tmp);
 		

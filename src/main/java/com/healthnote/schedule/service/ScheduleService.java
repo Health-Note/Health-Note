@@ -1,12 +1,13 @@
 package com.healthnote.schedule.service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+
+import javax.swing.text.html.HTMLDocument.Iterator;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
 import com.healthnote.members.dao.ScheduleDAO;
@@ -43,18 +44,54 @@ public class ScheduleService {
 	*/
 	public ArrayList<RoutineDTO> getDailyRoutine(String memberId, String today) {
 		
-		System.out.println("getDailyRoutine_service started");
-		
 		ScheduleDAO dao = sqlsession.getMapper(ScheduleDAO.class);
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("memberId", memberId);
 		map.put("today", today);
 		
 		ArrayList<RoutineDTO> routinedto = dao.getDailyRoutine(map);
-		System.out.println("ddddd");
-		System.out.println(routinedto.size());
 		
 		return routinedto;
+	}
+	
+	/*
+	날 짜 : 2019. 08. 06.
+	작성자 : 김 정 권
+	기 능 : 특정 수강생의 아이디와 날짜를 받아서 해당 날짜가 포함된 주의 월요일부터 일요일까지의 해당 수강생의 모든 운동 루틴을 가져옴 
+	*/
+	public HashMap<String, ArrayList<RoutineDTO>> getWeekRoutine(String memberId, String today) {
+		
+		ScheduleDAO dao = sqlsession.getMapper(ScheduleDAO.class);
+		HashMap<String, String> parammap = new HashMap<String, String>();
+		parammap.put("memberId", memberId);
+		parammap.put("today", today);
+		
+		ArrayList<RoutineDTO> routinedto = dao.getWeekRoutine(parammap);
+		
+		HashSet<String> dateset = new HashSet<String>();
+		for(int i = 0; i < routinedto.size(); i++) {
+			dateset.add(routinedto.get(i).getDate());
+		}
+		
+		HashMap<String, ArrayList<RoutineDTO>> resultmap = new HashMap<String, ArrayList<RoutineDTO>>(); 
+		ArrayList<RoutineDTO> dayroutinelist = null;
+		String tempDate = null;
+		for(String date : dateset) {
+		dayroutinelist = new ArrayList<RoutineDTO>();
+			for(int i = 0; i < routinedto.size(); i++) {
+				
+				if(date.equals(routinedto.get(i).getDate())) {
+					dayroutinelist.add(routinedto.get(i));
+				}
+				
+				if(i == routinedto.size() - 1) {
+					resultmap.put(date, dayroutinelist);
+				}
+			}
+		}
+		
+		return resultmap;
+
 	}
 	
 	public String getTest(String email) {
