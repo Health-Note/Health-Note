@@ -33,6 +33,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		                         end
 	</select>
 	
+	<select id="getDailyRoutine" parameterType="hashmap" resultType="com.healthnote.vo.RoutineDTO" >
+		select *
+		from routine
+		where 1=1
+			and date = #{today}
+		    and phonenum = #{memberId}
+	</select>
+	
 	<select id="getTest" resultType="String">
 		select email from trainer where email=#{email}	
 	</select>

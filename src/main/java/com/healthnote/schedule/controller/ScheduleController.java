@@ -1,6 +1,7 @@
 package com.healthnote.schedule.controller;
 
 import com.healthnote.schedule.service.ScheduleService;
+import com.healthnote.vo.RoutineDTO;
 import com.healthnote.vo.ScheduleDTO;
 
 import java.util.ArrayList;
@@ -24,27 +25,41 @@ public class ScheduleController {
 	@Autowired 
 	private ScheduleService ScheduleService;
 	
-	// 2019. 08. 06 kjk
-	// 좌측 네비게이터에서 Schedule클릭시 화면에 뿌려줄 데이터 가져옴 
+	/*
+	날 짜 : 2019. 08. 06.
+	작성자 : 김 정 권
+	기 능 : 좌측 네비게이션에서 schedule클릭시 화면에 뿌려주는 데이터들 가져옴 
+	*/
 	@RequestMapping(value = "/sendBasicsForSchedule", method = RequestMethod.GET)
-	public View getBasicsForSchedule(HttpSession session, Model model, String trainerId, String today) {
+	public View getBasicsForSchedule(HttpSession session, Model model) {
 	
-		System.out.println("getBasicsForSchedule started");
-		
-		/*
 		String trainerId = (String) session.getAttribute("trainerId");
 		String today = (String) session.getAttribute("today");
-		 */
-		System.out.println("trainerId" + trainerId);
-		System.out.println("today" + today);
 		
 		ArrayList<ScheduleDTO> scheduleList = ScheduleService.getAllWeekSchedule(trainerId, today);
-		
 		model.addAttribute("ptschedule", scheduleList);
 		
 		return jsonview;
 	
 	}
+	
+	/*
+	날 짜 : 2019. 08. 06.
+	작성자 : 김 정 권
+	기 능 : 특정 수강생의 아이디와 날짜를 받아서 해당 날짜의 해당 수강생의 모든 운동 루틴을 가져옴 
+	*/
+	@RequestMapping(value = "/getDailyRoutine", method = RequestMethod.GET)
+	public View getDailyRoutine(HttpSession session, Model model, String memberId) {
+	
+		System.out.println("getDailyRoutine started");
+		String today = (String) session.getAttribute("today");
+		
+		ArrayList<RoutineDTO> routinelist = ScheduleService.getDailyRoutine(memberId, today);
+		model.addAttribute("routinelist", routinelist);
+		
+		return jsonview;
+	}
+	
 	
 	@RequestMapping(value = "/getTest", method = RequestMethod.GET)
 	public View test(HttpSession session, Model model, String email) {
@@ -60,7 +75,11 @@ public class ScheduleController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public View welcome(HttpSession session, Model model, String email) {
 	
-		System.out.println("gogo");
+		System.out.println("login fini");
+		
+		session.setAttribute("trainerId", "surhommekim@gmail.com");
+		session.setAttribute("today", "20190807");
+		
 		return jsonview;
 	
 	}

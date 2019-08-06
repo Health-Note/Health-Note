@@ -90,8 +90,9 @@ CREATE TABLE `ROUTINE` (
 ALTER TABLE `ROUTINE`
    ADD CONSTRAINT `PK_ROUTINE` -- 회원별운동루틴 기본키
       PRIMARY KEY (
-         `date`,     -- 날짜
-         `phonenum`  -- 휴대폰번호
+         `date`,         -- 날짜
+         `phonenum`,     -- 휴대폰번호
+         `exercisename`  -- 운동이름
       );
 
 -- 회원체중변화기록
@@ -164,16 +165,6 @@ ALTER TABLE `SCHEDULE`
 
 -- 회원별운동루틴
 ALTER TABLE `ROUTINE`
-   ADD CONSTRAINT `FK_EXERCISE_TO_ROUTINE` -- 운동종류 -> 회원별운동루틴
-      FOREIGN KEY (
-         `exercisename` -- 운동이름
-      )
-      REFERENCES `EXERCISE` ( -- 운동종류
-         `exercisename` -- 운동이름
-      );
-
--- 회원별운동루틴
-ALTER TABLE `ROUTINE`
    ADD CONSTRAINT `FK_SCHEDULE_TO_ROUTINE` -- 수업시간관리 -> 회원별운동루틴
       FOREIGN KEY (
          `date`,     -- 날짜
@@ -182,6 +173,16 @@ ALTER TABLE `ROUTINE`
       REFERENCES `SCHEDULE` ( -- 수업시간관리
          `date`,     -- 날짜
          `phonenum`  -- 휴대폰번호
+      );
+
+-- 회원별운동루틴
+ALTER TABLE `ROUTINE`
+   ADD CONSTRAINT `FK_EXERCISE_TO_ROUTINE` -- 운동종류 -> 회원별운동루틴
+      FOREIGN KEY (
+         `exercisename` -- 운동이름
+      )
+      REFERENCES `EXERCISE` ( -- 운동종류
+         `exercisename` -- 운동이름
       );
 
 -- 회원체중변화기록

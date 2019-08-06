@@ -54,3 +54,55 @@ insert into schedule values('20190805', '01023549785', '1830', '1930', 1);
 insert into schedule values('20190807', '01023549785', '1830', '1930', 0);
 insert into schedule values('20190809', '01023549785', '1830', '1930', 0);
 
+-- exercise 0/가슴 1/등 2/하체 3/어깨 4/이두 5/삼두 6/복근/ 7/유산소 
+insert into exercise values('인클라인 바벨 벤치 프레스', 0);
+insert into exercise values('인클라인 덤벨 벤치 프레스', 0);
+insert into exercise values('플렛 바벨 벤치 프레스', 0);
+insert into exercise values('플렛 덤벨 벤치 프레스', 0);
+insert into exercise values('플렛 머신 벤치 프레스', 0);
+insert into exercise values('디클라인 바벨 벤치 프레스', 0);
+insert into exercise values('디클라인 덤벨 벤치 프레스', 0);
+insert into exercise values('디클라인 머신 벤치 프레스', 0);
+insert into exercise values('머신 펙 덱 플라이', 0);
+insert into exercise values('덤벨 플라이', 0);
+insert into exercise values('인클라인 덤벨 플라이', 0);
+insert into exercise values('케이블 크로스 오버', 0);
+insert into exercise values('풀 오버', 0);
+
+insert into exercise values('풀 업', 1);
+insert into exercise values('바벨로우', 1);
+insert into exercise values('덤벨로우', 1);
+insert into exercise values('T-bar 로우', 1);
+insert into exercise values('원암 덤벨로우', 1);
+insert into exercise values('랫 풀 다운', 1);
+insert into exercise values('백 익스텐션', 1);
+insert into exercise values('데드리프트', 1);
+insert into exercise values('시티드로우', 1);
+
+insert into exercise values('스쿼트', 2);
+insert into exercise values('레그프레스', 2);
+insert into exercise values('레그 익스텐션', 2);
+insert into exercise values('런지', 2);
+insert into exercise values('레그 컬', 2);
+insert into exercise values('원 레그컬', 2);
+
+-- routine
+insert into routine values('20190805','01023549785','인클라인 바벨 벤치 프레스', 8, 3);
+insert into routine values('20190805','01023549785','플렛 덤벨 벤치 프레스', 8, 3);
+insert into routine values('20190805','01023549785','디클라인 머신 벤치 프레스', 5, 5);
+insert into routine values('20190805','01023549785','머신 펙 덱 플라이', 5, 5);
+
+insert into routine values('20190807','01023549785','바벨로우', 8, 5);
+insert into routine values('20190807','01023549785','덤벨로우', 8, 5);
+insert into routine values('20190807','01023549785','T-bar 로우', 5, 5);
+insert into routine values('20190807','01023549785','원암 덤벨로우', 5, 5);
+insert into routine values('20190807','01023549785','랫 풀 다운', 5, 3);
+
+insert into routine values('20190809','01023549785','인클라인 바벨 벤치 프레스', 8, 5);
+insert into routine values('20190809','01023549785','스쿼트', 8, 5);
+insert into routine values('20190809','01023549785','레그프레스', 8, 5);
+insert into routine values('20190809','01023549785','레그 익스텐션', 5, 5);
+insert into routine values('20190809','01023549785','런지', 5, 5);
+insert into routine values('20190809','01023549785','레그 컬', 5, 5);
+insert into routine values('20190809','01023549785','원 레그컬', 5, 3);
+

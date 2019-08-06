@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
 import com.healthnote.members.dao.ScheduleDAO;
+import com.healthnote.vo.RoutineDTO;
 import com.healthnote.vo.ScheduleDTO;
 
 @Service
@@ -18,22 +19,42 @@ public class ScheduleService {
 	@Autowired
 	private SqlSession sqlsession;
 
+	/*
+	날 짜 : 2019. 08. 06.
+	작성자 : 김 정 권
+	기 능 : 현재 날짜와 트레이너 아이디를 받아서 현재 날짜가 포함된 주의 월 ~ 일 간의 모든 해당 트레이너의 수강생들의 PT일정을 가져옴 
+	*/
 	public ArrayList<ScheduleDTO> getAllWeekSchedule(String trainerId, String today) {
-
-		System.out.println("getAllWeekSchedule_service started");
 
 		ScheduleDAO dao = sqlsession.getMapper(ScheduleDAO.class);
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("trainerId", trainerId);
 		map.put("today", today);
 		
-		System.out.println("dao start!");
 		ArrayList<ScheduleDTO> scheduledto = dao.getAllWeekSchedule(map);
-		System.out.println("dao end!");
-		
-		System.out.println(scheduledto.size());
 		
 		return scheduledto;
+	}
+	
+	/*
+	날 짜 : 2019. 08. 06.
+	작성자 : 김 정 권
+	기 능 : 특정 수강생의 아이디와 날짜를 받아서 해당 날짜의 해당 수강생의 모든 운동 루틴을 가져옴 
+	*/
+	public ArrayList<RoutineDTO> getDailyRoutine(String memberId, String today) {
+		
+		System.out.println("getDailyRoutine_service started");
+		
+		ScheduleDAO dao = sqlsession.getMapper(ScheduleDAO.class);
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("memberId", memberId);
+		map.put("today", today);
+		
+		ArrayList<RoutineDTO> routinedto = dao.getDailyRoutine(map);
+		System.out.println("ddddd");
+		System.out.println(routinedto.size());
+		
+		return routinedto;
 	}
 	
 	public String getTest(String email) {
