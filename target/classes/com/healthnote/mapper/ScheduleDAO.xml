@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.healthnote.members.dao.ScheduleDAO">
+	
+	<select id="getAllWeekSchedule" parameterType="hashmap" resultType="com.healthnote.vo.ScheduleDTO">
+		select  t2.name, t1.date, t1.phonenum, t1.start_time, t1.end_time, t1.finish_dncd
+		from schedule t1, members t2
+		where 1=1
+		and t1.phonenum = t2.phonenum
+		and t2.email = #{trainerId}
+		and t1.date between case when weekday(#{today}) = 0 then #{today}
+								 when weekday(#{today}) = 1 then date_add(#{today}, INTERVAL -1 DAY)
+		                         when weekday(#{today}) = 2 then date_add(#{today}, INTERVAL -2 DAY)
+		                         when weekday(#{today}) = 3 then date_add(#{today}, INTERVAL -3 DAY)
+		                         when weekday(#{today}) = 4 then date_add(#{today}, INTERVAL -4 DAY)
+		                         when weekday(#{today}) = 5 then date_add(#{today}, INTERVAL -5 DAY)
+		                         when weekday(#{today}) = 6 then date_add(#{today}, INTERVAL -6 DAY)
+		                         else ''
+		                         end
+		                         
+		                         and
+		                         
+		                    case when weekday(#{today}) = 0 then date_add(#{today}, INTERVAL 6 DAY)
+								 when weekday(#{today}) = 1 then date_add(#{today}, INTERVAL 5 DAY)
+		                         when weekday(#{today}) = 2 then date_add(#{today}, INTERVAL 4 DAY)
+		                         when weekday(#{today}) = 3 then date_add(#{today}, INTERVAL 3 DAY)
+		                         when weekday(#{today}) = 4 then date_add(#{today}, INTERVAL 2 DAY)
+		                         when weekday(#{today}) = 5 then date_add(#{today}, INTERVAL 1 DAY)
+		                         when weekday(#{today}) = 6 then #{today}
+		                         else ''
+		                         end
+	</select>
+	
+	<select id="getDailyRoutine" parameterType="hashmap" resultType="com.healthnote.vo.RoutineDTO" >
+		select *
+		from routine
+		where 1=1
+			and phonenum = #{memberId}
+			and date = #{today}
+		    
+	</select>
+		
+	<select id="getWeekRoutine" parameterType="hashmap" resultType="com.healthnote.vo.RoutineDTO" >
+		select *
+		from routine
+		where 1=1
+		    and phonenum = #{memberId}
+		    and date between case when weekday(#{today}) = 0 then #{today}
+									 when weekday(#{today}) = 1 then date_add(#{today}, INTERVAL -1 DAY)
+				                     when weekday(#{today}) = 2 then date_add(#{today}, INTERVAL -2 DAY)
+				                     when weekday(#{today}) = 3 then date_add(#{today}, INTERVAL -3 DAY)
+				                     when weekday(#{today}) = 4 then date_add(#{today}, INTERVAL -4 DAY)
+				                     when weekday(#{today}) = 5 then date_add(#{today}, INTERVAL -5 DAY)
+				                     when weekday(#{today}) = 6 then date_add(#{today}, INTERVAL -6 DAY)
+				                     else ''
+				                     end
+				                     
+				                     and
+				                      
+				                case when weekday(#{today}) = 0 then date_add(#{today}, INTERVAL 6 DAY)
+									 when weekday(#{today}) = 1 then date_add(#{today}, INTERVAL 5 DAY)
+				                     when weekday(#{today}) = 2 then date_add(#{today}, INTERVAL 4 DAY)
+				                     when weekday(#{today}) = 3 then date_add(#{today}, INTERVAL 3 DAY)
+				                     when weekday(#{today}) = 4 then date_add(#{today}, INTERVAL 2 DAY)
+				                     when weekday(#{today}) = 5 then date_add(#{today}, INTERVAL 1 DAY)
+				                     when weekday(#{today}) = 6 then #{today}
+				                     else ''
+				                     end
+        order by date asc
+	</select>
+	
+	
+	<select id="getTest" resultType="String">
+		select email from trainer where email=#{email}	
+	</select>
+
+</mapper>
+
+

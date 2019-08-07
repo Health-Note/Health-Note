@@ -40,17 +40,17 @@
     <!-- LOCAL PC_MySql --> 
     <bean id="driverManagerDataSource"
         class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
-        <property name="url" value="jdbc:mysql://localhost:3306/sys?serverTimezone=UTC"></property>
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
+        <property name="url" value="jdbc:mysql://localhost:3306/healthnote2?serverTimezone=UTC"></property>
         <property name="username" value="Kwon"></property>
-        <property name="password" value="Jungkwon100"></property>
+        <property name="password" value="Jungkwon100!"></property>
     </bean>      
 
     <!-- Mybatis 사용을 위한 Bean 설정으로 pom.xml에서 dependency 설정을 이미 했기에 가능 -->
 	<bean id="sqlSessionFactoryBean"  class="org.mybatis.spring.SqlSessionFactoryBean">
        <property name="dataSource" ref="driverManagerDataSource"></property>
        <!-- mapper 설정으로 경로를 반드시 정확하게 지정해주어야 한다  -->  
-        <property name="mapperLocations" value="classpath*:com/Kwon/mapper/*xml" />
+        <property name="mapperLocations" value="classpath*:com/healthnote/mapper/*xml" />
     </bean>
 
     <!-- Mybatis 사용을 위한 Bean 설정으로 pom.xml에서 dependency 설정을 이미 했기에 가능 --> 
