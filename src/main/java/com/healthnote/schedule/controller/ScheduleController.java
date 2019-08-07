@@ -74,7 +74,9 @@ public class ScheduleController {
 		String today = (String) session.getAttribute("today");
 		
 		HashMap<String, ArrayList<RoutineDTO>> resultmap = ScheduleService.getWeekRoutine(memberId, today);
-		model.addAttribute("resultmap", resultmap);
+		for(String key : resultmap.keySet()) {
+			model.addAttribute(key, resultmap.get(key));
+		}
 		
 		return jsonview;
 	}
