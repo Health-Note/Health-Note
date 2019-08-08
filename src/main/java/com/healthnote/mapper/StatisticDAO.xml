@@ -36,6 +36,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where phonenum = #{phonenum} 
 	</select>
 	
+	<select id="getWeightAndBmi" parameterType="String" resultType="com.healthnote.vo.WeightAndBmiDTO">
+		select t2.date as date
+		      ,t2.weight as weight
+		      ,t1.height as height
+		      ,t2.weight / ((t1.height / 100) * (t1.height / 100)) as bmi
+		      <![CDATA[
+		      ,case when t2.weight / ((t1.height / 100) * (t1.height / 100)) < 18.5 
+					then 0
+		            
+		            when t2.weight / ((t1.height / 100) * (t1.height / 100)) < 24.9 
+					then 1
+		            
+		            when t2.weight / ((t1.height / 100) * (t1.height / 100)) < 29
+					then 2
+		            
+		            else 3
+					end as status
+		            ]]> 
+		from members t1
+		    ,weighthistory t2
+		where 1=1
+		and t1.phonenum = t2.phonenum
+		and t1.phonenum = #{phonenum} 
+	</select>
 	
+	<delete id="deleteMemo">
+		delete from memo
+		where no = #{no} 
+	</delete>
+	
+	<update id="updateMemoFinish" parameterType="hashmap">
+		update memo
+		set finish_dncd = #{finish_dncd}
+		where no = #{no}  
+	</update>
+	
+	<insert id="insertMemo" parameterType="com.healthnote.vo.MemoDTO">
+		insert into memo values(no, #{text}, #{finish_dncd}, #{phonenum})
+	</insert>
 
 </mapper>

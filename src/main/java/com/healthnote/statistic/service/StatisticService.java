@@ -1,6 +1,7 @@
 package com.healthnote.statistic.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import com.healthnote.statistic.dao.StatisticDAO;
 import com.healthnote.vo.MemberDTO;
 import com.healthnote.vo.MemoDTO;
 import com.healthnote.vo.TargetProportionDTO;
+import com.healthnote.vo.WeightAndBmiDTO;
 
 @Service
 public class StatisticService {
@@ -74,12 +76,69 @@ public class StatisticService {
 	}
 	
 	
+	/*
+	날 짜 : 2019. 8. 8.
+	작성자 : 김 정 권
+	기 능 : 해당 수강생의 몸무게와 BMI지수를 가져옴     
+	 */
+	public ArrayList<WeightAndBmiDTO> getWeightAndBmi(String phonenum){
+		
+		StatisticDAO dao = sqlsession.getMapper(StatisticDAO.class);
+		
+		ArrayList<WeightAndBmiDTO> weightAndBmiList = dao.getWeightAndBmi(phonenum);
+		
+		return weightAndBmiList;
+	}
 	
+	/*
+	날 짜 : 2019. 8. 8.
+	작성자 : 김 정 권
+	기 능 : 해당 메모를 삭제처리      
+	 */
+	public int deleteMemo(int no) {
+		
+		StatisticDAO dao = sqlsession.getMapper(StatisticDAO.class);
+		
+		int result = dao.deleteMemo(no); 
+		
+		return result; 
+	}
 	
+	/*
+	날 짜 : 2019. 8. 8.
+	작성자 : 김 정 권
+	기 능 : 해당 메모의 완료여부 변경       
+	 */
+	public int updateMemoFinish(int finish_dncd, int no) {
+		
+		StatisticDAO dao = sqlsession.getMapper(StatisticDAO.class);
+		
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("finish_dncd", finish_dncd);
+		map.put("no", no);
+		
+		int result = dao.updateMemoFinish(map); 
+
+		return result;
+	
+	}
+	
+	/*
+	날 짜 : 2019. 8. 8.
+	작성자 : 김 정 권
+	기 능 : 메모 insert       
+	 */
+	public int insertMemo(MemoDTO memoDto) {
+		
+		StatisticDAO dao = sqlsession.getMapper(StatisticDAO.class);
+		
+		int result = dao.insertMemo(memoDto); 
+
+		return result;
+		
+	}
 	
 }
-
-
 
 
 

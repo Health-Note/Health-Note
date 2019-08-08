@@ -2,9 +2,18 @@ package com.healthnote.vo;
 
 public class MemoDTO {
 
+	int no;
 	String text;
 	int finish_dncd;
 	String phonenum;
+
+	public int getNo() {
+		return no;
+	}
+
+	public void setNo(int no) {
+		this.no = no;
+	}
 
 	public String getText() {
 		return text;
