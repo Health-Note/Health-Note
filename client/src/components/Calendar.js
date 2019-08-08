@@ -1,17 +1,17 @@
 import React, { Component } from "react";
-import { Col, Row } from "reactstrap";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
 import momentPlugin from '@fullcalendar/moment';
 import Alert from "sweetalert2";
+import { Col, Row } from "reactstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import moment from 'moment';
 import "@fullcalendar/core/main.css";
 import "@fullcalendar/daygrid/main.css";
 import "@fullcalendar/timegrid/main.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./Calendar.css";
-import moment from 'moment';
 
 class Calendar extends Component {
 
