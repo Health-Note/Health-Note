@@ -112,10 +112,21 @@ ALTER TABLE `WEIGHTHISTORY`
 
 -- 메모
 CREATE TABLE `MEMO` (
+   `no`          INT          NOT NULL, -- 글번호
    `text`        VARCHAR(500) NOT NULL, -- 메모내용
    `finish_dncd` INT          NOT NULL, -- 완료여부
    `phonenum`    CHAR(11)     NOT NULL  -- 휴대폰번호
 );
+
+-- 메모
+ALTER TABLE `MEMO`
+   ADD CONSTRAINT `PK_MEMO` -- 메모 기본키
+      PRIMARY KEY (
+         `no` -- 글번호
+      );
+
+ALTER TABLE `MEMO`
+   MODIFY COLUMN `no` INT NOT NULL AUTO_INCREMENT;
 
 -- 웨이트목표
 CREATE TABLE `WORKOUTGOAL` (
@@ -151,7 +162,8 @@ ALTER TABLE `FIXEDSCHEDULE`
       )
       REFERENCES `MEMBERS` ( -- 회원
          `phonenum` -- 휴대폰번호
-      );
+      )
+      ON DELETE CASCADE;
 
 -- 수업시간관리
 ALTER TABLE `SCHEDULE`
@@ -161,7 +173,8 @@ ALTER TABLE `SCHEDULE`
       )
       REFERENCES `MEMBERS` ( -- 회원
          `phonenum` -- 휴대폰번호
-      );
+      )
+      ON DELETE CASCADE;
 
 -- 회원별운동루틴
 ALTER TABLE `ROUTINE`
@@ -173,7 +186,8 @@ ALTER TABLE `ROUTINE`
       REFERENCES `SCHEDULE` ( -- 수업시간관리
          `date`,     -- 날짜
          `phonenum`  -- 휴대폰번호
-      );
+      )
+      ON DELETE CASCADE;
 
 -- 회원별운동루틴
 ALTER TABLE `ROUTINE`
@@ -193,7 +207,8 @@ ALTER TABLE `WEIGHTHISTORY`
       )
       REFERENCES `MEMBERS` ( -- 회원
          `phonenum` -- 휴대폰번호
-      );
+      )
+      ON DELETE CASCADE;
 
 -- 메모
 ALTER TABLE `MEMO`
@@ -203,7 +218,8 @@ ALTER TABLE `MEMO`
       )
       REFERENCES `MEMBERS` ( -- 회원
          `phonenum` -- 휴대폰번호
-      );
+      )
+      ON DELETE CASCADE;
 
 -- 웨이트목표
 ALTER TABLE `WORKOUTGOAL`
@@ -213,7 +229,8 @@ ALTER TABLE `WORKOUTGOAL`
       )
       REFERENCES `MEMBERS` ( -- 회원
          `phonenum` -- 휴대폰번호
-      );
+      )
+      ON DELETE CASCADE;
 
 -- 웨이트목표
 ALTER TABLE `WORKOUTGOAL`

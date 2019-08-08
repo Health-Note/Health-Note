@@ -106,4 +106,21 @@ insert into routine values('20190809','01023549785','런지', 5, 5);
 insert into routine values('20190809','01023549785','레그 컬', 5, 5);
 insert into routine values('20190809','01023549785','원 레그컬', 5, 3);
 
+-- memo
+insert into memo values(no,'현재 감기 몸살 걸려서 운동 당분간 쉬기로 함', 1, '01023549785');
+insert into memo values(no,'초콜릿을 너무 좋아하는 회원임', 1, '01023549785');
+insert into memo values(no,'다음번 PT도 계속 등록할지 고민중', 1, '01023549785');
+
+-- weighthistory
+insert into weighthistory values('20190601','01023549785','80');
+insert into weighthistory values('20190701','01023549785','65');
+insert into weighthistory values('20190705','01023549785','61');
+insert into weighthistory values('20190711','01023549785','60');
+insert into weighthistory values('20190717','01023549785','60');
+insert into weighthistory values('20190725','01023549785','57');
+insert into weighthistory values('20190727','01023549785','58');
+insert into weighthistory values('20190804','01023549785','55');
+insert into weighthistory values('20190807','01023549785','54');
+
+
 commit;
