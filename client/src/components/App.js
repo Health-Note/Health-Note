@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import Calendar from './Calendar';
 import './App.css';
-import'./Routine/MaterialTable'
-import MaterialTable from 'material-table';
+import Routine from './routine/Routine'
 class App extends Component {
   render(){
     return (
       <>
-      <Calendar />
-      <MaterialTable />
+      
+      <Routine />
       </>
     );
   }
