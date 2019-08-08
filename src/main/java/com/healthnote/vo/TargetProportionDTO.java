@@ -3,8 +3,7 @@ package com.healthnote.vo;
 public class TargetProportionDTO {
 
 	private int target;
-	private int count;
-	private int total_count;
+	private float proportion;
 
 	public int getTarget() {
 		return target;
@@ -14,20 +13,12 @@ public class TargetProportionDTO {
 		this.target = target;
 	}
 
-	public int getCount() {
-		return count;
+	public float getProportion() {
+		return proportion;
 	}
 
-	public void setCount(int count) {
-		this.count = count;
-	}
-
-	public int getTotal_count() {
-		return total_count;
-	}
-
-	public void setTotal_count(int total_count) {
-		this.total_count = total_count;
+	public void setProportion(float proportion) {
+		this.proportion = proportion;
 	}
 
 }

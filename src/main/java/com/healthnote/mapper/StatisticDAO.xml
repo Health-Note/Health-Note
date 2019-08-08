@@ -10,18 +10,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where 1=1
 		and email = #{trainerId}
 	</select>
-
-	<select id="getTargetProportion" parameterType="String" resultType="com.healthnote.vo.TargetProportionDTO">>
-            select t2.target as target
-                  ,count(t2.target) as count
-                  ,t3.total_count as total_count 
+	
+	<select id="getTargetProportion" parameterType="String" resultType="com.healthnote.vo.TargetProportionDTO">
+			select  t2.target as target
+			       ,count(t2.target) / t3.total_count * 100 as proportion
 			from routine t1
 			    ,exercise t2
 			    ,(select count(*) as total_count from routine) t3
 			where 1=1
 			and t1.exercisename = t2.exercisename
 			and t1.phonenum = #{phonenum} 
-			group by t2.target, t3.total_count 
+			group by t2.target, t3.total_count
 	</select>
+	
+	<select id="getUnusedPtProportion" parameterType="String" resultType="float">
+		select 100 - usedpt / unusedpt * 100
+		from members
+		where 1=1
+		and phonenum = #{phonenum} 
+	</select>
+	
+	<select id="getMemos" parameterType="String" resultType="com.healthnote.vo.MemoDTO">
+		select *
+		from memo
+		where phonenum = #{phonenum} 
+	</select>
+	
+	
 
 </mapper>

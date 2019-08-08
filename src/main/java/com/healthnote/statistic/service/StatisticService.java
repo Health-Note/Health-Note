@@ -6,9 +6,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.amazonaws.services.cloudwatch.model.Statistic;
 import com.healthnote.statistic.dao.StatisticDAO;
 import com.healthnote.vo.MemberDTO;
+import com.healthnote.vo.MemoDTO;
 import com.healthnote.vo.TargetProportionDTO;
 
 @Service
@@ -38,13 +38,59 @@ public class StatisticService {
 	*/
 	public ArrayList<TargetProportionDTO> getTargetProportion(String phonenum){
 		
-		System.out.println("getBasicsForStatistic service");
 		StatisticDAO dao = sqlsession.getMapper(StatisticDAO.class);
-		System.out.println("1");
-		ArrayList<TargetProportionDTO> list = dao.getTargetProportion(phonenum);
-		System.out.println("2");
 		
-		return list;
+		ArrayList<TargetProportionDTO> targetList = dao.getTargetProportion(phonenum);
+		
+		return targetList;
 	}
 	
+	/*
+	날 짜 : 2019. 8. 8.
+	작성자 : 김 정 권
+	기 능 : 해당 수강생의 남은 PT수 비율 가져옴   
+	*/
+	public float getUnusedPtProportion(String phonenum){
+		
+		StatisticDAO dao = sqlsession.getMapper(StatisticDAO.class);
+		
+		float getUnusedPtProportion = dao.getUnusedPtProportion(phonenum);
+		
+		return getUnusedPtProportion;
+	}
+	
+	/*
+	날 짜 : 2019. 8. 8.
+	작성자 : 김 정 권
+	기 능 : 해당 수강생에 대한 메모 사항들 가져옴    
+	*/
+	public ArrayList<MemoDTO> getMemos(String phonenum){
+		
+		StatisticDAO dao = sqlsession.getMapper(StatisticDAO.class);
+		
+		ArrayList<MemoDTO> memoList = dao.getMemos(phonenum);
+		
+		return memoList;
+	}
+	
+	
+	
+	
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

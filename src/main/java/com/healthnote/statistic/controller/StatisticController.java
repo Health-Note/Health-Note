@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.View;
 
-import com.healthnote.statistic.dao.StatisticDAO;
 import com.healthnote.statistic.service.StatisticService;
 import com.healthnote.vo.MemberDTO;
-import com.healthnote.vo.ScheduleDTO;
+import com.healthnote.vo.MemoDTO;
 import com.healthnote.vo.TargetProportionDTO;
 
 
@@ -47,33 +46,30 @@ public class StatisticController {
 	/*
 	날 짜 : 2019. 8. 8.
 	작성자 : 김 정 권
-	기 능 : 수강생 클릭시 해당 수강생의 총 루틴에서 각 부위별로 운동 비율 계산하여 백분율 가져옴  
+	기 능 : 수강생 클릭시 해당 수강생의 여러가지 정보들 가져옴 (부위별 비율 / 남은 피티 수 비율 / 메모 / 몸무게 / BMI)  
 	*/
 	@RequestMapping(value = "/getBasicsForStatistic", method = RequestMethod.POST)
 	public View getBasicsForStatistic(HttpSession session, Model model, @RequestBody Map<String, Object> data) {
 
 		System.out.println("getBasicsForStatistic controller");
 		String phonenum = (String) data.get("memberId");
-		ArrayList<TargetProportionDTO> list = StatisticService.getTargetProportion(phonenum);
 		
-		for(TargetProportionDTO dto : list) {
-			System.out.println(dto.getTarget());
-		}
+		ArrayList<TargetProportionDTO> targetProportion = StatisticService.getTargetProportion(phonenum);
+		float getUnusedPtProportion = StatisticService.getUnusedPtProportion(phonenum);
+		ArrayList<MemoDTO> memoList = StatisticService.getMemos(phonenum);
 		
-		model.addAttribute("targetproportionlist", list);
+		model.addAttribute("targetProportion", targetProportion);
+		model.addAttribute("getUnusedPtProportion", getUnusedPtProportion);
+		model.addAttribute("memoList", memoList);
+		
+		
 		
 		return jsonview;
 	}
 	
 	
-	/*
-	 * ERROR: org.springframework.web.context.ContextLoader - Context initialization failed
-org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactoryBean' 
-defined in ServletContext resource [/WEB-INF/spring/root-context.xml]: Invocation of init method failed; nested 
-exception is org.springframework.core.NestedIOException: Failed to parse mapping resource: 'file
- [/Users/jungkwonkim/Desktop/jk_lab/STS_LAB/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/HealthNote/WEB-INF/classes/com/healthnote/mapper/StatisticDAO.xml]'; nested exception is org.apache.ibatis.builder.
- BuilderException: Error parsing Mapper XML. Cause: org.apache.ibatis.builder.BuilderException: Error resolving class. Cause: org.apache.ibatis.type.TypeException: Could not resolve type alias 'com.healthnote.vo.targetProportionDTO'.  Cause: java.lang.ClassNotFoundException: Cannot find class: com.healthnote.vo.targetProportionDTO
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1578
-	 * */
+	
+	
+	
 	
 }
