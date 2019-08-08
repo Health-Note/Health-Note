@@ -41,7 +41,7 @@
     <bean id="driverManagerDataSource"
         class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
-        <property name="url" value="jdbc:mysql://localhost:3306/healthnote?serverTimezone=UTC"></property>
+        <property name="url" value="jdbc:mysql://localhost:3306/healthnote2?serverTimezone=UTC"></property>
         <property name="username" value="Kwon"></property>
         <property name="password" value="Jungkwon100!"></property>
     </bean>      

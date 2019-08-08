@@ -162,7 +162,8 @@ ALTER TABLE `FIXEDSCHEDULE`
       )
       REFERENCES `MEMBERS` ( -- 회원
          `phonenum` -- 휴대폰번호
-      );
+      )
+      ON DELETE CASCADE;
 
 -- 수업시간관리
 ALTER TABLE `SCHEDULE`
@@ -172,7 +173,8 @@ ALTER TABLE `SCHEDULE`
       )
       REFERENCES `MEMBERS` ( -- 회원
          `phonenum` -- 휴대폰번호
-      );
+      )
+      ON DELETE CASCADE;
 
 -- 회원별운동루틴
 ALTER TABLE `ROUTINE`
@@ -184,7 +186,8 @@ ALTER TABLE `ROUTINE`
       REFERENCES `SCHEDULE` ( -- 수업시간관리
          `date`,     -- 날짜
          `phonenum`  -- 휴대폰번호
-      );
+      )
+      ON DELETE CASCADE;
 
 -- 회원별운동루틴
 ALTER TABLE `ROUTINE`
@@ -204,7 +207,8 @@ ALTER TABLE `WEIGHTHISTORY`
       )
       REFERENCES `MEMBERS` ( -- 회원
          `phonenum` -- 휴대폰번호
-      );
+      )
+      ON DELETE CASCADE;
 
 -- 메모
 ALTER TABLE `MEMO`
@@ -214,7 +218,8 @@ ALTER TABLE `MEMO`
       )
       REFERENCES `MEMBERS` ( -- 회원
          `phonenum` -- 휴대폰번호
-      );
+      )
+      ON DELETE CASCADE;
 
 -- 웨이트목표
 ALTER TABLE `WORKOUTGOAL`
@@ -224,7 +229,8 @@ ALTER TABLE `WORKOUTGOAL`
       )
       REFERENCES `MEMBERS` ( -- 회원
          `phonenum` -- 휴대폰번호
-      );
+      )
+      ON DELETE CASCADE;
 
 -- 웨이트목표
 ALTER TABLE `WORKOUTGOAL`

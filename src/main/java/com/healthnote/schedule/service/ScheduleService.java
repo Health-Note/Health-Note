@@ -10,7 +10,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.healthnote.members.dao.ScheduleDAO;
+import com.healthnote.schedule.dao.ScheduleDAO;
 import com.healthnote.vo.RoutineDTO;
 import com.healthnote.vo.ScheduleDTO;
 

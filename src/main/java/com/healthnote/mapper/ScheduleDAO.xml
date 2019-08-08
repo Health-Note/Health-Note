@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.healthnote.members.dao.ScheduleDAO">
+<mapper namespace="com.healthnote.schedule.dao.ScheduleDAO">
 	
 	<select id="getAllWeekSchedule" parameterType="hashmap" resultType="com.healthnote.vo.ScheduleDTO">
 		select  t2.name, t1.date, t1.phonenum, t1.start_time, t1.end_time, t1.finish_dncd

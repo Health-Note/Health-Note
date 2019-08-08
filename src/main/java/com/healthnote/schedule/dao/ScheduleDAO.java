@@ -1,4 +1,4 @@
-package com.healthnote.members.dao;
+package com.healthnote.schedule.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;

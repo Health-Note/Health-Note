@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.healthnote.members.dao.MembersDAO">
+
+	<select id="getMemberAndFixedSchedule" parameterType="String" resultType="com.healthnote.vo.MemberAndFixedScheduleDTO">
+		select t1.*, t2.day, t2.start_time, t2.end_time
+		from members t1
+		    ,fixedschedule t2
+		where 1=1
+		and t1.phonenum = t2.phonenum
+		and t1.email = #{trainerId}		
+	</select>
+	
+	<delete id="deleteMember">
+		delete from members
+		where phonenum = #{phonenum}
+	</delete>
+
+	<update id="changeMemberInfo" parameterType="com.healthnote.vo.MemberDTO">
+		update members
+		set <if test ="name != null">name = #{name},</if>
+		    <if test ="gender != null">gender = #{gender},</if>
+		    <if test ="start_date != null">start_date = #{start_date},</if>
+		    <if test ="end_date != null">end_date = #{end_date},</if>
+		    <if test ="unusedpt != null">unusedpt = #{unusedpt},</if>
+		    <if test ="usedpt != null">usedpt = #{usedpt},</if>
+		    <if test ="height != null">height = #{height},</if>
+			email = #{email}
+		where 1=1
+		and phonenum = #{phonenum}
+	</update>
+	
+</mapper>
