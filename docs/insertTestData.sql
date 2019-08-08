@@ -106,3 +106,7 @@ insert into routine values('20190809','01023549785','런지', 5, 5);
 insert into routine values('20190809','01023549785','레그 컬', 5, 5);
 insert into routine values('20190809','01023549785','원 레그컬', 5, 3);
 
+-- memo
+insert into memo values('현재 감기 몸살 걸려서 운동 당분간 쉬기로 함', 1, '01023549785');
+
+commit;
