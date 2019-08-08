@@ -106,3 +106,4 @@ insert into routine values('20190809','01023549785','런지', 5, 5);
 insert into routine values('20190809','01023549785','레그 컬', 5, 5);
 insert into routine values('20190809','01023549785','원 레그컬', 5, 3);
 
+commit;

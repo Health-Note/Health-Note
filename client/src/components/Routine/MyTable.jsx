@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -9,6 +9,8 @@ import Paper from '@material-ui/core/Paper';
 import useUpDown from './useUpDown'
 import Row from './Row'
 import uuid from 'uuid/v4'
+import { ExerciseContext }  from '../../contexts/ExerciseContext';
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,6 +30,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function MyTable() {
   const classes = useStyles();
+  const [selectedExer, setSelectedExer] = useContext(ExerciseContext);
   
   const [name, setName] = useState("")
   const [sets, increaseSets, decreaseSets] = useUpDown(0);
@@ -39,6 +42,7 @@ export default function MyTable() {
         reps: 12,
         id: uuid()
   }])
+  
 
   const onSubmit = ( name, sets, reps ) => {
     setRows(currentRows => [...currentRows, { name, sets, reps, id: uuid() }])
@@ -55,17 +59,18 @@ export default function MyTable() {
       body: JSON.stringify({})
     })
   }
+  
 
   const Rows = myRows.map(cv => {
     return(<Row name={cv.name} sets={cv.sets} reps={cv.reps} id={cv.id} remove={remove} />)
   })
 
   const handleChange = (evt) => {
-    setName(evt.target.value)
+    setSelectedExer(evt.target.value)
   }
 
   const handleSubmit = () => {
-    onSubmit(name, sets, reps);
+    onSubmit(selectedExer, sets, reps);
   }
 
 
@@ -83,7 +88,7 @@ export default function MyTable() {
           </TableHead>
           <TableBody>
             <TableRow>
-              <TableCell ><input type="text" value={name} onChange={handleChange}></input></TableCell>
+              <TableCell ><input type="text" value={selectedExer} onChange={handleChange}></input></TableCell>
               <TableCell align="right"><button onClick={increaseSets}>up</button> {sets} <button onClick={decreaseSets}>down</button></TableCell>
               <TableCell align="right"><button onClick={increaseReps}>up</button> {reps} <button onClick={decreaseReps}>down</button></TableCell>
               <TableCell align="right"><button onClick={handleSubmit}>추가</button> </TableCell>

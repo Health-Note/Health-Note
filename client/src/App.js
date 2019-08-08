@@ -1,48 +1,20 @@
-import React, { useEffect } from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import Calendar from './components/Calendar/Calendar';
 import './App.css';
+import Routine from './components/routine/Routine'
+import { ExerciseProvider } from './contexts/ExerciseContext'
 
-
-// 마스터 테스트!!!!
-// function App() {
-/*
-      useEffect(() => {
-      fetch("/postTEST",{
-        method: "post",
-        headers: new Headers({
-          'Content-Type': "application/json"
-        }),
-        body:JSON.stringify({
-          empno: "7902",
-          ena : "jkjk"
-        })
-      })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-      })
-    }) 종열 브랜치 테스트22222
-*/
-  
-   useEffect(() => {
-     fetch("/hihi", {
-       method: "get",
-       headers: new Headers({
-          'Content-Type': "application/json"
-       }),
-     })
-         .then((res) => res.json())
-         .then((data) => {
-           console.log(data);
-         })
-     })
-  
-
+class App extends Component {
+  render(){
     return (
-      <div className="App">
-        <h1>테스트</h1>
-      </div>
+      <>
+       <ExerciseProvider>
+          <Routine />
+       </ExerciseProvider>
+       
+      </>
     );
   }
-
+  
+}
 export default App;
