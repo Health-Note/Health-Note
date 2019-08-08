@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
+import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import useUpDown from './useUpDown'
+import Row from './Row'
+import uuid from 'uuid/v4'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,21 +25,49 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function createData(name, sets, reps, add) { // 객체를 만들어 냄
-  return { name, sets, reps, add };
+
+export default function MyTable() {
+  const classes = useStyles();
+  
+  const [name, setName] = useState("")
+  const [sets, increaseSets, decreaseSets] = useUpDown(0);
+  const [reps, increaseReps, decreaseReps] = useUpDown(0);
+
+  const [myRows, setRows] = useState([{
+        name: "22",
+        sets: 5,
+        reps: 12,
+        id: uuid()
+  }])
+
+  const onSubmit = ( name, sets, reps ) => {
+    setRows(currentRows => [...currentRows, { name, sets, reps, id: uuid() }])
 }
 
-// const rows = [
-//   createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-//   createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-//   createData('Eclair', 262, 16.0, 24, 6.0),
-//   createData('Cupcake', 305, 3.7, 67, 4.3),
-//   createData('Gingerbread', 356, 16.0, 49, 3.9),
-// ];
+  const remove = (id) => {
+    setRows(currentRows => currentRows.filter(row => row.id !== id))
+    fetch("/delete", {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({})
+    })
+  }
 
+  const Rows = myRows.map(cv => {
+    return(<Row name={cv.name} sets={cv.sets} reps={cv.reps} id={cv.id} remove={remove} />)
+  })
 
-export default function MyTable({ rows }) {
-  const classes = useStyles();
+  const handleChange = (evt) => {
+    setName(evt.target.value)
+  }
+
+  const handleSubmit = () => {
+    onSubmit(name, sets, reps);
+  }
+
 
   return (
     <div className={classes.root}>
@@ -44,23 +75,30 @@ export default function MyTable({ rows }) {
         <Table className={classes.table} size="small">
           <TableHead>
             <TableRow>
-              <TableCell>운동명</TableCell>
+              <TableCell >운동명</TableCell>
               <TableCell align="right">세트수</TableCell>
               <TableCell align="right">반복수</TableCell>
               <TableCell align="right">추가</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map(row => (
+            <TableRow>
+              <TableCell ><input type="text" value={name} onChange={handleChange}></input></TableCell>
+              <TableCell align="right"><button onClick={increaseSets}>up</button> {sets} <button onClick={decreaseSets}>down</button></TableCell>
+              <TableCell align="right"><button onClick={increaseReps}>up</button> {reps} <button onClick={decreaseReps}>down</button></TableCell>
+              <TableCell align="right"><button onClick={handleSubmit}>추가</button> </TableCell>
+            </TableRow>
+              {Rows}
+            {/* {rows.map(row => (
               <TableRow key={row.name}>
                 <TableCell component="th" scope="row">
                   {row.name}
                 </TableCell>
                 <TableCell align="right">{row.sets}</TableCell>
                 <TableCell align="right">{row.reps}</TableCell>
-                <TableCell align="right">{row.add}</TableCell>
+                <TableCell align="right"><button onClick={handleDelete}>삭제</button></TableCell>
               </TableRow>
-            ))}
+            ))} */}
           </TableBody>
         </Table>
       </Paper>
