@@ -264,7 +264,7 @@ public class ScheduleController {
 		
 	}
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public View welcome(HttpSession session, Model model, String email) {
 	
 		System.out.println("login fini");

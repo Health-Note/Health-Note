@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.healthnote.statistic.dao.StatisticDAO">
+											  
+	<select id="getMembersOfTra" parameterType="String" resultType="com.healthnote.vo.MemberDTO">
+		select *
+		from members
+		where 1=1
+		and email = #{trainerId}
+	</select>
+
+	<select id="getTargetProportion" parameterType="String" resultType="com.healthnote.vo.TargetProportionDTO">>
+            select t2.target as target
+                  ,count(t2.target) as count
+                  ,t3.total_count as total_count 
+			from routine t1
+			    ,exercise t2
+			    ,(select count(*) as total_count from routine) t3
+			where 1=1
+			and t1.exercisename = t2.exercisename
+			and t1.phonenum = #{phonenum} 
+			group by t2.target, t3.total_count 
+	</select>
+
+</mapper>

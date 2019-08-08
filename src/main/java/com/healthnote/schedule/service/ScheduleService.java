@@ -261,7 +261,7 @@ public class ScheduleService {
 		
 		
 		// 동일 날짜 내 시각 변경이 아니라 날짜가 변경되는 경우 DB구조상 외래키 제약에 걸리므로 schedule테이블을 참조하고 있는 routine테이블의 
-		// 해당 날짜 routine을 삭제한 후 schedule의 날짜 변경을 하고 삭제했던 routine을 변경된 날짜로 다시 insert 해주어야 
+		// 해당 날짜 routine을 삭제한 후 schedule의 날짜 변경을 하고 삭제했던 routine을 변경된 날짜로 다시 insert 해주어야 함 
 		int result = 0;
 		if(!before_date.equals(after_date)) {
 			
