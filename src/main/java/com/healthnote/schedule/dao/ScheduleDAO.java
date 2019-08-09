@@ -3,6 +3,7 @@ package com.healthnote.schedule.dao;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.healthnote.vo.ExerciseDTO;
 import com.healthnote.vo.MinusUnusedPtDTO;
 import com.healthnote.vo.RoutineDTO;
 import com.healthnote.vo.ScheduleDTO;
@@ -22,6 +23,6 @@ public interface ScheduleDAO {
 	public int chanegeSchedule(HashMap<String, String> map);
 	public int getUnusedPt(String phonenum);
 	public int minusUnusedPt(MinusUnusedPtDTO paramdto);
-	
+	public ArrayList<ExerciseDTO> getAllExercise();
 	
 }

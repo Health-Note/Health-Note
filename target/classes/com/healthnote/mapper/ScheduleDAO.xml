@@ -148,5 +148,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and phonenum = #{phonenum}	
 	</update>
 
+	<select id="getAllExercise" resultType="com.healthnote.vo.ExerciseDTO">
+		select *
+		from exercise
+	</select>
+
 </mapper>
 
