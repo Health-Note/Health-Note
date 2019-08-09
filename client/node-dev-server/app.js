@@ -25,22 +25,13 @@ app.get("/getData", (req, res) => {
 
 // 0성공 1실패
 app.post("/changeMemberSchedule", (req, res) => {
-    console.log(req.body);
-    res.json({result: 0});
+    console.log(req.body)
+    res.json({result: 0})
 })
 
 app.post("/deletePT", (req, res) => {
-    console.log(req.body);
-    res.json({result: 0});
-})
-
-app.post("/insertRoutine", (req, res) => {
-    console.log(req.body);
-    res.json({result: 0});
-})
-
-app.post("//getWeekRoutineOfStu", (req, res) => {
-    console.log(req.body);
+    console.log(req.body)
+    res.json({result: 0})
 })
 
 app.listen(8080, () => {

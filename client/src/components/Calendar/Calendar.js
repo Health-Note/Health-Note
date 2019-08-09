@@ -12,13 +12,10 @@ import "@fullcalendar/core/main.css";
 import "@fullcalendar/daygrid/main.css";
 import "@fullcalendar/timegrid/main.css";
 import "./Calendar.css";
-import { ExerciseContext }  from '../../contexts/ExerciseContext';
 
 class Calendar extends Component {
-    // state에서 날짜형식은 ISO // 2017-03-16T17:40:00+09:0
-  static contextType = ExerciseContext;
-  
-  
+
+  // state에서 날짜형식은 ISO // 2017-03-16T17:40:00+09:0
   state = {
     calendarEvents: [
       {
@@ -40,12 +37,12 @@ class Calendar extends Component {
       { title: "Event 5", id: "5" }
     ]
   };
-  
+
   /**
-   * 날짜 : 2019-08-07
    * 작성자: 박종열
    * 기능 : 서버에서 사용자 이름, 폰넘버, 시작날짜, 시작시간을 받아옴
    * adding dragable properties to external events through javascript
+   * 날짜 : 2019-08-07
    */
 
   componentDidMount() {
@@ -84,10 +81,10 @@ class Calendar extends Component {
   }
 
   /**
-   * 날짜 : 2019-08-07
    * 작성자: 박종열
    * 기능 : 드래그 드롭시마다 사용자 이름, 폰넘버, 예전시간, 바뀐시간을 받아옴, 
    *        날짜변환: 20190804 + 1630 => 2019-08-04 16:30
+   * 날짜 : 2019-08-07
    */
 
   drop = (info) => {
@@ -98,7 +95,7 @@ class Calendar extends Component {
     const oldTime = moment(info.oldEvent.start).format('HHmm');
     const changedTime = moment(info.event.start).format('HHmm');
    
-    fetch("/insertRoutine", {
+    fetch("/changeMemberSchedule", {
       method: "POST",
       headers: {
         'Accept': 'application/json',
@@ -115,21 +112,12 @@ class Calendar extends Component {
 
 
  /**
-  * 날짜 : 2019-08-07
    * 작성자: 박종열
    * 기능 : 캘린더에서 스케줄 클릭시 얼러트창 생성
    *        삭제클릭시 phoneNum, date, startTime 서버로 보냄
+   * 날짜 : 2019-08-07
    */
   eventClick = eventClick => {
-    
-    // 클릭시 ExerciseContext의 state들 설정 => 루틴 컴포넌트에서 fetch로 루틴정보 보낼 때 활용
-    const id = eventClick.event.id;
-    const date = moment(eventClick.event.start).format("YYYYMMDD"); // 20190807
-    const { setId, setDate } = this.context;
-    setId(id); //폰넘버
-    setDate(date); // 해당일
-
-    // 알림창
     Alert.fire({
       title: eventClick.event.title,
       html:
@@ -181,12 +169,12 @@ class Calendar extends Component {
         }).then((result) => { //성공시 응답 0, 실패시 1
           console.log("삭제결과:", result)
         })
+
       }
     });
   };
 
   render() {
-
     return (
       // 이벤트 창
       <div className="animated fadeIn p-4 demo-app">
@@ -220,7 +208,6 @@ class Calendar extends Component {
           <Col lg={9} sm={9} md={9}>
             <div className="demo-app-calendar" id="mycalendartest">
               <FullCalendar
-                selectable= {true}
                 minTime={"06:00:00"}
                 defaultView="dayGridMonth"
                 header={{
