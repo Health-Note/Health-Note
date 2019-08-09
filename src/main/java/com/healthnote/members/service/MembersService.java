@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.healthnote.members.dao.MembersDAO;
+import com.healthnote.vo.ChangeFixedScheduleDTO;
+import com.healthnote.vo.FixedScheduleDTO;
 import com.healthnote.vo.MemberAndFixedScheduleDTO;
 import com.healthnote.vo.MemberDTO;
 
@@ -60,4 +62,62 @@ public class MembersService {
 	}
 	
 	
+	/*
+	날 짜 : 2019. 8. 9.
+	작성자 : 김 정 권
+	기 능 : Member(수강생) 기본정보 변경   
+	*/
+	public int insertMember(MemberDTO paramdto) {
+		
+		MembersDAO dao = sqlsession.getMapper(MembersDAO.class);
+		int result = dao.insertMember(paramdto);
+
+		return result;
+	}
+	
+	
+	/*
+	날 짜 : 2019. 8. 9.
+	작성자 : 김 정 권
+	기 능 : Member(수강생) 신규 등록 후 고정 스케줄 삽입    
+	*/
+	public int insertFixedSchedule(FixedScheduleDTO paramdto) {
+		
+		MembersDAO dao = sqlsession.getMapper(MembersDAO.class);
+		int result = dao.insertFixedSchedule(paramdto);
+
+		return result;
+	}
+	
+	/*
+	날 짜 : 2019. 8. 9.
+	작성자 : 김 정 권
+	기 능 : Member(수강생) 고정 스케줄 삭제     
+	 */
+	public int deleteFixedSchedule(FixedScheduleDTO paramdto) {
+		
+		MembersDAO dao = sqlsession.getMapper(MembersDAO.class);
+		int result = dao.deleteFixedSchedule(paramdto);
+		
+		return result;
+	}
+	
+	/*
+	날 짜 : 2019. 8. 9.
+	작성자 : 김 정 권
+	기 능 : Member(수강생) 고정 스케줄 변경    
+	 */
+	public int changeFixedSchedule(ChangeFixedScheduleDTO paramdto) {
+	
+		MembersDAO dao = sqlsession.getMapper(MembersDAO.class);
+		int result = dao.changeFixedSchedule(paramdto);
+		
+		return result;
+	}
+	
 }
+
+
+
+
+

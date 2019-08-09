@@ -32,4 +32,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and phonenum = #{phonenum}
 	</update>
 	
+	<insert id="insertMember" parameterType="com.healthnote.vo.MemberDTO">
+		insert into members values(#{phonenum}, #{name}, #{gender}, #{start_date}, #{end_date}, #{unusedpt}, #{usedpt}, #{email}, #{height})
+	</insert>
+	
+	<insert id="insertFixedSchedule" parameterType="com.healthnote.vo.FixedScheduleDTO">
+		insert into fixedschedule values(#{day}, #{phonenum}, #{start_time}, #{end_time})
+	</insert>
+	
+	<delete id="deleteFixedSchedule" parameterType="com.healthnote.vo.FixedScheduleDTO">
+		delete from fixedschedule
+		where 1=1
+		and day = #{day}
+		and phonenum = #{phonenum}
+	</delete>
+	
+	<update id="changeFixedSchedule" parameterType="com.healthnote.vo.ChangeFixedScheduleDTO">
+		update fixedschedule
+		set day = #{after_day}, start_time = #{start_time}, end_time = #{end_time}
+		where 1=1
+		and day = #{before_day}
+		and phonenum = #{phonenum}
+	</update>
+		
 </mapper>
+
+<!--
+
+	/*
+	 
+	 빈칸 클릭  				인서트(1시간 단위로 들어온다) 
+	 드래그 					업데이트(화면에서 막을지 아니면 뒷 단에서 막을지 아니면 화면과 뒷단 모두에서 막을지 고민하여 체크로직 넣어야함) 
+	 이미 있는거 클릭 하여 삭제   딜리트 
+	
+	*/
+	
+
+  -->

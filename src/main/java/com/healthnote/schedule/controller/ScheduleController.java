@@ -223,7 +223,7 @@ public class ScheduleController {
 	/*
 	날 짜 : 2019. 08. 07.
 	작성자 : 김 정 권
-	기 능 : 해당 날짜의 해당 수강생 루틴 중 삭제하고 싶은 운동 종류를 하루 루틴에서 삭제 
+	기 능 : 해당 날짜의 해당 수강생 루틴중 하나의 운동 삽입 
 	 */
 	@RequestMapping(value = "/insertRoutine", method = RequestMethod.POST)
 	public View insertRoutine(HttpSession session, Model model, @RequestBody Map<String, Object> data) {
