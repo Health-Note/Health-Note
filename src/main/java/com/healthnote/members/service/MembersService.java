@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.healthnote.members.dao.MembersDAO;
 import com.healthnote.vo.ChangeFixedScheduleDTO;
 import com.healthnote.vo.CheckDayOfScheduleDTO;
+import com.healthnote.vo.DeleteScheduleDTO;
 import com.healthnote.vo.FixedScheduleDTO;
 import com.healthnote.vo.MemberAndFixedScheduleDTO;
 import com.healthnote.vo.MemberDTO;
@@ -92,78 +93,9 @@ public class MembersService {
 		MembersDAO dao = sqlsession.getMapper(MembersDAO.class);
 		int result = dao.insertFixedSchedule(paramdto);
 		
-		// 멤버십 만료일 가져오기 위해서 기본 memberDTO가져옴 
-		MemberDTO memberDto = dao.getMemberInfo(paramdto.getPhonenum()); 
-		String end_date = memberDto.getEnd_date(); 
+		ArrayList<ScheduleDTO> resultList = insertScheduleFollwingFixed(paramdto, today);
+		return resultList;
 		
-		SearchNotAvailableScheduleDTO searchDto = new SearchNotAvailableScheduleDTO();
-		searchDto.setToday(today);
-		searchDto.setEnd_date(end_date);
-		searchDto.setDay(paramdto.getDay());
-		searchDto.setStart_time(paramdto.getStart_time());
-		searchDto.setEnd_time(paramdto.getEnd_time());
-		
-		// 고정 스케줄 기반으로 가변 스케줄 테이블에 스케줄들을 insert하기 전에 기존 회원들이 insert할 공간에 이미 존재하는지
-		// 체크하여 이미 해당 스케줄에 특정 회원이 있으면 해당 회원의 정보를 가져옴 
-		ArrayList<ScheduleDTO> notAvailableScheduleDTO = searchNotAvailableSchedule(searchDto);
-		for(ScheduleDTO temp_dto : notAvailableScheduleDTO) {
-			System.out.println(temp_dto.getDate());
-		}
-		
-		ArrayList<String> insertTargetDateList = new ArrayList<String>();
-
-		end_date = end_date.substring(0, 4) + end_date.substring(5, 7) + end_date.substring(8,10);
-		
-		// 시작일과 종료일 간격을 반복의 총 횟수로 넣어야 하므로 이를 가져옴 
-		long dateGap = calDateBetweenAandB(today, end_date);
-		for(int i = 0; i < dateGap; i++) {
-			
-			String date = null;
-			try {
-				date = addDate(today,0,0,i);
-			} catch (Exception e) {
-				e.printStackTrace();
-			} 
-			CheckDayOfScheduleDTO dto = new CheckDayOfScheduleDTO();
-			dto.setDate(date);
-			dto.setDay(paramdto.getDay());
-			
-			// 대상 날짜가 수강생이 원하는 요일인 경우이면서 다른 사람과 겹치지 않는 경우
-			// insert 대상 date로 인식하여 ArrayList에 넣어줌 
-			if(dao.checkDayOfSchedule(dto) == 1) {
-				
-				boolean flag = true;
-				for(ScheduleDTO temp_dto : notAvailableScheduleDTO) {
-					
-					// YYYY-MM-DD => YYYYMMDD
-					String compDate = temp_dto.getDate().substring(0, 4) 
-									+ temp_dto.getDate().substring(5, 7)
-									+ temp_dto.getDate().substring(8,10);
-					if(date.equals(compDate)) {
-						flag = false;
-						break;
-					}
-				}
-				if(flag) {
-					System.out.println("최종추가날짜 : " + date);
-					insertTargetDateList.add(date);
-				}
-			}
-		} // end - for
-		
-		// 최종적으로 insert 대상이 되는 날짜들을 반복 돌리면서 Schedule에 insert 
-		ScheduleDTO scheduleDto = new ScheduleDTO();
-		for(String date : insertTargetDateList) {
-			scheduleDto.setDate(date);
-			scheduleDto.setStart_time(paramdto.getStart_time());
-			scheduleDto.setEnd_time(paramdto.getEnd_time());
-			scheduleDto.setFinish_dncd(0);
-			scheduleDto.setPhonenum(paramdto.getPhonenum());
-			
-			dao.insertScheduleFollowingFixedSchedule(scheduleDto);
-		}
-		
-		return notAvailableScheduleDTO;
 	}
 	
 	/*
@@ -176,6 +108,11 @@ public class MembersService {
 		MembersDAO dao = sqlsession.getMapper(MembersDAO.class);
 		int result = dao.deleteFixedSchedule(paramdto);
 		
+		DeleteScheduleDTO paramDto = new DeleteScheduleDTO();
+		paramDto.setDay(paramdto.getDay());
+		paramDto.setPhonenum(paramdto.getPhonenum());
+		result = dao.deleteSchedule(paramDto);
+		
 		return result;
 	}
 	
@@ -184,12 +121,25 @@ public class MembersService {
 	작성자 : 김 정 권
 	기 능 : Member(수강생) 고정 스케줄 변경    
 	 */
-	public int changeFixedSchedule(ChangeFixedScheduleDTO paramdto) {
+	public ArrayList<ScheduleDTO> changeFixedSchedule(ChangeFixedScheduleDTO paramdto, String today) {
 	
 		MembersDAO dao = sqlsession.getMapper(MembersDAO.class);
 		int result = dao.changeFixedSchedule(paramdto);
 		
-		return result;
+		DeleteScheduleDTO paramDto = new DeleteScheduleDTO();
+		paramDto.setDay(paramdto.getBefore_day());
+		paramDto.setPhonenum(paramdto.getPhonenum());
+		result = dao.deleteSchedule(paramDto);
+		
+		FixedScheduleDTO insertTargetDto = new FixedScheduleDTO();
+		insertTargetDto.setDay(paramdto.getAfter_day());
+		insertTargetDto.setEnd_time(paramdto.getEnd_time());
+		insertTargetDto.setStart_time(paramdto.getStart_time());
+		insertTargetDto.setPhonenum(paramdto.getPhonenum());
+		
+		ArrayList<ScheduleDTO> resultList = insertScheduleFollwingFixed(insertTargetDto, today);
+		
+		return resultList;
 	}
 	
 	/*
@@ -259,8 +209,92 @@ public class MembersService {
             }
 		return calDateDays;
     }    
-	
-}
+    
+	/*
+	날 짜 : 2019. 8. 9.
+	작성자 : 김 정 권
+	기 능 : 날짜 gap 계산  
+	 */
+    public ArrayList<ScheduleDTO> insertScheduleFollwingFixed(FixedScheduleDTO paramdto, String today) {
+    		
+    		MembersDAO dao = sqlsession.getMapper(MembersDAO.class);
+    	
+   			// 멤버십 만료일 가져오기 위해서 기본 memberDTO가져옴 
+  			MemberDTO memberDto = dao.getMemberInfo(paramdto.getPhonenum()); 
+   			String end_date = memberDto.getEnd_date(); 
+   			
+   			SearchNotAvailableScheduleDTO searchDto = new SearchNotAvailableScheduleDTO();
+   			searchDto.setToday(today);
+   			searchDto.setEnd_date(end_date);
+   			searchDto.setDay(paramdto.getDay());
+   			searchDto.setStart_time(paramdto.getStart_time());
+   			searchDto.setEnd_time(paramdto.getEnd_time());
+   			
+   			// 고정 스케줄 기반으로 가변 스케줄 테이블에 스케줄들을 insert하기 전에 기존 회원들이 insert할 공간에 이미 존재하는지
+   			// 체크하여 이미 해당 스케줄에 특정 회원이 있으면 해당 회원의 정보를 가져옴 
+   			ArrayList<ScheduleDTO> notAvailableScheduleDTO = searchNotAvailableSchedule(searchDto);
+   			for(ScheduleDTO temp_dto : notAvailableScheduleDTO) {
+   				System.out.println(temp_dto.getDate());
+   			}
+   			
+   			ArrayList<String> insertTargetDateList = new ArrayList<String>();
+   			end_date = end_date.substring(0, 4) + end_date.substring(5, 7) + end_date.substring(8,10);
+   			
+   			// 시작일과 종료일 간격을 반복의 총 횟수로 넣어야 하므로 이를 가져옴 
+   			long dateGap = calDateBetweenAandB(today, end_date);
+   			for(int i = 0; i < dateGap; i++) {
+   				
+   				String date = null;
+   				try {
+   					date = addDate(today,0,0,i);
+   				} catch (Exception e) {
+   					e.printStackTrace();
+   				} 
+   				CheckDayOfScheduleDTO dto = new CheckDayOfScheduleDTO();
+   				dto.setDate(date);
+   				dto.setDay(paramdto.getDay());
+   				
+   				// 대상 날짜가 수강생이 원하는 요일인 경우이면서 다른 사람과 겹치지 않는 경우
+   				// insert 대상 date로 인식하여 ArrayList에 넣어줌 
+   				if(dao.checkDayOfSchedule(dto) == 1) {
+   					
+   					boolean flag = true;
+   					for(ScheduleDTO temp_dto : notAvailableScheduleDTO) {
+   						
+   						// YYYY-MM-DD => YYYYMMDD
+   						String compDate = temp_dto.getDate().substring(0, 4) 
+   										+ temp_dto.getDate().substring(5, 7)
+   										+ temp_dto.getDate().substring(8,10);
+   						if(date.equals(compDate)) {
+   							flag = false;
+   							break;
+   						}
+   					}
+   					if(flag) {
+   						System.out.println("최종추가날짜 : " + date);
+   						insertTargetDateList.add(date);
+   					}
+   				}
+   			} // end - for
+   			
+   			// 최종적으로 insert 대상이 되는 날짜들을 반복 돌리면서 Schedule에 insert 
+   			ScheduleDTO scheduleDto = new ScheduleDTO();
+   			for(String date : insertTargetDateList) {
+   				scheduleDto.setDate(date);
+   				scheduleDto.setStart_time(paramdto.getStart_time());
+   				scheduleDto.setEnd_time(paramdto.getEnd_time());
+   				scheduleDto.setFinish_dncd(0);
+   				scheduleDto.setPhonenum(paramdto.getPhonenum());
+   				
+   				dao.insertScheduleFollowingFixedSchedule(scheduleDto);
+   			}
+   			
+   			return notAvailableScheduleDTO;  	
+   }
+
+}    
+
+
 
 
 

@@ -177,6 +177,7 @@ public class MembersController {
 	@RequestMapping(value = "/changeFixedSchedule", method = RequestMethod.POST)
 	public View changeFixedSchedule(HttpSession session, Model model, @RequestBody Map<String, Object> data) {
 		
+		String today = ((String) data.get("today"));
 		ChangeFixedScheduleDTO paramdto = new ChangeFixedScheduleDTO();
 		
 		paramdto.setAfter_day(Integer.parseInt((String) data.get("after_day")));
@@ -185,8 +186,8 @@ public class MembersController {
 		paramdto.setStart_time((String) data.get("start_time"));
 		paramdto.setEnd_time((String) data.get("end_time"));
 		
-		int result = MembersService.changeFixedSchedule(paramdto);
-		model.addAttribute("result", result);
+		ArrayList<ScheduleDTO> resultList = MembersService.changeFixedSchedule(paramdto, today);
+		model.addAttribute("resultList", resultList);
 		
 		return jsonview;
 	}

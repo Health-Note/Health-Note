@@ -100,4 +100,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into schedule values(#{date}, #{phonenum}, #{start_time}, #{end_time}, #{finish_dncd})
 	</insert>
 		
+	<delete id="deleteSchedule" parameterType="com.healthnote.vo.DeleteScheduleDTO">
+		delete from schedule
+		where 1=1
+		and phonenum = #{phonenum}
+		and weekday(date) = #{day}
+	</delete>		
+		
 </mapper>
+
+
+
+
+
+

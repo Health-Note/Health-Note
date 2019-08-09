@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.healthnote.vo.ChangeFixedScheduleDTO;
 import com.healthnote.vo.CheckDayOfScheduleDTO;
+import com.healthnote.vo.DeleteScheduleDTO;
 import com.healthnote.vo.FixedScheduleDTO;
 import com.healthnote.vo.MemberAndFixedScheduleDTO;
 import com.healthnote.vo.MemberDTO;
@@ -23,4 +24,6 @@ public interface MembersDAO {
 	public MemberDTO getMemberInfo(String phonenum);
 	public int checkDayOfSchedule(CheckDayOfScheduleDTO paramdto);
 	public int insertScheduleFollowingFixedSchedule(ScheduleDTO paramdto);
+	public int deleteSchedule(DeleteScheduleDTO paramdto);
+	
 }
