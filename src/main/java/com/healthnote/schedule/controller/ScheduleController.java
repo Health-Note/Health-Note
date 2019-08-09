@@ -1,6 +1,7 @@
 package com.healthnote.schedule.controller;
 
 import com.healthnote.schedule.service.ScheduleService;
+import com.healthnote.vo.ExerciseDTO;
 import com.healthnote.vo.RoutineDTO;
 import com.healthnote.vo.ScheduleDTO;
 
@@ -43,6 +44,9 @@ public class ScheduleController {
 		
 		ArrayList<ScheduleDTO> scheduleList = ScheduleService.getAllWeekSchedule(trainerId, today);
 		model.addAttribute("ptschedule", scheduleList);
+		
+		ArrayList<ExerciseDTO> exerciseList = ScheduleService.getAllExercise();
+		model.addAttribute("exerciseList", exerciseList);
 		
 		return jsonview;
 	

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.healthnote.schedule.dao.ScheduleDAO;
+import com.healthnote.vo.ExerciseDTO;
 import com.healthnote.vo.MinusUnusedPtDTO;
 import com.healthnote.vo.RoutineDTO;
 import com.healthnote.vo.ScheduleDTO;
@@ -326,6 +327,19 @@ public class ScheduleService {
 		
 		return result;
 		
+	}
+	
+	/*  
+	날 짜 : 2019. 08. 07.
+	작성자 : 김 정 권
+	기 능 : 해당 날짜의 해당 수강생 스케줄을 드래그앤 드롭으로 변경시 원하는 날짜의 원하는 시간으로 변경 
+	 */
+	public ArrayList<ExerciseDTO> getAllExercise(){
+	
+		ScheduleDAO dao = sqlsession.getMapper(ScheduleDAO.class);
+		ArrayList<ExerciseDTO> resultList = dao.getAllExercise();
+		
+		return resultList;
 	}
 
 	
