@@ -97,6 +97,9 @@ class Calendar extends Component {
     const changedDate = moment(info.event.start).format('YYYYMMDD'); // 한글시간으로 변화 필요
     const oldTime = moment(info.oldEvent.start).format('HHmm');
     const changedTime = moment(info.event.start).format('HHmm');
+
+
+
    
     fetch("/insertRoutine", {
       method: "POST",
@@ -106,9 +109,9 @@ class Calendar extends Component {
       },
       body: JSON.stringify({phoneNum: id, oldDate, changedDate, oldTime, changedTime})
     }).then((res) => {
-      return res.json()
-    }).then((result) => { //성공시 응답 0, 실패시 1
-      console.log(result)
+      return res.json();
+    }).then((result) => { // 성공시 응답 0, 실패시 1
+      console.log(result);
     })
   }
 
@@ -185,6 +188,10 @@ class Calendar extends Component {
     });
   };
 
+  eventReceive = (eventReceive) => {
+    eventReceive.draggedEl.parentNode.removeChild(eventReceive.draggedEl);
+  }
+
   render() {
 
     return (
@@ -220,6 +227,7 @@ class Calendar extends Component {
           <Col lg={9} sm={9} md={9}>
             <div className="demo-app-calendar" id="mycalendartest">
               <FullCalendar
+               mirrorSelector={'.gu-mirror'}
                 selectable= {true}
                 minTime={"06:00:00"}
                 defaultView="dayGridMonth"
@@ -240,7 +248,8 @@ class Calendar extends Component {
                 // drop={this.drop}
                 eventReceive={this.eventReceive}
                 eventClick={this.eventClick}
-                // selectable={true}
+                eventReceive={this.eventReceive}
+                
               />
             </div>
           </Col>
