@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import javax.swing.text.html.HTMLDocument.Iterator;
-
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.healthnote.schedule.dao.ScheduleDAO;
+import com.healthnote.vo.ExerciseDTO;
+import com.healthnote.vo.MinusUnusedPtDTO;
 import com.healthnote.vo.RoutineDTO;
 import com.healthnote.vo.ScheduleDTO;
 
@@ -124,7 +124,7 @@ public class ScheduleService {
 		return result;
 		
 	}
-	
+
 	/*
 	날 짜 : 2019. 08. 07.
 	작성자 : 김 정 권
@@ -133,7 +133,7 @@ public class ScheduleService {
 	public int changeRoutineReps(String memberId, String date, String exercisename, String reps) {
 		
 		ScheduleDAO dao = sqlsession.getMapper(ScheduleDAO.class);
-		
+
 		HashMap<String, String> parammap = new HashMap<String, String>();
 		parammap.put("memberId", memberId);
 		parammap.put("date", date);
@@ -141,6 +141,36 @@ public class ScheduleService {
 		parammap.put("reps", reps);
 		
 		int result = dao.changeRoutineReps(parammap);
+		
+		return result;
+		
+	}
+	
+	/*
+	날 짜 : 2019. 08. 09.
+	작성자 : 김 정 권
+	기 능 : 수강생의 미사용 pt 수 가져옴  
+	 */
+	public int getUnusedPt(String phonenum) {
+		
+		ScheduleDAO dao = sqlsession.getMapper(ScheduleDAO.class);
+
+		int unusedPt = dao.getUnusedPt(phonenum);
+		
+		return unusedPt;
+		
+	}
+	
+	/*
+	날 짜 : 2019. 08. 09.
+	작성자 : 김 정 권
+	기 능 : 수강생의 미사용 pt 를 마이너스 1회 시킴  
+	 */
+	public int minusUnusedPt(MinusUnusedPtDTO paramdto) {
+
+		ScheduleDAO dao = sqlsession.getMapper(ScheduleDAO.class);
+		
+		int result = dao.minusUnusedPt(paramdto);
 		
 		return result;
 		
@@ -156,12 +186,28 @@ public class ScheduleService {
 		
 		ScheduleDAO dao = sqlsession.getMapper(ScheduleDAO.class);
 		
+		int unusedPt = getUnusedPt(memberId);
+		
+		// 차감할 미사용 PT수가 없으면 2를 리턴하면서 메소드 종료시킴 
+		// 2를 리턴하는 이유는 실패시 2인 것을 프론트에서 감안하여
+		// 업데이트가 안된 이유를 알림으로 알려줘야하기 때문임 
+		if(unusedPt <= 0) {
+			return 2;
+		}
+		
+		MinusUnusedPtDTO paramdto = new MinusUnusedPtDTO();
+		paramdto.setPhonenum(memberId);
+		paramdto.setUnusedpt(dao.getUnusedPt(memberId) - 1);
+		int result = minusUnusedPt(paramdto);
+		
 		HashMap<String, String> parammap = new HashMap<String, String>();
 		parammap.put("memberId", memberId);
 		parammap.put("date", date);
 		parammap.put("finish_dncd", finish_dncd);
 		
-		int result = dao.updateScheduleFinishDncd(parammap);
+		if(result == 1) {
+			result = dao.updateScheduleFinishDncd(parammap);
+		}
 		
 		return result;
 		
@@ -281,6 +327,19 @@ public class ScheduleService {
 		
 		return result;
 		
+	}
+	
+	/*  
+	날 짜 : 2019. 08. 07.
+	작성자 : 김 정 권
+	기 능 : 해당 날짜의 해당 수강생 스케줄을 드래그앤 드롭으로 변경시 원하는 날짜의 원하는 시간으로 변경 
+	 */
+	public ArrayList<ExerciseDTO> getAllExercise(){
+	
+		ScheduleDAO dao = sqlsession.getMapper(ScheduleDAO.class);
+		ArrayList<ExerciseDTO> resultList = dao.getAllExercise();
+		
+		return resultList;
 	}
 
 	

@@ -133,7 +133,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and date = #{before_date}
 		and phonenum = #{phonenum}
 	</update>
+	
+	<select id="getUnusedPt" parameterType="String" resultType="Integer" >
+		select unusedpt
+		from members
+		where 1=1
+		and phonenum = #{phonenum}
+	</select>
+	
+	<update id="minusUnusedPt" parameterType="com.healthnote.vo.MinusUnusedPtDTO">
+		update members
+		set unusedpt = #{unusedpt}
+		where 1=1
+		and phonenum = #{phonenum}	
+	</update>
+
+	<select id="getAllExercise" resultType="com.healthnote.vo.ExerciseDTO">
+		select *
+		from exercise
+	</select>
 
 </mapper>
-
 
