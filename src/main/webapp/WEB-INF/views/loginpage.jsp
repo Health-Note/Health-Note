@@ -7,7 +7,7 @@
 
 <body onload="document.f.username.focus();">
     <h3>Login with Username and Password</h3>
-    <form name="f" action="/login" method="POST">
+    <form name="f" action="/main/login" method="post">
         <table>
             <tbody>
                 <tr>
@@ -21,9 +21,9 @@
                 <tr>
                     <td colspan="2"><input name="submit" type="submit" value="Login"></td>
                 </tr>
-                <input name="${_csrf.parameterName}" type="hidden" value="${_crsf.token}">
             </tbody>
         </table>
+		<input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
     </form>
 </body>
 </html>

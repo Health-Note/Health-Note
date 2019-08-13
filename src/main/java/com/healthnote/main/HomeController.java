@@ -35,7 +35,7 @@ public class HomeController {
 	
 	}
 	
-	@RequestMapping(value = "/loginSuccess", method = RequestMethod.GET)
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String loginSuccess(HttpSession request, Model model) {
 		
 		System.out.println("loginSuccess");
