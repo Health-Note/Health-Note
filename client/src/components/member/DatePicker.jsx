@@ -7,16 +7,16 @@ import {
   KeyboardTimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
-import moment from 'moment'
 
 
 export default function DatePicker({newStartDate, newEndDate, setStartDate, setEndDate}) {
 
-  const [selectedDate, setSelectedDate] = React.useState(newStartDate);
-  console.log(newStartDate)
-
-  function handleDateChange(date) {
+  function handleStartDateChange(date) {
     setStartDate(date);
+  }
+
+  function handleEndDateChange(date) {
+    setEndDate(date);
   }
 
 
@@ -26,11 +26,23 @@ export default function DatePicker({newStartDate, newEndDate, setStartDate, setE
         <KeyboardDatePicker
             fullWidth
           margin="normal"
-          id="date-picker-dialog"
-          label="Date picker dialog"
+          id="date-picker-startDate"
+          label="회원권 시작일"
           format="yyyy/MM/dd"
           value={newStartDate}
-          onChange={handleDateChange}
+          onChange={handleStartDateChange}
+          KeyboardButtonProps={{
+            'aria-label': 'change date',
+          }}
+        />
+         <KeyboardDatePicker
+            fullWidth
+          margin="normal"
+          id="date-picker-endDate"
+          label="회원권 종료일"
+          format="yyyy/MM/dd"
+          value={newEndDate}
+          onChange={handleEndDateChange}
           KeyboardButtonProps={{
             'aria-label': 'change date',
           }}

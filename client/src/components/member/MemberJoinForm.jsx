@@ -9,7 +9,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DatePicker from './DatePicker';
-import CheckBox from './CheckBox';
 import Select from './Select';
 import moment from 'moment';
 
@@ -27,6 +26,27 @@ function MemberJoinForm({ member, toggleJoin, isJoining }) {
     const handleSubmit = () => {
         dispatch({type: "ADD",  newName, newStartDate, newEndDate, newPhoneNum, newGender, newUnusedpt, newHeight});
         toggleJoin();
+
+        // 맴버 등록 (usedpt는 서버측에서 0으로 설정하면 어떨까?)
+        fetch("/insertMember", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json" 
+          },
+          body: JSON.stringify({
+              name: newName,
+              phoneNum: newPhoneNum, 
+              gender: newGender, 
+              start_date: newStartDate, 
+              end_date: newEndDate, 
+              unusedpt: newUnusedpt,
+              height: newHeight
+          })
+      }).then((res) => {
+          return res.json()
+      }).then((result) => {
+          //console.log("insertMember", result);
+      })
     }
         
     return (

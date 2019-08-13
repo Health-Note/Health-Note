@@ -18,7 +18,6 @@ class Calendar extends Component {
     // state에서 날짜형식은 ISO // 2017-03-16T17:40:00+09:0
   static contextType = ExerciseContext;
   
-  
   state = {
     calendarEvents: [
       {
@@ -32,13 +31,6 @@ class Calendar extends Component {
         id: "01045678945"
       }
     ],
-    events: [
-      { title: "Event 1", id: "1" },
-      { title: "Event 2", id: "2" },
-      { title: "Event 3", id: "3" },
-      { title: "Event 4", id: "4" },
-      { title: "Event 5", id: "5" }
-    ]
   };
   
   /**
@@ -49,6 +41,8 @@ class Calendar extends Component {
    */
 
   componentDidMount() {
+
+
     fetch("/getData", {
       method: "get",
       headers: {
@@ -97,9 +91,6 @@ class Calendar extends Component {
     const changedDate = moment(info.event.start).format('YYYYMMDD'); // 한글시간으로 변화 필요
     const oldTime = moment(info.oldEvent.start).format('HHmm');
     const changedTime = moment(info.event.start).format('HHmm');
-
-
-
    
     fetch("/insertRoutine", {
       method: "POST",
@@ -115,8 +106,6 @@ class Calendar extends Component {
     })
   }
 
-
-
  /**
   * 날짜 : 2019-08-07
    * 작성자: 박종열
@@ -124,14 +113,13 @@ class Calendar extends Component {
    *        삭제클릭시 phoneNum, date, startTime 서버로 보냄
    */
   eventClick = eventClick => {
-    
+  
     // 클릭시 ExerciseContext의 state들 설정 => 루틴 컴포넌트에서 fetch로 루틴정보 보낼 때 활용
     const id = eventClick.event.id;
     const date = moment(eventClick.event.start).format("YYYYMMDD"); // 20190807
-    const { setId, setDate } = this.context;
-    setId(id); //폰넘버
-    setDate(date); // 해당일
-
+    const exercise = this.context
+    exercise.setId(id);
+    exercise.setDate(exercise);
     // 알림창
     Alert.fire({
       title: eventClick.event.title,
@@ -140,18 +128,18 @@ class Calendar extends Component {
       <table class="table">
       <tbody>
       <tr >
-      <td>이름</td>
-      <td><strong>` +
-        eventClick.event.title +
-        `</strong></td>
+        <td>이름</td>
+        <td><strong>` +
+          eventClick.event.title +
+          `</strong></td>
       </tr>
       <tr >
-      <td>시작</td>
-      <td><strong>
-      ` +
-        eventClick.event.start +
-        `
-      </strong></td>
+        <td>시작</td>
+        <td><strong>
+        ` +
+          eventClick.event.start +
+          `
+        </strong></td>
       </tr>
       </tbody>
       </table>
@@ -189,6 +177,7 @@ class Calendar extends Component {
   };
 
   eventReceive = (eventReceive) => {
+    console.log(eventReceive)
     eventReceive.draggedEl.parentNode.removeChild(eventReceive.draggedEl);
   }
 
@@ -198,12 +187,12 @@ class Calendar extends Component {
       // 이벤트 창
       <div className="animated fadeIn p-4 demo-app">
         <Row>
-          <Col lg={3} sm={3} md={3}>
+          
             <div
               id="external-events"
               style={{
                 padding: "10px",
-                width: "80%",
+                width: "0%",
                 height: "auto",
                 maxHeight: "-webkit-fill-available"
               }}
@@ -211,20 +200,11 @@ class Calendar extends Component {
               <p align="center">
                 <strong> Events</strong>
               </p>
-              {this.state.events.map(event => (
-                <div
-                  className="fc-event"
-                  title={event.title}
-                  data={event.id}
-                  key={event.id}
-                >
-                  {event.title}
-                </div>
-              ))}
+          
             </div>
-          </Col>
+          
 
-          <Col lg={9} sm={9} md={9}>
+          <Col lg={12} sm={12} md={12}>
             <div className="demo-app-calendar" id="mycalendartest">
               <FullCalendar
                mirrorSelector={'.gu-mirror'}
@@ -246,9 +226,8 @@ class Calendar extends Component {
                 events={this.state.calendarEvents}
                 eventDrop={this.drop}
                 // drop={this.drop}
-                eventReceive={this.eventReceive}
+                eventReceive={this.eventReceive} //eventReceive는 외부에서 캘린더로 들어오는 객체를 받는 리시버이다.
                 eventClick={this.eventClick}
-                eventReceive={this.eventReceive}
                 
               />
             </div>

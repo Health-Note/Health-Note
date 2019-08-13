@@ -1,9 +1,8 @@
 import React, { useEffect, useContext } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
 import Divider from './Divider'
 import { ExerciseContext }  from '../../contexts/ExerciseContext';
+import { idContext }  from '../../contexts/ExerciseContext';
 import Grid from '@material-ui/core/Grid';
 
 export default function RecentWorkOut() {
@@ -24,26 +23,27 @@ export default function RecentWorkOut() {
   /**
    * 날짜: 2019.08.09
    * 작성자: 박종열
-   * 기능: ajax (월~일요일 해당회원의 운동루틴 데이저를 가져온다)
+   * 기능: Calendar에서 이름 클릭시 ajax (월~일요일 해당회원의 운동루틴 데이저를 가져온다)
            req: id, date
            res: 요일별 운동루틴
   **/
-  // useEffect(() => {
-  //   fetch("/getWeekRoutineOfStu",{
-  //     method: "POST",
-  //     headers: {
-  //       'Accept': 'application/json',
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({id, today: date})
-  //   })
-  //   .then((res) => {
-  //     return res.json();
-  //   })
-  //   .then((result) => {
-  //     console.log("월,화,수,목,금,토,일 운동루틴", result);
-  //   })
-  // }, [id])
+  useEffect(() => {
+    console.log("recentworkOut", id)
+    fetch("/getWeekRoutineOfStu",{
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({id, today: date})
+    })
+    .then((res) => {
+      return res.json();
+    })
+    .then((result) => {
+      console.log("월,화,수,목,금,토,일 운동루틴", result);
+    })
+  }, [id])
   
   // 예시 json 
   // { 0: { exercise: [펙덱플라이, 풀업, 러닝, 윗몸일으키기] },
@@ -53,8 +53,6 @@ export default function RecentWorkOut() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Container className="RecentWorkOut" maxWidth="lg">
-       
           <Grid item >
             <Grid
               container
@@ -62,17 +60,12 @@ export default function RecentWorkOut() {
               direction="row"
               justify="center"
               alignItems="center"
-            
             >
                   { defaultProps.map(exercise => (
                     <Divider className="Divder" exercise={ exercise }/>
                 )) }
-        
             </Grid>
-         
         </Grid>
-        <Typography component="div" style={{ backgroundColor: '#cfe8fc', height: '100vh' }} />
-      </Container>
     </React.Fragment>
   );
 }

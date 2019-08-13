@@ -5,7 +5,7 @@ const reducer = (state, action) => {
         case "ADD":
             return [...state, { 
                 id: uuid(), 
-                name: action.name, 
+                name: action.newName, 
                 phoneNum: action.newPhoneNum,  
                 gender: action.newGender,
                 unusedpt: action.newUnusedpt,

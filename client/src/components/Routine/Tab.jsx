@@ -80,9 +80,9 @@ export default function ScrollableTabsButtonAuto() {
           scrollButtons="auto"
           aria-label="scrollable auto tabs example"
         >
-          <Tab label="Item One" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
+          <Tab label="가슴" {...a11yProps(0)} />
+          <Tab label="등" {...a11yProps(1)} />
+          <Tab label="하체" {...a11yProps(2)} />
           <Tab label="Item Four" {...a11yProps(3)} />
           <Tab label="Item Five" {...a11yProps(4)} />
           <Tab label="Item Six" {...a11yProps(5)} />
@@ -95,22 +95,22 @@ export default function ScrollableTabsButtonAuto() {
         })}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        등
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        하체
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Item Four
+        어깨
       </TabPanel>
       <TabPanel value={value} index={4}>
-        Item Five
+        이두
       </TabPanel>
       <TabPanel value={value} index={5}>
-        Item Six
+        삼두
       </TabPanel>
       <TabPanel value={value} index={6}>
-        Item Seven
+        유산소
       </TabPanel>
     </div>
   );

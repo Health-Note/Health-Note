@@ -1,3 +1,9 @@
+/* 
+* 날짜: 2019.08.12
+* 작성자: 박종열
+* 기능: Member(회원)정보 수정
+*/
+
 import React, { useContext } from 'react';
 import useInputState from '../../hooks/useInputState';
 import TextField from '@material-ui/core/TextField';
@@ -9,7 +15,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DatePicker from './DatePicker';
-import CheckBox from './CheckBox';
 import Select from './Select';
 import moment from 'moment';
 
@@ -83,7 +88,7 @@ function EditMemberForm({ member, toggle, isEditing }) {
             <TextField
               id="usedpt"
               margin="normal"
-              label="지난피티수"
+              label="완료피티수"
               type="email"
               fullWidth
             />

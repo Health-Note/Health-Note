@@ -1,7 +1,7 @@
 import React, { createContext, useState } from 'react';
-import Routine from '../components/routine/Routine'
 
 const ExerciseContext = createContext();
+const idContext = createContext();
 
 const ExerciseProvider = ( props ) => {
 
@@ -12,15 +12,15 @@ const ExerciseProvider = ( props ) => {
     
    
     return (
-        <>
             <ExerciseContext.Provider value={{selectedExer, setSelectedExer, id, setId, date, setDate, startTime, setStartTime}}>
-                {props.children}
+                <idContext.Provider  value={id}>
+                    {props.children}
+                </idContext.Provider>
             </ExerciseContext.Provider>
-        </>
     )
 }
 
-export { ExerciseProvider, ExerciseContext };
+export { ExerciseProvider, ExerciseContext, idContext };
 
 
     
