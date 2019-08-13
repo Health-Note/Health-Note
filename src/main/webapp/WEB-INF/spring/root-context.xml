@@ -24,19 +24,6 @@
     </bean>
     -->
  
-    <!--
-    jdbc 자원을 bean으로 선언하고 접속 환경을 구성_MySQL AWS RDBS 
-    <bean id="driverManagerDataSource"
-        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
-        <property name="url"
-            value="jdbc:mysql://데이터베이스 주소:포트번호/스키마이름?useSSL=false&amp;serverTimezone=UTC">
-        </property>
-        <property name="username" value="MySQL 계정"></property>
-        <property name="password" value="비밀번호"></property>
-    </bean>  
-    -->      
- 
     <!-- LOCAL PC_MySql --> 
     <bean id="driverManagerDataSource"
         class="org.springframework.jdbc.datasource.DriverManagerDataSource">
