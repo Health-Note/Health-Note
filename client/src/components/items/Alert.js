@@ -20,10 +20,11 @@ export default function AlertDialog({toggle, setToggle, targetId}) {
     setToggle();
   }
   
-  // 회원 가변 스케줄상에서 완료로 바꿈 / 창닫기
+  // 회원 가변 스케줄상에서 완료로 바꿈 / 창닫기 / targetId = PhoneNum
   function completeSchedule() {
     setToggle();
-    dispatch({type: "TOGGLE", id: targetId});
+    console.log("targetId", targetId)
+    dispatch({type: "TOGGLE", id: targetId}); 
   }
 
 
@@ -47,10 +48,10 @@ export default function AlertDialog({toggle, setToggle, targetId}) {
             닫기
           </Button>
           <Button onClick={deleteSchedule} color="primary" autoFocus>
-            일정삭제
+            일정 삭제
           </Button>
           <Button onClick={completeSchedule} color="primary" >
-            PT완료
+            PT 완료
           </Button>
         </DialogActions>
       </Dialog>

@@ -97,7 +97,6 @@ function Calendar () {
     const id = eventClick.event.id;
     setToggle(!toggle)
     handleTargetId(id);
-    console.log(id)
 
     // 클릭시 ExerciseContext의 state들 설정 => 루틴 컴포넌트에서 fetch로 루틴정보 보낼 때 활용
     const date = moment(eventClick.event.start).format("YYYYMMDD"); // 20190807
@@ -138,7 +137,7 @@ function Calendar () {
     return (
       // 이벤트 창
       <div className="animated fadeIn p-4 demo-app">
-      <Alert toggle={toggle} setToggle={setToggle} id={targetId}/>
+      <Alert toggle={toggle} setToggle={setToggle} targetId={targetId}/>
         <Row>
             <div
               id="external-events"
