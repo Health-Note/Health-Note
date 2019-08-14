@@ -13,7 +13,8 @@ const defaultTodos = [
         endDate:"20191028",
         usedpt: 0,
         unusedpt: 16,
-        height: 173
+        height: 173,
+        day: [0, 1, 3]
     },
     {   id: uuid(),
         name: "박종열",
@@ -23,7 +24,8 @@ const defaultTodos = [
         endDate:"20191027",
         usedpt: 2,
         unusedpt: 4 ,
-        height: 180
+        height: 180,
+        day: [0, 1, 6]
     },
     {   id: uuid(),
         name: "김정권",
@@ -33,7 +35,8 @@ const defaultTodos = [
         endDate:"20191029",
         usedpt: 5,
         unusedpt: 10 ,
-        height: 181
+        height: 181,
+        day: [1, 3, 5]
     }
 ]
 
@@ -43,7 +46,7 @@ export const DispatchContext = createContext();
 export function MembersProvider(props) {
     // 작성일: 2019.08.11 
     // 작성자: 박종열
-    // 기능: 트레이너들의 회원목록(이름, 등록일, 마감일, 남은pt수) 가져오기
+    // 기능: 트레이너들의 회원목록(이름, 등록일, 마감일, 남은pt수) 가져오기, 정적 스케줄 가져오기
     useEffect(() => {
         fetch("/getMemberAndFixedSchedule", {
             method: "GET",

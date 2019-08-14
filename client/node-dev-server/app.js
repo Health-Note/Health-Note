@@ -39,8 +39,64 @@ app.post("/insertRoutine", (req, res) => {
     res.json({result: 0});
 })
 
-app.post("//getWeekRoutineOfStu", (req, res) => {
+app.post("/getWeekRoutineOfStu", (req, res) => {
     console.log(req.body);
+})
+
+app.get("/sendBasicsForSchedule", (req, res) => {
+    res.json({   
+        name: "이서영",
+        date: "20190814", // superkey
+        phoneNum: "01022221111", //superkey
+        start_time: "1830", 
+        end_time: "1930",
+        finish_dncd: true,
+        start: "20190815 1930",
+    },
+    {  
+        name: "이서영",
+        date: "20190815", // superkey
+        phoneNum: "01022221111", //superkey
+        start_time: "1830", 
+        end_time: "1930",
+        finish_dncd: false,
+        start: "20190814 1330",
+    },
+    {   
+        name: "이서영",
+        date: "20190816", // superkey
+        phoneNum: "01022221111", //superkey
+        start_time: "1830", 
+        end_time: "1930",
+        finish_dncd: false
+    },
+    { 
+        name: "박종열",
+        date: "20190816", // superkey
+        phoneNum: "01033334444", //superkey
+        start_time: "1930", 
+        end_time: "1830",
+        finish_dncd: false,
+        start: "20190818 1930",
+    },
+    { 
+        name: "박종열",
+        date: "20190815", // superkey
+        phoneNum: "01033334444", //superkey
+        start_time: "1830", 
+        end_time: "1930",
+        finish_dncd: false,
+        start: "20190816 1930",
+    },
+    {  
+        name: "김정권",
+        date: "20190816", // superkey
+        phoneNum: "01044445555", //superkey
+        start_time: "1830", 
+        end_time: "1930",
+        finish_dncd: false,
+        start: "20190816 1930",
+    })
 })
 
 app.listen(8080, () => {

@@ -1,30 +1,37 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { DispatchContext } from '../../contexts/schedule.context';
 
-export default function AlertDialog() {
-  const [open, setOpen] = React.useState(false);
 
-  function handleClickOpen() {
-    setOpen(true);
+export default function AlertDialog({toggle, setToggle, targetId}) {
+  const dispatch = useContext(DispatchContext);
+
+
+  function closeAlert() {
+    setToggle();
   }
 
-  function handleClose() {
-    setOpen(false);
+  function deleteSchedule() {
+    setToggle();
   }
+  
+  // 회원 가변 스케줄상에서 완료로 바꿈 / 창닫기
+  function completeSchedule() {
+    setToggle();
+    dispatch({type: "TOGGLE", id: targetId});
+  }
+
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Open alert dialog
-      </Button>
       <Dialog
-        open={open}
-        onClose={handleClose}
+        open={toggle}
+        onClose={setToggle}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -36,14 +43,14 @@ export default function AlertDialog() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Disagree
+          <Button onClick={closeAlert} color="primary">
+            닫기
           </Button>
-          <Button onClick={handleClose} color="primary" autoFocus>
-            Agree
+          <Button onClick={deleteSchedule} color="primary" autoFocus>
+            일정삭제
           </Button>
-          <Button onClick={handleClose} color="primary" >
-            Agree
+          <Button onClick={completeSchedule} color="primary" >
+            PT완료
           </Button>
         </DialogActions>
       </Dialog>

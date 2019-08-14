@@ -7,6 +7,7 @@ import { Route, Switch, Link } from 'react-router-dom'
 import Schedule from '../pages/Schedule';
 import Members from '../pages/Members'
 import Statistics from '../pages/Statistics';
+import Routes from '../../Routes'
 
 const drawerWidth = 240;
 
@@ -97,7 +98,6 @@ export default function Dashboard() {
   return (
   <>
     <div className={classes.root}>
-
         <Divider />
         <List><Link exact to={"/schedule"}>{"Schedule"}</Link></List>
 
@@ -107,12 +107,7 @@ export default function Dashboard() {
         <Divider />
         <List><Link exact to={"/member"}>{"Member"}</Link></List>
     </div>
-      <Switch>
-        <Route exact path="/schedule" render={() => <Schedule/> } />
-        <Route exact path="/statistic" render={() => <Statistics/> } />
-        <Route exact path="/member" render={() => <Members/> } />
-        <Route render={() => <h1>404 not found</h1>}/>
-      </Switch>
+    <Routes />
     </>
 
   );

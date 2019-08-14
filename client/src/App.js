@@ -1,19 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
 import DashBoard from './components/dashBoard/DashBoard';
 import { ExerciseProvider } from './contexts/ExerciseContext';
+import { MembersProvider } from './contexts/members.context';
+import { ScheduleProvider } from './contexts/schedule.context';
 import './App.css';
 
 
-class App extends Component {
-  render(){
+function App () {
     return (
       <>
-      <ExerciseProvider >
-          <DashBoard />
-      </ExerciseProvider>
+      <ScheduleProvider>
+        <MembersProvider>
+            <ExerciseProvider >
+                <DashBoard />
+            </ExerciseProvider>
+        </MembersProvider>
+      </ScheduleProvider>
+     
       </>
-    );
-  }
-  
+    );  
 }
 export default App;
