@@ -19,6 +19,8 @@ import com.healthnote.vo.ChangeFixedScheduleDTO;
 import com.healthnote.vo.FixedScheduleDTO;
 import com.healthnote.vo.MemberAndFixedScheduleDTO;
 import com.healthnote.vo.MemberDTO;
+import com.healthnote.vo.ScheduleDTO;
+import com.healthnote.vo.SearchNotAvailableScheduleDTO;
 
 @Controller
 public class MembersController {
@@ -132,9 +134,13 @@ public class MembersController {
 		paramdto.setPhonenum((String) data.get("phonenum"));
 		paramdto.setStart_time((String) data.get("start_time"));
 		paramdto.setEnd_time((String) data.get("end_time"));
+		String today = ((String) data.get("today"));
 		
-		int result = MembersService.insertFixedSchedule(paramdto);
-		model.addAttribute("result", result);
+		// 여기서 return되는 결과 값은 고정 스케줄 입력 후 해당 스케줄에 따라 가변 스케줄에 insert를 하는데
+		// 가변 스케줄 상에 이미 누군가가 스케줄이 들어가 있어서 insert 하지 못한 날짜와 시간에 대한 list이다 
+		// 고정 스케줄에 대한 insert 결과와 아래 리스트를 따로 return하도록 하려면 메소드를 분절화 해야하는데 일단 이것은 나중으로 미루기로 한다 
+		ArrayList<ScheduleDTO> resultList = MembersService.insertFixedSchedule(paramdto, today);
+		model.addAttribute("result", resultList);
 		
 		return jsonview;
 	}
@@ -171,6 +177,7 @@ public class MembersController {
 	@RequestMapping(value = "/changeFixedSchedule", method = RequestMethod.POST)
 	public View changeFixedSchedule(HttpSession session, Model model, @RequestBody Map<String, Object> data) {
 		
+		String today = ((String) data.get("today"));
 		ChangeFixedScheduleDTO paramdto = new ChangeFixedScheduleDTO();
 		
 		paramdto.setAfter_day(Integer.parseInt((String) data.get("after_day")));
@@ -179,19 +186,12 @@ public class MembersController {
 		paramdto.setStart_time((String) data.get("start_time"));
 		paramdto.setEnd_time((String) data.get("end_time"));
 		
-		int result = MembersService.changeFixedSchedule(paramdto);
-		model.addAttribute("result", result);
+		ArrayList<ScheduleDTO> resultList = MembersService.changeFixedSchedule(paramdto, today);
+		model.addAttribute("resultList", resultList);
 		
 		return jsonview;
 	}
 	
+	
+	
 }
-
-
-
-
-
-
-
-
-

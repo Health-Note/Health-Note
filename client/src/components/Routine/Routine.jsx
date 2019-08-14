@@ -2,9 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import MyTable from './MyTable';
 import Grid from '@material-ui/core/Grid'
-import uuid from 'uuid/v4'
 import Tab from './Tab';
-import { ExerciseContext } from '../../contexts/ExerciseContext';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,6 +26,8 @@ const useStyles = makeStyles(theme => ({
   }));
   
 const Routine = () => {
+
+  
 
   //const value = useContext(ExerciseContext);
   //console.log(value)

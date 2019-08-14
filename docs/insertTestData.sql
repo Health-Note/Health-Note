@@ -11,6 +11,7 @@ insert into members values('01036961411','손석희',1,'20190510','20191010',40,
 insert into members values('01098994512','박승지',0,'20190701','20191001',30,17,'surhommekim@gmail.com',164);
 insert into members values('01010312574','최수오',1,'20190601','20191030',50,34,'surhommekim@gmail.com',175);
 insert into members values('01051764414','강형구',1,'20190401','20191030',60,47,'surhommekim@gmail.com',187); 
+insert into members values('01051769999','김시험',1,'20190808','20191231',60,59,'surhommekim@gmail.com',180); 
 ;
 
 
@@ -53,6 +54,23 @@ insert into fixedschedule values(4, '01051764414', '2200', '2300');
 insert into schedule values('20190805', '01023549785', '1830', '1930', 1);
 insert into schedule values('20190807', '01023549785', '1830', '1930', 0);
 insert into schedule values('20190809', '01023549785', '1830', '1930', 0);
+insert into schedule values('20190812', '01023549785', '1830', '1930', 1);
+insert into schedule values('20190814', '01023549785', '1830', '1930', 0);
+insert into schedule values('20190816', '01023549785', '1830', '1930', 0);
+insert into schedule values('20190702', '01010312574', '1800', '1900', 0);
+insert into schedule values('20190704', '01010312574', '1800', '1900', 0);
+insert into schedule values('20190706', '01010312574', '1800', '1900', 0);
+insert into schedule values('20190709', '01010312574', '1800', '1900', 0);
+insert into schedule values('20190711', '01010312574', '1800', '1900', 0);
+insert into schedule values('20190713', '01010312574', '1800', '1900', 0);
+insert into schedule values('20190716', '01010312574', '1800', '1900', 0);
+insert into schedule values('20190718', '01010312574', '1800', '1900', 0);
+insert into schedule values('20190720', '01010312574', '1800', '1900', 0);
+insert into schedule values('20190723', '01010312574', '1800', '1900', 0);
+insert into schedule values('20190725', '01010312574', '1800', '1900', 0);
+insert into schedule values('20190727', '01010312574', '1800', '1900', 0);
+
+
 
 -- exercise 0/가슴 1/등 2/하체 3/어깨 4/이두 5/삼두 6/복근/ 7/유산소 
 insert into exercise values('인클라인 바벨 벤치 프레스', 0);

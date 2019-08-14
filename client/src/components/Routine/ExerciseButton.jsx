@@ -12,9 +12,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function TextButton({ kind, selectButton }) {
+export default function ExerciseButton({ kind, selectButton }) {
   const classes = useStyles();
-  const [selectedExer, setSelectedExer] = useContext(ExerciseContext);
+  const {selectedExer, setSelectedExer} = useContext(ExerciseContext);
 
 const handleSelectButton = () => {
   setSelectedExer(kind)

@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -6,7 +6,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import TextButton from './TextButton';
+import TextButton from './ExerciseButton';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -54,6 +54,12 @@ export default function ScrollableTabsButtonAuto() {
     setValue(newValue);
   }
 
+  // 모든 운동 종류들을 받아온다
+  // useEffect(() => {
+    
+  // }, [])
+
+  // (개발메모) ajax와 연결되면 삭제해도 됨.
   const exerciseData = {
         chest: ["벤치프레스", "인클라인벤치프레스", "디클라인벤치프레스", "팩덱플라이", "푸쉬업"],
         등: ["데드리프트", "풀업", "바벨로우"],
@@ -74,9 +80,9 @@ export default function ScrollableTabsButtonAuto() {
           scrollButtons="auto"
           aria-label="scrollable auto tabs example"
         >
-          <Tab label="Item One" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
+          <Tab label="가슴" {...a11yProps(0)} />
+          <Tab label="등" {...a11yProps(1)} />
+          <Tab label="하체" {...a11yProps(2)} />
           <Tab label="Item Four" {...a11yProps(3)} />
           <Tab label="Item Five" {...a11yProps(4)} />
           <Tab label="Item Six" {...a11yProps(5)} />
@@ -89,22 +95,22 @@ export default function ScrollableTabsButtonAuto() {
         })}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        등
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        하체
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Item Four
+        어깨
       </TabPanel>
       <TabPanel value={value} index={4}>
-        Item Five
+        이두
       </TabPanel>
       <TabPanel value={value} index={5}>
-        Item Six
+        삼두
       </TabPanel>
       <TabPanel value={value} index={6}>
-        Item Seven
+        유산소
       </TabPanel>
     </div>
   );

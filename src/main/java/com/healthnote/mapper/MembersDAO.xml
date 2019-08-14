@@ -54,18 +54,63 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and day = #{before_day}
 		and phonenum = #{phonenum}
 	</update>
+	
+	<select id="searchNotAvailableSchedule" parameterType="com.healthnote.vo.SearchNotAvailableScheduleDTO" resultType="com.healthnote.vo.ScheduleDTO" >
+		select t1.*, t2.name
+		from schedule t1
+			,members t2
+		where 1=1
+		and t1.phonenum = t2.phonenum
+		and t1.date between #{today} and #{end_date}
+		and weekday(t1.date) = #{day}
+		<![CDATA[		
+		and (
+ 			(#{start_time} = t1.start_time and #{end_time} = t1.end_time) or
+		    (#{start_time} > t1.start_time and #{start_time} < t1.end_time ) or
+		    (#{end_time} > t1.start_time and #{end_time} < t1.end_time )
+			)
+	 	]]> 
+	</select>
+		
+	<select id="getMemberInfo" parameterType="String" resultType="com.healthnote.vo.MemberDTO" >
+		select *
+		from members
+		where phonenum = #{phonenum}
+	</select>		
+	
+	<select id="checkDayOfSchedule" parameterType="com.healthnote.vo.CheckDayOfScheduleDTO"  resultType="Integer" >
+		select max(t1.result)
+		from
+		(
+		select 1 as result
+		from dual
+		where 1=1
+		and weekday(#{date}) = #{day}
+		
+		union all
+		
+		select count(*) as result
+		from dual
+		where 1=1
+		and weekday(#{date}) = #{day}
+		) t1
+	</select>
+	
+	<insert id="insertScheduleFollowingFixedSchedule" parameterType="com.healthnote.vo.ScheduleDTO">
+		insert into schedule values(#{date}, #{phonenum}, #{start_time}, #{end_time}, #{finish_dncd})
+	</insert>
+		
+	<delete id="deleteSchedule" parameterType="com.healthnote.vo.DeleteScheduleDTO">
+		delete from schedule
+		where 1=1
+		and phonenum = #{phonenum}
+		and weekday(date) = #{day}
+	</delete>		
 		
 </mapper>
 
-<!--
 
-	/*
-	 
-	 빈칸 클릭  				인서트(1시간 단위로 들어온다) 
-	 드래그 					업데이트(화면에서 막을지 아니면 뒷 단에서 막을지 아니면 화면과 뒷단 모두에서 막을지 고민하여 체크로직 넣어야함) 
-	 이미 있는거 클릭 하여 삭제   딜리트 
-	
-	*/
-	
 
-  -->
+
+
+
