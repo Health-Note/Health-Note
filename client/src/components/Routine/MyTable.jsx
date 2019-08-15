@@ -83,7 +83,7 @@ export default function MyTable() {
   
 
   const Rows = myRows.map(cv => {
-    return(<Row name={cv.name} sets={cv.sets} reps={cv.reps} id={cv.id} remove={remove} />)
+    return(<Row name={cv.name} sets={cv.sets} reps={cv.reps} id={cv.id} remove={remove} key={cv.id} />)
   })
 
   const handleChange = (evt) => {

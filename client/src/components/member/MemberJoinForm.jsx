@@ -35,7 +35,7 @@ function MemberJoinForm({ member, toggleJoin, isJoining }) {
           },
           body: JSON.stringify({
               name: newName,
-              phoneNum: newPhoneNum, 
+              phonenum: newPhoneNum, 
               gender: newGender, 
               start_date: newStartDate, 
               end_date: newEndDate, 
@@ -69,7 +69,7 @@ function MemberJoinForm({ member, toggleJoin, isJoining }) {
             />
               <Select prevGender={0} newGender={newGender} handleGender={handleGender}/>
             <TextField
-              id="phoneNum"
+              id="phonenum"
               value={newPhoneNum}
               onChange={handlePhoneNum}
               margin="normal"

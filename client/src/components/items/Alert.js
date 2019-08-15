@@ -8,7 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { DispatchContext } from '../../contexts/schedule.context';
 
 
-export default function AlertDialog({toggle, setToggle, targetId}) {
+export default function AlertDialog({toggle, setToggle, targetId, handleRemove}) {
   const dispatch = useContext(DispatchContext);
 
 
@@ -16,14 +16,15 @@ export default function AlertDialog({toggle, setToggle, targetId}) {
     setToggle();
   }
 
-  function deleteSchedule() {
+  function removeSchedule() {
+    handleRemove();
     setToggle();
+    dispatch({type: "DELETE", id: targetId})
   }
   
   // 회원 가변 스케줄상에서 완료로 바꿈 / 창닫기 / targetId = PhoneNum
   function completeSchedule() {
     setToggle();
-    console.log("targetId", targetId)
     dispatch({type: "TOGGLE", id: targetId}); 
   }
 
@@ -47,7 +48,7 @@ export default function AlertDialog({toggle, setToggle, targetId}) {
           <Button onClick={closeAlert} color="primary">
             닫기
           </Button>
-          <Button onClick={deleteSchedule} color="primary" autoFocus>
+          <Button onClick={removeSchedule} color="primary" autoFocus>
             일정 삭제
           </Button>
           <Button onClick={completeSchedule} color="primary" >

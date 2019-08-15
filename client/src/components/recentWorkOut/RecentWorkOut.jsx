@@ -61,8 +61,8 @@ export default function RecentWorkOut() {
               justify="center"
               alignItems="center"
             >
-                  { defaultProps.map(exercise => (
-                    <Divider className="Divder" exercise={ exercise }/>
+                  { defaultProps.map(cv => (
+                    <Divider className="Divder" exercise={ cv } key={cv.day} />
                 )) }
             </Grid>
         </Grid>

@@ -11,7 +11,7 @@ import moment from 'moment';
 
 
 const Member = ({ member }) => {
-    const {id, name, phoneNum, gender, startDate, endDate, unusedpt, height} = member;
+    const {id, name, phonenum, gender, startDate, endDate, unusedpt, height} = member;
     const dispatch  = useContext(DispatchContext);
     const [isEditing, toggle] = useToggle(false); 
    
@@ -29,7 +29,7 @@ const Member = ({ member }) => {
                     {gender == 0 ? "여" : "남"}
                 </TableCell>
                 <TableCell  align="right">
-                    { phoneNum }
+                    { phonenum }
                 </TableCell>
                 <TableCell  align="right">
                     { moment(startDate).format("YY.MM.DD") }

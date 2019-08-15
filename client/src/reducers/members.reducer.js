@@ -6,7 +6,7 @@ const reducer = (state, action) => {
             return [...state, { 
                 id: uuid(), 
                 name: action.newName, 
-                phoneNum: action.newPhoneNum,  
+                phonenum: action.newPhoneNum,  
                 gender: action.newGender,
                 unusedpt: action.newUnusedpt,
                 startDate: action.newStartDate,
@@ -24,7 +24,7 @@ const reducer = (state, action) => {
                  member.id === action.id ? {
                     ...member,
                     name: action.newName,
-                    phoneNum: action.newPhoneNum,
+                    phonenum: action.newPhoneNum,
                     gender: action.newGender, 
                     unusedpt: action.newUnusedpt,
                     startDate: action.newStartDate,
