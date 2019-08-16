@@ -8,7 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { DispatchContext } from '../../contexts/schedule.context';
 
 
-export default function AlertDialog({toggle, setToggle, targetId}) {
+export default function AlertDialog({toggle, setToggle, targetId, handleRemove, name, start}) {
   const dispatch = useContext(DispatchContext);
 
 
@@ -16,14 +16,15 @@ export default function AlertDialog({toggle, setToggle, targetId}) {
     setToggle();
   }
 
-  function deleteSchedule() {
+  function removeSchedule() {
+    handleRemove();
     setToggle();
+    dispatch({type: "DELETE", id: targetId})
   }
   
   // 회원 가변 스케줄상에서 완료로 바꿈 / 창닫기 / targetId = PhoneNum
   function completeSchedule() {
     setToggle();
-    console.log("targetId", targetId)
     dispatch({type: "TOGGLE", id: targetId}); 
   }
 
@@ -36,18 +37,17 @@ export default function AlertDialog({toggle, setToggle, targetId}) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{name} 님</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
+            {start} PT를 선택하였습니다
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={closeAlert} color="primary">
             닫기
           </Button>
-          <Button onClick={deleteSchedule} color="primary" autoFocus>
+          <Button onClick={removeSchedule} color="primary" autoFocus>
             일정 삭제
           </Button>
           <Button onClick={completeSchedule} color="primary" >

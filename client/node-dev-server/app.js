@@ -6,17 +6,17 @@ app.get("/getData", (req, res) => {
     res.json({
          members: [{
             name: "park",
-            phoneNum: "01020777538",
+            phonenum: "01020777538",
             startDay: "20190807",
             startTime: "1600"
         },{
             name: "jong",
-            phoneNum: "01094325615",
+            phonenum: "01094325615",
             startDay: "20190806",
             startTime: "1700"
         },{
             name: "yeol",
-            phoneNum: "01097045552",
+            phonenum: "01097045552",
             startDay: "20190808",
             startTime: "1800"
         }]
@@ -40,14 +40,25 @@ app.post("/insertRoutine", (req, res) => {
 })
 
 app.post("/getWeekRoutineOfStu", (req, res) => {
-    console.log(req.body);
+    res.json( {
+        name: "park",
+        week: [
+            { day: 0, dayRoutines: ["벤치프레스", "풀업", "러닝", "윗몸일으키기"] },
+            { day: 1, dayRoutines: ["덤벨컬", "풀업", "러닝", "윗몸일으키기"] },
+            { day: 2, dayRoutines: ["바벨컬", "풀업", "러닝", "윗몸일으키기"] },
+            { day: 3, dayRoutines: ["펙덱플라이4", "풀업", "러닝", "윗몸일으키기"] },
+            { day: 4, dayRoutines: ["펙덱플라이5", "풀업", "러닝", "윗몸일으키기"] },
+            { day: 5, dayRoutines: ["펙덱플라이6", "풀업", "러닝", "윗몸일으키기"] },
+            { day: 6, dayRoutines: ["펙덱플라이7", "풀업", "러닝", "윗몸일으키기"] }
+        ]
+    })
 })
 
 app.get("/sendBasicsForSchedule", (req, res) => {
     res.json({   
         name: "이서영",
         date: "20190814", // superkey
-        phoneNum: "01022221111", //superkey
+        phonenum: "01022221111", //superkey
         start_time: "1830", 
         end_time: "1930",
         finish_dncd: true,
@@ -56,7 +67,7 @@ app.get("/sendBasicsForSchedule", (req, res) => {
     {  
         name: "이서영",
         date: "20190815", // superkey
-        phoneNum: "01022221111", //superkey
+        phonenum: "01022221111", //superkey
         start_time: "1830", 
         end_time: "1930",
         finish_dncd: false,
@@ -65,7 +76,7 @@ app.get("/sendBasicsForSchedule", (req, res) => {
     {   
         name: "이서영",
         date: "20190816", // superkey
-        phoneNum: "01022221111", //superkey
+        phonenum: "01022221111", //superkey
         start_time: "1830", 
         end_time: "1930",
         finish_dncd: false
@@ -73,7 +84,7 @@ app.get("/sendBasicsForSchedule", (req, res) => {
     { 
         name: "박종열",
         date: "20190816", // superkey
-        phoneNum: "01033334444", //superkey
+        phonenum: "01033334444", //superkey
         start_time: "1930", 
         end_time: "1830",
         finish_dncd: false,
@@ -82,7 +93,7 @@ app.get("/sendBasicsForSchedule", (req, res) => {
     { 
         name: "박종열",
         date: "20190815", // superkey
-        phoneNum: "01033334444", //superkey
+        phonenum: "01033334444", //superkey
         start_time: "1830", 
         end_time: "1930",
         finish_dncd: false,
@@ -91,7 +102,7 @@ app.get("/sendBasicsForSchedule", (req, res) => {
     {  
         name: "김정권",
         date: "20190816", // superkey
-        phoneNum: "01044445555", //superkey
+        phonenum: "01044445555", //superkey
         start_time: "1830", 
         end_time: "1930",
         finish_dncd: false,

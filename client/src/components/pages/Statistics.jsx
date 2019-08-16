@@ -9,10 +9,11 @@ import BarChart from '../statistic/BarChart'
 import SelectMember from '../statistic/SelectMember';
 import moment from 'moment';
 import BMIChart from '../statistic/BMIChart'
+import RadarChart from '../statistic/RadarChart'
 
 const data = [
   {
-    "country": "AD",
+    "percent": "AD",
     "hot dog": 39,
     "hot dogColor": "hsl(90, 70%, 50%)",
     "burger": 146,
@@ -25,6 +26,48 @@ const data = [
     "friesColor": "hsl(217, 70%, 50%)",
     "donut": 6,
     "donutColor": "hsl(120, 70%, 50%)"
+  },
+]
+
+const radarData = [
+  {
+    "taste": "fruity",
+    "chardonay": 42,
+    "carmenere": 64,
+    "syrah": 92
+  },
+  {
+    "taste": "bitter",
+    "chardonay": 93,
+    "carmenere": 59,
+    "syrah": 28
+  },
+  {
+    "taste": "heavy",
+    "chardonay": 75,
+    "carmenere": 51,
+    "syrah": 107
+  },
+  {
+    "taste": "strong",
+    "chardonay": 85,
+    "carmenere": 109,
+    "syrah": 79
+  },
+  {
+    "taste": "sunny",
+    "chardonay": 103,
+    "carmenere": 44,
+    "syrah": 77
+  }
+]
+
+const pieData = [
+  {
+    "id": "ruby",
+    "label": "ruby",
+    "value": 119,
+    "color": "hsl(27, 70%, 50%)"
   },
 ]
 
@@ -183,14 +226,14 @@ function Statistics({member}) { //Routes.js에서 오는 member
               </Grid>
               <Grid item xs={3}>
                 <Paper className={classes.paper}>
-                  <BarChart data={data} />
+                <RadarChart data={radarData}/>
                 </Paper>
               </Grid>
             </Grid>
             <Grid container spacing={2} justify="center">
                 <Grid item xs={7}>
                   <Paper className={classes.paper}>
-                    <BMIChart data={BMIData}/>
+                    
                     {"SDf"}
                   </Paper>
                 </Grid>

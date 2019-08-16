@@ -3,7 +3,12 @@ const reducer = (state, action) => {
         case "TOGGLE":
                 console.log(action.id)
             return state.map(schedule => 
-                schedule.phoneNum === action.id ? { ...schedule, finish_dncd: !schedule.finish_dncd } : schedule);            
+                schedule.phonenum + schedule.date === action.id ? { ...schedule, finish_dncd: !schedule.finish_dncd } : schedule);
+        case "DELETE":
+            console.log(action.id)
+               return state.filter(schedule => 
+                action.id !== schedule.phonenum + schedule.date)
+            
         default: 
             return state;
     }   

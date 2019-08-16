@@ -6,46 +6,15 @@ import { ResponsivePie } from '@nivo/pie'
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const data = [
-    {
-      "id": "c",
-      "label": "c",
-      "value": 41,
-      "color": "hsl(9, 70%, 50%)"
-    },
-    {
-      "id": "hack",
-      "label": "hack",
-      "value": 319,
-      "color": "hsl(48, 70%, 50%)"
-    },
-    {
-      "id": "javascript",
-      "label": "javascript",
-      "value": 165,
-      "color": "hsl(264, 70%, 50%)"
-    },
-    {
-      "id": "php",
-      "label": "php",
-      "value": 99,
-      "color": "hsl(307, 70%, 50%)"
-    },
-    {
-      "id": "make",
-      "label": "make",
-      "value": 425,
-      "color": "hsl(163, 70%, 50%)"
-    }
-  ]
+
   // make sure parent container have a defined height when using
   // responsive component, otherwise height will be 0 and
   // no chart will be rendered.
   // website examples showcase many properties,
   // you'll often use just a few of them.
-  const MyResponsivePie = () => (
+  const MyResponsivePie = ({pieData}) => (
       <ResponsivePie
-          data={data}
+          data={pieData}
           margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
           innerRadius={0.8}
           padAngle={2}

@@ -3,14 +3,13 @@
     z-index: 2;
     padding: 0 10px;
     background: rgba(237, 243, 159, 0.8);
-    overflow-y: scroll;
   }
   
   #external-events .fc-event {
     margin: 1em 0;
     cursor: move;
-    color: purple;
-    background: lightcoral;
+    color: black;
+    background: orange;
   }
 
     
@@ -20,9 +19,4 @@
     color: purple;
     background: lightcoral;
   }
-  
-  .fc-event {
-    background: lightcoral;
-    border: white;
-  }
-  
+

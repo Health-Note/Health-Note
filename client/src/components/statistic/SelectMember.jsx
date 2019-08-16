@@ -48,7 +48,7 @@ export default function SelectMember() {
         >
           {members.map(cv => {
               
-              return <MenuItem value={cv.phoneNum}><NavLink exact to={`/statistic/${cv.name}`} key={cv.phoneNum}> {cv.name} </NavLink></MenuItem>
+              return <MenuItem value={cv.phonenum}><NavLink exact to={`/statistic/${cv.name}`} key={cv.phonenum}> {cv.name} </NavLink></MenuItem>
           })}
           <MenuItem value={20}>Twenty</MenuItem>
         </Select>

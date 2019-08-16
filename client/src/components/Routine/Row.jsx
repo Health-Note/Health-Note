@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
+import Grid from '@material-ui/core/Grid'
 
 
 function Row ({name, reps, sets, id, remove}) {
@@ -13,6 +14,7 @@ function Row ({name, reps, sets, id, remove}) {
   return (
     <>
     
+
       <TableRow key={id}>
         <TableCell component="th" scope="row">
           {name}
@@ -21,6 +23,7 @@ function Row ({name, reps, sets, id, remove}) {
         <TableCell align="right">{reps}</TableCell>
         <TableCell align="right"><button onClick={handleRemove}>삭제</button></TableCell>
       </TableRow>
+    
     
     </>
     )

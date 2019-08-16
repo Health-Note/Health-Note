@@ -20,10 +20,10 @@ import moment from 'moment';
 
 function EditMemberForm({ member, toggle, isEditing }) {
 
-    const {name, id, phoneNum, gender, startDate, endDate, unusedpt, height} = member;
+    const {name, id, phonenum, gender, startDate, endDate, unusedpt, height} = member;
     const dispatch = useContext(DispatchContext);
     const [newName, handleName] = useInputState(name);
-    const [newPhoneNum, handlePhoneNum] = useInputState(phoneNum);
+    const [newPhoneNum, handlePhoneNum] = useInputState(phonenum);
     const [newGender, handleGender] = useInputState(gender);
     const [newUnusedpt, handleUnusedpt] = useInputState(unusedpt);
     const [newHeight, handleHeight] = useInputState(height);
@@ -42,7 +42,7 @@ function EditMemberForm({ member, toggle, isEditing }) {
             },
             body: JSON.stringify({
                 name: newName,
-                phoneNum: newPhoneNum, 
+                phonenum: newPhoneNum, 
                 gender: newGender, 
                 start_date: newStartDate, 
                 end_date: newEndDate, 
@@ -76,7 +76,7 @@ function EditMemberForm({ member, toggle, isEditing }) {
             />
               <Select prevGender={gender} newGender={newGender} handleGender={handleGender}/>
             <TextField
-              id="phoneNum"
+              id="phonenum"
               value={newPhoneNum}
               onChange={handlePhoneNum}
               margin="normal"

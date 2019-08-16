@@ -22,7 +22,7 @@ class MemberCalendar extends Component {
             title: "kim",
             start: new Date("2019-08-04 16:00"),
             id: "01011112222",
-            phoneNum: "9999999999"
+            phonenum: "9999999999"
         },{
             title: "My Favorite Murder",
             start: moment("20190804 1630").format(),
@@ -34,7 +34,7 @@ class MemberCalendar extends Component {
   componentDidMount() {
     const member = this.context;
     const newMember = member.map(cv => {
-        return {title: cv.name, id: cv.phoneNum, phoneNum: cv.phoneNum}
+        return {title: cv.name, id: cv.phonenum, phonenum: cv.phonenum}
     })
     this.setState({
         events: this.state.events.concat(newMember)
@@ -59,7 +59,7 @@ class MemberCalendar extends Component {
           //     let meberList = data.members.map(member => {
   //         const startReady = member.startDay + " " + member.startTime;
   //     const start = moment(startReady).format();
-  //     return { title: member.name, id: member.phoneNum, start }
+  //     return { title: member.name, id: member.phonenum, start }
   // })
   //   console.log(meberList)
   //   this.setState({
@@ -73,19 +73,19 @@ class MemberCalendar extends Component {
         eventData: function(eventEl) {
             let title = eventEl.getAttribute("title");
             let id = eventEl.getAttribute("data");
-            let phoneNum = eventEl.getAttribute("phoneNum");
+            let phonenum = eventEl.getAttribute("phonenum");
             return {
                 title: title,
                 id: id,
-                phoneNum: phoneNum
+                phonenum: phonenum
             };
         }
     });
   } // componentDidMount 끝
 
   eventReceive = (eventReceive) => {
-    const startTime = moment(eventReceive.event.start).format("HHmm");
-    const PhoneNum = eventReceive.event.id;
+    const start_time = moment(eventReceive.event.start).format("HHmm");
+    const phonenum = eventReceive.event.id;
     let day;
     
     switch (moment(eventReceive.event.start).format("dddd")){
@@ -105,7 +105,7 @@ class MemberCalendar extends Component {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({day, phonenum: PhoneNum, start_time: startTime})
+        body: JSON.stringify({day, phonenum, start_time})
     }).then((res) => {
           return res.json();
     }).then((result) => {
@@ -134,7 +134,7 @@ class MemberCalendar extends Component {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({phoneNum: id, oldDate, changedDate, oldTime, changedTime})
+      body: JSON.stringify({phonenum: id, oldDate, changedDate, oldTime, changedTime})
     }).then((res) => {
       return res.json();
     }).then((result) => { // 성공시 응답 0, 실패시 1
@@ -148,7 +148,7 @@ class MemberCalendar extends Component {
    * 날짜 : 2019-08-07
    * 작성자: 박종열
    * 기능 : 캘린더에서 스케줄 클릭시 얼러트창 생성
-   *        삭제클릭시 phoneNum, date, startTime 서버로 보냄
+   *        삭제클릭시 phonenum, date, startTime 서버로 보냄
    */
   eventClick = eventClick => {
     // 클릭시 ExerciseContext의 state들 설정 => 루틴 컴포넌트에서 fetch로 루틴정보 보낼 때 활용
@@ -167,7 +167,7 @@ class MemberCalendar extends Component {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({phoneNum: id, date, startTime})
+          body: JSON.stringify({phonenum: id, date, startTime})
         }).then((res) => {
           return res.json()
         }).then((result) => { //성공시 응답 0, 실패시 1
