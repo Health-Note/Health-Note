@@ -3,37 +3,57 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
-	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
+	<!-- The definition of the Root Spring Container shared by all Servlets 
+		and Filters -->
 	<!-- 모든 서블릿과 필터들에 의해 공유되는 컨테이너를 정의함 -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/spring/root-context.xml</param-value>
+		<param-value>
+		/WEB-INF/spring/root-context.xml
+		/WEB-INF/spring/security-context.xml
+		</param-value>
 	</context-param>
-	
+
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->
-	<!-- 아래 것이 없으면 아예 컨테이너에서 꺼내지지 않는지를 봐야겠음 해당주석은 이를 테스트 해보고 수정하던가 하기  -->
+	<!-- 아래 것이 없으면 아예 컨테이너에서 꺼내지지 않는지를 봐야겠음 해당주석은 이를 테스트 해보고 수정하던가 하기 -->
 	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+		<listener-class>org.springframework.web.context.ContextLoaderListener
+		</listener-class>
 	</listener>
 
 	<!-- Processes application requests -->
 	<servlet>
 		<servlet-name>appServlet</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet
+		</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
+			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml
+			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-		
-	<!-- 여기서 설정한 접근 url패턴으로 들어오는 모든 것은 appServlet 으로 들어오도록 mapping함 -->				
+
+	<!-- 여기서 설정한 접근 url패턴으로 들어오는 모든 것은 appServlet 으로 들어오도록 mapping함 -->
 	<servlet-mapping>
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
-	<!-- 에러페이지 처리 
+	<!-- Spring Security Filter-->
+	<!-- Filter이름 반드시 springSecurityFilterChain 로 설정되어야 함 -->
+	<!-- 모든 request에 대해 먼저 intercept하기 위해서 /*로 설정해야 함 -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy
+		</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+<!-- 
 	<error-page>
 		<error-code>404</error-code>
 		<location>/error/404error.jsp</location>
@@ -41,21 +61,16 @@
 	<session-config>
 		<session-timeout>-1</session-timeout>
 	</session-config>
-
 	<error-page>
 		<error-code>500</error-code>
 		<location>/error/500error.jsp</location>
 	</error-page>
-	-->
-	
+-->
+
 </web-app>
 
-<!-- 
-
-Spring Framework 는 크게 두 가지 설정파일을 갖고 있다.
-1. pom.xml -> 애플리케이션에 사용하기 위한 여러가지 라이브러리들을 네트워크를 통해 받고 사용하고 버전의 동기화를 할 수 있도록 해주는 설정
-2. web.xml -> 프로젝트의 설계 및 구현을 위해서 필요한 설정 파일로 root container와 DispatcherServlet의 설정 등을 하는 설 
-	2-1) contextConfigLocation : 프로젝트에서 사용될 각종 bean파일들을 정의해두는 곳  
-	2-2) appServlet : 프로젝트에 사용될 DispatcherServlet 
-
--->
+<!-- Spring Framework 는 크게 두 가지 설정파일을 갖고 있다. 1. pom.xml -> 애플리케이션에 사용하기 위한 
+	여러가지 라이브러리들을 네트워크를 통해 받고 사용하고 버전의 동기화를 할 수 있도록 해주는 설정 2. web.xml -> 프로젝트의 
+	설계 및 구현을 위해서 필요한 설정 파일로 root container와 DispatcherServlet의 설정 등을 하는 설 2-1) 
+	contextConfigLocation : 프로젝트에서 사용될 각종 bean파일들을 정의해두는 곳 2-2) appServlet : 
+	프로젝트에 사용될 DispatcherServlet -->

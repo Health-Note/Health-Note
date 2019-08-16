@@ -1,44 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
-	
-    <!-- 프로젝트 기본 정보(비 기술적 정보) -->	
+
+	<!-- 프로젝트 기본 정보(비 기술적 정보) -->
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.healthnote</groupId> <!-- 구분자로 사용 -->
 	<artifactId>main</artifactId> <!-- 구분자 & 회사이름 -->
 	<name>Templete</name> <!-- 프로젝트 이름 -->
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
-	
+
 	<properties>
-		
+
 		<!-- 사용 자바 버전 -->
 		<java-version>1.8</java-version>
-		
+
 		<!-- 사용 스프링 프레임워크 버전 정보 -->
 		<org.springframework-version>4.2.5.RELEASE</org.springframework-version>
-		
-        <!-- PARC에서 개발한 자바 프로그래밍 언어용 관점 지향 프로그래밍 (AOP) 확장 기능 -->		
+
+		<!-- PARC에서 개발한 자바 프로그래밍 언어용 관점 지향 프로그래밍 (AOP) 확장 기능 -->
 		<org.aspectj-version>1.6.10</org.aspectj-version>
-		
-        <!-- 로깅 관련 모듈 -->		
+
+		<!-- 로깅 관련 모듈 -->
 		<org.slf4j-version>1.6.6</org.slf4j-version>
+		
+		<!-- Security -->
+		<security.version>4.1.3.RELEASE</security.version>
+
 	</properties>
 
-    <!-- orcle 저작권 문제해결 위해 oracle repository 설정 -->
-    <!-- 아래에서 dependency로 oracle jdbc 부르기 위한 선행 작업-->
-	<repositories> 
-	     <repository> 
-	         <id>oracle</id> 
-	         <name>ORACLE JDBC Repository</name> 
-	         <url>http://maven.jahia.org/maven2</url> 
-	      </repository>
-	      
-	     <repository>
+	<!-- orcle 저작권 문제해결 위해 oracle repository 설정 -->
+	<!-- 아래에서 dependency로 oracle jdbc 부르기 위한 선행 작업 -->
+	<repositories>
+		<repository>
+			<id>oracle</id>
+			<name>ORACLE JDBC Repository</name>
+			<url>http://maven.jahia.org/maven2</url>
+		</repository>
+
+		<repository>
 			<id>mesir-repo</id>
 			<url>http://mesir.googlecode.com/svn/trunk/mavenrepo</url>
 		</repository>
-	</repositories> 
+	</repositories>
 
 	<dependencies>
 		<!-- Spring -->
@@ -51,10 +56,10 @@
 				<exclusion>
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
-				 </exclusion>
+				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<!-- spring web MVC -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -62,14 +67,14 @@
 			<!-- 위 properties에서 만든 org.sp~-version을 call -->
 			<version>${org.springframework-version}</version>
 		</dependency>
-				
+
 		<!-- AspectJ -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
 			<version>${org.aspectj-version}</version>
-		</dependency>	
-		
+		</dependency>
+
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -119,7 +124,7 @@
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
 		</dependency>
-				
+
 		<!-- Servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -138,201 +143,197 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
-		
-			
-        <!-- 위 dependency들은 기본 생성 Spring Legacy project 기본 생성 dependency-->
-        <!-- 아래부터는 자주 쓰는 dependency를 추가 한 것 -->
-		
+
+
+		<!-- 위 dependency들은 기본 생성 Spring Legacy project 기본 생성 dependency -->
+		<!-- 아래부터는 자주 쓰는 dependency를 추가 한 것 -->
+
 		<!-- 비동기 -->
- 		<dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>2.7.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-asl</artifactId>
-            <version>1.9.13</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.7.3</version>
-        </dependency>
-
-        <!-- JSP UI JSTL LIB -->
 		<dependency>
-    		<groupId>javax.servlet</groupId>
-    		<artifactId>jstl</artifactId>
-    		<version>1.2</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.7.3</version>
 		</dependency>
-        
-        <!--OJDBC6  -->
-		<dependency> 
-	     	<groupId>com.oracle</groupId> 
-	     	<artifactId>ojdbc6</artifactId> 
-	     	<version>12.1.0.1</version> 
-	     	<scope>runtime</scope> 
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.7.3</version>
 		</dependency>
 
-        <!-- MySQL -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.11</version>
-        </dependency>
+		<!-- JSP UI JSTL LIB -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
 
-        <!-- MyBatis 3.4.1 -->
-        <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>3.4.1</version>
-        </dependency>
- 
-        <!-- MyBatis-Spring -->
-        <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis-spring -->
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis-spring</artifactId>
-            <version>1.3.0</version>
-        </dependency>
-	
-	    <!-- Spring-jdbc -->
-        <!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-            <version>${org.springframework-version}</version>
-        </dependency>
-        
-	    <!-- Spring-test -->
-        <!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${org.springframework-version}</version>
-        </dependency>
+		<!--OJDBC6 -->
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>12.1.0.1</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- MySQL -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.11</version>
+		</dependency>
+
+		<!-- MyBatis 3.4.1 -->
+		<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>3.4.1</version>
+		</dependency>
+
+		<!-- MyBatis-Spring -->
+		<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis-spring -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>1.3.0</version>
+		</dependency>
+
+		<!-- Spring-jdbc -->
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+
+		<!-- Spring-test -->
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
 
 		<!-- Spring Security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
-			<version>4.0.1.RELEASE</version>
+			<version>${security.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
-			<version>4.0.1.RELEASE</version>
+			<version>${security.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-taglibs</artifactId>
-			<version>4.0.1.RELEASE</version>
+			<version>${security.version}</version>
 		</dependency>
-	
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<version>${security.version}</version>
+		</dependency>
+
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.7</version>
 			<scope>test</scope>
-		</dependency>        
-		
-	    <!-- 메일 발송 지원 기능 포함 -->
-	    <dependency>
-	        <groupId>org.springframework</groupId>
-	        <artifactId>spring-context-support</artifactId>
-	        <version>${org.springframework-version}</version>
-	    </dependency>		
-		
+		</dependency>
+
+		<!-- 메일 발송 지원 기능 포함 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+
 		<!-- 구글아이디연동 -->
 		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-google</artifactId>
 			<version>1.0.0.RELEASE</version>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.5.3</version>
 		</dependency>
-		
-		<!--AWS  -->
+
+		<!--AWS -->
 		<dependency>
-		    <groupId>com.amazonaws</groupId>
-		    <artifactId>aws-java-sdk</artifactId>
-		    <version>1.11.358</version>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk</artifactId>
+			<version>1.11.358</version>
 		</dependency>
-	
+
 	</dependencies>
-	
-	
-    <build>
-        <plugins>
-        
-            <!-- Maven 사용을 위한 plug-in -->
-            <plugin>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <version>2.9</version>
-                <configuration>
-                    <additionalProjectnatures>
-                        <projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
-                    </additionalProjectnatures>
-                    <additionalBuildcommands>
-                        <buildcommand>org.springframework.ide.eclipse.core.springbuilder</buildcommand>
-                    </additionalBuildcommands>
-                    <downloadSources>true</downloadSources>
-                    <downloadJavadocs>true</downloadJavadocs>
-                </configuration>
-            </plugin>
-            
-            <!-- Maven 사용을 위한 plug-in -->           
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <compilerArgument>-Xlint:all</compilerArgument>
-                    <showWarnings>true</showWarnings>
-                    <showDeprecation>true</showDeprecation>
-                </configuration>
-            </plugin>
-            
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <configuration>
-                    <mainClass>org.test.int1.Main</mainClass>
-                </configuration>
-            </plugin>
-            
-            <!-- 메이븐을 통한 서버 배포     
-            <plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-war-plugin</artifactId>
-		        <version>2.4</version>
-		        <configuration>
-		            <warsourcedirectory>src/main/webapp</warsourcedirectory>
-		            <webxml>src/main/webapp/WEB-INF/web.xml</webxml>
-		            <failOnMissingWebXml>false</failOnMissingWebXml>
-		        </configuration>
-		    </plugin>
-		 
-		    <plugin>
-		        <groupId>org.codehaus.mojo</groupId>
-		        <artifactId>tomcat-maven-plugin</artifactId>
-		        <version>1.1</version>
-		        <configuration>
-		            <url>http://52.79.251.197:8080/manager/text</url>
-		            <path>/Apollo</path>
-		            <username>projectapollo</username>
-		      -->                 
-            
-        </plugins>
-    </build>
+
+
+	<build>
+		<plugins>
+
+			<!-- Maven 사용을 위한 plug-in -->
+			<plugin>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<additionalProjectnatures>
+						<projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
+					</additionalProjectnatures>
+					<additionalBuildcommands>
+						<buildcommand>org.springframework.ide.eclipse.core.springbuilder</buildcommand>
+					</additionalBuildcommands>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+				</configuration>
+			</plugin>
+
+			<!-- Maven 사용을 위한 plug-in -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<compilerArgument>-Xlint:all</compilerArgument>
+					<showWarnings>true</showWarnings>
+					<showDeprecation>true</showDeprecation>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<configuration>
+					<mainClass>org.test.int1.Main</mainClass>
+				</configuration>
+			</plugin>
+
+			<!-- 메이븐을 통한 서버 배포 <plugin> <groupId>org.apache.maven.plugins</groupId> 
+				<artifactId>maven-war-plugin</artifactId> <version>2.4</version> <configuration> 
+				<warsourcedirectory>src/main/webapp</warsourcedirectory> <webxml>src/main/webapp/WEB-INF/web.xml</webxml> 
+				<failOnMissingWebXml>false</failOnMissingWebXml> </configuration> </plugin> 
+				<plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>tomcat-maven-plugin</artifactId> 
+				<version>1.1</version> <configuration> <url>http://52.79.251.197:8080/manager/text</url> 
+				<path>/Apollo</path> <username>projectapollo</username> -->
+
+		</plugins>
+	</build>
 </project>

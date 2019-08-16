@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:security="http://www.springframework.org/schema/security"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.1.xsd
+							http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+							http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+							
+		<context:component-scan base-package="com.healthnote.*" />							
+		
+		<security:http auto-config="true" use-expressions="true">
+		    <security:intercept-url pattern="/welcomeLogin" access="permitAll"/>
+		    <security:intercept-url pattern="joinHealthNote" access="permitAll"/>
+		    <security:intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>
+		    
+		    <security:form-login
+		    	login-page="/welcomeLogin"
+		    	login-processing-url="/login"
+		    	authentication-failure-url="/welcomeLogin" 
+		    	default-target-url="/loginSuccess" 
+		    	username-parameter="username"
+		    	password-parameter="password"
+		    />
+		    <!-- 
+		    authentication-failure-handler-ref="loginFailureHandler"
+		    authentication-success-handler-ref="loginSuccessHandler"
+		    
+		    login-page : The URL that should be used to render the login page.
+		    			 Maps to the loginFormUrl property of the LoginUrlAuthenticationEntryPoint. Defaults to "/login".
+			
+			login-processing-url : Maps to the filterProcessesUrl property of UsernamePasswordAuthenticationFilter.
+								   The default value is "/login".
+		    			 
+		     -->
+		    
+		    <security:session-management>
+		    	<security:concurrency-control
+		    		max-sessions="1"
+		    		error-if-maximum-exceeded="true"
+		    	/>
+		    </security:session-management>
+		    
+		</security:http>
+		
+        <security:authentication-manager>
+        	<security:authentication-provider ref="userAuthProvider"/>
+        	<security:authentication-provider user-service-ref="userService">
+        		<security:password-encoder ref="bcryptPasswordEncoder"/>
+        	</security:authentication-provider>
+        </security:authentication-manager>
+        
+        <bean id="userService" class="com.healthnote.security.CustomUserDetailsService"/>
+        <bean id="userAuthProvider" class="com.healthnote.security.CustomAuthenticationProvider"/>
+        
+        <!-- 
+        <bean id="loginFailureHandler" class="com.healthnote.security.LoginFailureHandler">
+            <property name="loginidname" value="loginId"/>
+        	<property name="loginpwdname" value="loginPwd"/>
+        	<property name="errormsgname" value="ERRORMSG"/>
+        	<property name="defaultFailureUrl" value="/secu/loginPage?error"/>
+        </bean>
+        
+        <bean id="loginSuccessHandler" class="com.healthnote.security.LoginSuccessHandler">
+        	<property name="loginidname" value="loginId"/>
+        	<property name="defaultUrl" value="/"/>
+        </bean>
+        -->
+        
+        <bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+    
+</beans>

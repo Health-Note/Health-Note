@@ -1,7 +1,9 @@
 -- 트레이너
 CREATE TABLE `TRAINER` (
    `email`    VARCHAR(50) NOT NULL, -- 이메일
-   `nickname` VARCHAR(50) NOT NULL  -- 닉네임
+   `nickname` VARCHAR(50) NOT NULL,  -- 닉네임
+   `pw` VARCHAR(500) NOT NULL,  -- 닉네임
+   `authority` VARCHAR(50) NOT NULL  -- 닉네임
 );
 
 -- 트레이너
