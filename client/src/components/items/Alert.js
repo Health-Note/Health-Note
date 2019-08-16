@@ -8,7 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { DispatchContext } from '../../contexts/schedule.context';
 
 
-export default function AlertDialog({toggle, setToggle, targetId, handleRemove}) {
+export default function AlertDialog({toggle, setToggle, targetId, handleRemove, name, start}) {
   const dispatch = useContext(DispatchContext);
 
 
@@ -37,11 +37,10 @@ export default function AlertDialog({toggle, setToggle, targetId, handleRemove})
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{name} 님</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
+            {start} PT를 선택하였습니다
           </DialogContentText>
         </DialogContent>
         <DialogActions>

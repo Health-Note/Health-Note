@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import moment from 'moment';
-import { Col, Row } from "reactstrap";
+import Grid from '@material-ui/core/Grid'
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -13,17 +13,21 @@ import "@fullcalendar/timegrid/main.css";
 import "./Calendar.css";
 import { ScheduleContext }  from '../../contexts/schedule.context';
 import { MembersContext }  from '../../contexts/members.context';
+import { DispatchContext } from '../../contexts/routine.context';
 import Alert from '../items/Alert';
 
 function Calendar () {
   const schedules = useContext(ScheduleContext); //title, start, id가 포함되어야 함.
   const members = useContext(MembersContext); 
+  const dispatch = useContext(DispatchContext); 
   const [toggle, setToggle] = useState(false);
   const [evtColor, setEvtColor] = useState("orange")
   const [targetId, setTargetId] = useState("");
   const [scheduleList, setScheduleList] = useState([])
   const [evt, setEvt] = useState();
   const [exeMember, setMember] = useState([]);
+  const [name, setName] = useState([]);
+  const [start, setStart] = useState([]);
 
   // 내부 이벤트 초기화
   // useEffect(() => {
@@ -82,7 +86,8 @@ function Calendar () {
           title: schedule.name,
           color: color,  
           phonenum: schedule.phonenum, 
-          finish_dncd: schedule.finish_dncd, 
+          finish_dncd: schedule.finish_dncd,
+          name: schedule.name 
         }
       })
       setScheduleList(parsedScheduleList)
@@ -180,25 +185,44 @@ function Calendar () {
    *        삭제클릭시 phonenum, date, startTime 서버로 보냄
    */
   const eventClick = eventClick => {
+    const phonenum = eventClick.event.id.substr(0,11);  
+    const date = moment(eventClick.event.start).format("YYYYMMDD");  
+    setName(eventClick.event.extendedProps.name);
     setEvt(eventClick.event);
     handleTargetId(eventClick.event.id); 
     setToggle(!toggle); //alert창을 오픈
-    
-    // 클릭시 ExerciseContext의 state들 설정 => 루틴 컴포넌트에서 fetch로 루틴정보 보낼 때 활용
-    const date = moment(eventClick.event.start).format("YYYYMMDD"); // 20190807
-  };
+    setStart(moment(eventClick.event.start).format("MM월 DD일"))
+   
+    // 클릭시 1주일간의 해당 회원의 운동루틴을 받음
+    fetch("/getWeekRoutineOfStu", {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({phonenum, date}) 
+    }).then((res) => {
+      return res.json();
+    }).then((routine) => { // 성공시 응답 0, 실패시 1
+      console.log(routine)
+      dispatch({type: "GETWEEK",
+        name: eventClick.event.extendedProps.name,
+        week: routine.week,
+      })
+    })
+  }
 
     return (
       // 이벤트 창
       <div className="animated fadeIn p-4 demo-app">
-      <Alert toggle={toggle} setToggle={setToggle} targetId={targetId} handleRemove={handleRemove} evt={evt}/>
-        <Row>
-          <Col lg={3} md={3} sm={3}>
+      <Alert toggle={toggle} setToggle={setToggle} targetId={targetId} handleRemove={handleRemove} evt={evt} name={name} start={start}/>
+        <Grid container>
+          <Grid item xs={2}>
             <div
               id="external-events"
               style={{
                 padding: "10px",
-                width: "80%",
+                width: "10%",
                 height: "500px",
                 maxHeight: "-webkit-fill-available"
               }}
@@ -210,8 +234,8 @@ function Calendar () {
                 </div>
               ))}
             </div>
-          </Col>     
-          <Col lg={9} sm={9} md={9}>
+          </Grid>     
+          <Grid item xs={10} >
             <div className="demo-app-calendar" id="mycalendartest">
               <FullCalendar
               height={500}
@@ -238,8 +262,8 @@ function Calendar () {
                 eventColor = {evtColor}
               />
             </div>
-          </Col>
-        </Row>
+          </Grid>
+        </Grid>
       </div>
     );
 }

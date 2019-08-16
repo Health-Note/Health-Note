@@ -10,7 +10,9 @@ import useUpDown from './useUpDown'
 import Row from './Row'
 import uuid from 'uuid/v4'
 import { ExerciseContext }  from '../../contexts/ExerciseContext';
-
+import Grid from '@material-ui/core/Grid'
+import Minus  from '../icons/Minus'
+import Plus  from '../icons/Plus'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(2),
   },
   table: {
-    minWidth: 650,
+    minWidth: 500,
   },
 }));
 
@@ -97,6 +99,10 @@ export default function MyTable() {
 
   return (
     <div className={classes.root}>
+
+
+      <Grid container >
+        <Grid item lg={12}>
       <Paper className={classes.paper}>
         <Table className={classes.table} size="small">
           <TableHead>
@@ -110,14 +116,16 @@ export default function MyTable() {
           <TableBody>
             <TableRow>
               <TableCell ><input type="text" value={selectedExer} onChange={handleChange}></input></TableCell>
-              <TableCell align="right"><button onClick={increaseSets}>up</button> {sets} <button onClick={decreaseSets}>down</button></TableCell>
-              <TableCell align="right"><button onClick={increaseReps}>up</button> {reps} <button onClick={decreaseReps}>down</button></TableCell>
+              <TableCell align="right"><span onClick={decreaseSets}><Minus /></span> {sets} <span onClick={increaseSets}><Plus /></span> </TableCell>
+              <TableCell align="right"><span onClick={decreaseReps}><Minus /></span> {reps} <span onClick={increaseReps}><Plus /></span></TableCell>
               <TableCell align="right"><button onClick={handleSubmit}>추가</button> </TableCell>
             </TableRow>
               {Rows}
           </TableBody>
         </Table>
       </Paper>
+        </Grid>
+      </Grid>
     </div>
   );
 }
