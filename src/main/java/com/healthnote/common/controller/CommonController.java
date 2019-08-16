@@ -1,7 +1,5 @@
 package com.healthnote.common.controller;
 
-import java.util.ArrayList;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.View;
 
 import com.healthnote.common.service.CommonService;
-import com.healthnote.members.service.MembersService;
-import com.healthnote.vo.MemberAndFixedScheduleDTO;
 import com.healthnote.vo.TrainerUpgradedDTO;
 
 @Controller
