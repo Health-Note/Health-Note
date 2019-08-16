@@ -12,45 +12,43 @@ public class TrainerUpgradedDTO implements UserDetails {
 	private String email;
 	private String nickname;
 	private String password;
-	private String AUTHORITY;
-	private boolean ENABLED;
-	private boolean CREDEXPI;
-	
+	private String authority;
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		ArrayList<GrantedAuthority> auth = new ArrayList<GrantedAuthority>();
-		auth.add(new SimpleGrantedAuthority(AUTHORITY));
+		auth.add(new SimpleGrantedAuthority(authority));
 		return auth;
 	}
 
 	@Override
-	public String getPassword() {
-		return password;
-	}
-
-	@Override
 	public String getUsername() {
-		return email;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public boolean isAccountNonExpired() {
-		return true;
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return true;
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		return CREDEXPI;
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		return ENABLED;
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	public String getEmail() {
@@ -68,6 +66,21 @@ public class TrainerUpgradedDTO implements UserDetails {
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
-	
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getAuthority() {
+		return authority;
+	}
+
+	public void setAuthority(String authority) {
+		this.authority = authority;
+	}
 	
 }

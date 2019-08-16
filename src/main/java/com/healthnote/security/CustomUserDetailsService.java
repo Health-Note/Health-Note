@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import com.healthnote.common.dao.CommonDAO;
 import com.healthnote.vo.TrainerUpgradedDTO;
 
 public class CustomUserDetailsService implements UserDetailsService {
@@ -15,17 +16,19 @@ public class CustomUserDetailsService implements UserDetailsService {
 	private SqlSession sqlsession;
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		
-		System.out.println("loadUserByUsername 실행");
-		System.out.println("username : " + username);
+		CommonDAO dao = sqlsession.getMapper(CommonDAO.class);
+		TrainerUpgradedDTO user = dao.getUser(email);
 		
-		TrainerDAO dao = sqlsession.getMapper(TrainerDAO.class);
-		TrainerUpgradedDTO user = dao.getUser(username);
-		System.out.println("user email : " + user.getUsername());
+		if(user.getAuthority().equals("user")) {
+			user.setAuthority("ROLE_USER");
+		}else if (user.getAuthority().equals("admin")) {
+			user.setAuthority("ROLE_ADMIN");
+		}
 		
 		if(user==null) {
-			throw new InternalAuthenticationServiceException(username);
+			throw new InternalAuthenticationServiceException(email);
 		}
 		
 		return user;

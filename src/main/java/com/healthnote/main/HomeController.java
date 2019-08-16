@@ -26,22 +26,4 @@ public class HomeController {
 	@Autowired
 	private View jsonview;
 	
-	@RequestMapping(value = "/welcomeLogin", method = RequestMethod.GET)
-	public String welcomeLogin(HttpSession request, Model model) {
-		
-		System.out.println("welcomeLogin");
-		
-	return "loginpage";
-	
-	}
-	
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String loginSuccess(HttpSession request, Model model) {
-		
-		System.out.println("loginSuccess");
-		
-		return "home";
-		
-	}
-	
 }

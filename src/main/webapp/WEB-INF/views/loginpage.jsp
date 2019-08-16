@@ -6,7 +6,7 @@
 </head>
 
 <body onload="document.f.username.focus();">
-    <h3>Login with Username and Password</h3>
+    <h3>Customized Login Page HealthNote</h3>
     <form name="f" action="/main/login" method="post">
         <table>
             <tbody>

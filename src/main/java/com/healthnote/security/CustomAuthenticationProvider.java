@@ -26,36 +26,20 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		
-		System.out.println("authenticate 실행");
-			
 		String username = (String) authentication.getPrincipal();
 		String password = (String) authentication.getCredentials();
 		
-		System.out.println("username : " + username);
-		System.out.println("password : " + password);
-		
 		TrainerUpgradedDTO user = (TrainerUpgradedDTO) userDeSer.loadUserByUsername(username);
-		
-		System.out.println("user email : " + user.getUsername());
-		
-		/*
-		if(!user.isEnabled() || !user.isCredentialsNonExpired()) {
-		throw new AuthenticationCredentialsNotFoundException(username);
-		}
-		
-		Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>) user.getAuthorities();
-		System.out.println("user.getAuthorities(); 잘 실행됨");
+
+		// 비밀번호 검사 
 		if(!passwordEncoder.matches(password, user.getPassword())) {
 			throw new BadCredentialsException(username);
 		}
 		
-		System.out.println("authorities : " + authorities);
-		
+		// 권한 가져오기 
+		Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>) user.getAuthorities();
 		return new UsernamePasswordAuthenticationToken(username, password, authorities);
-		*/
 		
-		return null;
-
 	}
 	
 	@Override
@@ -63,43 +47,5 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	
 		return true;
 	}
-	
-	/*
-	@Resource(name="userSer")
-	private UserService userSer;
-	
-	@Autowired
-	private UserDetailsService userDeSer;
-	
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		
-		String username = (String) authentication.getPrincipal();
-		String password = (String) authentication.getCredentials();
-		
-		
-		CustomUserDetails user = (CustomUserDetails) userDeSer.loadUserByUsername(username);
-		
-//		if(!user.isEnabled() || !user.isCredentialsNonExpired()) {
-//			log.debug("isEnabled or isCredentialsNonExpired :::::::: false!");
-//			throw new AuthenticationCredentialsNotFoundException(username);
-//		}
-		
-		Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>) user.getAuthorities();
-		
-		
-//		if(!passwordEncoder.matches(password, user.getPassword())) {
-//			log.debug("matchPassword :::::::: false!");
-//			throw new BadCredentialsException(username);
-//		}
-		
-		
-		return new UsernamePasswordAuthenticationToken(username, password, authorities);
-	}
-*/
 
 }
