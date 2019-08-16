@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -280,6 +281,64 @@ public class ScheduleController {
 	
 	}
 	
+	/*
+	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder; 
+
+ 	memberdto.setPwd(this.bCryptPasswordEncoder.encode(memberdto.getPwd()));	
+	 
+	 
+	--------------------------------------------------------------------------
+	
+	@RequestMapping(value="/login.htm",method=RequestMethod.POST)
+	public String login(String mid, String pwd, Model model,HttpSession session) throws Exception {
+		String ischecked = service.ischecked(mid);
+		String result="";
+		String msg = "";
+		int newcount = 0;
+		String securitypwd = service.getlogin(mid);
+		if(securitypwd == null) {
+			System.out.println("아이디 존재 안함");
+			msg = "아이디가 존재하지 않습니다.";
+			result = "login";
+		}else {
+			if (bCryptPasswordEncoder.matches(pwd, securitypwd)) {
+				if (ischecked.equals("y")) {
+					MemberDTO memberdto = service.getProfileInfoMember(mid);
+					session.setAttribute("mid", mid);
+					model.addAttribute("memberdto", memberdto);
+					result = "main";
+					int check = service.freeTrialCheck(mid);
+					if (check == 1) {
+						result = "login";
+						msg = "2주의 무료체험기간이 만료되었습니다.";
+
+					} else {
+						///////////////이거 main.htm에 넣으면 아마 끝?
+						newcount = inboxservice.newCount(mid);
+						session.setAttribute("mid", mid);
+						result = "main";
+
+					}
+				}
+				else {
+					 msg = "인증되지 않은 이메일입니다.<br>가입 당시 입력하신 E-Mail을 통해 인증해주세요";
+			         result = "login";
+				}
+			} else {
+				msg = "비밀번호가 일치하지 않습니다.";
+				result = "login";
+			}
+		}
+		model.addAttribute("newcount", newcount);
+		model.addAttribute("msg", msg);
+		
+		  
+		return result;
+	}
+	 
+	 * */
 	
 	
 }

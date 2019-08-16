@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.healthnote.statistic.dao.StatisticDAO">
+											  
+	<select id="getMembersOfTra" parameterType="String" resultType="com.healthnote.vo.MemberDTO">
+		select *
+		from members
+		where 1=1
+		and email = #{trainerId}
+	</select>
+	
+	<select id="getTargetProportion" parameterType="String" resultType="com.healthnote.vo.TargetProportionDTO">
+			select  t2.target as target
+			       ,count(t2.target) / t3.total_count * 100 as proportion
+			from routine t1
+			    ,exercise t2
+			    ,(select count(*) as total_count from routine) t3
+			where 1=1
+			and t1.exercisename = t2.exercisename
+			and t1.phonenum = #{phonenum} 
+			group by t2.target, t3.total_count
+	</select>
+	
+	<select id="getUnusedPtProportion" parameterType="String" resultType="float">
+		select 100 - usedpt / unusedpt * 100
+		from members
+		where 1=1
+		and phonenum = #{phonenum} 
+	</select>
+	
+	<select id="getMemos" parameterType="String" resultType="com.healthnote.vo.MemoDTO">
+		select *
+		from memo
+		where phonenum = #{phonenum} 
+	</select>
+	
+	<select id="getWeightAndBmi" parameterType="String" resultType="com.healthnote.vo.WeightAndBmiDTO">
+		select t2.date as date
+		      ,t2.weight as weight
+		      ,t1.height as height
+		      ,t2.weight / ((t1.height / 100) * (t1.height / 100)) as bmi
+		      <![CDATA[
+		      ,case when t2.weight / ((t1.height / 100) * (t1.height / 100)) < 18.5 
+					then 0
+		            
+		            when t2.weight / ((t1.height / 100) * (t1.height / 100)) < 24.9 
+					then 1
+		            
+		            when t2.weight / ((t1.height / 100) * (t1.height / 100)) < 29
+					then 2
+		            
+		            else 3
+					end as status
+		            ]]> 
+		from members t1
+		    ,weighthistory t2
+		where 1=1
+		and t1.phonenum = t2.phonenum
+		and t1.phonenum = #{phonenum} 
+	</select>
+	
+	<delete id="deleteMemo">
+		delete from memo
+		where no = #{no} 
+	</delete>
+	
+	<update id="updateMemoFinish" parameterType="hashmap">
+		update memo
+		set finish_dncd = #{finish_dncd}
+		where no = #{no}  
+	</update>
+	
+	<insert id="insertMemo" parameterType="com.healthnote.vo.MemoDTO">
+		insert into memo values(no, #{text}, #{finish_dncd}, #{phonenum})
+	</insert>
+
+</mapper>

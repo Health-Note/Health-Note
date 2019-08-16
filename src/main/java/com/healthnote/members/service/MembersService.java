@@ -213,7 +213,8 @@ public class MembersService {
 	/*
 	날 짜 : 2019. 8. 9.
 	작성자 : 김 정 권
-	기 능 : 날짜 gap 계산  
+	기 능 : 정적 스케줄에 따라 동적 스케줄도 같이 넣어주는 기능이며 동적 스케줄에 insert시 해당 시간에 누군가 미리 스케줄이 있으면 
+	       해당 사항을 ArrayList로 던져준다  
 	 */
     public ArrayList<ScheduleDTO> insertScheduleFollwingFixed(FixedScheduleDTO paramdto, String today) {
     		
