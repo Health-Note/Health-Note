@@ -6,7 +6,7 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 export default function GroupedButtons() {
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={12}>
         <Grid container spacing={1} direction="column" alignItems="center">
           <Grid item>
             <ButtonGroup size="small" aria-label="small outlined button group">

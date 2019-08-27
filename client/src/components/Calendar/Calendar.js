@@ -18,7 +18,7 @@ import Alert from '../items/Alert';
 
 function Calendar () {
   const schedules = useContext(ScheduleContext); //title, start, id가 포함되어야 함.
-  const members = useContext(MembersContext); 
+  const { members } = useContext(MembersContext); 
   const dispatch = useContext(DispatchContext); 
   const [toggle, setToggle] = useState(false);
   const [evtColor, setEvtColor] = useState("orange")
@@ -191,8 +191,8 @@ function Calendar () {
     setEvt(eventClick.event);
     handleTargetId(eventClick.event.id); 
     setToggle(!toggle); //alert창을 오픈
-    setStart(moment(eventClick.event.start).format("MM월 DD일"))
-   
+    setStart(moment(eventClick.event.start).format("MM월 DD일"));
+
     // 클릭시 1주일간의 해당 회원의 운동루틴을 받음
     fetch("/getWeekRoutineOfStu", {
       method: "POST",
@@ -215,14 +215,22 @@ function Calendar () {
     return (
       // 이벤트 창
       <div className="animated fadeIn p-4 demo-app">
-      <Alert toggle={toggle} setToggle={setToggle} targetId={targetId} handleRemove={handleRemove} evt={evt} name={name} start={start}/>
+      <Alert 
+        toggle={toggle}
+        setToggle={setToggle} 
+        targetId={targetId} 
+        handleRemove={handleRemove} 
+        evt={evt} 
+        name={name} 
+        start={start}
+      />
         <Grid container>
           <Grid item xs={2}>
             <div
               id="external-events"
               style={{
                 padding: "10px",
-                width: "10%",
+               
                 height: "500px",
                 maxHeight: "-webkit-fill-available"
               }}

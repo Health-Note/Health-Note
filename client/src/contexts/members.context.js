@@ -44,27 +44,29 @@ export const MembersContext = createContext();
 export const DispatchContext = createContext();
 
 export function MembersProvider(props) {
+    const [state, dispatch] = useReducer(memberReducer, defaultTodos);
+
     // 작성일: 2019.08.11 
     // 작성자: 박종열
     // 기능: 트레이너들의 회원목록(이름, 등록일, 마감일, 남은pt수) 가져오기, 정적 스케줄 가져오기
-    useEffect(() => {
-        fetch("/getMemberAndFixedSchedule", {
+    const getMember = async () => {
+        const setting = {
             method: "GET",
             headers: {
                 "Content-Type": "application/json" 
             }
-        }).then((res) => {
-            return res.json()
-        }).then((expectedMembers) => {
-            //console.log("getMemberAndFixedSchedule", expectedMembers);
-            // expectedMembers.map(cv => {...cv {gender: String(cv.gender)}})
-        })
-    }, [])
-
+        }
+        try {
+            const res = await fetch("/getMemberAndFixedSchedule", setting);
+            const members = await res.json();
+            dispatch({type: "GETMEMBER", members });
+        } catch (err) {
+           
+        }
+    }
     
-    const [members, dispatch] = useReducer(memberReducer, defaultTodos);
         return(
-            <MembersContext.Provider value={ members }>
+            <MembersContext.Provider value={{ members: state, getMember }}>
                 <DispatchContext.Provider value={ dispatch }> {/*dispatch를 계속해서 만들어내지 않게 객체형태로 보내지 않는다 */}
                     {props.children}
                 </DispatchContext.Provider>

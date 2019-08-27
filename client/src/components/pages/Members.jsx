@@ -21,7 +21,7 @@ function Member () {
    
           
             <Grid container justify="center" style={{marginTop: "1rem"}}>
-                <Grid item xs={12} md={10} lg={7}>
+                <Grid item xs={12} md={10} lg={10}>
                 <MembersProvider>
                     <MemberForm />
                     <MemberList/>

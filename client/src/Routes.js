@@ -6,15 +6,13 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import { MembersContext } from './contexts/members.context';
 
 function Routes () {
-    const members = useContext(MembersContext);
+    const { members } = useContext(MembersContext);
 
     function getMember(props) { // 괄호안에 props는 라우터에서 넣어주는 프롭스
         let name = props.match.params.name;// 파라미터를 통해 멤버정보 가져오기
-        console.log("이름", name);
         let currentMember = members.find( // 프롭스의 멤버와 파라미터의 멤버를 비교
             member => member.name.toLowerCase() === name.toLowerCase()
             );
-            console.log("이름", currentMember);
         return <Statistics {...props} member={currentMember} />;
     }
 

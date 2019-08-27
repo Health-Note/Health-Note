@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import { ExerciseContext }  from '../../contexts/ExerciseContext';
+import { ExerciseContext }  from '../../contexts/exercise.context';
 
 const useStyles = makeStyles(theme => ({
   button: {

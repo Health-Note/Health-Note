@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SelectMember() {
-  const members = useContext(MembersContext);
+  const { members } = useContext(MembersContext);
   const classes = useStyles();
   const [values, setValues] = React.useState({});
 

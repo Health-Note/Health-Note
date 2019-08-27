@@ -4,10 +4,8 @@ import "@fullcalendar/core/main.css";
 import "@fullcalendar/daygrid/main.css";
 import "@fullcalendar/timegrid/main.css";
 import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
-import momentPlugin from '@fullcalendar/moment';
 import moment from 'moment';
 import { Col, Row } from "reactstrap";
 import { MembersContext }  from '../../contexts/members.context';
@@ -31,9 +29,10 @@ class MemberCalendar extends Component {
     events: []
   };
 
-  componentDidMount() {
-    const member = this.context;
-    const newMember = member.map(cv => {
+  componentDidMount() { // calendar에 맞게 변경
+    const { members, getMember }  = this.context;
+    getMember();
+    const newMember = members.map(cv => {
         return {title: cv.name, id: cv.phonenum, phonenum: cv.phonenum}
     })
     this.setState({
@@ -43,20 +42,20 @@ class MemberCalendar extends Component {
     /**
  * 날짜 : 2019-08-07
  * 작성자: 박종열
-   * 기능 : 서버에서 사용자 이름, 폰넘버, 시작날짜, 시작시간을 받아옴
+   * 기능 : 서버에서 사용자 이름, 폰넘버, 시작시간을 받아옴
    * adding dragable properties to external events through javascript
    */
     
-    // fetch("/getData", {
-        //     method: "get",
-        //   headers: {
+  // fetch("/getData", {
+  //     method: "get",
+  //   headers: {
   //       'Accept': 'application/json',
   //       'Content-Type': 'application/json'
   //   }
   // }).then((res) => {
-      //     return res.json()
-      // }).then((data) => {
-          //     let meberList = data.members.map(member => {
+  //     return res.json()
+  // }).then((data) => {
+  //     let meberList = data.members.map(member => {
   //         const startReady = member.startDay + " " + member.startTime;
   //     const start = moment(startReady).format();
   //     return { title: member.name, id: member.phonenum, start }

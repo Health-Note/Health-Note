@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -24,9 +24,14 @@ const useStyles = makeStyles(theme => ({
 function MembeList() {
     
     const classes = useStyles();
-    const members  = useContext(MembersContext);
+    const { getMember, members }  = useContext(MembersContext);
+    
+    useEffect(() => {
+        getMember()
+        // eslint-disable-next-line
+    }, []);
+    
     return (
-  
         <Paper>
             
             <Table className={classes.table}>

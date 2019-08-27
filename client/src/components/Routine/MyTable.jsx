@@ -6,35 +6,34 @@ import TableHead from '@material-ui/core/TableHead';
 import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import useUpDown from './useUpDown'
-import Row from './Row'
-import uuid from 'uuid/v4'
-import { ExerciseContext }  from '../../contexts/ExerciseContext';
-import Grid from '@material-ui/core/Grid'
-import Minus  from '../icons/Minus'
-import Plus  from '../icons/Plus'
+import useUpDown from './useUpDown';
+import Row from './Row';
+import uuid from 'uuid/v4';
+import { ExerciseContext }  from '../../contexts/exercise.context';
+import Grid from '@material-ui/core/Grid';
+import Minus  from '../icons/Minus';
+import Plus  from '../icons/Plus';
 
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
   },
   paper: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(1),
     width: '100%',
     overflowX: 'auto',
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(1),
   },
   table: {
-    minWidth: 500,
+  
   },
 }));
 
 
 export default function MyTable() {
   const classes = useStyles();
-  const {selectedExer, setSelectedExer, id, date, startTime} = useContext(ExerciseContext);
+  const {selectedExer, setSelectedExer} = useContext(ExerciseContext);
   
-  const [name, setName] = useState("")
   const [sets, increaseSets, decreaseSets] = useUpDown(0);
   const [reps, increaseReps, decreaseReps] = useUpDown(0);
 
@@ -96,34 +95,31 @@ export default function MyTable() {
     onSubmit(selectedExer, sets, reps);
   }
 
-
   return (
     <div className={classes.root}>
-
-
-      <Grid container >
-        <Grid item lg={12}>
-      <Paper className={classes.paper}>
-        <Table className={classes.table} size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell >운동명</TableCell>
-              <TableCell align="right">세트수</TableCell>
-              <TableCell align="right">반복수</TableCell>
-              <TableCell align="right">추가</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <TableRow>
-              <TableCell ><input type="text" value={selectedExer} onChange={handleChange}></input></TableCell>
-              <TableCell align="right"><span onClick={decreaseSets}><Minus /></span> {sets} <span onClick={increaseSets}><Plus /></span> </TableCell>
-              <TableCell align="right"><span onClick={decreaseReps}><Minus /></span> {reps} <span onClick={increaseReps}><Plus /></span></TableCell>
-              <TableCell align="right"><button onClick={handleSubmit}>추가</button> </TableCell>
-            </TableRow>
-              {Rows}
-          </TableBody>
-        </Table>
-      </Paper>
+      <Grid container justify="center" >
+        <Grid item lg={8}>
+          <Paper className={classes.paper}>
+            <Table className={classes.table} >
+              <TableHead>
+                <TableRow>
+                  <TableCell >운동명</TableCell>
+                  <TableCell align="right">세트수</TableCell>
+                  <TableCell align="right">반복수</TableCell>
+                  <TableCell align="right">추가</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  <TableCell ><input type="text" value={selectedExer} onChange={handleChange}></input></TableCell>
+                  <TableCell align="right"><span onClick={decreaseSets}><Minus /></span> {sets} <span onClick={increaseSets}><Plus /></span> </TableCell>
+                  <TableCell align="right"><span onClick={decreaseReps}><Minus /></span> {reps} <span onClick={increaseReps}><Plus /></span></TableCell>
+                  <TableCell align="right"><button onClick={handleSubmit}>추가</button> </TableCell>
+                </TableRow>
+                  {Rows}
+              </TableBody>
+            </Table>
+          </Paper>
         </Grid>
       </Grid>
     </div>

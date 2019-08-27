@@ -1,114 +1,69 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-//import { mainListItems, secondaryListItems } from './listItems';
-import { Route, Switch, Link } from 'react-router-dom'
-import Schedule from '../pages/Schedule';
-import Members from '../pages/Members'
-import Statistics from '../pages/Statistics';
-import Routes from '../../Routes'
+import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+import { Link } from 'react-router-dom';
+import Routes from '../../Routes';
 
-const drawerWidth = 240;
+const { Header, Content, Footer, Sider } = Layout;
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
-  },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: 'none',
-  },
-  title: {
-    flexGrow: 1,
-  },
-  drawerPaper: {
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9),
-    },
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: '100vh',
-    overflow: 'auto',
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-  },
-
-}));
-
-export default function Dashboard() {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
+class SiderDemo extends React.Component {
+  state = {
+    collapsed: false,
   };
 
-  return (
-  <>
-    <div className={classes.root}>
-        <Divider />
-        <List><Link exact to={"/schedule"}>{"Schedule"}</Link></List>
+  onCollapse = collapsed => {
+    console.log(collapsed);
+    this.setState({ collapsed });
+  };
 
-        <Divider />
-        <List><Link exact to={"/Statistic"}>{"Statistics"}</Link></List>
-
-        <Divider />
-        <List><Link exact to={"/member"}>{"Member"}</Link></List>
-    </div>
-    <Routes />
-  </>
-
-  );
+  render() {
+    return (
+      <Layout style={{ minHeight: '100vh' }}>
+        
+        <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+          <div className="logo" />
+          <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+            <Menu.Item></Menu.Item>
+            <Menu.Item key="1">
+              <span>Health Note</span>
+              <Link exact to={"/schedule"}>{"Schedule"}</Link>
+            </Menu.Item>
+            <Menu.Item key="2">
+              <Icon type="desktop" />
+              <span>로그인 / 회원가입</span>
+              <Link exact to={"/Statistic"}>{"Statistics"}</Link>
+            </Menu.Item>
+            <Menu.Item></Menu.Item>
+            <Menu.Item key="9">
+              <Icon type="team" />
+              <span>회원 관리</span>
+              <Link exact to={"/member"}></Link>
+            </Menu.Item>
+            <Menu.Item key="10">
+              <Icon type="calendar"></Icon>
+              <span>일정 관리</span>
+              <Link exact to={"/schedule"}></Link>
+            </Menu.Item>
+            <Menu.Item key="11">
+              <Icon type="pie-chart" />
+              <span>회원 분석</span>
+              <Link exact to={"/Statistic"}></Link>
+            </Menu.Item>
+          </Menu>
+        </Sider>
+        <Layout>
+          <Header style={{ background: '#fff', padding: 0 }} />
+          <Content style={{ margin: '0 16px' }}>
+            <Breadcrumb style={{ margin: '16px 0' }}>
+              <Breadcrumb.Item>User</Breadcrumb.Item>
+              <Breadcrumb.Item>Bill</Breadcrumb.Item>
+            </Breadcrumb>
+            <div style={{ padding: 24, background: '#fff', minHeight: 360 }}><Routes/></div>
+          </Content>
+          <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+        </Layout>
+      </Layout>
+    );
+  }
 }
+
+export default SiderDemo;
