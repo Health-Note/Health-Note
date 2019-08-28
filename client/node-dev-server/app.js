@@ -1,46 +1,24 @@
 const express = require("express");
-const sequelize = require("./db");
 const app = express();
-
 app.use(express.json());
 
-const Member = sequelize.import("./models/members");
-const Trainer = sequelize.import("./models/trainer");
+// routes
+const memberRoutes = require("./routes/members");
 
-Trainer.create({
-   email: "fitdata2@naver.com",
-   nickname: "왕만두"
-}).then(() => {
-    console.log("생성완료")
-})
+app.use(memberRoutes);
 
-
-app.get("/getData", (req, res) => {
-    res.json({
-         members: [{
-            name: "park",
-            phonenum: "01020777538",
-            startDay: "20190807",
-            startTime: "1600"
-        },{
-            name: "jong",
-            phonenum: "01094325615",
-            startDay: "20190806",
-            startTime: "1700"
-        },{
-            name: "yeol",
-            phonenum: "01097045552",
-            startDay: "20190808",
-            startTime: "1800"
-        }]
-    })
-})
+// Trainer.create({
+//    email: "fitdata2@naver.com",
+//    nickname: "왕만두"
+// }).then(() => {
+//     console.log("생성완료");
+// })
 
 // 0성공 1실패
 app.post("/changeMemberSchedule", (req, res) => {
     console.log(req.body);
     res.json({result: 0});
-})
+});
 
 app.post("/deletePT", (req, res) => {
     console.log(req.body);

@@ -18,17 +18,15 @@ function Member () {
     // }, [todos])
 
     return(
-   
-          
-            <Grid container justify="center" style={{marginTop: "1rem"}}>
-                <Grid item xs={12} md={10} lg={10}>
-                <MembersProvider>
-                    <MemberForm />
-                    <MemberList/>
-                    <MemberCalendar />
-                </MembersProvider>
-                </Grid>
+        <Grid container justify="center" style={{marginTop: "1rem"}}>
+            <Grid item xs={12} md={10} lg={10}>
+            <MembersProvider>
+                <MemberForm />
+                <MemberList/>
+                <MemberCalendar />
+            </MembersProvider>
             </Grid>
+        </Grid>
     )
 }
 

@@ -4,7 +4,7 @@ import DropDown from './DropDown';
 import { ExerciseContext }  from '../../contexts/exercise.context'
 
 const Routine = () => {
-  const { getExercises, exercises } = useContext(ExerciseContext);
+  const { getExercises, exercises,  } = useContext(ExerciseContext);
 
   useEffect(() => {
     getExercises();
