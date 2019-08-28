@@ -18,19 +18,19 @@ class SiderDemo extends React.Component {
   render() {
     return (
       <Layout style={{ minHeight: '100vh' }}>
-        
+
         <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
           <div className="logo" />
           <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
             <Menu.Item></Menu.Item>
             <Menu.Item key="1">
               <span>Health Note</span>
-              <Link exact to={"/schedule"}>{"Schedule"}</Link>
+              <Link exact to={"/schedule"}>{"schedule"}</Link>
             </Menu.Item>
             <Menu.Item key="2">
               <Icon type="desktop" />
               <span>로그인 / 회원가입</span>
-              <Link exact to={"/Statistic"}>{"Statistics"}</Link>
+              <Link exact to={"/register"}></Link>
             </Menu.Item>
             <Menu.Item></Menu.Item>
             <Menu.Item key="9">
@@ -46,7 +46,7 @@ class SiderDemo extends React.Component {
             <Menu.Item key="11">
               <Icon type="pie-chart" />
               <span>회원 분석</span>
-              <Link exact to={"/Statistic"}></Link>
+              <Link exact to={"/statistic"}></Link>
             </Menu.Item>
           </Menu>
         </Sider>
