@@ -26,7 +26,7 @@ class SiderDemo extends React.Component {
             <Menu.Item></Menu.Item>
             <Menu.Item key="1">
               <span>Health Note</span>
-              <Link exact to={"/schedule"}>{"schedule"}</Link>
+              <Link exact to={"/"}></Link>
             </Menu.Item>
             <Menu.Item key="2">
               <Icon type="desktop" />

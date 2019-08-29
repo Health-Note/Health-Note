@@ -33,7 +33,7 @@ router.post("/", [
         
         const payload = {
             trainer: {
-                id: email // 유저 아이디를 권한 인증 및 접근 가능
+                email: email // 유저 아이디를 권한 인증 및 접근 가능
             }
         };
 

@@ -4,6 +4,7 @@ import Statistics from './components/pages/Statistics';
 import Members from './components/pages/Members';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
+import Home from './components/home/Home';
 import { Switch, Route, Redirect } from "react-router-dom";
 import { MembersContext } from './contexts/members.context';
 
@@ -20,6 +21,7 @@ function Routes () {
 
     return(
         <Switch>
+            <Route exact path="/" render={() => <Home/>} />
             <Route exact path="/schedule" render={() => <Schedule/>} />
             <Route exact path="/statistic" render={() => <Statistics/>} />
             <Route exact path="/statistic/:name" render={getMember} />
