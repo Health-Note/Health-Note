@@ -4,15 +4,10 @@ app.use(express.json());
 
 // routes
 const memberRoutes = require("./routes/members");
+const trainerRoutes = require("./routes/trainers");
 
 app.use(memberRoutes);
-
-// Trainer.create({
-//    email: "fitdata2@naver.com",
-//    nickname: "왕만두"
-// }).then(() => {
-//     console.log("생성완료");
-// })
+app.use("/api/trainers", trainerRoutes);
 
 // 0성공 1실패
 app.post("/changeMemberSchedule", (req, res) => {

@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import { Link } from 'react-router-dom';
 import Routes from '../../Routes';
+import Alerts from '../layout/Alerts'
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -52,6 +53,7 @@ class SiderDemo extends React.Component {
         </Sider>
         <Layout>
           <Header style={{ background: '#fff', padding: 0 }} />
+          <Alerts/>
           <Content style={{ margin: '0 16px' }}>
             <Breadcrumb style={{ margin: '16px 0' }}>
               <Breadcrumb.Item>User</Breadcrumb.Item>

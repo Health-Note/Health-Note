@@ -1,25 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Input, Icon, Button, Row, Col } from 'antd';
-
+import { AlertContext } from '../../contexts/alert.context';
+import { AuthContext } from '../../contexts/auth.context';
 
 function Register() {
+  const alertContext = useContext(AlertContext);
+  const authContext = useContext(AuthContext);
 
+  const { setAlert } = alertContext; 
+  const { register, error, clearErrors } = authContext; 
+
+  useEffect(() => {
+    if (error === '유저가 이미 존재합니다.') {
+      setAlert(error);
+      clearErrors();
+    }
+    
+  }, [error])
   const [user, setUser] = useState({
-    name: '',
+    nickname: '',
     email: '',
     password: '',
     password2: ''
   })
 
-  const { name, email, password, password2 } = user;
+  const { nickname, email, password, password2 } = user;
   
   const onChange = e => setUser({
     ...user, [e.target.name]: e.target.value
   });
 
   const onSubmit = e => {
+    console.log("제출")
     e.preventDefault();
-    console.log('유저 등록')
+    if(nickname === '' || email === '' || password === '') {
+      setAlert('모든 항목을 채우세요', 'danger')
+    } else if (password !== password2) {
+      setAlert('비밀번호가 일치하지 않습니다.', 'danger')
+    } else {
+      register({nickname, email, password})
+      console.log('유저 등록')
+    }
   }
 
   return(
@@ -34,12 +55,13 @@ function Register() {
         <Row type="flex" justify="center">
         <form onSubmit={onSubmit}>
           <div>
-              <label htmlFor="name">닉네임</label>
+              <label htmlFor="nickname">닉네임</label>
               <Input  
                 prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                name="name"
-                value={name}
+                name="nickname"
+                value={nickname}
                 placeholder="닉네임"
+                required
                 onChange={onChange}>
               </Input>
           </div>
@@ -50,6 +72,7 @@ function Register() {
                 name="email" 
                 value={email}
                 placeholder="이메일" 
+                required
                 onChange={onChange}></Input>
           </div>
           <div>
@@ -59,19 +82,23 @@ function Register() {
               name="password" 
               value={password} 
               placeholder="비밀번호" 
+              required
+              minLength={6}
               onChange={onChange}></Input>
           </div>
           <div>
               <label htmlFor="password2">비밀번호 확인</label>
               <Input 
-                type="password2"
+                type="password"
                 name="password2" 
-                value={password} 
+                value={password2} 
                 placeholder="비밀번호 확인" 
+                required
+                minLength={6}
                 onChange={onChange}>
               </Input>
           </div>
-          <Button type="primary" block style={{"margin-top": "15px"}}> 제출 </Button>
+          <Button htmlType="submit" type="primary" block style={{"marginTop": "15px"}}> 제출 </Button>
         </form> 
       </Row>
     </div>
