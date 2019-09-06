@@ -15,12 +15,11 @@ export const AlertProvider = (props) => {
     const [state, dispatch] = useReducer(alertReducer, initialState);
     
     // 얼럿 만들기
-    const setAlert = (msg, type) => {
-        console.log("셋 얼러트")
+    const setAlert = (msg, alertType ) => {
         const id = uuid();
         dispatch({
             type: SET_ALERT,
-            payload: { msg, type, id }
+            payload: { msg, alertType, id }
         });
         // 얼럿 삭제
         setTimeout(() => dispatch({type: REMOVE_ALERT, id}), 3000);

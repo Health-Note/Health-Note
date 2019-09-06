@@ -5,7 +5,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
-import momentPlugin from '@fullcalendar/moment';
+import koLocale from '@fullcalendar/core/locales/ko';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fullcalendar/core/main.css";
 import "@fullcalendar/daygrid/main.css";
@@ -225,42 +225,42 @@ function Calendar () {
         start={start}
       />
         <Grid container>
-          <Grid item xs={2}>
+          <Grid item xs={0}>
             <div
               id="external-events"
               style={{
                 padding: "10px",
-               
                 height: "500px",
                 maxHeight: "-webkit-fill-available"
               }}
             >
-              <p align="center"><strong> 전체회원</strong></p>
-              {exeMember.map(member => (
+              {/*<p align="center"><strong> 전체회원</strong></p>
+               {exeMember.map(member => (
                 <div className="fc-event" title={member.title} key={member.id} >
                   {member.title}
                 </div>
-              ))}
+              ))} */}
             </div>
-          </Grid>     
-          <Grid item xs={10} >
+          </Grid>
+          <Grid item xs={11} >
             <div className="demo-app-calendar" id="mycalendartest">
               <FullCalendar
-              height={500}
-               mirrorSelector={'.gu-mirror'}
+                height={500}
+                mirrorSelector={'.gu-mirror'}
                 selectable= {true}
-                minTime={"06:00:00"}
-                defaultView="dayGridMonth"
+                minTime={"09:00:00"}
+                defaultView="timeGridWeek"
                 header={{
                   left: "prev,next today",
                   center: "title",
-                  right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek"
+                  right: "dayGridMonth, timeGridWeek, listWeek"
                 }}
+                locale={koLocale}
                 rerenderDelay={10}
                 eventDurationEditable={false}
                 editable={true}
                 droppable={true}
-                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, momentPlugin]}
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                 //ref={calendarComponentRef}
                 //weekends={this.state.calendarWeekends}
                 events={scheduleList} // 달력안에 스케줄(events)이 표시된다.

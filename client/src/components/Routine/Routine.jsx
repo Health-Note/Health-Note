@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import MyTable from './MyTable';
 import DropDown from './DropDown';
 import { ExerciseContext }  from '../../contexts/exercise.context'
@@ -8,9 +8,8 @@ const Routine = () => {
 
   useEffect(() => {
     getExercises();
-    console.log(exercises)
-    console.log("유즈 이펙트")
-  },[])
+    // eslint-disable-next-line
+  }, [])   
 
     return (
       <>

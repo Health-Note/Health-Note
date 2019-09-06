@@ -11,7 +11,7 @@ const Alerts = () => {
             <div key={alert.id}>
                 <Alert
                     message={alert.msg}
-                    type="error"
+                    type={alert.alertType}
                     closable
                     />
             </div>

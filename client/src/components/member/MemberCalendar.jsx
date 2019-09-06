@@ -5,6 +5,7 @@ import "@fullcalendar/daygrid/main.css";
 import "@fullcalendar/timegrid/main.css";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
+import koLocale from '@fullcalendar/core/locales/ko';
 import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
 import moment from 'moment';
 import { Col, Row } from "reactstrap";
@@ -207,11 +208,12 @@ class MemberCalendar extends Component {
                 columnHeaderFormat={{
                     weekday:"short" // 이것은 기적이다.
                 }}
+                locale={koLocale}
                 displayEventTime={true}
                 all-day={false}
                 mirrorSelector={'.gu-mirror'}
                 selectable= {true}
-                minTime={"06:00:00"}
+                minTime={"09:00:00"}
                 defaultView="timeGridWeek"
                 header={false}
                 rerenderDelay={10}

@@ -1,26 +1,62 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import { Link } from 'react-router-dom';
 import Routes from '../../Routes';
-import Alerts from '../layout/Alerts'
+import Alerts from '../layout/Alerts';
+import { AuthContext } from '../../contexts/auth.context';
+import { AlertContext } from '../../contexts/alert.context';
 
 const { Header, Content, Footer, Sider } = Layout;
 
-class SiderDemo extends React.Component {
-  state = {
-    collapsed: false,
+const SiderDemo = () => {
+  const authContext = useContext(AuthContext);
+  const alertContext = useContext(AlertContext);
+  const { isAuthenticated, logout, trainer } = authContext;
+  const { setAlert } = alertContext;
+  
+  const [collapsed, setCollapsed] = useState(false); 
+
+  const onCollapse = collapsed => {
+    setCollapsed(collapsed);
   };
 
-  onCollapse = collapsed => {
-    console.log(collapsed);
-    this.setState({ collapsed });
-  };
+  const handleLogout = () => {
+    logout();
+    setAlert(`${trainer.nickname}님, 로그아웃 하셨습니다.`, "error")
+  }
 
-  render() {
+  const authLinks = (
+    <>
+      <Icon type="user" />
+      <span> {trainer && trainer.nickname} 접속중 </span>
+    </>
+  );
+  
+  const logoutLinks = (
+    <>
+      <Icon type="logout" />
+      <span>로그아웃</span>
+      <Link onClick={handleLogout}></Link>
+    </>
+  )
+
+  const guestLinks = (
+    <>
+      <Icon type="desktop" />
+      <span>로그인 / 회원가입</span>
+      <Link exact to={"/register"}></Link>
+    </>
+  );
+
     return (
       <Layout style={{ minHeight: '100vh' }}>
-
-        <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+        <Sider collapsible collapsed={collapsed} onCollapse={onCollapse} 
+        style={{
+          overflow: 'auto',
+          height: '100vh',
+          position: 'fixed',
+          left: 0,
+        }}>
           <div className="logo" />
           <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
             <Menu.Item></Menu.Item>
@@ -29,9 +65,10 @@ class SiderDemo extends React.Component {
               <Link exact to={"/"}></Link>
             </Menu.Item>
             <Menu.Item key="2">
-              <Icon type="desktop" />
-              <span>로그인 / 회원가입</span>
-              <Link exact to={"/register"}></Link>
+              {isAuthenticated ? authLinks : guestLinks}
+            </Menu.Item>
+            <Menu.Item key="3">
+              {isAuthenticated && logoutLinks}
             </Menu.Item>
             <Menu.Item></Menu.Item>
             <Menu.Item key="9">
@@ -51,10 +88,10 @@ class SiderDemo extends React.Component {
             </Menu.Item>
           </Menu>
         </Sider>
-        <Layout>
+        <Layout style={{ marginLeft: 200 }}>
           <Header style={{ background: '#fff', padding: 0 }} />
           <Alerts/>
-          <Content style={{ margin: '0 16px' }}>
+          <Content style={{margin: '24px 16px 0', overflow: 'initial' }}>
             <Breadcrumb style={{ margin: '16px 0' }}>
               <Breadcrumb.Item>User</Breadcrumb.Item>
               <Breadcrumb.Item>Bill</Breadcrumb.Item>
@@ -66,6 +103,5 @@ class SiderDemo extends React.Component {
       </Layout>
     );
   }
-}
 
 export default SiderDemo;

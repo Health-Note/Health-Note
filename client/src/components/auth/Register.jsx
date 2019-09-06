@@ -12,7 +12,7 @@ function Register(props) {
   const { register, error, clearErrors, isAuthenticated } = authContext; 
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated) { // 로그인이 되어있으면 홈으로 보냄
       props.history.push('/');
     }
     if (error === '유저가 이미 존재합니다.') {
@@ -20,14 +20,14 @@ function Register(props) {
       clearErrors();
     }
     // eslint-disable-next-line
-  }, [error, isAuthenticated])
+  }, [error, isAuthenticated]);
 
   const [user, setUser] = useState({
     nickname: '',
     email: '',
     password: '',
     password2: ''
-  })
+  });
 
   const { nickname, email, password, password2 } = user;
   
@@ -36,19 +36,17 @@ function Register(props) {
   });
 
   const onSubmit = e => {
-    console.log("제출")
     e.preventDefault();
     if (nickname === '' || email === '' || password === '') {
-      setAlert('모든 항목을 채우세요', 'danger')
+      setAlert('모든 항목을 채우세요', 'danger');
     } else if (password !== password2) {
       setAlert('비밀번호가 일치하지 않습니다.', 'danger');
     } else {
       register({ nickname, email, password });
-      console.log('유저 등록');
     }
   }
 
-  return(
+  return (
     <div>
       <Row type="flex" justify="center">
         <Col>
