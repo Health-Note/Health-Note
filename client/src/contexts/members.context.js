@@ -1,75 +1,96 @@
-import React, { createContext, useReducer, useEffect } from 'react';
+import React, { createContext, useReducer } from 'react';
 import memberReducer from '../reducers/members.reducer.js';
-import uuid from 'uuid/v4'
+import axios from 'axios';
+import setAuthToken from '../utils/setAuthToken';
+import { 
+    ADD_MEMBER,
+    GET_MEMBER, 
+    REMOVE_MEMBER, 
+    EDIT_MEMBER
+} from '../reducers/types'; 
 
-const defaultTodos = [
-    //디비상에서 젠더는 INT이니 주의
-    {
-        id: uuid(),
-        name: "이서영",
-        phonenum:"01094325615",
-        gender: 0,
-        start: "20190917",
-        endDate:"20191028",
-        usedpt: 0,
-        unusedpt: 16,
-        height: 173,
-        day: [0, 1, 3]
-    },
-    {   id: uuid(),
-        name: "박종열",
-        phonenum:"01020777538",
-        gender: 1,
-        startDate: "20190818",
-        endDate:"20191027",
-        usedpt: 2,
-        unusedpt: 4 ,
-        height: 180,
-        day: [0, 1, 6]
-    },
-    {   id: uuid(),
-        name: "김정권",
-        phonenum:"01097045552",
-        gender: "1",
-        startDate: "20190819",
-        endDate:"20191029",
-        usedpt: 5,
-        unusedpt: 10 ,
-        height: 181,
-        day: [1, 3, 5]
-    }
-]
+const initialState = {
+    loading: true,
+    members: [
+        {
+            id: null, 
+            name: null,
+            phonenum: null,
+            gender: null,
+            start_date: null,
+            end_date: null,
+            usedpt: null,
+            unusedpt: null,
+            height: null,
+        }
+    ]
+};
 
 export const MembersContext = createContext();
 export const DispatchContext = createContext();
 
 export function MembersProvider(props) {
-    const [state, dispatch] = useReducer(memberReducer, defaultTodos);
+    const [state, dispatch] = useReducer(memberReducer, initialState);
 
     // 작성일: 2019.08.11 
     // 작성자: 박종열
     // 기능: 트레이너들의 회원목록(이름, 등록일, 마감일, 남은pt수) 가져오기, 정적 스케줄 가져오기
     const getMember = async () => {
+        if (localStorage.token) {
+            setAuthToken(localStorage.token);
+        }
         const setting = {
-            method: "GET",
             headers: {
                 "Content-Type": "application/json" 
             }
         }
         try {
-            const res = await fetch("/getMemberAndFixedSchedule", setting);
-            const members = await res.json();
-            dispatch({type: "GETMEMBER", members });
+            const res = await axios.get("/api/members/getMembers", setting);
+            console.log("res.data", res.data)
+            await dispatch({ type: GET_MEMBER, payload: res.data });
         } catch (err) {
-           
+           console.log(err);
         }
     }
-    
-        return(
-            <MembersContext.Provider value={{ members: state, getMember }}>
-                <DispatchContext.Provider value={ dispatch }> {/*dispatch를 계속해서 만들어내지 않게 객체형태로 보내지 않는다 */}
-                    {props.children}
-                </DispatchContext.Provider>
-            </MembersContext.Provider>
-        )
+
+    // 작성일: 2019.09.07
+    // 작성자: 박종열
+    // 기능: 맴버 추가
+    const addMember = formdata => { // newName, newStartDate, newEndDate, newPhoneNum, newGender, newUnusedpt, newHeight
+        console.log("formdata", formdata)
+        if (localStorage.token) {
+            setAuthToken(localStorage.token);
+        }
+        axios.post("/api/members/insertMember", {
+            formdata
+        }).then((res) => {
+            if (res.data) {
+                dispatch({type: ADD_MEMBER,  payload: res.data});
+            }
+        }).catch((err) => {
+          console.log(err);
+        })
+    }
+
+    const removeMember = (phonenum) => {
+        dispatch({ type: REMOVE_MEMBER, payload: phonenum });
+    }
+
+    const editMember = (phonenum) => {
+        dispatch({type: EDIT_MEMBER, payload: phonenum})
+    }
+
+    return (
+        <MembersContext.Provider value={{
+            members: state.members, 
+            getMember,
+            addMember, 
+            removeMember, 
+            editMember 
+        }}>
+            <DispatchContext.Provider value={ dispatch }> {/*dispatch를 계속해서 만들어내지 않게 객체형태로 보내지 않는다 */}
+                {props.children}
+            </DispatchContext.Provider>
+        </MembersContext.Provider>
+    )
 }

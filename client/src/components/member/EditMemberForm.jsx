@@ -7,7 +7,7 @@
 import React, { useContext } from 'react';
 import useInputState from '../../hooks/useInputState';
 import TextField from '@material-ui/core/TextField';
-import { DispatchContext } from '../../contexts/members.context';
+import { MembersContext } from '../../contexts/members.context';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -20,40 +20,39 @@ import moment from 'moment';
 
 function EditMemberForm({ member, toggle, isEditing }) {
 
-    const {name, id, phonenum, gender, startDate, endDate, unusedpt, height} = member;
-    const dispatch = useContext(DispatchContext);
+    const { name, id, phonenum, gender, startDate, endDate, unusedpt, height } = member;
+    const editMember = useContext(MembersContext);
+
     const [newName, handleName] = useInputState(name);
     const [newPhoneNum, handlePhoneNum] = useInputState(phonenum);
     const [newGender, handleGender] = useInputState(gender);
     const [newUnusedpt, handleUnusedpt] = useInputState(unusedpt);
     const [newHeight, handleHeight] = useInputState(height);
-
     const [newStartDate, setStartDate] = React.useState((moment(startDate).format()));
     const [newEndDate, setEndDate] = React.useState((moment(endDate).format()));
                                                                   
     const handleSubmit = () => {
-        dispatch({type: "EDIT", id, newName, newStartDate, newEndDate, newPhoneNum, newGender, newUnusedpt, newHeight});
-        toggle();
+      editMember(phonenum);
+      toggle();
        
-        fetch("/changeMemberInfo", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json" 
-            },
-            body: JSON.stringify({
-                name: newName,
-                phonenum: newPhoneNum, 
-                gender: newGender, 
-                start_date: newStartDate, 
-                end_date: newEndDate, 
-                unusedpt: newUnusedpt
-            })
-        }).then((res) => {
-            return res.json()
-        }).then((result) => {
-            //console.log("getMemberAndFixedSchedule", expectedMembers);
-        })
-            
+    //     fetch("/changeMemberInfo", {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json" 
+    //         },
+    //         body: JSON.stringify({
+    //             name: newName,
+    //             phonenum: newPhoneNum, 
+    //             gender: newGender, 
+    //             start_date: newStartDate, 
+    //             end_date: newEndDate, 
+    //             unusedpt: newUnusedpt
+    //         })
+    //     }).then((res) => {
+    //         return res.json()
+    //     }).then((result) => {
+    //         //console.log("getMemberAndFixedSchedule", expectedMembers);
+    //     })
     }
  
     return (
@@ -74,7 +73,7 @@ function EditMemberForm({ member, toggle, isEditing }) {
               type="text"
               fullWidth
             />
-              <Select prevGender={gender} newGender={newGender} handleGender={handleGender}/>
+            <Select prevGender={gender} newGender={newGender} handleGender={handleGender}/>
             <TextField
               id="phonenum"
               value={newPhoneNum}
@@ -85,13 +84,6 @@ function EditMemberForm({ member, toggle, isEditing }) {
               fullWidth
             />
             <DatePicker newStartDate={newStartDate} setStartDate={setStartDate} />
-            <TextField
-              id="usedpt"
-              margin="normal"
-              label="완료피티수"
-              type="email"
-              fullWidth
-            />
             <TextField
               id="unusedpt"
               value={newUnusedpt}
@@ -121,9 +113,7 @@ function EditMemberForm({ member, toggle, isEditing }) {
           </DialogActions>
         </Dialog>
       </>
-
     )
-
 }
 
 export default EditMemberForm;

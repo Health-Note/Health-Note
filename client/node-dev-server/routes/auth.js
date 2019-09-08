@@ -11,7 +11,7 @@ const { check, validationResult } = require('express-validator');
 // @access  Private
 router.get("/", auth, async (req, res) => {
     try {
-        const trainer = await db.Trainer.findByPk(req.trainer);
+        const trainer = await db.Trainer.findOne( { where: {trainer_id: req.trainer} });
         console.log("트레이너", trainer);
         res.json(trainer);
     } catch (err) {
@@ -36,6 +36,7 @@ router.post("/",[
         }
 
         const { email, password } = req.body;
+        console.log("로그인", req.body)
 
         try {
             let trainer = await db.Trainer.findOne({ where: { email }});
@@ -51,7 +52,7 @@ router.post("/",[
 
             const payload = {
                 trainer: {
-                    email: trainer.email, // 유저 아이디를 권한 인증 및 접근 가능
+                    trainer_id: trainer.trainer_id, // 유저 아이디를 권한 인증 및 접근 가능
                 }
             };
             

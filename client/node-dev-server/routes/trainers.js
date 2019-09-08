@@ -11,7 +11,7 @@ const db = require("../models/index");
 router.post("/", [
         check('nickname', "이름을 필수값 입니다.").not().isEmpty(),
         check("email", "올바른 이메일 형식을 입력하세요").isEmail(),
-        check("password", "6자리 이상 문자를 입력하세요").isLength({min: 6})
+        check("password", "6자리 이상 문자를 입력하세요").isLength({ min: 6 })
     ], async(req, res) => {
         console.log("req.body", req.body);
         const errors = validationResult(req);
@@ -31,14 +31,14 @@ router.post("/", [
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         
+        const newTrainer = await db.Trainer.create({ email, nickname, password: hashedPassword });
+        const newTrainer2 = await db.Trainer.findOne({ where: { email: newTrainer.email }});
+
         const payload = {
             trainer: {
-                email: email // 유저 아이디를 권한 인증 및 접근 가능
+                trainer_id: newTrainer2.trainer_id // 유저 아이디를 권한 인증 및 접근 가능
             }
         };
-
-        const newTrainer = await db.Trainer.create({ nickname, email, password: hashedPassword });
-        console.log("newTrainer", newTrainer);
         
         jwt.sign(payload, 'jwtSecret', {
             expiresIn: 3600000
@@ -46,9 +46,9 @@ router.post("/", [
             if(err) throw err;
             res.json({ token })
         });
-    } catch(err) {
+    } catch (err) {
         console.log(err);
-        res.status(500).send('server err')
+        res.status(500).send('server err');
     }
 
 });

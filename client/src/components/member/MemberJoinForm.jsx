@@ -1,52 +1,40 @@
 import React, { useContext } from 'react';
-import useInputState from '../../hooks/useInputState';
-import TextField from '@material-ui/core/TextField';
-import { DispatchContext } from '../../contexts/members.context';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import DatePicker from './DatePicker';
-import Select from './Select';
+import TextField from '@material-ui/core/TextField';
 import moment from 'moment';
+import Select from './Select';
+import DatePicker from './DatePicker';
+import useInputState from '../../hooks/useInputState';
+import { MembersContext } from '../../contexts/members.context';
 
 function MemberJoinForm({ member, toggleJoin, isJoining }) {
 
-    const dispatch = useContext(DispatchContext);
-    const [newName, handleName] = useInputState();
-    const [newPhoneNum, handlePhoneNum] = useInputState();
-    const [newGender, handleGender] = useInputState(0);
-    const [newUnusedpt, handleUnusedpt] = useInputState();
-    const [newHeight, handleHeight] = useInputState();
-    const [newStartDate, setStartDate] = React.useState(Date.now());
-    const [newEndDate, setEndDate] = React.useState(Date.now());
+    const { addMember } = useContext(MembersContext);
+
+    const [name, handleName] = useInputState();
+    const [phonenum, handlePhoneNum] = useInputState();
+    const [gender, handleGender] = useInputState(0);
+    const [unusedpt, handleUnusedpt] = useInputState();
+    const [height, handleHeight] = useInputState();
+    const [start_date, setStartDate] = React.useState(Date.now());
+    const [end_date, setEndDate] = React.useState(Date.now());
                                                                   
     const handleSubmit = () => {
-        dispatch({type: "ADD",  newName, newStartDate, newEndDate, newPhoneNum, newGender, newUnusedpt, newHeight});
-        toggleJoin();
-
-        // 맴버 등록 (usedpt는 서버측에서 0으로 설정하면 어떨까?)
-        fetch("/insertMember", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json" 
-          },
-          body: JSON.stringify({
-              name: newName,
-              phonenum: newPhoneNum, 
-              gender: newGender, 
-              start_date: newStartDate, 
-              end_date: newEndDate, 
-              unusedpt: newUnusedpt,
-              height: newHeight
-          })
-      }).then((res) => {
-          return res.json()
-      }).then((result) => {
-          //console.log("insertMember", result);
-      })
+      addMember({ 
+        name,
+        phonenum,
+        gender,
+        unusedpt, 
+        height, 
+        start_date: moment(start_date).format("YYYY-MM-DD"), 
+        end_date: moment(end_date).format("YYYY-MM-DD"), 
+      });
+      toggleJoin();
     }
         
     return (
@@ -59,7 +47,7 @@ function MemberJoinForm({ member, toggleJoin, isJoining }) {
             </DialogContentText>
             <TextField
               autoFocus
-              value={newName}
+              value={name}
               onChange={handleName}
               margin="normal"
               id="name"
@@ -67,36 +55,29 @@ function MemberJoinForm({ member, toggleJoin, isJoining }) {
               type="text"
               fullWidth
             />
-              <Select prevGender={0} newGender={newGender} handleGender={handleGender}/>
+              <Select prevGender={0} newGender={gender} handleGender={handleGender}/>
             <TextField
               id="phonenum"
-              value={newPhoneNum}
+              value={phonenum}
               onChange={handlePhoneNum}
               margin="normal"
               label="연락처 '-' 없이 입력. ex) 01077778888 "
               type="email"
               fullWidth
             />
-            <DatePicker newStartDate={newStartDate} setStartDate={setStartDate} />
-            <TextField
-              id="usedpt"
-              margin="normal"
-              label="지난피티수"
-              type="email"
-              fullWidth
-            />
+            <DatePicker newStartDate={start_date} newEndDate={end_date} setStartDate={setStartDate} setEndDate={setEndDate}/>
             <TextField
               id="unusedpt"
-              value={newUnusedpt}
+              value={unusedpt}
               onChange={handleUnusedpt}
               margin="normal"
-              label="남은피티수"
+              label="결제피티수"
               type="email"
               fullWidth
             />
             <TextField
               id="height"
-              value={newHeight}
+              value={height}
               onChange={handleHeight}
               margin="normal"
               label="키"
@@ -114,9 +95,7 @@ function MemberJoinForm({ member, toggleJoin, isJoining }) {
           </DialogActions>
         </Dialog>
       </>
-
     )
-
 }
 
 export default MemberJoinForm;

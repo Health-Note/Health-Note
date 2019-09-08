@@ -24,8 +24,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function RadioButtonsGroup({prevGender, newGender, handleGender}) {
   const classes = useStyles();
-  console.log("prevGender", prevGender)
-  console.log("newGender", newGender)
 
   return (
     <div className={classes.root}>

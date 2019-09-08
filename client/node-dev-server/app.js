@@ -8,9 +8,9 @@ const memberRoutes = require("./routes/members");
 const trainerRoutes = require("./routes/trainers");
 const authRoutes = require("./routes/auth");
 
-app.use(memberRoutes);
 app.use("/api/trainers", trainerRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/members", memberRoutes);
 
 // 0성공 1실패
 app.post("/changeMemberSchedule", (req, res) => {
@@ -70,59 +70,7 @@ app.post("/getWeekRoutineOfStu", (req, res) => {
 })
 
 app.get("/sendBasicsForSchedule", (req, res) => {
-    res.json({   
-        name: "이서영",
-        date: "20190814", // superkey
-        phonenum: "01022221111", //superkey
-        start_time: "1830", 
-        end_time: "1930",
-        finish_dncd: true,
-        start: "20190815 1930",
-    },
-    {  
-        name: "이서영",
-        date: "20190815", // superkey
-        phonenum: "01022221111", //superkey
-        start_time: "1830", 
-        end_time: "1930",
-        finish_dncd: false,
-        start: "20190814 1330",
-    },
-    {   
-        name: "이서영",
-        date: "20190816", // superkey
-        phonenum: "01022221111", //superkey
-        start_time: "1830", 
-        end_time: "1930",
-        finish_dncd: false
-    },
-    { 
-        name: "박종열",
-        date: "20190816", // superkey
-        phonenum: "01033334444", //superkey
-        start_time: "1930", 
-        end_time: "1830",
-        finish_dncd: false,
-        start: "20190818 1930",
-    },
-    { 
-        name: "박종열",
-        date: "20190815", // superkey
-        phonenum: "01033334444", //superkey
-        start_time: "1830", 
-        end_time: "1930",
-        finish_dncd: false,
-        start: "20190816 1930",
-    },
-    {  
-        name: "김정권",
-        date: "20190816", // superkey
-        phonenum: "01044445555", //superkey
-        start_time: "1830", 
-        end_time: "1930",
-        finish_dncd: false,
-        start: "20190816 1930",
-    })
+   
 })
 
 app.listen(8080, () => {

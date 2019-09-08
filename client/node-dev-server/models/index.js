@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize('health-note', 'jongyeol', 'Whdduf123!', {
+const sequelize = new Sequelize('health_note', 'jongyeol', 'Whdduf123!', {
     host: 'localhost',
     dialect: 'mysql',
     define: {

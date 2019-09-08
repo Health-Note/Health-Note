@@ -9,7 +9,7 @@ import {
 } from '@material-ui/pickers';
 
 
-export default function DatePicker({newStartDate, newEndDate, setStartDate, setEndDate}) {
+export default function DatePicker({start_date, end_date, setStartDate, setEndDate}) {
 
   function handleStartDateChange(date) {
     setStartDate(date);
@@ -29,7 +29,7 @@ export default function DatePicker({newStartDate, newEndDate, setStartDate, setE
           id="date-picker-startDate"
           label="회원권 시작일"
           format="yyyy/MM/dd"
-          value={newStartDate}
+          value={start_date}
           onChange={handleStartDateChange}
           KeyboardButtonProps={{
             'aria-label': 'change date',
@@ -41,7 +41,7 @@ export default function DatePicker({newStartDate, newEndDate, setStartDate, setE
           id="date-picker-endDate"
           label="회원권 종료일"
           format="yyyy/MM/dd"
-          value={newEndDate}
+          value={end_date}
           onChange={handleEndDateChange}
           KeyboardButtonProps={{
             'aria-label': 'change date',

@@ -8,7 +8,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Member from './Member';
 import { MembersContext } from '../../contexts/members.context';
-import uuid from 'uuid/v4'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -22,12 +21,12 @@ const useStyles = makeStyles(theme => ({
   }));
 
 function MembeList() {
-    
     const classes = useStyles();
     const { getMember, members }  = useContext(MembersContext);
     
     useEffect(() => {
-        getMember()
+        getMember();
+        console.log(members)
         // eslint-disable-next-line
     }, []);
     
@@ -42,7 +41,7 @@ function MembeList() {
                         <TableCell align="right">연락처</TableCell>
                         <TableCell align="right">등록일</TableCell>
                         <TableCell align="right">마감일</TableCell>
-                        <TableCell align="right">남은pt수</TableCell>
+                        <TableCell align="right">남은PT</TableCell>
                         <TableCell align="right">키</TableCell>
                         <TableCell align="right">수정, 삭제</TableCell>
                     </TableRow>

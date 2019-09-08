@@ -15,14 +15,6 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER(11),
       allowNull: false
     },
-    phonenum: {
-      type: DataTypes.CHAR(11),
-      allowNull: false,
-      references: {
-        model: 'members',
-        key: 'phonenum'
-      }
-    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: true
@@ -30,6 +22,14 @@ module.exports = function(sequelize, DataTypes) {
     updatedAt: {
       type: DataTypes.DATE,
       allowNull: true
+    },
+    member_id: {
+      type: DataTypes.INTEGER(10).UNSIGNED,
+      allowNull: true,
+      references: {
+        model: 'members',
+        key: 'member_id'
+      }
     }
   }, {
     tableName: 'memo'

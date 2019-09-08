@@ -2,10 +2,13 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('members', {
+    member_id: {
+      type: DataTypes.INTEGER(10).UNSIGNED,
+      primaryKey: true
+    },
     phonenum: {
       type: DataTypes.CHAR(11),
-      allowNull: false,
-      primaryKey: true
+      allowNull: false
     },
     name: {
       type: DataTypes.STRING(10),
@@ -31,14 +34,6 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER(11),
       allowNull: false
     },
-    email: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
-      references: {
-        model: 'trainer',
-        key: 'email'
-      }
-    },
     height: {
       type: DataTypes.INTEGER(11),
       allowNull: false
@@ -50,6 +45,14 @@ module.exports = function(sequelize, DataTypes) {
     updatedAt: {
       type: DataTypes.DATE,
       allowNull: true
+    },
+    trainer_id: {
+      type: DataTypes.INTEGER(10).UNSIGNED,
+      allowNull: true,
+      references: {
+        model: 'trainer',
+        key: 'trainer_id'
+      }
     }
   }, {
     tableName: 'members'

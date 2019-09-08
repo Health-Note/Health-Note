@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
@@ -7,6 +7,7 @@ import Calendar from '../Calendar/Calendar';
 import Routine from '../routine/Routine';
 import RecentWorkOut from '../recentWorkOut/RecentWorkOut';
 import { RoutineProvider } from '../../contexts/routine.context';
+import { MembersContext } from '../../contexts/members.context';
 
 function Copyright() {
     return (
@@ -32,7 +33,13 @@ fixedHeight: {
 }));
 
 function Schedule(){
-    const classes = useStyles();
+  const { getMember } = useContext(MembersContext);
+  const classes = useStyles();
+  
+  useEffect(() => {
+    getMember();
+  }, []);
+
     return(
        <>
         <RoutineProvider>

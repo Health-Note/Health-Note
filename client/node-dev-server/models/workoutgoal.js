@@ -2,15 +2,6 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('workoutgoal', {
-    phonenum: {
-      type: DataTypes.CHAR(11),
-      allowNull: false,
-      primaryKey: true,
-      references: {
-        model: 'members',
-        key: 'phonenum'
-      }
-    },
     exercisename: {
       type: DataTypes.STRING(50),
       allowNull: false,
@@ -18,6 +9,15 @@ module.exports = function(sequelize, DataTypes) {
       references: {
         model: 'exercise',
         key: 'exercisename'
+      }
+    },
+    member_id: {
+      type: DataTypes.INTEGER(10).UNSIGNED,
+      allowNull: false,
+      primaryKey: true,
+      references: {
+        model: 'members',
+        key: 'member_id'
       }
     },
     target_weight: {
