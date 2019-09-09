@@ -6,16 +6,18 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
+import { Typography } from 'antd';
 import moment from 'moment';
 import Select from './Select';
+import DaySelect from './DaySelect';
 import DatePicker from './DatePicker';
 import useInputState from '../../hooks/useInputState';
 import { MembersContext } from '../../contexts/members.context';
 
 function MemberJoinForm({ member, toggleJoin, isJoining }) {
-
+  
     const { addMember } = useContext(MembersContext);
-
+  
     const [name, handleName] = useInputState();
     const [phonenum, handlePhoneNum] = useInputState();
     const [gender, handleGender] = useInputState(0);
@@ -23,7 +25,9 @@ function MemberJoinForm({ member, toggleJoin, isJoining }) {
     const [height, handleHeight] = useInputState();
     const [start_date, setStartDate] = React.useState(Date.now());
     const [end_date, setEndDate] = React.useState(Date.now());
-                                                                  
+    
+    const { Text } = Typography;
+    
     const handleSubmit = () => {
       addMember({ 
         name,
@@ -84,6 +88,10 @@ function MemberJoinForm({ member, toggleJoin, isJoining }) {
               type="height"
               fullWidth
             />
+            <br />
+            <br />
+          <Text type="secondary">PT요일</Text>
+          <DaySelect />
           </DialogContent>
           <DialogActions>
             <Button onClick={toggleJoin} color="primary">

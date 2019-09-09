@@ -15,14 +15,14 @@ import Alert from '../items/Alert';
 
 const MemberCalendar = () => {
 
-  const schedules = useContext(ScheduleContext); //title, start, id가 포함되어야 함.
+  const { setFixedSchedule, getFixedSchedule } = useContext(ScheduleContext); //title, start, id가 포함되어야 함.
   const { members, getMember } = useContext(MembersContext); 
 
   const [evtColor, setEvtColor] = useState("orange");
   const [targetId, setTargetId] = useState("");
   const [scheduleList, setScheduleList] = useState([]);
-  const [evt, setEvt] = useState();
-  const [exeMember, setMember] = useState([]); // 외부
+  const [evt, setEvt] = useState(); // 내부 이벤트
+  const [exeMember, setMember] = useState([]); // 외부 이벤트
   const [name, setName] = useState([]);
   const [start, setStart] = useState([]);
   
@@ -43,13 +43,20 @@ const MemberCalendar = () => {
     //     member_id: "9999999999"
     // }]
      
-  useEffect(()=>{
+  useEffect(() => {
+    console.log("맴버캘린더 유즈이펙트")
+    getFixedSchedule();
+  }, []);
     
-    console.log("componentDidUpdate_members", members);
+  // 외부 이벤트 초기화
+  useEffect(()=>{
+    console.log("memberCalendar_members", members);
+    
       const newMember = members.map(member => {
         return { title: member.name, id: member.member_id, member_id: member.member_id }
       });
       setMember(newMember);
+      
   }, [members]) 
   
   useEffect(()=>{
@@ -97,23 +104,26 @@ const MemberCalendar = () => {
     });  
   }, []);
 
+  // 외부 이벤트
   const eventReceive = eventReceive => {
     const start_time = moment(eventReceive.event.start).format("HHmm");
+    console.log("eventReceve _ start_time", start_time)
     const member_id = eventReceive.event.id;
+    console.log("eventReceve _ member_id", member_id)
     let day;
     
     switch (moment(eventReceive.event.start).format("dddd")) {
-        case "Monday":    day = 0; break;
-        case "Thuseday":  day = 1; break; 
-        case "Wednesday": day = 2; break; 
-        case "Thursday":  day = 3; break;
-        case "Friday":    day = 4; break;
-        case "Saturday":  day = 5; break;
-        case "Sunday":    day = 6; break;
+        case "Monday":    day = 1; break;
+        case "Thuseday":  day = 2; break; 
+        case "Wednesday": day = 3; break; 
+        case "Thursday":  day = 4; break;
+        case "Friday":    day = 5; break;
+        case "Saturday":  day = 6; break;
+        case "Sunday":    day = 0; break;
         default: return null;
     }  
 
-    //setFixedSchedule(start_time, member_id, day);
+    setFixedSchedule({ start_time, member_id, day });
   };
     
   /**
@@ -123,7 +133,7 @@ const MemberCalendar = () => {
    *        날짜변환: 20190804 + 1630 => 2019-08-04 16:30
    */
   const drop = (info) => {
-      console.log(info.event.id)
+    console.log(info.event.id)
     const name = info.event.title;
     const id = info.event.id;
     const oldDate = moment(info.oldEvent.start).format('YYYYMMDD');

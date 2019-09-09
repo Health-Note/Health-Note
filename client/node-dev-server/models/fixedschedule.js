@@ -22,7 +22,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     end_time: {
       type: DataTypes.CHAR(4),
-      allowNull: false
+      allowNull: true
     },
     createdAt: {
       type: DataTypes.DATE,

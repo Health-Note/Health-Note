@@ -32,7 +32,7 @@ function EditMemberForm({ member, toggle, isEditing }) {
     const [newEndDate, setEndDate] = React.useState((moment(endDate).format()));
                                                                   
     const handleSubmit = () => {
-      editMember(phonenum);
+      editMember(newName, newPhoneNum, newGender, newUnusedpt, newHeight, newStartDate, newEndDate);
       toggle();
        
     //     fetch("/changeMemberInfo", {

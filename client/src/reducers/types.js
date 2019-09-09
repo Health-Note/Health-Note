@@ -16,3 +16,6 @@ export const ADD_MEMBER = "ADD_MEMBER";
 export const REMOVE_MEMBER = "REMOVE_MEMBER";
 export const EDIT_MEMBER = "EDIT_MEMBER";
 
+// 스케줄
+export const SET_FIXED_SCHEDULE = "SET_FIXED_SCHEDULE";
+export const GET_FIXED_SCHEDULE = "GET_FIXED_SCHEDULE";

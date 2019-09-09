@@ -17,9 +17,10 @@ import { DispatchContext } from '../../contexts/routine.context';
 import Alert from '../items/Alert';
 
 function Calendar () {
-  const schedules = useContext(ScheduleContext); //title, start, id가 포함되어야 함.
+  const { schedules } = useContext(ScheduleContext); //title, start, id가 포함되어야 함.
   const { members } = useContext(MembersContext); 
   const dispatch = useContext(DispatchContext); 
+  
   const [toggle, setToggle] = useState(false);
   const [evtColor, setEvtColor] = useState("orange")
   const [targetId, setTargetId] = useState("");
@@ -67,33 +68,35 @@ function Calendar () {
       id: cv.phonenum + cv.date,
     }))
     setMember(exeMember)
-  }, [])
+  }, []);
 
 
+  // 달력에 표시될 스케줄 초기화
   useEffect(() => {
-        let parsedScheduleList = schedules.map(schedule => {
-        const id = schedule.phonenum + schedule.date;
-        const datePlusTime = schedule.date + " " + schedule.start_time;
-        const start = moment(datePlusTime).format();
-        let color = "";
-        if (schedule.finish_dncd === true) {
-          color = "gray"
-        }
-        
-        return { 
-          id,
-          start, 
-          title: schedule.name,
-          color: color,  
-          phonenum: schedule.phonenum, 
-          finish_dncd: schedule.finish_dncd,
-          name: schedule.name 
-        }
-      })
-      setScheduleList(parsedScheduleList)
-    }, [toggle]);
+    let parsedScheduleList = schedules.map(schedule => {
 
-    const handleTargetId = (id) => {
+      const id = schedule.phonenum + schedule.date;
+      const datePlusTime = schedule.date + " " + schedule.start_time;
+      const start = moment(datePlusTime).format();
+      let color = ""; 
+      if (schedule.finish_dncd === true) { color = "gray" }
+      
+      return { 
+        id,
+        start, 
+        title: schedule.name,
+        color: color,  
+        phonenum: schedule.phonenum, 
+        finish_dncd: schedule.finish_dncd,
+        name: schedule.name 
+      }
+    });
+
+    setScheduleList(parsedScheduleList);
+
+  }, [toggle]);
+
+  const handleTargetId = (id) => {
   // fullcalendar state에서 날짜형식은 ISO // 2017-03-16T17:40:00+09:00 이여야 함
 
     setTargetId(id)

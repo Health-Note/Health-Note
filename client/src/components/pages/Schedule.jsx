@@ -33,12 +33,9 @@ fixedHeight: {
 }));
 
 function Schedule(){
-  const { getMember } = useContext(MembersContext);
+ 
   const classes = useStyles();
-  
-  useEffect(() => {
-    getMember();
-  }, []);
+
 
     return(
        <>

@@ -13,7 +13,7 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 loading: false,
-                members: action.payload // 전체 멤버 (배열)
+                members: [...action.payload] // 전체 멤버 (배열)
             }
         case ADD_MEMBER:
             return {

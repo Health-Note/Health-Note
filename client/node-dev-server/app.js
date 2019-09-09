@@ -7,10 +7,12 @@ app.use(express.json());
 const memberRoutes = require("./routes/members");
 const trainerRoutes = require("./routes/trainers");
 const authRoutes = require("./routes/auth");
+const fixedScheduleRoutes = require("./routes/fixedSchedules");
 
 app.use("/api/trainers", trainerRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/members", memberRoutes);
+app.use("/api/fixedSchedules", fixedScheduleRoutes);
 
 // 0성공 1실패
 app.post("/changeMemberSchedule", (req, res) => {
