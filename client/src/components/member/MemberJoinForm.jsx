@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -13,18 +13,21 @@ import DaySelect from './DaySelect';
 import DatePicker from './DatePicker';
 import useInputState from '../../hooks/useInputState';
 import { MembersContext } from '../../contexts/members.context';
+import { ScheduleContext } from '../../contexts/schedule.context';
 
 function MemberJoinForm({ member, toggleJoin, isJoining }) {
   
-    const { addMember } = useContext(MembersContext);
+    const { addMember, members } = useContext(MembersContext);
+    const { setSchedule } = useContext(ScheduleContext);
   
     const [name, handleName] = useInputState();
     const [phonenum, handlePhoneNum] = useInputState();
     const [gender, handleGender] = useInputState(0);
     const [unusedpt, handleUnusedpt] = useInputState();
     const [height, handleHeight] = useInputState();
-    const [start_date, setStartDate] = React.useState(Date.now());
-    const [end_date, setEndDate] = React.useState(Date.now());
+    const [start_date, setStartDate] = useState(Date.now());
+    const [end_date, setEndDate] = useState(Date.now());
+    const [days, setDays] = useState([]);
     
     const { Text } = Typography;
     
@@ -38,6 +41,11 @@ function MemberJoinForm({ member, toggleJoin, isJoining }) {
         start_date: moment(start_date).format("YYYY-MM-DD"), 
         end_date: moment(end_date).format("YYYY-MM-DD"), 
       });
+
+      setTimeout(()=>{
+        setSchedule({ unusedpt, start_date, days, phonenum });
+      }, 2000)
+      
       toggleJoin();
     }
         
@@ -69,7 +77,7 @@ function MemberJoinForm({ member, toggleJoin, isJoining }) {
               type="email"
               fullWidth
             />
-            <DatePicker newStartDate={start_date} newEndDate={end_date} setStartDate={setStartDate} setEndDate={setEndDate}/>
+            <DatePicker start_date={start_date} end_date={end_date} setStartDate={setStartDate} setEndDate={setEndDate}/>
             <TextField
               id="unusedpt"
               value={unusedpt}
@@ -91,7 +99,7 @@ function MemberJoinForm({ member, toggleJoin, isJoining }) {
             <br />
             <br />
           <Text type="secondary">PT요일</Text>
-          <DaySelect />
+          <DaySelect setDays={setDays}/>
           </DialogContent>
           <DialogActions>
             <Button onClick={toggleJoin} color="primary">

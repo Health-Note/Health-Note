@@ -19,3 +19,4 @@ export const EDIT_MEMBER = "EDIT_MEMBER";
 // 스케줄
 export const SET_FIXED_SCHEDULE = "SET_FIXED_SCHEDULE";
 export const GET_FIXED_SCHEDULE = "GET_FIXED_SCHEDULE";
+export const SET_SCHEDULE = "SET_SCHEDULE";

@@ -1,12 +1,18 @@
 import { 
-    SET_SCHEDULE
+    SET_FIXED_SCHEDULE,
+    GET_FIXED_SCHEDULE,
  } from './types';
 
 const reducer = (state, action) => {
     switch(action.type) {
-        case SET_SCHEDULE: 
+        case GET_FIXED_SCHEDULE:
+            console.log("스케줄 리듀서_get_fixed_schedule", action.payload)
+            return;
+        case SET_FIXED_SCHEDULE: 
         return [...state, {
-            ...action.payload
+                title: action.payload.name,
+                id: action.payload.member_id,
+                start: action.payload.start_time
             }]
         case "TOGGLE":
                 console.log(action.id)
@@ -21,5 +27,3 @@ const reducer = (state, action) => {
             return state;
     }   
 }
-
-export default reducer;

@@ -56,7 +56,7 @@ export function MembersProvider(props) {
     // 작성일: 2019.09.07
     // 작성자: 박종열
     // 기능: 맴버 추가
-    const addMember = formdata => { // newName, newStartDate, newEndDate, newPhoneNum, newGender, newUnusedpt, newHeight
+    const addMember = formdata => { // name, start_date, end_date, phonenum, gender, unusedpt, height
         console.log("formdata", formdata)
         if (localStorage.token) {
             setAuthToken(localStorage.token);

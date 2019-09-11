@@ -7,13 +7,13 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
-    member_id: {
-      type: DataTypes.INTEGER(10).UNSIGNED,
+    phonenum: {
+      type: DataTypes.CHAR(11),
       allowNull: false,
       primaryKey: true,
       references: {
         model: 'members',
-        key: 'member_id'
+        key: 'phonenum'
       }
     },
     start_time: {

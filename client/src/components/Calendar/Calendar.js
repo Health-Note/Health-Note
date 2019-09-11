@@ -31,35 +31,23 @@ function Calendar () {
   const [start, setStart] = useState([]);
 
   // 내부 이벤트 초기화
-  // useEffect(() => {
-  //     fetch("/sendBasicsForSchedule", {
-  //         method: "get",
-  //         headers: {
-  //           'Accept': 'application/json',
-  //           'Content-Type': 'application/json'
-  //         }
-  //       }).then((res) => {
-  //         return res.json();
-  //       }).then((schedules) => {
-  //         let scheduleList = schedules.map(schedule => {
-  //           const datePlusTime = schedule.date + " " + schedule.start_time;
-  //           const start = moment(datePlusTime).format();
-  //           let color = "";
-  //           if (schedule.finish_dncd === true) {
-  //             color = "gray"
-  //           }
-  //           return { 
-  //             title: schedule.name,
-  //             id: schedule.phonenum + schedule.date,
-  //             phonenum: schedule.phonenum, 
-  //             finish_dncd: schedule.finish_dncd, 
-  //             start, 
-  //             color: color  
-  //           }
-  //         })
-  //       })
-  //       setScheduleList(scheduleList)
-  // }, [toggle])
+   useEffect(() => {
+    let scheduleList = schedules.map(schedule => {
+     let color = "";
+            if (schedule.finish_dncd === true) {
+              color = "gray"
+            }
+            return { 
+              title: schedule.name,
+              id: members.phonenum,
+              start: schedule.start, 
+              finish_dncd: schedule.finish_dncd, 
+              color: color  
+            }
+          })
+          setScheduleList(scheduleList)
+     }, [members, schedules])
+  
  
   // 외부 이벤트 초기화
   useEffect (() => {
@@ -72,29 +60,6 @@ function Calendar () {
 
 
   // 달력에 표시될 스케줄 초기화
-  useEffect(() => {
-    let parsedScheduleList = schedules.map(schedule => {
-
-      const id = schedule.phonenum + schedule.date;
-      const datePlusTime = schedule.date + " " + schedule.start_time;
-      const start = moment(datePlusTime).format();
-      let color = ""; 
-      if (schedule.finish_dncd === true) { color = "gray" }
-      
-      return { 
-        id,
-        start, 
-        title: schedule.name,
-        color: color,  
-        phonenum: schedule.phonenum, 
-        finish_dncd: schedule.finish_dncd,
-        name: schedule.name 
-      }
-    });
-
-    setScheduleList(parsedScheduleList);
-
-  }, [toggle]);
 
   const handleTargetId = (id) => {
   // fullcalendar state에서 날짜형식은 ISO // 2017-03-16T17:40:00+09:00 이여야 함

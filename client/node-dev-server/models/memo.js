@@ -23,12 +23,12 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: true
     },
-    member_id: {
-      type: DataTypes.INTEGER(10).UNSIGNED,
+    phonenum: {
+      type: DataTypes.CHAR(11),
       allowNull: true,
       references: {
         model: 'members',
-        key: 'member_id'
+        key: 'phonenum'
       }
     }
   }, {

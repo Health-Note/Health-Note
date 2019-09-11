@@ -11,10 +11,11 @@ const options = [
     { label: '일', value: 0 },
 ];
 
-const DaySelect = () => {
+const DaySelect = ({ setDays }) => {
 
     const onChange = checkedValues => {
         console.log('checked = ', checkedValues);
+        setDays(checkedValues);
     }
 
     return (

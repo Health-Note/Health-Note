@@ -12,6 +12,6 @@ const db = {};
 
 db['Member'] = sequelize.import(path.join(__dirname, 'members.js'));
 db['Trainer'] = sequelize.import(path.join(__dirname, 'trainer.js'));
-db['FixedSchedule'] = sequelize.import(path.join(__dirname, 'fixedSchedule.js'));
+db['Schedule'] = sequelize.import(path.join(__dirname, 'schedule.js'));
 db.sequelize = sequelize;
 module.exports = db;

@@ -2,13 +2,10 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('members', {
-    member_id: {
-      type: DataTypes.INTEGER(10).UNSIGNED,
-      primaryKey: true
-    },
     phonenum: {
       type: DataTypes.CHAR(11),
-      allowNull: false
+      allowNull: false,
+      primaryKey: true
     },
     name: {
       type: DataTypes.STRING(10),

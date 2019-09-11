@@ -4,6 +4,7 @@ module.exports = function(sequelize, DataTypes) {
   return sequelize.define('trainer', {
     trainer_id: {
       type: DataTypes.INTEGER(10).UNSIGNED,
+      allowNull: true,
       primaryKey: true
     },
     email: {

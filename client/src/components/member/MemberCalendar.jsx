@@ -10,12 +10,12 @@ import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
 import moment from 'moment';
 import { Col, Row } from "reactstrap";
 import { MembersContext }  from '../../contexts/members.context';
-import { ScheduleContext }  from '../../contexts/schedule.context';
+import { fixedScheduleContext }  from '../../contexts/fixedSchedule.context';
 import Alert from '../items/Alert';
 
 const MemberCalendar = () => {
 
-  const { setFixedSchedule, getFixedSchedule } = useContext(ScheduleContext); //title, start, id가 포함되어야 함.
+  const { setFixedSchedule, getFixedSchedule } = useContext(fixedScheduleContext); //title, start, id가 포함되어야 함.
   const { members, getMember } = useContext(MembersContext); 
 
   const [evtColor, setEvtColor] = useState("orange");

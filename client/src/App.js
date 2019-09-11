@@ -5,6 +5,7 @@ import DashBoard from './components/dashBoard/DashBoard';
 import { ExerciseProvider } from './contexts/exercise.context';
 import { MembersProvider } from './contexts/members.context';
 import { ScheduleProvider } from './contexts/schedule.context';
+import { FixedScheduleProvider } from './contexts/fixedSchedule.context';
 import { AuthProvider } from './contexts/auth.context';
 import { AlertProvider } from './contexts/alert.context';
 import './App.css';
@@ -18,15 +19,17 @@ function App () {
       <>
       <AuthProvider>
         <AlertProvider>
-          <ScheduleProvider>
             <MembersProvider>
+          <ScheduleProvider>
+            <FixedScheduleProvider>
               <ExerciseProvider >
                 <broswerRouter>
                   <DashBoard />
                 </broswerRouter>
               </ExerciseProvider>
-            </MembersProvider>
+            </FixedScheduleProvider>
           </ScheduleProvider>
+            </MembersProvider>
         </AlertProvider>
       </AuthProvider>
       </>

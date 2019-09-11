@@ -8,11 +8,13 @@ const memberRoutes = require("./routes/members");
 const trainerRoutes = require("./routes/trainers");
 const authRoutes = require("./routes/auth");
 const fixedScheduleRoutes = require("./routes/fixedSchedules");
+const scheduleRoutes = require("./routes/schedules");
 
 app.use("/api/trainers", trainerRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/members", memberRoutes);
 app.use("/api/fixedSchedules", fixedScheduleRoutes);
+app.use("/api/schedules", scheduleRoutes);
 
 // 0성공 1실패
 app.post("/changeMemberSchedule", (req, res) => {
