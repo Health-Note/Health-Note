@@ -2,10 +2,11 @@ import React, { createContext, useReducer, useContext } from 'react';
 import scheduleReducer from '../reducers/schedule.reducer.js';
 import Axios from 'axios';
 import setAuthToken from '../utils/setAuthToken';
-import { MembersContext } from './members.context';
+
 
 import { 
-    SET_SCHEDULE
+    SET_SCHEDULE,
+    GET_SCHEDULES
  } from '../reducers/types';
 
 export const ScheduleContext = createContext();
@@ -21,8 +22,6 @@ const initialState = [
 ]
 
 export const ScheduleProvider = (props) => {
-   const { members } = useContext(MembersContext);
-   console.log("inside schedule constext", members)
    
    const setSchedule = async data => { // unusedpt, start_date, days, phonenum
         if (localStorage.token) {
@@ -43,10 +42,23 @@ export const ScheduleProvider = (props) => {
         }
     }
 
+    const getAllSchedules = async () => {
+        if (localStorage.token) {
+            setAuthToken(localStorage.token);
+        }
+        try {
+            const res = await Axios.get("/api/schedules/getAllSchedules");
+            console.log("schedule.context_ getAllSchedules _ res.data", res.data);
+        } catch (err) {
+            console.log(err);
+        }
+
+    }
+
     const [schedules, dispatch] = useReducer(scheduleReducer, initialState);
 
     return (
-        <ScheduleContext.Provider value={{ schedules, setSchedule }}>
+        <ScheduleContext.Provider value={{ schedules, setSchedule, getAllSchedules }}>
             <DispatchContext.Provider value={ dispatch }> {/*dispatch를 계속해서 만들어내지 않게 객체형태로 보내지 않는다 */}
                 {props.children}
             </DispatchContext.Provider>

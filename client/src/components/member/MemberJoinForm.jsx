@@ -37,7 +37,7 @@ function MemberJoinForm({ member, toggleJoin, isJoining }) {
     const handleSubmit = () => {
       console.log("start_date", start_date);
       if (name && phonenum && gender && unusedpt && height && start_date && end_date && days){
-        const result = addMember({ 
+        const addResult = addMember({ 
           name,
           phonenum,
           gender,
@@ -46,8 +46,9 @@ function MemberJoinForm({ member, toggleJoin, isJoining }) {
           start_date: moment(start_date).format("YYYY-MM-DD"), 
           end_date: moment(end_date).format("YYYY-MM-DD"), 
         });
+        console.log("addResult", addResult)
 
-        if (result) {
+        if (addResult) {
           setTimeout(()=>{
             setSchedule({ unusedpt, start_date, days, phonenum });
           }, 2000)

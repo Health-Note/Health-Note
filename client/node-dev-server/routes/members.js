@@ -5,7 +5,7 @@ const auth = require("../middleware/auth");
 
 router.post("/insertMember", auth, async (req, res) => {
     console.log("insertMember", req.body);
-    const { name, phonenum, gender, start_date, end_date, unusedpt, height } = req.body.formdata;
+    const { name, phonenum, gender, start_date, end_date, unusedpt, height } = req.body;
     try {
         const member = await db.Member.findOne({ where: { phonenum } });
         if (member) {

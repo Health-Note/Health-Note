@@ -58,21 +58,23 @@ export function MembersProvider(props) {
     // 작성일: 2019.09.07
     // 작성자: 박종열
     // 기능: 맴버 추가
-    const addMember = formdata => { // name, start_date, end_date, phonenum, gender, unusedpt, height
-        console.log("formdata", formdata)
+    const addMember = async formdata => { // name, start_date, end_date, phonenum, gender, unusedpt, height
+        console.log("formdata", formdata);
         if (localStorage.token) {
             setAuthToken(localStorage.token);
         }
-        axios.post("/api/members/insertMember", {
-            formdata
-        }).then((res) => {
+        try {
+            const res = await axios.post("/api/members/insertMember", formdata);
             if (res.data) {
-                dispatch({ type: ADD_MEMBER,  payload: res.data });
+                console.log("addMember_res.data", res.data);
+                dispatch({ type: ADD_MEMBER, payload: res.data });
+            } else {
+                console.log("어떤 에러");
             }
-        }).catch((error) => {
+        } catch (error) {
             console.log(error.response.data.msg)
-            dispatch({ type: MEMBER_ERROR, payload: error.response.data.msg })
-        })
+            dispatch({ type: MEMBER_ERROR, payload: error.response.data.msg });
+        }
     }
 
     const removeMember = (phonenum) => {
@@ -80,7 +82,7 @@ export function MembersProvider(props) {
     }
 
     const editMember = (phonenum) => {
-        dispatch({type: EDIT_MEMBER, payload: phonenum})
+        dispatch({type: EDIT_MEMBER, payload: phonenum});
     }
 
     return (

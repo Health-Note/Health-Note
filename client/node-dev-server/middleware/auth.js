@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 module.exports = function(req, res, next){
     // 헤더에서 토큰을 가져온다.
     const token = req.header('x-auth-token');
-
+    console.log("token", token);
     // 토큰이 있는지 확인한다.
     if (!token) {
         return res.status(401).json({ msg: "토큰이 없습니다. 인증이 거부되었습니다." });

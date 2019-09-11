@@ -17,7 +17,7 @@ import { DispatchContext } from '../../contexts/routine.context';
 import Alert from '../items/Alert';
 
 function Calendar () {
-  const { schedules } = useContext(ScheduleContext); //title, start, id가 포함되어야 함.
+  const { schedules, getAllSchedules } = useContext(ScheduleContext); //title, start, id가 포함되어야 함.
   const { members } = useContext(MembersContext); 
   const dispatch = useContext(DispatchContext); 
   
@@ -32,6 +32,7 @@ function Calendar () {
 
   // 내부 이벤트 초기화
    useEffect(() => {
+    getAllSchedules();
     let scheduleList = schedules.map(schedule => {
      let color = "";
             if (schedule.finish_dncd === true) {

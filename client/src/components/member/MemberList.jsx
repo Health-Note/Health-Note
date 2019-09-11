@@ -10,7 +10,6 @@ import Member from './Member';
 import { MembersContext } from '../../contexts/members.context';
 import { AlertContext } from '../../contexts/alert.context';
 
-
 const useStyles = makeStyles(theme => ({
     root: {
       width: '100%',
@@ -20,26 +19,25 @@ const useStyles = makeStyles(theme => ({
     table: {
       minWidth: 650,
     },
-  }));
+}));
 
 function MembeList() {
     const classes = useStyles();
-    const { getMember, members, error }  = useContext(MembersContext);
+    const { getMember, members, error } = useContext(MembersContext);
     const alertContext = useContext(AlertContext);
     const { setAlert } = alertContext; 
     
     useEffect(() => {
         getMember();
         if (error) {
-            setAlert(error)
+            setAlert(error);
         }
-        console.log(members)
+        console.log(members);
         // eslint-disable-next-line
     }, [error]);
     
     return (
         <Paper>
-            
             <Table className={classes.table}>
                 <TableHead>
                     <TableRow>
@@ -53,7 +51,6 @@ function MembeList() {
                         <TableCell align="right">수정, 삭제</TableCell>
                     </TableRow>
                 </TableHead>
-
                 <TableBody>
                      {members.map((member, i) => (
                         <TableRow key={member.id}>

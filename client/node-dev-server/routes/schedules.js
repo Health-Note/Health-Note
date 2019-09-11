@@ -15,8 +15,6 @@ const schedulesController = require('../controller/schedulesController');
     // 30, 2  
 router.post("/setSchedule", auth, schedulesController.setSchedule);
 
-router.get("/getAllSchedules", auth, async (req, res) => {
-
-})
+router.get("/getAllSchedules", auth, schedulesController.getSchedule);
 
 module.exports = router;
