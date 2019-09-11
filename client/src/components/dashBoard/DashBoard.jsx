@@ -40,13 +40,22 @@ const SiderDemo = () => {
     </>
   )
 
-  const guestLinks = (
+  const guestLoginLinks = (
     <>
       <Icon type="desktop" />
-      <span>로그인 / 회원가입</span>
+      <span>로그인</span>
+      <Link exact to={"/login"}></Link>
+    </>
+  );
+
+  const guestRegisterLinks = (
+    <>
+      <Icon type="desktop" />
+      <span> 회원가입</span>
       <Link exact to={"/register"}></Link>
     </>
   );
+
 
     return (
       <Layout style={{ minHeight: '100vh' }}>
@@ -65,10 +74,10 @@ const SiderDemo = () => {
               <Link exact to={"/"}></Link>
             </Menu.Item>
             <Menu.Item key="2">
-              {isAuthenticated ? authLinks : guestLinks}
+              {isAuthenticated ? authLinks : guestLoginLinks}
             </Menu.Item>
             <Menu.Item key="3">
-              {isAuthenticated && logoutLinks}
+              {isAuthenticated ? logoutLinks : guestRegisterLinks}
             </Menu.Item>
             <Menu.Item></Menu.Item>
             <Menu.Item key="9">

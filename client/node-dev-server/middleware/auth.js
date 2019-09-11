@@ -6,12 +6,12 @@ module.exports = function(req, res, next){
 
     // 토큰이 있는지 확인한다.
     if (!token) {
-        return res.status(401).json({msg: "토큰이 없습니다. 인증이 거부되었습니다."});
+        return res.status(401).json({ msg: "토큰이 없습니다. 인증이 거부되었습니다." });
     }
     try {
         const decoded = jwt.verify(token, 'jwtSecret');
         req.trainer = decoded.trainer.trainer_id; // 페이로드의 trainer정보를 req.trainer에 담는다.
-        console.log("미들웨어 트레이너 이메일", req.trainer)
+        console.log("미들웨어 트레이너 id:", req.trainer);
         next();
     } catch(err) {
         res.status(401).json({msg: 'token is not valid'});

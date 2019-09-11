@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -14,11 +14,14 @@ import DatePicker from './DatePicker';
 import useInputState from '../../hooks/useInputState';
 import { MembersContext } from '../../contexts/members.context';
 import { ScheduleContext } from '../../contexts/schedule.context';
+import { AlertContext } from '../../contexts/alert.context';
 
 function MemberJoinForm({ member, toggleJoin, isJoining }) {
   
-    const { addMember, members } = useContext(MembersContext);
+    const { addMember, error } = useContext(MembersContext);
     const { setSchedule } = useContext(ScheduleContext);
+    const alertContext = useContext(AlertContext);
+    const { setAlert } = alertContext; 
   
     const [name, handleName] = useInputState();
     const [phonenum, handlePhoneNum] = useInputState();
@@ -30,22 +33,28 @@ function MemberJoinForm({ member, toggleJoin, isJoining }) {
     const [days, setDays] = useState([]);
     
     const { Text } = Typography;
-    
-    const handleSubmit = () => {
-      addMember({ 
-        name,
-        phonenum,
-        gender,
-        unusedpt, 
-        height, 
-        start_date: moment(start_date).format("YYYY-MM-DD"), 
-        end_date: moment(end_date).format("YYYY-MM-DD"), 
-      });
 
-      setTimeout(()=>{
-        setSchedule({ unusedpt, start_date, days, phonenum });
-      }, 2000)
-      
+    const handleSubmit = () => {
+      console.log("start_date", start_date);
+      if (name && phonenum && gender && unusedpt && height && start_date && end_date && days){
+        const result = addMember({ 
+          name,
+          phonenum,
+          gender,
+          unusedpt, 
+          height, 
+          start_date: moment(start_date).format("YYYY-MM-DD"), 
+          end_date: moment(end_date).format("YYYY-MM-DD"), 
+        });
+
+        if (result) {
+          setTimeout(()=>{
+            setSchedule({ unusedpt, start_date, days, phonenum });
+          }, 2000)
+        }
+      } else {
+        setAlert("모든 항목을 다 채우세요", "error")
+      }
       toggleJoin();
     }
         

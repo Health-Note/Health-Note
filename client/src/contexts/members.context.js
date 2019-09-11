@@ -6,11 +6,13 @@ import {
     ADD_MEMBER,
     GET_MEMBER, 
     REMOVE_MEMBER, 
-    EDIT_MEMBER
+    EDIT_MEMBER,
+    MEMBER_ERROR
 } from '../reducers/types'; 
 
 const initialState = {
     loading: true,
+    error: null,
     members: [
         {
             id: null, 
@@ -65,10 +67,11 @@ export function MembersProvider(props) {
             formdata
         }).then((res) => {
             if (res.data) {
-                dispatch({type: ADD_MEMBER,  payload: res.data});
+                dispatch({ type: ADD_MEMBER,  payload: res.data });
             }
-        }).catch((err) => {
-          console.log(err);
+        }).catch((error) => {
+            console.log(error.response.data.msg)
+            dispatch({ type: MEMBER_ERROR, payload: error.response.data.msg })
         })
     }
 
@@ -86,7 +89,8 @@ export function MembersProvider(props) {
             getMember,
             addMember, 
             removeMember, 
-            editMember 
+            editMember,
+            error: state.error 
         }}>
             <DispatchContext.Provider value={ dispatch }> {/*dispatch를 계속해서 만들어내지 않게 객체형태로 보내지 않는다 */}
                 {props.children}

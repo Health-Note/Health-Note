@@ -3,7 +3,8 @@ import {
     ADD_MEMBER,
     GET_MEMBER,
     REMOVE_MEMBER,
-    EDIT_MEMBER 
+    EDIT_MEMBER ,
+    MEMBER_ERROR
 } from './types'; 
 
 const reducer = (state, action) => {
@@ -49,7 +50,13 @@ const reducer = (state, action) => {
                     endDate: action.newEndDate,
                     height: action.newHeight,
                 }
-                :  member);       
+                :  member);    
+        case MEMBER_ERROR:
+                return {
+                    ...state,
+                    loading: false,
+                    error: action.payload
+                }
         default: 
             return state;
     }   

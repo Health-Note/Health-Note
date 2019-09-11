@@ -38,6 +38,7 @@ export const AuthProvider = (props) => {
             await dispatch({ type: USER_LOADED, payload: res.data }); // payload는 찾은 trainer 
             console.log("로드 유저", res.data)
         } catch (err) {
+            console.log(err)
             dispatch({ type: AUTH_ERROR });
         }
     }

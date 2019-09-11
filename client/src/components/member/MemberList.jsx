@@ -8,6 +8,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Member from './Member';
 import { MembersContext } from '../../contexts/members.context';
+import { AlertContext } from '../../contexts/alert.context';
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -22,13 +24,18 @@ const useStyles = makeStyles(theme => ({
 
 function MembeList() {
     const classes = useStyles();
-    const { getMember, members }  = useContext(MembersContext);
+    const { getMember, members, error }  = useContext(MembersContext);
+    const alertContext = useContext(AlertContext);
+    const { setAlert } = alertContext; 
     
     useEffect(() => {
         getMember();
+        if (error) {
+            setAlert(error)
+        }
         console.log(members)
         // eslint-disable-next-line
-    }, []);
+    }, [error]);
     
     return (
         <Paper>

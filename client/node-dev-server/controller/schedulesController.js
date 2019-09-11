@@ -5,6 +5,7 @@ const schedulesController = {};
 const getStartDate = (days, start_date) => {
     let startDay = null;
     const startDate = moment(start_date).format();
+    console.log(startDate);
     
     switch (moment(start_date).format("dddd")) {
         case "Monday":    startDay = 1; break;
@@ -36,8 +37,8 @@ const getStartDate = (days, start_date) => {
         return daysToDateArr.sort();
     }
 
-    const makeAllSchedule = (startDatesByDays, unusedpt) => {
-        
+    const makeAllSchedule = (startDatesByDays, unusedpt, phonenum) => {
+        console.log(startDatesByDays);
         const allSchedule = [];
         const copyStartDatesByDays = []; // 복사
         const copyStartDatesByDays2 = []; // 복사
@@ -65,36 +66,49 @@ const getStartDate = (days, start_date) => {
         for (let r = 0; r < remainDayNum; r++) {
             allSchedule.push(copyStartDatesByDays[r].add(weekNum, "weeks").format());
         }
+
+        allSchedule.sort();
+
+        const createdAllSchedules = allSchedule.map((cv, i)=> {
+            return {
+                date: moment(cv).format("YYYY-MM-DD"),
+                phonenum: phonenum,
+                start_time: moment(cv).format("0000"),
+                end_time: "0000",
+                finish_dncd: false,
+            }
+        })
     
-        return allSchedule.sort();
+        return createdAllSchedules
     } 
 
-    const createAllSchedules = async (allSchedule, phonenum) => {
-        let createdSchedules;
-        for (let i; i < allSchedule.length; i++) {
-            try {
-                createdSchedules = await db.Schedule.create({
-                    date: allSchedule[i],
-                    phonenum: phonenum,
-                    start_time: moment(allSchedule[i].format("hhmm")),
-                    end_time: "0000",
-                    finish_dncd: false,
-                });
-            } catch (err) {
-                console.log(err);
-            }
-        } 
-        return createdSchedules;
+    const createAllSchedules = async (createdAllSchedules, phonenum) => {
+        console.log("createdAllSchedules", createdAllSchedules);
+        let createdDbSchedules;
+        try {
+            createdDbSchedules = await db.Schedule.bulkCreate(createdAllSchedules);
+        } catch (err) {
+            console.log(err);
+        }
+        return createdDbSchedules;
     }
 
     schedulesController.setSchedule = async (req, res) => {
         const { start_date, unusedpt, days, phonenum } = req.body; // 시작일, 횟수, 요일배열
-        console.log("start_date:", start_date, "days:", days, "unusedpt:", unusedpt, "phonenum:", phonenum);
-        
-        const startDatesByDays = await getStartDate(days, start_date);
-        const allSchedules = await makeAllSchedule(startDatesByDays, unusedpt);
-        const createdSchedules = await createAllSchedules(allSchedules, phonenum);
-        res.json(createdSchedules);
+        console.log(
+            "start_date:", moment(start_date).format("YYYY-MM-DD"),
+            "days:", days,
+            "unusedpt:",unusedpt,
+            "phonenum:", phonenum);
+        try {
+            const startDatesByDays = await getStartDate(days, start_date);
+            const allSchedules = await makeAllSchedule(startDatesByDays, unusedpt, phonenum);
+            const createdDbSchedules = await createAllSchedules(allSchedules, phonenum);
+            console.log("createdDbSchedules", createdDbSchedules);
+            res.json(createdDbSchedules);
+        } catch (err) {
+            console.log(err);
+        }
     }
 
 module.exports = schedulesController;
