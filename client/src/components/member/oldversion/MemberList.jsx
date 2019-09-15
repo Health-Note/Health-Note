@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-function MembeList() {
+function MemberList() {
     const classes = useStyles();
     const { getMember, members, error } = useContext(MembersContext);
     const alertContext = useContext(AlertContext);
@@ -63,4 +63,4 @@ function MembeList() {
     )
 }
 
-export default MembeList;
+export default MemberList;

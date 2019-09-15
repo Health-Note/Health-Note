@@ -17,7 +17,7 @@ router.post("/insertMember", auth, async (req, res) => {
             name,
             gender, 
             start_date, 
-            end_date, 
+            end_date: null, 
             unusedpt,
             usedpt: 0,
             height,

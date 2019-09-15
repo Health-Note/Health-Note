@@ -36,7 +36,7 @@ const SiderDemo = () => {
     <>
       <Icon type="logout" />
       <span>로그아웃</span>
-      <Link onClick={handleLogout}></Link>
+      <Link to={'/login'} onClick={handleLogout}></Link>
     </>
   )
 
@@ -44,7 +44,7 @@ const SiderDemo = () => {
     <>
       <Icon type="desktop" />
       <span>로그인</span>
-      <Link exact to={"/login"}></Link>
+      <Link to={"/login"}></Link>
     </>
   );
 
@@ -52,7 +52,7 @@ const SiderDemo = () => {
     <>
       <Icon type="desktop" />
       <span> 회원가입</span>
-      <Link exact to={"/register"}></Link>
+      <Link to={"/register"}></Link>
     </>
   );
 
@@ -71,7 +71,7 @@ const SiderDemo = () => {
             <Menu.Item></Menu.Item>
             <Menu.Item key="1">
               <span>Health Note</span>
-              <Link exact to={"/"}></Link>
+              <Link to={"/"}></Link>
             </Menu.Item>
             <Menu.Item key="2">
               {isAuthenticated ? authLinks : guestLoginLinks}
@@ -83,17 +83,17 @@ const SiderDemo = () => {
             <Menu.Item key="9">
               <Icon type="team" />
               <span>회원 관리</span>
-              <Link exact to={"/member"}></Link>
+              <Link to={"/member"}></Link>
             </Menu.Item>
             <Menu.Item key="10">
               <Icon type="calendar"></Icon>
               <span>일정 관리</span>
-              <Link exact to={"/schedule"}></Link>
+              <Link to={"/schedule"}></Link>
             </Menu.Item>
             <Menu.Item key="11">
               <Icon type="pie-chart" />
               <span>회원 분석</span>
-              <Link exact to={"/statistic"}></Link>
+              <Link to={"/statistic"}></Link>
             </Menu.Item>
           </Menu>
         </Sider>

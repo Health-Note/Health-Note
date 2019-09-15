@@ -1,16 +1,19 @@
-import 'date-fns';
-import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import DateFnsUtils from '@date-io/date-fns';
+import "date-fns";
+import React from "react";
+import Grid from "@material-ui/core/Grid";
+import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
+  KeyboardDatePicker
+} from "@material-ui/pickers";
 
-
-export default function DatePicker({start_date, end_date, setStartDate, setEndDate}) {
-
+export default function DatePicker({
+  start_date,
+  end_date,
+  setStartDate,
+  setEndDate
+}) {
   function handleStartDateChange(date) {
     setStartDate(date);
   }
@@ -19,12 +22,11 @@ export default function DatePicker({start_date, end_date, setStartDate, setEndDa
     setEndDate(date);
   }
 
-
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Grid container justify="space-around">
         <KeyboardDatePicker
-            fullWidth
+          fullWidth
           margin="normal"
           id="date-picker-startDate"
           label="회원권 시작일"
@@ -32,11 +34,11 @@ export default function DatePicker({start_date, end_date, setStartDate, setEndDa
           value={start_date}
           onChange={handleStartDateChange}
           KeyboardButtonProps={{
-            'aria-label': 'change date',
+            "aria-label": "change date"
           }}
         />
-         <KeyboardDatePicker
-            fullWidth
+        <KeyboardDatePicker
+          fullWidth
           margin="normal"
           id="date-picker-endDate"
           label="회원권 종료일"
@@ -44,12 +46,9 @@ export default function DatePicker({start_date, end_date, setStartDate, setEndDa
           value={end_date}
           onChange={handleEndDateChange}
           KeyboardButtonProps={{
-            'aria-label': 'change date',
+            "aria-label": "change date"
           }}
         />
-     
-      
-       
       </Grid>
     </MuiPickersUtilsProvider>
   );

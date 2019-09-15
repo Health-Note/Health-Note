@@ -21,7 +21,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     end_date: {
       type: DataTypes.DATEONLY,
-      allowNull: false
+      allowNull: true
     },
     unusedpt: {
       type: DataTypes.INTEGER(11),

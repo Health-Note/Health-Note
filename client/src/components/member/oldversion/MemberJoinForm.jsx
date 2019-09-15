@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -6,10 +6,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
-import { Typography } from 'antd';
+import { Typography, TimePicker  } from 'antd';
 import moment from 'moment';
+
 import Select from './Select';
-import DaySelect from './DaySelect';
+import DaySelect from './CheckBox';
 import DatePicker from './DatePicker';
 import useInputState from '../../hooks/useInputState';
 import { MembersContext } from '../../contexts/members.context';
@@ -33,10 +34,11 @@ function MemberJoinForm({ member, toggleJoin, isJoining }) {
     const [days, setDays] = useState([]);
     
     const { Text } = Typography;
+    const format = 'HH:mm';
 
     const handleSubmit = () => {
       console.log("start_date", start_date);
-      if (name && phonenum && gender && unusedpt && height && start_date && end_date && days){
+      if (name && phonenum && gender && unusedpt && height && start_date && end_date && days) {
         const addResult = addMember({ 
           name,
           phonenum,
@@ -87,6 +89,7 @@ function MemberJoinForm({ member, toggleJoin, isJoining }) {
               type="email"
               fullWidth
             />
+            
             <DatePicker start_date={start_date} end_date={end_date} setStartDate={setStartDate} setEndDate={setEndDate}/>
             <TextField
               id="unusedpt"
@@ -110,6 +113,7 @@ function MemberJoinForm({ member, toggleJoin, isJoining }) {
             <br />
           <Text type="secondary">PT요일</Text>
           <DaySelect setDays={setDays}/>
+          <TimePicker defaultValue={moment('12:08', format)} format={format}/>
           </DialogContent>
           <DialogActions>
             <Button onClick={toggleJoin} color="primary">
