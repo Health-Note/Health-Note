@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Table, Button, Icon } from "antd";
-import uuid from 'uuid/v4'
+import { Table, Button, Icon, } from "antd";
 import { MembersContext } from "../../contexts/members.context";
 import { AlertContext } from "../../contexts/alert.context";
 
@@ -43,11 +42,12 @@ const columns = [
 ];
 
 const MemberTable = () => {
-  const { members, error } = useContext(MembersContext);
+  const { members, error, removeMember } = useContext(MembersContext);
   const alertContext = useContext(AlertContext);
   const { setAlert } = alertContext;
 
   const [memberData, setMemberData] = useState([]);
+  const [checkedRows, setChedckedRows] = useState([]);
 
   useEffect(() => {
     const data = members.map(member => {
@@ -70,10 +70,27 @@ const MemberTable = () => {
     // eslint-disable-next-line
   }, [error]);
 
+  const handleRemove = () => {
+    console.log("리무브", checkedRows)
+    removeMember(checkedRows);
+  }
+
+  const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      setChedckedRows(selectedRows);
+    },
+    getCheckboxProps: record => ({
+      disabled: record.name === 'Disabled User', // Column configuration not to be checked
+      name: record.name,
+    }),
+  };
+
   return (
     <>
-      <Button><Icon type="user-add" style={{ fontSize: '20px'}}/></Button>
-      <Table columns={columns} dataSource={memberData} onChange={onChange} />
+      <Button><Icon type="user-add" style={{ fontSize: '20px'}}/>회원 등록</Button>
+      <Button onClick={handleRemove}><Icon type="user-delete" style={{ fontSize: '20px'}} />회원 삭제</Button>
+      <Table rowSelection={rowSelection} columns={columns} dataSource={memberData} onChange={onChange} />
     </>
   );
 };

@@ -32,20 +32,6 @@ function Calendar() {
 
   // 내부 이벤트 초기화
   useEffect(() => {
-    
-    // let scheduleList = schedules.map(schedule => {
-    //   let color = "";
-    //   if (schedule.finish_dncd === true) {
-    //     color = "gray";
-    //   }
-    //   return {
-    //     title: schedule.name,
-    //     id: members.phonenum,
-    //     start: schedule.start,
-    //     finish_dncd: schedule.finish_dncd,
-    //     color: color
-    //   };
-    // });
     setScheduleList(schedules);
   }, [members, schedules]);
 
