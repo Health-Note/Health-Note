@@ -216,7 +216,7 @@ function Calendar() {
         <Grid item xs={11}>
           <div className="demo-app-calendar" id="mycalendartest">
             <FullCalendar
-              height={500}
+              height={700}
               mirrorSelector={".gu-mirror"}
               selectable={true}
               minTime={"09:00:00"}

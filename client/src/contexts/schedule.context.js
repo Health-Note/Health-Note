@@ -13,6 +13,7 @@ const initialState = [
     title: null,
     id: null, // phonenum
     start: null,
+    color: null,
     finish_dncd: false
   }
 ];

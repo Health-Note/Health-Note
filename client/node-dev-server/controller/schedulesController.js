@@ -1,6 +1,7 @@
 const moment = require("moment");
 const db = require("../models/index");
 const schedulesController = {};
+const calendarColors = require("../utils/seedColors");
 
 const getStartDate = (days, start_date) => {
   let startDay = null;
@@ -108,6 +109,7 @@ const makeAllSchedule = (startDatesByDays, unusedpt, phonenum, start_time) => {
       start_time: moment(start_time[j++]).format("HHmm"),
       // !! [시작시간, 시작시간, 시작시간]형태로 온 시작시간 데이터를 어떻게 전체 날짜를 기준으로 넣어서 객체로 만들 것인가?
       end_time: "0000",
+      color: "blue",
       finish_dncd: false
     };
   });
@@ -149,7 +151,7 @@ schedulesController.setSchedule = async (req, res) => {
 
 schedulesController.getSchedule = async (req, res) => {
   try {
-    const result = await db.Member.findAll({
+    const foundMembersWithSchedules = await db.Member.findAll({
       where: {
         trainer_id: req.trainer
       },
@@ -157,21 +159,16 @@ schedulesController.getSchedule = async (req, res) => {
         model: db.Schedule
       }
     });
-    // [
-    //  [{name, phonenum, schedules[{date, start_time}, ...]}, {...}],
-    //  [{...}, {...}],
-    //  [{...}, {...}, {...}]
-    // ]
-    //
     const arr = [];
-    for (let i = 0; i < result.length; i++) {
+    for (let i = 0; i < foundMembersWithSchedules.length; i++) {
       arr.push(
-        result[i].schedules.map(cv => {
+        foundMembersWithSchedules[i].schedules.map(cv => {
           const d = moment(cv.date).format("YYYYMMDD") + " " + cv.start_time;
           return {
-            title: result[i].name,
+            title: foundMembersWithSchedules[i].name,
             start: moment(d).format(),
             id: cv.phonenum,
+            color: calendarColors[i].color,
             finish_dncd: cv.finish_dncd
           };
         })
