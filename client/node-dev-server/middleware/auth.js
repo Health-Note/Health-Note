@@ -10,7 +10,6 @@ module.exports = function(req, res, next){
     try {
         const decoded = jwt.verify(token, 'jwtSecret');
         req.trainer = decoded.trainer.trainer_id; // 페이로드의 trainer정보를 req.trainer에 담는다.
-        console.log("미들웨어 트레이너 id:", req.trainer);
         next();
     } catch(err) {
         res.status(401).json({msg: 'token is not valid'});

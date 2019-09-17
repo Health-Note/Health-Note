@@ -3,7 +3,7 @@ import { Table, Button, Icon, } from "antd";
 import { MembersContext } from "../../contexts/members.context";
 import { AlertContext } from "../../contexts/alert.context";
 
-function onChange(pagination, filters, sorter) {
+const onChange = (pagination, filters, sorter) => {
   console.log("params", pagination, filters, sorter);
 }
 
@@ -41,7 +41,7 @@ const columns = [
   }
 ];
 
-const MemberTable = () => {
+const MemberTable = ({toggle}) => {
   const { members, error, removeMember } = useContext(MembersContext);
   const alertContext = useContext(AlertContext);
   const { setAlert } = alertContext;
@@ -88,7 +88,7 @@ const MemberTable = () => {
 
   return (
     <>
-      <Button><Icon type="user-add" style={{ fontSize: '20px'}}/>회원 등록</Button>
+      <Button onClick={toggle}><Icon type="user-add" style={{ fontSize: '20px'}}/>회원 등록</Button>
       <Button onClick={handleRemove}><Icon type="user-delete" style={{ fontSize: '20px'}} />회원 삭제</Button>
       <Table rowSelection={rowSelection} columns={columns} dataSource={memberData} onChange={onChange} />
     </>

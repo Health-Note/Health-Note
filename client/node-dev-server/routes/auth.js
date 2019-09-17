@@ -29,7 +29,6 @@ router.post("/",[
     check('email', '이메일 형식을 입력하세요').isEmail(),
     check('password', '패스워드를 입력하세요').exists() // exists괄호 안에 커스텀 가능
     ], async(req, res) => {
-        console.log("로그인 정보", req.body)
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -48,7 +47,7 @@ router.post("/",[
 
             if (!isMatch) {
                 return res.status(400).json({ msg: '잘못된 정보입니다.' });
-            } 
+            }
 
             const payload = {
                 trainer: {
@@ -57,7 +56,7 @@ router.post("/",[
             };
             
             // 로그인 성공시 토큰 발행
-            jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 360000 }, (err, token) => {
+            jwt.sign(payload, "jwtSecret", { expiresIn: 360000 }, (err, token) => {
                 if (err) throw err;
                 res.json({ token });
             });

@@ -31,7 +31,7 @@ const options = [
   { label: "일", value: 7 }
 ];
 
-const MemberJoinForm2 = ({ form }) => {
+const MemberJoinForm2 = ({ form, toggle }) => {
   const { addMember, error } = useContext(MembersContext);
   const { setSchedule } = useContext(ScheduleContext);
 
@@ -76,6 +76,7 @@ const MemberJoinForm2 = ({ form }) => {
   };
 
   const handleCheckBox = checkedValues => {
+    console.log(checkedValues)
     !checkedValues.includes(1) && setMon(null);
     !checkedValues.includes(2) && setTue(null);
     !checkedValues.includes(3) && setWed(null);
@@ -208,6 +209,7 @@ const MemberJoinForm2 = ({ form }) => {
       <Row type="flex" justify="end">
         <Col>
           <Form.Item>
+          <Button onClick={toggle}>닫기</Button>
             <Button type="primary" htmlType="submit">
               등록하기
             </Button>

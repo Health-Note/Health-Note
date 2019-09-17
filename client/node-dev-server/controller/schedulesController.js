@@ -6,12 +6,15 @@ const getStartDate = (days, start_date) => {
   let startDay = null;
   const startDate = moment(start_date).format();
   console.log(startDate);
+  console.log(moment(start_date).format("dddd"));
+  console.log(moment(start_date).format("E"));
+  console.log("=======days.length======", days.length);
 
   switch (moment(start_date).format("dddd")) {
     case "Monday":
       startDay = 1;
       break;
-    case "Thuseday":
+    case "Tuesday":
       startDay = 2;
       break;
     case "Wednesday":
@@ -30,12 +33,16 @@ const getStartDate = (days, start_date) => {
       startDay = 7;
       break;
     default:
-      return null;
+      break;
   }
 
   const daysToDateArr = [];
   for (let i = 0; i < days.length; i++) {
     if (startDay === days[i]) {
+      console.log(
+        "===================daysToDateArr==================",
+        daysToDateArr
+      );
       const tempStartDate1 = moment(startDate);
       daysToDateArr.push(tempStartDate1.format());
     } else if (startDay > days[i]) {
@@ -55,12 +62,15 @@ const getStartDate = (days, start_date) => {
 
 // [ 2013-07-12, , ,]
 const makeAllSchedule = (startDatesByDays, unusedpt, phonenum, start_time) => {
-  console.log(startDatesByDays);
+  console.log(
+    "===============startDatesByDays===============",
+    startDatesByDays
+  );
   const allSchedule = [];
   const copyStartDatesByDays = []; // 복사
   const copyStartDatesByDays2 = []; // 복사
   const weekNum = Math.floor(unusedpt / startDatesByDays.length); // 10 / 3 = 3
-  console.log(weekNum);
+  console.log("weekNum", weekNum);
   const remainDayNum = unusedpt % startDatesByDays.length;
 
   // 첫 주 요일들의 날짜를 넣는다.
@@ -77,14 +87,15 @@ const makeAllSchedule = (startDatesByDays, unusedpt, phonenum, start_time) => {
     }
   }
 
-  if (remainDayNum === 0) return allSchedule;
+  console.log("===========allSchedule=========", allSchedule);
 
-  // 남은 요일들을 넣는다.
-  for (let r = 0; r < remainDayNum; r++) {
-    allSchedule.push(copyStartDatesByDays[r].add(weekNum, "weeks").format());
+  if (!remainDayNum === 0) {
+    // 남은 요일들을 넣는다.
+    for (let r = 0; r < remainDayNum; r++) {
+      allSchedule.push(copyStartDatesByDays[r].add(weekNum, "weeks").format());
+    }
+    allSchedule.sort();
   }
-
-  allSchedule.sort();
 
   let j = 0;
   const createdAllSchedules = allSchedule.map((cv, i) => {
@@ -118,6 +129,7 @@ const createAllSchedules = async (createdAllSchedules, phonenum) => {
 
 schedulesController.setSchedule = async (req, res) => {
   const { start_date, start_time, unusedpt, days, phonenum } = req.body; // 시작일, 횟수, 요일배열
+  console.log("days", days);
 
   try {
     const startDatesByDays = await getStartDate(days, start_date);
@@ -145,7 +157,6 @@ schedulesController.getSchedule = async (req, res) => {
         model: db.Schedule
       }
     });
-    console.log("getSchedule", result);
     // [
     //  [{name, phonenum, schedules[{date, start_time}, ...]}, {...}],
     //  [{...}, {...}],
@@ -156,17 +167,16 @@ schedulesController.getSchedule = async (req, res) => {
     for (let i = 0; i < result.length; i++) {
       arr.push(
         result[i].schedules.map(cv => {
-        const d = moment(cv.date).format("YYYYMMDD") + " " + cv.start_time;
+          const d = moment(cv.date).format("YYYYMMDD") + " " + cv.start_time;
           return {
             title: result[i].name,
             start: moment(d).format(),
             id: cv.phonenum,
-            finish_dncd: cv.finish_dncd,
+            finish_dncd: cv.finish_dncd
           };
         })
       );
     }
-
     res.json(arr);
   } catch (err) {
     console.log(err);

@@ -80,6 +80,7 @@ export const AuthProvider = props => {
       const res = await axios.post("/api/auth", formData, config);
       if (res.status === 200 || res.status === 201) {
         // response.ok (200~299)
+        console.log(res.data)
         await dispatch({ type: LOGIN_SUCCESS, payload: res.data }); // res.data = token
         await loadUser();
       }
