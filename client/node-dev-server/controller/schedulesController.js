@@ -109,7 +109,6 @@ const makeAllSchedule = (startDatesByDays, unusedpt, phonenum, start_time) => {
       start_time: moment(start_time[j++]).format("HHmm"),
       // !! [시작시간, 시작시간, 시작시간]형태로 온 시작시간 데이터를 어떻게 전체 날짜를 기준으로 넣어서 객체로 만들 것인가?
       end_time: "0000",
-      color: "blue",
       finish_dncd: false
     };
   });
@@ -161,6 +160,7 @@ schedulesController.getSchedule = async (req, res) => {
     });
     const arr = [];
     for (let i = 0; i < foundMembersWithSchedules.length; i++) {
+      console.log("aa", calendarColors)
       arr.push(
         foundMembersWithSchedules[i].schedules.map(cv => {
           const d = moment(cv.date).format("YYYYMMDD") + " " + cv.start_time;
@@ -168,7 +168,7 @@ schedulesController.getSchedule = async (req, res) => {
             title: foundMembersWithSchedules[i].name,
             start: moment(d).format(),
             id: cv.phonenum,
-            color: calendarColors[i].color,
+            color: calendarColors[2].colors[i].color,
             finish_dncd: cv.finish_dncd
           };
         })
