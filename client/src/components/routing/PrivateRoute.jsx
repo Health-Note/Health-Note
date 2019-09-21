@@ -10,9 +10,11 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={props => // 프롭스 전체
+      render={(
+        props // 프롭스 전체
+      ) =>
         !isAuthenticated && !loading ? (
-          <Redirect to='/login' />
+          <Redirect to="/login" />
         ) : (
           <Component {...props} />
         )

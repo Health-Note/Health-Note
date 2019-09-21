@@ -3,8 +3,9 @@ import {
   GET_MEMBER,
   REMOVE_MEMBER,
   EDIT_MEMBER,
-  MEMBER_ERROR
-} from "./types";
+  MEMBER_ERROR,
+  CLEAR_ERRORS,
+} from './types';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -12,18 +13,19 @@ const reducer = (state, action) => {
       return {
         ...state,
         loading: false,
-        members: [...action.payload] // 전체 멤버 (배열)
+        members: [...action.payload], // 전체 멤버 (배열)
       };
     case ADD_MEMBER:
       return {
         ...state,
         loading: false,
+        target: action.payload.name,
         members: [
           {
-            ...action.payload // 멤버 추가 (배열안에 객체 추가)
+            ...action.payload, // 멤버 추가 (배열안에 객체 추가)
           },
-          ...state.members
-        ]
+          ...state.members,
+        ],
       };
     case REMOVE_MEMBER:
       const filter = action.payload.map(cv => cv.key);
@@ -38,10 +40,10 @@ const reducer = (state, action) => {
       return {
         ...state,
         members: deletedMembers,
-        loading: false
+        loading: false,
       };
 
-    case "TOGGLE":
+    case 'TOGGLE':
       return state.map(member =>
         member.id === action.id
           ? { ...member, completed: !member.completed }
@@ -58,7 +60,7 @@ const reducer = (state, action) => {
               unusedpt: action.newUnusedpt,
               startDate: action.newStartDate,
               endDate: action.newEndDate,
-              height: action.newHeight
+              height: action.newHeight,
             }
           : member
       );
@@ -66,7 +68,13 @@ const reducer = (state, action) => {
       return {
         ...state,
         loading: false,
-        error: action.payload
+        target: null,
+        error: action.payload,
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
       };
     default:
       return state;

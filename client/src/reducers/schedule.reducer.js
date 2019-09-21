@@ -1,5 +1,5 @@
-import moment from "moment";
-import { SET_SCHEDULE, GET_SCHEDULES } from "./types";
+import moment from 'moment';
+import { SET_SCHEDULE, GET_SCHEDULES } from './types';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -15,17 +15,17 @@ const reducer = (state, action) => {
       return [
         ...state,
         {
-          ...action.payload
-        }
+          ...action.payload,
+        },
       ];
-    case "TOGGLE":
+    case 'TOGGLE':
       console.log(action.id);
       return state.map(schedule =>
         schedule.phonenum + schedule.date === action.id
           ? { ...schedule, finish_dncd: !schedule.finish_dncd }
           : schedule
       );
-    case "DELETE":
+    case 'DELETE':
       console.log(action.id);
       return state.filter(
         schedule => action.id !== schedule.phonenum + schedule.date
