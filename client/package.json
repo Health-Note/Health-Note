@@ -20,6 +20,9 @@
     "@nivo/line": "^0.59.3",
     "@nivo/pie": "^0.59.1",
     "@nivo/radar": "^0.59.1",
+    "antd": "^3.22.1",
+    "array-move": "^2.1.0",
+    "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
     "material-table": "^1.46.0",
     "moment": "^2.24.0",
@@ -27,18 +30,16 @@
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
+    "react-sortable-hoc": "^1.10.1",
     "reactstrap": "^8.0.1",
-    "sweetalert2": "^8.15.2",
     "uuid": "^3.3.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "eject": "react-scripts eject",
+    "lint": "./node_modules/.bin/eslint App.js"
   },
   "browserslist": {
     "production": [
