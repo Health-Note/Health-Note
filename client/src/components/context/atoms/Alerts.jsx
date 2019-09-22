@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Alert } from 'antd';
+import { Alert, message } from 'antd';
 import { AlertContext } from '../../../contexts/alert.context';
 
 const Alerts = () => {
@@ -10,6 +10,8 @@ const Alerts = () => {
     alertContext.alerts.map(alert => (
       <div key={alert.id}>
         <Alert message={alert.msg} type={alert.alertType} closable />
+        {alert.alertType === "success" && message.success(alert.msg)}
+        {alert.alertType === "error" && message.error(alert.msg)}
       </div>
     ))
   );

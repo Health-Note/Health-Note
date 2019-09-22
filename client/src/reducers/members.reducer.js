@@ -28,7 +28,7 @@ const reducer = (state, action) => {
         ],
       };
     case REMOVE_MEMBER:
-      const filter = action.payload.map(cv => cv.key);
+      const filter = action.payload.map(cv => cv.key); // 삭제된 회원의 phonenum만 받아옴
       const deletedMembers = state.members.filter(member => {
         for (var value of filter) {
           if (member.phonenum === value) {

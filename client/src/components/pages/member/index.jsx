@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
+import uuid from 'uuid/v4'
 import MemberJoinForm2 from './MemberJoinForm2';
 import MemberTable from './MemberTable';
 import { MembersProvider } from '../../../contexts/members.context';
@@ -15,13 +16,13 @@ function Member() {
   useEffect(() => {
     console.log(target)
     if (target) {
-      setAlert(target + '님 추가 완료', 'success', target);
+      setAlert(target + '님 추가 완료', 'success', uuid());
     }
   }, [target]);
 
   useEffect(() => {
     if (error) {
-      setAlert(error);
+      setAlert(error, 'error', uuid());
       clearErrors();
     }
   }, [error]);

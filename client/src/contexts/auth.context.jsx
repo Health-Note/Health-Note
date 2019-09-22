@@ -59,7 +59,7 @@ export const AuthProvider = props => {
         // response.ok (200~299)
         dispatch({ type: REGISTER_SUCCESS, payload: res.data }); // res.data = token
         console.log(res.data);
-        loadUser();
+        //loadUser();
       } else {
         dispatch({ type: REGISTER_FAIL, payload: res.data.msg });
       }

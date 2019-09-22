@@ -22,7 +22,7 @@ const SiderDemo = () => {
 
   const handleLogout = () => {
     logout();
-    setAlert(`${trainer.nickname}님, 로그아웃 하셨습니다.`, 'error');
+    setAlert(`${trainer.nickname}님, 로그아웃 하셨습니다.`, 'success', trainer.nickname);
   };
 
   const authLinks = (
