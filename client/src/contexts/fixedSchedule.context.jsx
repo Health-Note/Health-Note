@@ -42,7 +42,7 @@ export const FixedScheduleProvider = props => {
    * 작성일: 2019.09.09 (월)
    * 작성자: 박종열
    * 기능: 외부이벤트를 캘린더에 넣을때 마다 고정 스케줄을 만들 데이터를 보냄
-   * body: start_date, day, member_id
+   * body: startDate, day, member_id
    */
   const setFixedSchedule = async data => {
     console.log('fixedSchedule.context.data', data);

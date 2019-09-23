@@ -7,7 +7,7 @@ const Home = () => {
   const membersContext = useContext(MembersContext);
 
   useEffect(() => {
-    //authContext.loadUser();
+    authContext.loadUser();
     membersContext.getMember();
     // eslint-disable-next-line
   }, []);

@@ -84,7 +84,6 @@ module.exports = [
     id: 'flat-ui-colors-american',
     emoji: '🇺🇸',
     colors: [
-      { name: 'DraculaOrchid', color: '#2d3436' },
       { name: 'FirstDate', color: '#fab1a0' },
       { name: 'FadedPoster', color: '#81ecec' },
       { name: 'GreenDarnerTail', color: '#74b9ff' },
@@ -99,6 +98,7 @@ module.exports = [
       { name: 'ExodusFruit', color: '#6c5ce7' },
       { name: 'SoothingBreeze', color: '#b2bec3' },
       { name: 'Pico8Pink', color: '#fd79a8' },
+      { name: 'DraculaOrchid', color: '#2d3436' },
       { name: 'AmericanRiver', color: '#636e72' },
       { name: 'Chi-Gong', color: '#d63031' },
       { name: 'ElectronBlue', color: '#0984e3' },

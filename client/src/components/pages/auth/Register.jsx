@@ -1,28 +1,31 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Input, Icon, Button, Row, Col } from 'antd';
+import { Input, Icon, Button, Row, Col, Checkbox } from 'antd';
 import { withRouter } from 'react-router-dom';
+import { showConfirm } from '../../../components/context/atoms/ComfirmModal';
 import { AlertContext } from '../../../contexts/alert.context';
 import { AuthContext } from '../../../contexts/auth.context';
+import useToggle from '../../../hooks/useToggle';
 
 function Register(props) {
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
-
+  
   const { setAlert } = alertContext;
   const { register, error, clearErrors, isAuthenticated } = authContext;
-
+  
   useEffect(() => {
     if (isAuthenticated) {
       // 로그인이 되어있으면 홈으로 보냄
       props.history.push('/');
     }
-    if (error === '유저가 이미 존재합니다.') {
-      setAlert(error);
+    if (error) {
+      setAlert(error, "error");
       clearErrors();
     }
     // eslint-disable-next-line
   }, [error, isAuthenticated]);
-
+  
+  const [agreement, toggle] = useToggle();
   const [user, setUser] = useState({
     nickname: '',
     email: '',
@@ -41,12 +44,14 @@ function Register(props) {
   const onSubmit = e => {
     e.preventDefault();
     if (nickname === '' || email === '' || password === '') {
-      setAlert('모든 항목을 채우세요', 'danger');
+      setAlert('모든 항목을 채우세요', 'error');
     } else if (password !== password2) {
-      setAlert('비밀번호가 일치하지 않습니다.', 'danger');
-    } else {
+      setAlert('비밀번호가 일치하지 않습니다.', 'error');
+    } else if (!agreement) {
+      setAlert('회원약관에 동의하지 않았습니다.')
+    } else  {
       register({ nickname, email, password });
-    }
+    } 
   };
 
   return (
@@ -106,14 +111,19 @@ function Register(props) {
               onChange={onChange}
             />
           </div>
+          <Row type="flex" justify="end" style={{marginTop: "10px"}}>
+            <Col>
+              <Checkbox value={agreement} onChange={toggle}> </Checkbox>
+              <Button  onClick={()=> showConfirm({title: "hello", content: "동의하시죠?"})} > 회원약관보기 </Button>
+            </Col>
+          </Row>
           <Button
             htmlType="submit"
             type="primary"
             block
             style={{ marginTop: '15px' }}
           >
-            {' '}
-            제출{' '}
+            가입
           </Button>
         </form>
       </Row>

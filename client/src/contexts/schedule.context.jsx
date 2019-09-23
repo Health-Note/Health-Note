@@ -20,7 +20,7 @@ const initialState = [
 
 export const ScheduleProvider = props => {
   const setSchedule = async data => {
-    // unusedpt, start_date, days, phonenum
+    // totalPT, startDate, days, phonenum
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }

@@ -19,12 +19,12 @@ const initialState = {
     {
       id: null,
       name: null,
-      phonenum: null,
+      phoneNum: null,
       gender: null,
-      start_date: null,
-      end_date: null,
-      usedpt: null,
-      unusedpt: null,
+      startDate: null,
+      endDate: null,
+      usedPT: null,
+      totalPT: null,
       height: null,
     },
   ],
@@ -61,7 +61,7 @@ export function MembersProvider(props) {
   // 작성자: 박종열
   // 기능: 맴버 추가
   const addMember = async formdata => {
-    // name, start_date, end_date, phonenum, gender, unusedpt, height
+    // name, startDate, endDate, phonenum, gender, totalPT, height
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
@@ -87,7 +87,9 @@ export function MembersProvider(props) {
       const res = await axios.post('/api/members/removeMember', selectedRows);
       if (res.data) {
         // 삭제된 row수
-        dispatch({ type: REMOVE_MEMBER, payload: selectedRows });
+        console.log("removeMember", res.data)
+        console.log("selectedRows", selectedRows)
+        dispatch({ type: REMOVE_MEMBER, payload: res.data });
       } else {
         console.log('어떤 에러');
       }
@@ -97,8 +99,8 @@ export function MembersProvider(props) {
     }
   };
 
-  const editMember = phonenum => {
-    dispatch({ type: EDIT_MEMBER, payload: phonenum });
+  const editMember = phoneNum => {
+    dispatch({ type: EDIT_MEMBER, payload: phoneNum });
   };
 
   const clearErrors = () => dispatch({ type: CLEAR_ERRORS });

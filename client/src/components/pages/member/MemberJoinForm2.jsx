@@ -34,7 +34,7 @@ const MemberJoinForm2 = ({ form, toggle }) => {
 
   // const [name, handleName] = useInputState("");
   // const [phonenum, handlePhoneNum] = useInputState("");
-  // const [unusedpt, handleUnusept] = useInputState("");
+  // const [totalPT, handleTotalPT] = useInputState("");
   // const [gender, handleGender] = useInputState("");
   // const [height, handleHeight] = useInputState("");
   const [startDate] = useState(moment());
@@ -60,11 +60,11 @@ const MemberJoinForm2 = ({ form, toggle }) => {
         });
         setTimeout(() => {
           setSchedule({
-            unusedpt: values.unusedpt,
+            totalPT: values.totalPT,
             startDate: moment(startDate).format('YYYY-MM-DD'),
             days,
             startTime: [mon, tue, wed, thu, fri, sat, sun].filter(cv => cv), // true만 고르기
-            phonenum: values.phonenum,
+            phoneNum: values.phoneNum,
           });
         }, 2000);
       }
@@ -138,14 +138,14 @@ const MemberJoinForm2 = ({ form, toggle }) => {
         </Descriptions.Item>
         <Descriptions.Item label="연락처">
           <Form.Item style={{ margin: 0 }}>
-            {getFieldDecorator('phonenum', {
+            {getFieldDecorator('phoneNum', {
               rules: [{ required: true, message: '핸드폰 번호를 입력하세요' }],
             })(<Input />)}
           </Form.Item>
         </Descriptions.Item>
         <Descriptions.Item label="시작일">
           <Form.Item style={{ margin: 0 }}>
-            {getFieldDecorator('start_date', {
+            {getFieldDecorator('startDate', {
               initialValue: startDate,
               rules: [{ required: true, message: '시작일을 입력하세요' }],
             })(<DatePicker locale={locale} />)}
@@ -153,7 +153,7 @@ const MemberJoinForm2 = ({ form, toggle }) => {
         </Descriptions.Item>
         <Descriptions.Item label="등록PT수">
           <Form.Item style={{ margin: 0 }}>
-            {getFieldDecorator('unusedpt', {
+            {getFieldDecorator('totalPT', {
               rules: [{ required: true, message: '등록PT수를 입력하세요' }],
             })(<Input />)}
           </Form.Item>
@@ -197,6 +197,15 @@ const MemberJoinForm2 = ({ form, toggle }) => {
                       minuteStep={30}
                       disabledHours={() => [0, 1, 2, 3, 4, 5, 6, 7, 8]}
                       format={format}
+                      onChange={
+                        (cv === 1 && handleMon) ||
+                        (cv === 2 && handleTue) ||
+                        (cv === 3 && handleWed) ||
+                        (cv === 4 && handleThu) ||
+                        (cv === 5 && handleFri) ||
+                        (cv === 6 && handleSat) ||
+                        (cv === 7 && handleSun)
+                      }
                     />
                   )}
                 </Form.Item>

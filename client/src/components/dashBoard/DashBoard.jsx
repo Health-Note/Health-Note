@@ -22,13 +22,13 @@ const SiderDemo = () => {
 
   const handleLogout = () => {
     logout();
-    setAlert(`${trainer.nickname}님, 로그아웃 하셨습니다.`, 'success', trainer.nickname);
+    setAlert(`${trainer.Email}님, 로그아웃 하셨습니다.`, 'success', trainer.nickname);
   };
 
   const authLinks = (
     <>
       <Icon type="user" />
-      <span> {trainer && trainer.nickname} 접속중 </span>
+      <span> {trainer && trainer.Email} 접속중 </span>
     </>
   );
 
@@ -77,10 +77,10 @@ const SiderDemo = () => {
             <Link to={'/'}></Link>
           </Menu.Item>
           <Menu.Item key="2">
-            {isAuthenticated ? authLinks : guestLoginLinks}
+            {isAuthenticated && trainer ? authLinks : guestLoginLinks}
           </Menu.Item>
           <Menu.Item key="3">
-            {isAuthenticated ? logoutLinks : guestRegisterLinks}
+            {isAuthenticated && trainer ? logoutLinks : guestRegisterLinks}
           </Menu.Item>
           <Menu.Item></Menu.Item>
           <Menu.Item key="9">

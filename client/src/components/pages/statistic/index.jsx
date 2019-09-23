@@ -87,10 +87,10 @@ function Statistics({ member }) {
               <SelectMember />
             </Grid>
             <Grid item xs={2}>
-              <NumberCard num={member.usedpt} text={'진행된PT'} />
+              <NumberCard num={member.usedPT} text={'진행된PT'} />
             </Grid>
             <Grid item xs={2}>
-              <NumberCard num={member.unusedpt} text={'남은PT'} />
+              <NumberCard num={member.totalPT} text={'남은PT'} />
             </Grid>
             <Grid item xs={3}>
               <NumberCard

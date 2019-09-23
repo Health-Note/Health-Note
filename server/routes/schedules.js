@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
-const db = require('../models/index');
 const auth = require('../middleware/auth');
-const moment = require('moment');
 const schedulesController = require('../controller/schedulesController');
 // 월, 수, 금
 // ========== 시작 요일

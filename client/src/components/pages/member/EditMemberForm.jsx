@@ -25,7 +25,7 @@ function EditMemberForm({ member, toggle, isEditing }) {
     gender,
     startDate,
     endDate,
-    unusedpt,
+    totalPT,
     height,
   } = member;
   const editMember = useContext(MembersContext);
@@ -33,7 +33,7 @@ function EditMemberForm({ member, toggle, isEditing }) {
   const [newName, handleName] = useInputState(name);
   const [newPhoneNum, handlePhoneNum] = useInputState(phonenum);
   const [newGender, handleGender] = useInputState(gender);
-  const [newUnusedpt, handleUnusedpt] = useInputState(unusedpt);
+  const [newTotalPT, handleTotalPT] = useInputState(totalPT);
   const [newHeight, handleHeight] = useInputState(height);
   const [newStartDate, setStartDate] = React.useState(
     moment(startDate).format()
@@ -45,7 +45,7 @@ function EditMemberForm({ member, toggle, isEditing }) {
       newName,
       newPhoneNum,
       newGender,
-      newUnusedpt,
+      newTotalPT,
       newHeight,
       newStartDate,
       newEndDate
@@ -61,9 +61,9 @@ function EditMemberForm({ member, toggle, isEditing }) {
     //             name: newName,
     //             phonenum: newPhoneNum,
     //             gender: newGender,
-    //             start_date: newStartDate,
-    //             end_date: newEndDate,
-    //             unusedpt: newUnusedpt
+    //             startDate: newStartDate,
+    //             endDate: newEndDate,
+    //             totalPT: newTotalPT
     //         })
     //     }).then((res) => {
     //         return res.json()
@@ -109,9 +109,9 @@ function EditMemberForm({ member, toggle, isEditing }) {
           />
           <DatePicker newStartDate={newStartDate} setStartDate={setStartDate} />
           <TextField
-            id="unusedpt"
-            value={newUnusedpt}
-            onChange={handleUnusedpt}
+            id="totalPT"
+            value={newTotalPT}
+            onChange={handleTotalPT}
             margin="normal"
             label="남은피티수"
             type="email"

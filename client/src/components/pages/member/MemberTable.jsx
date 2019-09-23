@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Table, Button, Icon } from 'antd';
 import { MembersContext } from '../../../contexts/members.context';
-import { AlertContext } from '../../../contexts/alert.context';
 
 const onChange = (pagination, filters, sorter) => {
   console.log('params', pagination, filters, sorter);
@@ -15,8 +14,8 @@ const columns = [
   },
   {
     title: '연락처',
-    dataIndex: 'phonenum',
-    key: 'phonenum',
+    dataIndex: 'phoneNum',
+    key: 'phoneNum',
   },
   {
     title: '성별',
@@ -27,17 +26,18 @@ const columns = [
     sortDirections: ['descend', 'ascend'],
   },
   {
-    title: '시작일',
-    dataIndex: 'start_date',
-    key: 'start_date',
-    sorter: (a, b) => new Date(a.start_date) - new Date(b.start_date),
+    title: '결제한PT수',
+    dataIndex: 'totalPT',
+    key: 'totalPT',
+    defaultSortOrder: 'descend',
+    sorter: (a, b) => a.totalPT - b.totalPT,
   },
   {
-    title: '남은PT',
-    dataIndex: 'unusedpt',
-    key: 'unusedpt',
+    title: '진행된PT수',
+    dataIndex: 'usedPT',
+    key: 'usedPT',
     defaultSortOrder: 'descend',
-    sorter: (a, b) => a.unusedpt - b.unusedpt,
+    sorter: (a, b) => a.usedPT - b.usedPT,
   },
 ];
 
@@ -45,8 +45,6 @@ const MemberTable = ({ toggle }) => {
   const { members, error, getMember, removeMember } = useContext(
     MembersContext
   );
-  const alertContext = useContext(AlertContext);
-  const { setAlert } = alertContext;
 
   const [memberData, setMemberData] = useState([]);
   const [checkedRows, setChedckedRows] = useState([]);
@@ -56,17 +54,17 @@ const MemberTable = ({ toggle }) => {
   }, []);
 
   useEffect(() => {
-    const data = members.map(member => {
+    const memberRow = members.map(member => {
       return {
-        key: member.phonenum,
-        name: member.name,
-        gender: member.gender === 1 ? '남' : '여',
-        phonenum: member.phonenum,
-        start_date: member.start_date,
-        unusedpt: member.unusedpt,
+        key: member.PhoneNum,
+        name: member.Name,
+        gender: member.Gender === 1 ? '남' : '여',
+        phoneNum: member.PhoneNum,
+        usedPT: member.UsedPT,
+        totalPT: member.TotalPT,
       };
     });
-    setMemberData(data);
+    setMemberData(memberRow);
     console.log(members);
   }, [MembersContext, members]);
 

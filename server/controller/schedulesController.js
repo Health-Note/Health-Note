@@ -1,5 +1,7 @@
 const moment = require('moment');
-const db = require('../models/index');
+require('moment-timezone');
+moment.tz.setDefault("Asia/Seoul");
+const db = require('../models2/index');
 const schedulesController = {};
 const calendarColors = require('../utils/seedColors');
 
@@ -38,12 +40,12 @@ const getStartDate = (days, startDate) => {
   const daysToDateArr = [];
   for (let i = 0; i < days.length; i++) {
     if (startDay === days[i]) {
+      const tempStartDate1 = moment(startDateFormat);
+      daysToDateArr.push(tempStartDate1.format());
       console.log(
         '===================daysToDateArr==================',
         daysToDateArr
       );
-      const tempStartDate1 = moment(startDateFormat);
-      daysToDateArr.push(tempStartDate1.format());
     } else if (startDay > days[i]) {
       // ex) 수요일인데 그 다음주 월요일 구할때
       const tempStartDate2 = moment(startDateFormat);
@@ -60,7 +62,12 @@ const getStartDate = (days, startDate) => {
 };
 
 // [ 2013-07-12, , ,]
-const makeAllSchedule = (startDatesByDays, unusedpt, phonenum, startTime) => {
+const makeAllSchedule = async (
+  startDatesByDays,
+  totalPT,
+  foundMemberId,
+  startTime
+) => {
   console.log(
     '===============startDatesByDays===============',
     startDatesByDays
@@ -68,9 +75,9 @@ const makeAllSchedule = (startDatesByDays, unusedpt, phonenum, startTime) => {
   const allSchedule = [];
   const copyStartDatesByDays = []; // 복사
   const copyStartDatesByDays2 = []; // 복사
-  const weekNum = Math.floor(unusedpt / startDatesByDays.length); // 10 / 3 = 3
+  const weekNum = Math.floor(totalPT / startDatesByDays.length); // 10 / 3 = 3
   console.log('weekNum', weekNum);
-  const remainDayNum = unusedpt % startDatesByDays.length;
+  const remainDayNum = totalPT % startDatesByDays.length;
 
   // 첫 주 요일들의 날짜를 넣는다.
   for (let i = 0; i < startDatesByDays.length; i++) {
@@ -99,15 +106,23 @@ const makeAllSchedule = (startDatesByDays, unusedpt, phonenum, startTime) => {
   let j = 0;
   const createdAllSchedules = allSchedule.map((cv, i) => {
     if (j === startTime.length) {
+      // EX) 배열로 들어온 월, 수, 금 차례로 넣어주기 위한 장치)
       j = 0;
     }
+    const date =
+      moment(cv).format('YYYYMMDD') +
+      ' ' +
+      moment(startTime[j++]).format('HHmm');
+    const finalDate = moment(date).format('YYYY-MM-DD HH:mm');
+
+
     return {
-      date: moment(cv).format('YYYYMMDD'),
-      phonenum: phonenum,
-      start_time: moment(startTime[j++]).format('HHmm'),
-      // !! [시작시간, 시작시간, 시작시간]형태로 온 시작시간 데이터를 어떻게 전체 날짜를 기준으로 넣어서 객체로 만들 것인가?
-      end_time: '0000',
-      finish_dncd: false,
+      StartDate: finalDate,
+      MemberId: foundMemberId,
+      EndDate: '0000',
+      IsFinish: false,
+      IsTemp: '??',
+      Day: moment(cv).format('E'),
     };
   });
 
@@ -127,57 +142,73 @@ const createAllSchedules = async createdAllSchedules => {
 };
 
 schedulesController.setSchedule = async (req, res) => {
-  const { startDate, startTime, unusedpt, days, phonenum } = req.body; // 시작일, 횟수, 요일배열
-  console.log('days', days);
+  const { startDate, startTime, totalPT, days, phoneNum } = req.body; // 시작일, 횟수, 요일배열
+  console.log(
+    'days: ',
+    days,
+    'startdate: ',
+    moment(startDate).day(),
+    'startTime: ',
+    startTime,
+    'totalPT',
+    totalPT
+  );
 
-  if (!days.includes(moment(startDate).format('E'))){
-    console.log("시작일이 선택요일에 포함되지 않음 다름");
-    return res.status(400).json({ msg: "시작일이 선택요일에 포함되지 않습니다." })
+  if (!days.includes(moment(startDate).day())) {
+    console.log('시작일이 선택요일에 포함되지 않음');
+    return res
+      .status(400)
+      .json({ msg: '시작일이 선택요일에 포함되지 않습니다.' });
   }
-    try {
-      const startDatesByDays = await getStartDate(days, startDate);
-      const allSchedules = await makeAllSchedule(
-        startDatesByDays,
-        unusedpt,
-        phonenum,
-        startTime
-      );
-      const createdDbSchedules = await createAllSchedules(
-        allSchedules,
-        phonenum
-      );
-      console.log('createdDbSchedules', createdDbSchedules);
-      res.json(createdDbSchedules);
-    } catch (err) {
-      console.log(err);
-    }
+
+  try {
+    const startDatesByDays = await getStartDate(days, startDate);
+    const foundMemberId = await db.Member.findOne({
+      where: { PhoneNum: phoneNum },
+      attributes: ['MemberId'],
+    });
+    console.log("foundMemberId", foundMemberId.dataValues.MemberId)
+    const allSchedules = await makeAllSchedule(
+      startDatesByDays,
+      totalPT,
+      foundMemberId.dataValues.MemberId,
+      startTime
+    );
+    const createdDbSchedules = await createAllSchedules(allSchedules, phoneNum);
+    console.log('createdDbSchedules', createdDbSchedules);
+    res.json(createdDbSchedules);
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 schedulesController.getSchedule = async (req, res) => {
+  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
   try {
     const foundMembersWithSchedules = await db.Member.findAll({
       where: {
-        trainer_id: req.trainer,
+        TrainerId: req.trainer,
       },
       include: {
         model: db.Schedule,
       },
     });
     const arr = [];
+    console.log("foundMembersWithSchedules", foundMembersWithSchedules)
     for (let i = 0; i < foundMembersWithSchedules.length; i++) {
       arr.push(
-        foundMembersWithSchedules[i].schedules.map(cv => {
-          const d = moment(cv.date).format('YYYYMMDD') + ' ' + cv.start_time;
+        foundMembersWithSchedules[i].schedules.map(schedule => {
           return {
-            title: foundMembersWithSchedules[i].name,
-            start: moment(d).format(),
-            id: cv.phonenum,
+            title: foundMembersWithSchedules[i].Name,
+            start: schedule.StartDate,
+            id: schedule.ScheduleId,
             color: calendarColors[3].colors[i].color,
-            finish_dncd: cv.finish_dncd,
+            isFinish: schedule.IsFinish,
           };
         })
       );
     }
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!", arr)
     res.json(arr);
   } catch (err) {
     console.log(err);

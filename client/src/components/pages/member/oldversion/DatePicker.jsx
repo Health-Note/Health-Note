@@ -36,7 +36,7 @@ export default function DatePicker({ startDate, setStartDate, setEndDate }) {
           id="date-picker-endDate"
           label="회원권 종료일"
           format="yyyy/MM/dd"
-          value={end_date}
+          value={endDate}
           onChange={handleEndDateChange}
           KeyboardButtonProps={{
             'aria-label': 'change date',

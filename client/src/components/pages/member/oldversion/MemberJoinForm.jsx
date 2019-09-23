@@ -26,41 +26,41 @@ function MemberJoinForm({ member, toggleJoin, isJoining }) {
   const [name, handleName] = useInputState();
   const [phonenum, handlePhoneNum] = useInputState();
   const [gender, handleGender] = useInputState(0);
-  const [unusedpt, handleUnusedpt] = useInputState();
+  const [totalPT, handleTotalPT] = useInputState();
   const [height, handleHeight] = useInputState();
-  const [start_date, setStartDate] = useState(Date.now());
-  const [end_date, setEndDate] = useState(Date.now());
+  const [startDate, setStartDate] = useState(Date.now());
+  const [endDate, setEndDate] = useState(Date.now());
   const [days, setDays] = useState([]);
 
   const { Text } = Typography;
   const format = 'HH:mm';
 
   const handleSubmit = () => {
-    console.log('start_date', start_date);
+    console.log('startDate', startDate);
     if (
       name &&
       phonenum &&
       gender &&
-      unusedpt &&
+      totalPT &&
       height &&
-      start_date &&
-      end_date &&
+      startDate &&
+      endDate &&
       days
     ) {
       const addResult = addMember({
         name,
         phonenum,
         gender,
-        unusedpt,
+        totalPT,
         height,
-        start_date: moment(start_date).format('YYYY-MM-DD'),
-        end_date: moment(end_date).format('YYYY-MM-DD'),
+        startDate: moment(startDate).format('YYYY-MM-DD'),
+        endDate: moment(endDate).format('YYYY-MM-DD'),
       });
       console.log('addResult', addResult);
 
       if (addResult) {
         setTimeout(() => {
-          setSchedule({ unusedpt, start_date, days, phonenum });
+          setSchedule({ totalPT, startDate, days, phonenum });
         }, 2000);
       }
     } else {
@@ -106,15 +106,15 @@ function MemberJoinForm({ member, toggleJoin, isJoining }) {
           />
 
           <DatePicker
-            start_date={start_date}
-            end_date={end_date}
+            startDate={startDate}
+            endDate={endDate}
             setStartDate={setStartDate}
             setEndDate={setEndDate}
           />
           <TextField
-            id="unusedpt"
-            value={unusedpt}
-            onChange={handleUnusedpt}
+            id="totalPT"
+            value={totalPT}
+            onChange={handleTotalPT}
             margin="normal"
             label="결제피티수"
             type="email"

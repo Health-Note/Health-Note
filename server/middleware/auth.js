@@ -9,7 +9,7 @@ module.exports = function(req, res, next){
     }
     try {
         const decoded = jwt.verify(token, 'jwtSecret');
-        req.trainer = decoded.trainer.trainer_id; // 페이로드의 trainer정보를 req.trainer에 담는다.
+        req.trainer = decoded.trainer.trainerId; // 페이로드의 trainer정보를 req.trainer에 담는다.
         next();
     } catch(err) {
         res.status(401).json({msg: 'token is not valid'});

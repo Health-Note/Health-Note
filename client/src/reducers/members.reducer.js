@@ -28,19 +28,24 @@ const reducer = (state, action) => {
         ],
       };
     case REMOVE_MEMBER:
-      const filter = action.payload.map(cv => cv.key); // 삭제된 회원의 phonenum만 받아옴
-      const deletedMembers = state.members.filter(member => {
-        for (var value of filter) {
-          if (member.phonenum === value) {
-            return false;
-          }
-        }
-        return true;
-      });
       return {
         ...state,
-        members: deletedMembers,
         loading: false,
+        members: [...action.payload],
+        // const filter = action.payload.map(cv => cv.key); // 삭제된 회원의 phonenum만 받아옴
+        // const deletedMembers = state.members.filter(member => {
+        //   for (var value of filter) {
+        //     if (member.phoneNum === value) {
+        //       return false;
+        //     }
+        //   }
+        //   return true;
+        // });
+        // return {
+        //   ...state,
+        //   members: deletedMembers,
+        //   loading: false,
+        // };
       };
 
     case 'TOGGLE':
@@ -55,9 +60,9 @@ const reducer = (state, action) => {
           ? {
               ...member,
               name: action.newName,
-              phonenum: action.newPhoneNum,
+              phoneNum: action.newPhoneNum,
               gender: action.newGender,
-              unusedpt: action.newUnusedpt,
+              totalPT: action.newTotalPT,
               startDate: action.newStartDate,
               endDate: action.newEndDate,
               height: action.newHeight,

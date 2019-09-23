@@ -3,8 +3,8 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
-const db = require('../models/index');
-
+const db = require('../models2/index');
+const moment = require('moment/locale/ko')
 // @route   POST api/trainers
 // @desc    유저등록
 // @access  Public
@@ -20,6 +20,7 @@ router.post(
   async (req, res) => {
     console.log('req.body', req.body);
     const errors = validationResult(req);
+    console.log("error", errors.array())
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
@@ -27,27 +28,31 @@ router.post(
     const { nickname, email, password } = req.body;
 
     try {
-      const trainer = await db.Trainer.findOne({ where: { email: email } });
+      const account = await db.Account.findOne({ where: { Email: email } });
 
-      if (trainer) {
-        return res.status(400).json({ msg: '유저가 이미 존재합니다.' });
+      if (account) {
+        return res.status(400).json({ msg: '가입된 이메일이 이미 존재합니다.' });
       }
 
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
 
-      const newTrainer = await db.Trainer.create({
-        email,
-        nickname,
-        password: hashedPassword,
+      // 생성
+      const newAccount = await db.Account.create({
+        AgreementVersion: 1,
+        AgreementDate: moment().format('YYYY-MM-DD HH:mm:ss'),
+        Email: email,
+        Password: hashedPassword,
       });
-      const newTrainer2 = await db.Trainer.findOne({
-        where: { email: newTrainer.email },
+
+      // 생성 후 id찾기
+      const foundAccount = await db.Account.findOne({
+        where: { TrainerId: newAccount.TrainerId },
       });
 
       const payload = {
         trainer: {
-          trainer_id: newTrainer2.trainer_id, // 유저 아이디를 권한 인증 및 접근 가능
+          trainerId: foundAccount.TrainerId, // 유저 아이디를 권한 인증 및 접근 가능
         },
       };
 

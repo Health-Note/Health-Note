@@ -14,9 +14,9 @@ const Member = ({ member }) => {
     name,
     phonenum,
     gender,
-    start_date,
-    end_date,
-    unusedpt,
+    startDate,
+    endDate,
+    totalPT,
     height,
   } = member;
   const { removeMember } = useContext(MembersContext);
@@ -43,16 +43,16 @@ const Member = ({ member }) => {
         <TableCell align="right">{gender == 0 ? '여' : '남'}</TableCell>
         <TableCell align="right">{phonenum}</TableCell>
         <TableCell align="right">
-          {moment(start_date).format('YY.MM.DD')}
+          {moment(startDate).format('YY.MM.DD')}
         </TableCell>
         <TableCell align="right">
-          {moment(end_date).format('YY.MM.DD')}
+          {moment(endDate).format('YY.MM.DD')}
         </TableCell>
         <TableCell
-          style={{ color: unusedpt < 5 ? 'red' : 'blue' }}
+          style={{ color: totalPT < 5 ? 'red' : 'blue' }}
           align="right"
         >
-          {unusedpt}
+          {totalPT}
         </TableCell>
         <TableCell align="right">{height}</TableCell>
         <TableCell align="right">
