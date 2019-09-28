@@ -9,6 +9,7 @@ import {
   EDIT_MEMBER,
   MEMBER_ERROR,
   CLEAR_ERRORS,
+  CLEAR_TARGET,
 } from '../reducers/types';
 
 const initialState = {
@@ -61,7 +62,7 @@ export function MembersProvider(props) {
   // 작성자: 박종열
   // 기능: 맴버 추가
   const addMember = async formdata => {
-    // name, startDate, endDate, phonenum, gender, totalPT, height
+    // name, startTime, endTime, phonenum, gender, totalPT, height
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
@@ -104,6 +105,7 @@ export function MembersProvider(props) {
   };
 
   const clearErrors = () => dispatch({ type: CLEAR_ERRORS });
+  const clearTarget = () => dispatch({ type: CLEAR_TARGET });
 
   return (
     <MembersContext.Provider
@@ -116,6 +118,7 @@ export function MembersProvider(props) {
         error: state.error,
         target: state.target,
         clearErrors,
+        clearTarget,
       }}
     >
       <DispatchContext.Provider value={dispatch}>

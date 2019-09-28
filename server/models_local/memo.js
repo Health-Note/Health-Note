@@ -1,25 +1,27 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('trainer', {
-    TrainerId: {
-      type: DataTypes.INTEGER(10).UNSIGNED,
+  return sequelize.define('memo', {
+    MemoId: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    MemberId: {
+      type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
       references: {
-        model: 'account',
-        key: 'TrainerId'
+        model: 'member',
+        key: 'MemberId'
       }
     },
-    Name: {
-      type: DataTypes.STRING(45),
+    Text: {
+      type: DataTypes.STRING(2000),
       allowNull: false
     },
-    ManMemberCount: {
-      type: DataTypes.INTEGER(4),
-      allowNull: false
-    },
-    WomenMemberCount: {
+    IsAlarm: {
       type: DataTypes.INTEGER(4),
       allowNull: false
     },
@@ -32,6 +34,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     }
   }, {
-    tableName: 'trainer'
+    tableName: 'memo'
   });
 };

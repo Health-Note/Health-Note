@@ -16,13 +16,23 @@ import { MembersContext } from '../../../../contexts/members.context';
 import { RoutineContext } from '../../../../contexts/routine.context';
 import Alert from '../../../context/molecules/Alert';
 
+// title, start, id가 포함되어야 함.
 function Calendar() {
-  const { schedules, getAllSchedules } = useContext(ScheduleContext); // title, start, id가 포함되어야 함.
+  // useContext
+  const {
+    schedules,
+    getAllSchedules,
+    setDrawer,
+    removeSchedule,
+    setScheduleTarget,
+    target
+  } = useContext(ScheduleContext); 
   const { setSelectedDate } = useContext(RoutineContext);
   const { members } = useContext(MembersContext);
 
+  // states
   const [toggle, setToggle] = useState(false);
-  const [evtColor] = useState('orange');
+  // const [evtColor] = useState('orange');
   const [targetId, setTargetId] = useState('');
   const [scheduleList, setScheduleList] = useState([]);
   const [evt, setEvt] = useState();
@@ -49,7 +59,6 @@ function Calendar() {
 
   const handleTargetId = id => {
     // fullcalendar state에서 날짜형식은 ISO // 2017-03-16T17:40:00+09:00 이여야 함
-
     setTargetId(id);
   };
 
@@ -58,25 +67,8 @@ function Calendar() {
     const phonenum = evt.id.substr(0, 11);
     const date = moment(evt.start).format('YYYYMMDD');
     const startTime = moment(evt.start).format('HHmm');
-    console.log(phonenum, date, startTime);
     evt.remove();
-    fetch('/deletePT', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ phonenum, date, startTime }),
-    })
-      .then(res => {
-        return res.json();
-      })
-      .then(result => {
-        // 성공시 응답 0, 실패시 1
-        console.log('삭제결과:', result);
-      });
   };
-
   /**
    * 날짜 : 2019-08-07
    * 작성자: 박종열
@@ -84,20 +76,20 @@ function Calendar() {
    * adding dragable properties to external events through javascript
    */
 
-  useEffect(() => {
-    const draggableEl = document.getElementById('external-events');
-    new Draggable(draggableEl, {
-      itemSelector: '.fc-event',
-      eventData(eventEl) {
-        const title = eventEl.getAttribute('title');
-        const id = eventEl.getAttribute('data');
-        return {
-          title,
-          id,
-        };
-      },
-    });
-  }, []);
+  // useEffect(() => {
+  //   const draggableEl = document.getElementById('external-events');
+  //   new Draggable(draggableEl, {
+  //     itemSelector: '.fc-event',
+  //     eventData(eventEl) {
+  //       const title = eventEl.getAttribute('title');
+  //       const id = eventEl.getAttribute('data');
+  //       return {
+  //         title,
+  //         id,
+  //       };
+  //     },
+  //   });
+  // }, []);
 
   // 서버에서 추가로 가변테이블에 들어오는 것을 받는 라우터를 만들어야 함
   // const handleEventReceive = eventReceive => {
@@ -119,29 +111,6 @@ function Calendar() {
     const startTime = moment(info.event.start).format('HHmm'); // 변경 후 시작 시간
     const endTime = moment(info.event.end).format('HHmm'); // 변경 후 종료 시간
     const finishDNCD = info.event.extendedProps.finishDNCD ? 1 : 0; // 완료 여부 (1: true, 0: false)
-
-    fetch('/insertRoutine', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        phonenum,
-        beforDate,
-        afterDate,
-        startTime,
-        endTime,
-        finishDNCD,
-      }),
-    })
-      .then(res => {
-        return res.json();
-      })
-      .then(result => {
-        // 성공시 응답 0, 실패시 1
-        console.log(result);
-      });
   };
 
   /**
@@ -151,15 +120,23 @@ function Calendar() {
    *        삭제클릭시 phonenum, date, startTime 서버로 보냄
    */
   const handleEventClick = eventClick => {
-    const phonenum = eventClick.event.id;
+    const scheduleId = eventClick.event.id; 
+    const title = eventClick.event.title; 
+    const start = eventClick.event.start; 
+    const memberId = eventClick.event.extendedProps.memberId;
     const date = moment(eventClick.event.start).format('YYYY-MM-DD');
-    setName(eventClick.event.extendedProps.name);
+
+    setName(eventClick.event.title);
     setEvt(eventClick.event);
     handleTargetId(eventClick.event.id);
-    setToggle(!toggle); // alert창을 오픈
+    //setToggle(!toggle); // alert창을 오픈
     setStart(moment(eventClick.event.start).format('MM월 DD일'));
-    setSelectedDate(date, phonenum);
+    setSelectedDate(date, memberId);
+    setDrawer(true);
+    setScheduleTarget(parseInt(scheduleId));
+    // removeSchedule(scheduleId, memberId);
   };
+
   return (
     // 이벤트 창
     <div className="animated fadeIn p-4 demo-app">
@@ -215,7 +192,7 @@ function Calendar() {
               eventDrop={drop}
               // drop={this.drop}
               eventClick={handleEventClick}
-              eventColor={evtColor}
+              // eventColor={evtColor}
               // eventReceive={handleEventReceive}
             />
           </div>

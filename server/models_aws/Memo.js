@@ -1,30 +1,27 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('weighthistory', {
+  return sequelize.define('Memo', {
+    MemoId: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true
+    },
     MemberId: {
       type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
       references: {
-        model: 'member',
+        model: 'Member',
         key: 'MemberId'
       }
     },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      primaryKey: true
-    },
-    TargetWeight: {
-      type: DataTypes.INTEGER(4),
+    Text: {
+      type: DataTypes.STRING(2000),
       allowNull: false
     },
-    CurrentWeight: {
-      type: DataTypes.INTEGER(4),
-      allowNull: false
-    },
-    IsSuccess: {
+    IsAlarm: {
       type: DataTypes.INTEGER(4),
       allowNull: false
     },
@@ -32,11 +29,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: false
     },
-    EndDate: {
+    updatedAt: {
       type: DataTypes.DATE,
       allowNull: false
     }
   }, {
-    tableName: 'weighthistory'
+    tableName: 'Memo'
   });
 };

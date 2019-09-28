@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('member', {
+  return sequelize.define('Member', {
     MemberId: {
       type: DataTypes.BIGINT,
       allowNull: false,
@@ -9,11 +9,11 @@ module.exports = function(sequelize, DataTypes) {
       autoIncrement: true
     },
     Name: {
-      type: DataTypes.STRING(45),
+      type: DataTypes.STRING(30),
       allowNull: false
     },
     PhoneNum: {
-      type: DataTypes.CHAR(11),
+      type: DataTypes.STRING(15),
       allowNull: false
     },
     Gender: {
@@ -21,16 +21,16 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     Height: {
-      type: DataTypes.INTEGER(3).UNSIGNED,
+      type: DataTypes.INTEGER(11),
       allowNull: false
     },
     TotalPT: {
-      type: DataTypes.INTEGER(6),
+      type: DataTypes.INTEGER(11),
       allowNull: false
     },
     UsedPT: {
-      type: DataTypes.INTEGER(6),
-      allowNull: true
+      type: DataTypes.INTEGER(11),
+      allowNull: false
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -40,15 +40,19 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: false
     },
+    IsRegistered: {
+      type: DataTypes.INTEGER(4),
+      allowNull: false
+    },
     TrainerId: {
-      type: DataTypes.INTEGER(10).UNSIGNED,
+      type: DataTypes.INTEGER(11),
       allowNull: false,
       references: {
-        model: 'account',
+        model: 'Account',
         key: 'TrainerId'
       }
     }
   }, {
-    tableName: 'member'
+    tableName: 'Member'
   });
 };

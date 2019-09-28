@@ -8,21 +8,21 @@ export const RoutineContext = createContext();
 export const DispatchContext = createContext();
 
 export const RoutineProvider = props => {
-  const initialState = {
-    date: null, //멤버
-    memberName: null, //멤버
-    reps: 0, //루틴
-    sets: 0, //루틴
-    exercises: [], //루틴(모델링에 따라 변경)
-    recentWorkout: [], //루틴
-    error: null,
-  };
+  const initialState = [
+    {
+      exerciseCode: null, //멤버
+      scheduleId: null, //멤버
+      memebrId: null, //루틴
+      setCount: null, //루틴
+      repititions: null, //루틴(모델링에 따라 변경)
+    },
+  ];
 
   const [routineState, dispatch] = useReducer(routineReducer, initialState);
-  const [phonenum, setPhonenum] = useState('');
+  const [scheduleId, setScheduleId] = useState('');
 
-  const setSelectedDate = (date, phonenum) => {
-    setPhonenum(phonenum);
+  const setSelectedDate = (date, scheduleId) => {
+    setScheduleId(scheduleId);
     dispatch({ type: SET_DATE, payload: { date } });
     //getRoutine(date, phonenum);
   };
@@ -36,27 +36,30 @@ export const RoutineProvider = props => {
    *    recentWorkout: [],
    *  }
    */
-  const getRoutine = async (phonenum, date) => {
+  const getRoutine = async (scheduleId, date) => {
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
-    const res = await axios.post('/api/routine/getRoutine', { phonenum, date });
+    const res = await axios.post('/api/routine/getRoutine', {
+      scheduleId,
+      date,
+    });
     console.log(res.data);
   };
 
   /* <setRoutine api>
    *  body: phonenum, date, reps, sets, exerciseName
    */
-  const setRoutine = async (exerciseName, reps, sets) => {
+  const setRoutine = async (exerciseCode, scheduleId, memberId, reptitions, setCounts) => {
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
     const res = await axios.post('/api/routine/setRoutine', {
-      date: routineState.date,
-      phonenum,
-      reps,
-      sets,
-      exerciseName,
+      exerciseCode,
+      scheduleId,
+      memberId,
+      setCounts,
+      reptitions,
     });
     console.log(res.data);
   };

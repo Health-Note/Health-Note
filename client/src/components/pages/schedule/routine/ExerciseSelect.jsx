@@ -1,32 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TreeSelect, Input, InputNumber } from 'antd';
+import axios from 'axios';
+import setAuthToken from '../../../../utils/setAuthToken';
 
 const { TreeNode } = TreeSelect;
 
-const Exercises = {
-  가슴: ['벤치프레스', '펙덱플라이', '덤벨프레스', '덤벨플라이', '푸쉬업'],
-  등: ['턱걸이', '바벨로우', '렛풀다운'],
-  하체: ['스쿼트', '프론트스쿼트', '런지'],
-  어깨: ['밀리터리프레스', '덤벨프레스', '사이드 레터럴 레이즈'],
-  삼두: [
-    '트라이셉스 푸쉬 다운',
-    '원 암 리버스 푸쉬 다운',
-    '라잉 트라이셉스 익스텐션',
-    '트라이셉스 킥 백',
-    '트라이셉스 익스텐션',
-    '트라이셉스 딥스',
-  ],
-  이두: ['바벨컬', '덤벨컬'],
-  유산소: ['러닝', '바이크'],
-};
+const ExerciseSelect = ({getReptitions, getSetCount, getExerciseCode}) => {
+  if (localStorage.token) {
+    setAuthToken(localStorage.token);
+  }
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await axios('/api/exercises/getExercises');
+      setExercises(res.data);
+    };
+    fetchData();
+  }, []);
 
-const ExerciseSelect = () => {
-  const [value, setValue] = useState('');
   const InputGroup = Input.Group;
+  const [exercises, setExercises] = useState([]); // 최초 fetch용
+  const [selectedExercise, setSelectedExercise] = useState('');
+  const [reptitions, setReptitions] = useState('');
+  const [setCounts, setSetCount] = useState('');
 
-  const onChange = value => {
-    console.log(value);
-    setValue(value);
+  const handleSelectExercise = code => {
+    getExerciseCode(code);
+  };
+
+  const handleReptitions = repitions => {
+    getReptitions(repitions);
+  };
+
+  const handleSetCount = setCount => {
+    getSetCount(setCount);
   };
 
   return (
@@ -34,36 +40,102 @@ const ExerciseSelect = () => {
       <TreeSelect
         showSearch
         style={{ width: '60%' }}
-        value={value}
+        value={selectedExercise}
         dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
         placeholder="Please select"
         allowClear
         treeDefaultExpandAll
-        onChange={onChange}
+        onChange={handleSelectExercise}
       >
-        <TreeNode value="가슴" title="가슴" key="가슴">
-          {Exercises.가슴.map(cv => (
-            <TreeNode value={cv} title={cv} key={cv} />
-          ))}
+        <TreeNode title="가슴" key="가슴">
+          {exercises
+            .filter(exercise => exercise.Target === '가슴')
+            .map(cv => (
+              <TreeNode
+                value={cv.ExerciseCode}
+                title={cv.ExerciseName}
+                key={cv.ExerciseName}
+              />
+            ))}
         </TreeNode>
-
-        <TreeNode value="parent 1-1" title="parent 1-1" key="random2">
-          <TreeNode
-            value="sss"
-            title={<b style={{ color: '#08c' }}>sss</b>}
-            key="random3"
-          />
+        <TreeNode title="하체" key="하체">
+          {exercises
+            .filter(exercise => exercise.Target === '하체')
+            .map(cv => (
+              <TreeNode
+                value={cv.ExerciseCode}
+                title={cv.ExerciseName}
+                key={cv.ExerciseName}
+              />
+            ))}
+        </TreeNode>
+        <TreeNode title="등" key="등">
+          {exercises
+            .filter(exercise => exercise.Target === '하체')
+            .map(cv => (
+              <TreeNode
+                value={cv.ExerciseCode}
+                title={cv.ExerciseName}
+                key={cv.ExerciseName}
+              />
+            ))}
+        </TreeNode>
+        <TreeNode title="어깨" key="어깨">
+          {exercises
+            .filter(exercise => exercise.Target === '어깨')
+            .map(cv => (
+              <TreeNode
+                value={cv.ExerciseCode}
+                title={cv.ExerciseName}
+                key={cv.ExerciseName}
+              />
+            ))}
+        </TreeNode>
+        <TreeNode title="복부" key="복부">
+          {exercises
+            .filter(exercise => exercise.Target === '복부')
+            .map(cv => (
+              <TreeNode
+                value={cv.ExerciseCode}
+                title={cv.ExerciseName}
+                key={cv.ExerciseName}
+              />
+            ))}
+        </TreeNode>
+        <TreeNode title="이두" key="이두">
+          {exercises
+            .filter(exercise => exercise.Target === '이두')
+            .map(cv => (
+              <TreeNode
+                value={cv.ExerciseCode}
+                title={cv.ExerciseName}
+                key={cv.ExerciseName}
+              />
+            ))}
+        </TreeNode>
+        <TreeNode title="삼두" key="삼두">
+          {exercises
+            .filter(exercise => exercise.Target === '삼두')
+            .map(cv => (
+              <TreeNode
+                value={cv.ExerciseCode}
+                title={cv.ExerciseName}
+                key={cv.ExerciseName}
+              />
+            ))}
         </TreeNode>
       </TreeSelect>
       <InputNumber
+        value={setCounts}
+        onChange={handleSetCount}
         style={{ width: '20%' }}
         placeholder={'세트'}
-        defaultValue={0}
       />
       <InputNumber
+        value={reptitions}
+        onChange={handleReptitions}
         style={{ width: '20%' }}
         placeholder={'반복'}
-        defaultValue={0}
       />
     </InputGroup>
   );

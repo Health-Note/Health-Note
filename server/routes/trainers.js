@@ -3,8 +3,8 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
-const db = require('../models2/index');
-const moment = require('moment/locale/ko')
+const db = require('../models_aws/index');
+const moment = require('moment')
 // @route   POST api/trainers
 // @desc    유저등록
 // @access  Public
@@ -38,9 +38,10 @@ router.post(
       const hashedPassword = await bcrypt.hash(password, salt);
 
       // 생성
+      const agreementDate = moment().format('YYYY-MM-DD HH:mm:ss');
       const newAccount = await db.Account.create({
         AgreementVersion: 1,
-        AgreementDate: moment().format('YYYY-MM-DD HH:mm:ss'),
+        AgreementDate: agreementDate,
         Email: email,
         Password: hashedPassword,
       });

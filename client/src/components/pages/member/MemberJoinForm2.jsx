@@ -61,9 +61,9 @@ const MemberJoinForm2 = ({ form, toggle }) => {
         setTimeout(() => {
           setSchedule({
             totalPT: values.totalPT,
-            startDate: moment(startDate).format('YYYY-MM-DD'),
+            firstDate: moment(startDate).format('YYYY-MM-DD'),
             days,
-            startTime: [mon, tue, wed, thu, fri, sat, sun].filter(cv => cv), // true만 고르기
+            times: [mon, tue, wed, thu, fri, sat, sun].filter(cv => cv), // true만 고르기
             phoneNum: values.phoneNum,
           });
         }, 2000);
@@ -188,7 +188,7 @@ const MemberJoinForm2 = ({ form, toggle }) => {
                       (cv === 6 && '토') ||
                       (cv === 7 && '일')}
                   </span>
-                  {getFieldDecorator('day' + +cv, {
+                  {getFieldDecorator('day' + cv, {
                     rules: [{ required: true, message: '시간을 입력하세요' }],
                   })(
                     <TimePicker

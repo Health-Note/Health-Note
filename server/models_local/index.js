@@ -10,14 +10,14 @@ const sequelize = new Sequelize('healthnote', 'jongyeol', 'Whdduf123!', {
   dialectOptions: {
     useUTC: false, //for reading from database
     dateStrings: true,
-    typeCast: function (field, next) { // for reading from database
+    typeCast: function(field, next) {
       if (field.type === 'DATETIME') {
-        return field.string()
+        return field.string();
       }
-        return next()
-      },
+      return next();
+    },
   },
-  timezone: '+09:00'
+  timezone: '+09:00',
 });
 const db = {};
 
@@ -26,6 +26,7 @@ db['Account'] = sequelize.import(path.join(__dirname, 'account.js'));
 db['Trainer'] = sequelize.import(path.join(__dirname, 'trainer.js'));
 db['Schedule'] = sequelize.import(path.join(__dirname, 'schedule.js'));
 db['Routine'] = sequelize.import(path.join(__dirname, 'routine.js'));
+db['Exercise'] = sequelize.import(path.join(__dirname, 'exercise.js'));
 db.sequelize = sequelize;
 
 db.Schedule.belongsTo(db.Member, { foreignKey: 'MemberId' });

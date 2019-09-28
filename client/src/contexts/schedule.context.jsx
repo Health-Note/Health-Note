@@ -1,37 +1,51 @@
-import React, { createContext, useReducer, useContext } from 'react';
+import React, { createContext, useReducer, useState } from 'react';
 import scheduleReducer from '../reducers/schedule.reducer.js';
-import Axios from 'axios';
+import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken';
-
-import { SET_SCHEDULE, GET_SCHEDULES } from '../reducers/types';
+import {
+  SET_SCHEDULE,
+  GET_SCHEDULES,
+  SET_SCHEDULE_TARGET,
+} from '../reducers/types';
+import useToggle from '../hooks/useToggle';
 
 export const ScheduleContext = createContext();
 export const DispatchContext = createContext();
 
-const initialState = [
-  {
-    title: null,
-    id: null, // phonenum
-    start: null,
-    color: null,
-    finish_dncd: false,
-  },
-];
+const initialState = {
+  schedules: [
+    {
+      title: null,
+      id: null, // phonenum
+      start: null,
+      color: null,
+      finish_dncd: false,
+      memberId: null,
+    },
+  ],
+};
 
 export const ScheduleProvider = props => {
+  const [drawerBoolean, setDrawer] = useState(false);
+
+  const setScheduleTarget = (scheduleId) => {
+    dispatch({
+      type: SET_SCHEDULE_TARGET,
+      payload: { scheduleId },
+    });
+  };
+
   const setSchedule = async data => {
     // totalPT, startDate, days, phonenum
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
-
     const settings = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     };
-
     try {
-      const res = await Axios.post(
+      const res = await axios.post(
         '/api/schedules/setSchedule',
         data,
         settings
@@ -48,7 +62,7 @@ export const ScheduleProvider = props => {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await Axios.get('/api/schedules/getAllSchedules');
+      const res = await axios.get('/api/schedules/getAllSchedules');
       dispatch({ type: GET_SCHEDULES, payload: res.data });
       console.log('schedule.context/getAllSchedules/res.data', res.data);
     } catch (err) {
@@ -56,15 +70,37 @@ export const ScheduleProvider = props => {
     }
   };
 
-  const [schedules, dispatch] = useReducer(scheduleReducer, initialState);
+  const removeSchedule = async (scheduleId, memberId) => {
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+    }
+    try {
+      const res = await axios.post('/api/schedules/removeSchedule', {
+        scheduleId,
+        memberId,
+      });
+      console.log('removeSchedule', res.data);
+    } catch (err) {
+      console.log('removeSchedule', err);
+    }
+  };
+
+  const [state, dispatch] = useReducer(scheduleReducer, initialState);
 
   return (
     <ScheduleContext.Provider
-      value={{ schedules, setSchedule, getAllSchedules }}
+      value={{
+        schedules: state.schedules, // 전체 스케줄 state
+        target: state.target,
+        setScheduleTarget, // 이벤트 클릭시 해당 이벤트를 state에 킵해둠
+        setSchedule, // 멤버추가시 스케줄 추가
+        getAllSchedules, // 스케줄 전체 받아오기
+        drawerBoolean, // 드로어 true or false
+        setDrawer, // 드로어 토글
+        removeSchedule, // 스케줄 삭제
+      }}
     >
       <DispatchContext.Provider value={dispatch}>
-        {' '}
-        {/*dispatch를 계속해서 만들어내지 않게 객체형태로 보내지 않는다 */}
         {props.children}
       </DispatchContext.Provider>
     </ScheduleContext.Provider>

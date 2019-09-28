@@ -5,6 +5,7 @@ import {
   EDIT_MEMBER,
   MEMBER_ERROR,
   CLEAR_ERRORS,
+  CLEAR_TARGET,
 } from './types';
 
 const reducer = (state, action) => {
@@ -19,7 +20,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         loading: false,
-        target: action.payload.name,
+        target: action.payload.Name,
         members: [
           {
             ...action.payload, // 멤버 추가 (배열안에 객체 추가)
@@ -31,21 +32,8 @@ const reducer = (state, action) => {
       return {
         ...state,
         loading: false,
+        target: "deleted",
         members: [...action.payload],
-        // const filter = action.payload.map(cv => cv.key); // 삭제된 회원의 phonenum만 받아옴
-        // const deletedMembers = state.members.filter(member => {
-        //   for (var value of filter) {
-        //     if (member.phoneNum === value) {
-        //       return false;
-        //     }
-        //   }
-        //   return true;
-        // });
-        // return {
-        //   ...state,
-        //   members: deletedMembers,
-        //   loading: false,
-        // };
       };
 
     case 'TOGGLE':
@@ -77,6 +65,7 @@ const reducer = (state, action) => {
         error: action.payload,
       };
     case CLEAR_ERRORS:
+    case CLEAR_TARGET:
       return {
         ...state,
         error: null,

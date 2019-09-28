@@ -1,9 +1,9 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('schedule', {
+  return sequelize.define('Schedule', {
     ScheduleId: {
-      type: DataTypes.INTEGER(10).UNSIGNED,
+      type: DataTypes.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
@@ -13,15 +13,15 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true,
       references: {
-        model: 'member',
+        model: 'Member',
         key: 'MemberId'
       }
     },
-    StartDate: {
+    StartTime: {
       type: DataTypes.DATE,
       allowNull: false
     },
-    EndDate: {
+    EndTime: {
       type: DataTypes.DATE,
       allowNull: false
     },
@@ -30,18 +30,18 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     Day: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.INTEGER(4),
       allowNull: false
     },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false
     },
-    IsTemp: {
-      type: DataTypes.TEXT,
+    updatedAt: {
+      type: DataTypes.DATE,
       allowNull: false
     }
   }, {
-    tableName: 'schedule'
+    tableName: 'Schedule'
   });
 };

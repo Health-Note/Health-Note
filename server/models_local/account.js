@@ -3,17 +3,17 @@
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('account', {
     TrainerId: {
-      type: DataTypes.INTEGER(10).UNSIGNED,
+      type: DataTypes.INTEGER(11),
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
     },
     AgreementDate: {
       type: DataTypes.DATE,
       allowNull: false
     },
     Email: {
-      type: DataTypes.STRING(45),
+      type: DataTypes.STRING(50),
       allowNull: false
     },
     Password: {
@@ -29,7 +29,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     AgreementVersion: {
-      type: DataTypes.INTEGER(3).UNSIGNED,
+      type: DataTypes.INTEGER(4),
       allowNull: false,
       references: {
         model: 'agreement',

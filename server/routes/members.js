@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
-const db = require('../models2/index');
+const db = require('../models_aws/index');
 const auth = require('../middleware/auth');
 
 router.post('/insertMember', auth, async (req, res) => {
@@ -23,11 +23,12 @@ router.post('/insertMember', auth, async (req, res) => {
       PhoneNum: phoneNum,
       Name: name,
       Gender: gender,
-      StartDate: startDate,
-      EndDate: '2019-09-24',
+      StartTime: startDate,
+      EndTime: '2019-09-24',
       TotalPT: totalPT,
       UsedPT: 0,
       Height: height,
+      IsRegistered: true,
       TrainerId: req.trainer,
     });
     res.json(newMember);

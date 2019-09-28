@@ -1,31 +1,30 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('routine', {
+  return sequelize.define('Routine', {
     ExerciseCode: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       references: {
-        model: 'exercise',
+        model: 'Exercise',
         key: 'ExerciseCode'
       }
     },
     ScheduleId: {
-      type: DataTypes.INTEGER(10).UNSIGNED,
+      type: DataTypes.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       references: {
-        model: 'schedule',
+        model: 'Schedule',
         key: 'ScheduleId'
       }
     },
     MemberId: {
       type: DataTypes.BIGINT,
       allowNull: false,
-      primaryKey: true,
       references: {
-        model: 'schedule',
+        model: 'Schedule',
         key: 'MemberId'
       }
     },
@@ -46,6 +45,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     }
   }, {
-    tableName: 'routine'
+    tableName: 'Routine'
   });
 };

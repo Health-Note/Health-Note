@@ -1,23 +1,38 @@
-import moment from 'moment';
-import { SET_SCHEDULE, GET_SCHEDULES } from './types';
+import { SET_SCHEDULE, GET_SCHEDULES, SET_SCHEDULE_TARGET } from './types';
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case SET_SCHEDULE_TARGET:
+      return {
+        schedules: state.schedules.map(schedule => {
+          if (schedule.id === action.payload.scheduleId) {
+            return {
+              ...schedule,
+              target: true,
+              borderColor: 'blue',
+            };
+          } else {
+            return {
+              ...schedule,
+              target: false,
+              borderColor: 'white',
+            };
+          }
+        }),
+      };
+
     case GET_SCHEDULES:
       const allSchedules = action.payload;
-      const result = allSchedules.reduce((acc, cv) => acc.concat(cv), []); // 이중배열 => 일차원배열
-      //   for (let i = 0; i < allSchedules.length - 1; i++) {
-      //     allSchedules[0].concat(allSchedules[i + 1]);
-      // }
-      console.log(result);
-      return result;
-    case SET_SCHEDULE:
-      return [
+      const schedules = allSchedules.reduce((acc, cv) => acc.concat(cv), []); // 이중배열 => 일차원배열
+      return {
         ...state,
-        {
-          ...action.payload,
-        },
-      ];
+        schedules,
+      };
+    case SET_SCHEDULE:
+      return {
+        ...state,
+        schedules: [...state.schedules, ...action.payload],
+      };
     case 'TOGGLE':
       console.log(action.id);
       return state.map(schedule =>

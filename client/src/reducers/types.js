@@ -16,11 +16,13 @@ export const REMOVE_MEMBER = 'REMOVE_MEMBER';
 export const EDIT_MEMBER = 'EDIT_MEMBER';
 export const MEMBER_ERROR = 'MEMBER_ERROR';
 
+
 // 스케줄
 export const SET_FIXED_SCHEDULE = 'SET_FIXED_SCHEDULE';
 export const GET_FIXED_SCHEDULE = 'GET_FIXED_SCHEDULE';
 export const SET_SCHEDULE = 'SET_SCHEDULE';
 export const GET_SCHEDULES = 'GET_SCHEDULES';
+export const SET_SCHEDULE_TARGET = 'SET_SCHEDULE_TARGET';
 
 // 루틴
 export const SET_DATE = 'SET_DATE';
@@ -28,6 +30,8 @@ export const GET_ROUTINE = 'GET_ROUTINE';
 
 // 회원분석
 
+// 타겟 초기화
+export const CLEAR_TARGET = 'CLEAR_TARGET';
 
 // 에러 초기화
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';

@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Table, Button, Icon } from 'antd';
+import uuid from 'uuid/v4'
 import { MembersContext } from '../../../contexts/members.context';
+import { AlertContext } from '../../../contexts/alert.context';
+import { useIsMount } from '../../../hooks/useIsMount';
 
 const onChange = (pagination, filters, sorter) => {
   console.log('params', pagination, filters, sorter);
@@ -42,9 +45,12 @@ const columns = [
 ];
 
 const MemberTable = ({ toggle }) => {
-  const { members, error, getMember, removeMember } = useContext(
+  const isMount = useIsMount();
+  
+  const { members, error, getMember, removeMember, target, clearErrors, clearTarget } = useContext(
     MembersContext
   );
+  const { setAlert } = useContext(AlertContext);
 
   const [memberData, setMemberData] = useState([]);
   const [checkedRows, setChedckedRows] = useState([]);
@@ -52,6 +58,26 @@ const MemberTable = ({ toggle }) => {
   useEffect(() => {
     getMember();
   }, []);
+
+  useEffect(() => {
+    if (target && target !== "deleted") {
+      setAlert(target + '회원님이 목록에 추가되었습니다.', 'success', uuid());
+      clearTarget();
+    } 
+  }, [target]);
+
+  useEffect(() => {
+    if(target === "deleted"){
+      setAlert('삭제에 성공했습니다.', 'success', uuid());
+    }
+  }, [target]);
+
+  useEffect(() => {
+    if (error) {
+      setAlert(error, 'error', uuid());
+      clearErrors();
+    }
+  }, [error]);
 
   useEffect(() => {
     const memberRow = members.map(member => {

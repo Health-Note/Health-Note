@@ -1,29 +1,21 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('exercise', {
+  return sequelize.define('Exercise', {
     ExerciseCode: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       primaryKey: true
     },
     ExerciseName: {
-      type: DataTypes.STRING(45),
+      type: DataTypes.STRING(20),
       allowNull: false
     },
     Target: {
-      type: DataTypes.STRING(45),
-      allowNull: false
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING(10),
       allowNull: false
     }
   }, {
-    tableName: 'exercise'
+    tableName: 'Exercise'
   });
 };
