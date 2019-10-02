@@ -15,6 +15,7 @@ import moment from 'moment';
 import DaySelect from './CheckBox';
 import { MembersContext } from '../../../contexts/members.context';
 import { ScheduleContext } from '../../../contexts/schedule.context';
+import { AlertContext } from '../../../contexts/alert.context';
 
 const format = 'HH:mm';
 
@@ -32,6 +33,7 @@ const options = [
 const MemberJoinForm2 = ({ form, toggle }) => {
   const { addMember } = useContext(MembersContext);
   const { setSchedule } = useContext(ScheduleContext);
+  const { setAlert } = useContext(AlertContext);
 
   // const [name, handleName] = useInputState("");
   // const [phonenum, handlePhoneNum] = useInputState("");
@@ -39,7 +41,7 @@ const MemberJoinForm2 = ({ form, toggle }) => {
   // const [gender, handleGender] = useInputState("");
   // const [height, handleHeight] = useInputState("");
 
-  const [startDate] = useState(moment()); // 시작시간
+  const [startDate, setStartDate] = useState(moment()); // 시작시간
   const [days, setDays] = useState([]); // 선택된 요일들, 배열
   const [mon, setMon] = useState(null); // 시간
   const [tue, setTue] = useState(null);
@@ -50,11 +52,20 @@ const MemberJoinForm2 = ({ form, toggle }) => {
   const [sun, setSun] = useState(null);
   const { getFieldDecorator } = form;
 
+  const onChangeDate = (date) => {
+    setStartDate(date.format("YYYY-MM-DD"))
+    console.log(date.format("E"))
+  }
+
   const handleSubmit = e => {
     e.preventDefault();
 
     form.validateFields((err, values) => {
-      console.log(values);
+      if(!days.includes(moment(startDate).isoWeekday())){
+        console.log("시작일이 요일에 포함x");
+        setAlert("시작일이 선택 요일에 포함되지 않습니다.", "error")
+        return
+      }
       if (!err) {
         addMember({
           ...values,
@@ -150,7 +161,7 @@ const MemberJoinForm2 = ({ form, toggle }) => {
             {getFieldDecorator('startDate', {
               initialValue: startDate,
               rules: [{ required: true, message: '시작일을 입력하세요' }],
-            })(<DatePicker locale={locale} />)}
+            })(<DatePicker onChange={onChangeDate} locale={locale} />)}
           </Form.Item>
         </Descriptions.Item>
         <Descriptions.Item label="등록PT수">

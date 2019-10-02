@@ -141,14 +141,14 @@ schedulesController.setSchedule = async (req, res) => {
     'days: ',
     days,
     'date: ',
-    moment(firstDate).day(),
+    moment(firstDate).isoWeekday(),
     'time: ',
     times,
     'totalPT',
     totalPT
-  );
+  ); 
 
-  if (!days.includes(moment(firstDate).day())) {
+  if (!days.includes(moment(firstDate).isoWeekday())) {
     console.log('시작일이 선택요일에 포함되지 않음');
     return res
       .status(400)
