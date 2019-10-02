@@ -47,7 +47,7 @@ const columns = [
 const MemberTable = ({ toggle }) => {
   const isMount = useIsMount();
   
-  const { members, error, getMember, removeMember, target, clearErrors, clearTarget } = useContext(
+  const { members, error, getMember, removeMember, targetMember, clearErrors, clearTarget } = useContext(
     MembersContext
   );
   const { setAlert } = useContext(AlertContext);
@@ -60,17 +60,17 @@ const MemberTable = ({ toggle }) => {
   }, []);
 
   useEffect(() => {
-    if (target && target !== "deleted") {
-      setAlert(target + '회원님이 목록에 추가되었습니다.', 'success', uuid());
+    if (targetMember && targetMember !== "deleted") {
+      setAlert(targetMember + '회원님이 목록에 추가되었습니다.', 'success', uuid());
       clearTarget();
     } 
-  }, [target]);
+  }, [targetMember]);
 
   useEffect(() => {
-    if(target === "deleted"){
+    if(targetMember === "deleted"){
       setAlert('삭제에 성공했습니다.', 'success', uuid());
     }
-  }, [target]);
+  }, [targetMember]);
 
   useEffect(() => {
     if (error) {

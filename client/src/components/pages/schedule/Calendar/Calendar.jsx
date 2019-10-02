@@ -133,7 +133,7 @@ function Calendar() {
     setStart(moment(eventClick.event.start).format('MM월 DD일'));
     setSelectedDate(date, memberId);
     setDrawer(true);
-    setScheduleTarget(parseInt(scheduleId));
+    setScheduleTarget(parseInt(scheduleId), parseInt(memberId));
     // removeSchedule(scheduleId, memberId);
   };
 

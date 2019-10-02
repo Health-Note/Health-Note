@@ -50,29 +50,22 @@ export const RoutineProvider = props => {
   /* <setRoutine api>
    *  body: phonenum, date, reps, sets, exerciseName
    */
-  const setRoutine = async (exerciseCode, scheduleId, memberId, reptitions, setCounts) => {
+  const insertRoutine = async (exercises) => {
+    console.log(exercises);
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
     const res = await axios.post('/api/routine/setRoutine', {
-      exerciseCode,
-      scheduleId,
-      memberId,
-      setCounts,
-      reptitions,
+      exercises
     });
     console.log(res.data);
   };
 
   return (
     <RoutineContext.Provider
-      value={{ setSelectedDate, setRoutine, getRoutine, routineState }}
+      value={{ setSelectedDate, insertRoutine, getRoutine, routineState }}
     >
-      <DispatchContext.Provider value={dispatch}>
-        {' '}
-        {/* dispatch를 계속해서 만들어내지 않게 객체형태로 보내지 않는다 */}
-        {props.children}
-      </DispatchContext.Provider>
+      {props.children}
     </RoutineContext.Provider>
   );
 };

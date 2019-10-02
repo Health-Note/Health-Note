@@ -21,9 +21,6 @@ const MyDrawer = props => {
         width={400}
       >
         {props.children}
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
       </Drawer>
     </div>
   );

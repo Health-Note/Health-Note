@@ -1,0 +1,13 @@
+.sortableBox {
+    border-radius: 2px;
+    align-items: center;
+    display: flex;
+    height: auto;
+    position: relative;
+    width: 100%;
+    z-index: 0;
+    background-color: #fff;
+    border-bottom: 1px solid #efefef;
+    font-weight: 400;
+    color: #333;
+  }

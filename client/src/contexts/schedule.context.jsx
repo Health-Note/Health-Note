@@ -13,6 +13,10 @@ export const ScheduleContext = createContext();
 export const DispatchContext = createContext();
 
 const initialState = {
+  selectedSchedule: {
+    scheduleId: null,
+    memberId: null
+  },
   schedules: [
     {
       title: null,
@@ -20,6 +24,8 @@ const initialState = {
       start: null,
       color: null,
       finish_dncd: false,
+      target: null,
+      borderColor: null,
       memberId: null,
     },
   ],
@@ -28,10 +34,10 @@ const initialState = {
 export const ScheduleProvider = props => {
   const [drawerBoolean, setDrawer] = useState(false);
 
-  const setScheduleTarget = (scheduleId) => {
+  const setScheduleTarget = (scheduleId, memberId) => {
     dispatch({
       type: SET_SCHEDULE_TARGET,
-      payload: { scheduleId },
+      payload: { scheduleId, memberId },
     });
   };
 
@@ -90,6 +96,7 @@ export const ScheduleProvider = props => {
   return (
     <ScheduleContext.Provider
       value={{
+        targetSchedule: state.selectedSchedule,
         schedules: state.schedules, // 전체 스케줄 state
         target: state.target,
         setScheduleTarget, // 이벤트 클릭시 해당 이벤트를 state에 킵해둠

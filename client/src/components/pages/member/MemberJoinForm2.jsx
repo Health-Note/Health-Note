@@ -18,6 +18,7 @@ import { ScheduleContext } from '../../../contexts/schedule.context';
 
 const format = 'HH:mm';
 
+// 체크박스 옵션
 const options = [
   { label: '월', value: 1 },
   { label: '화', value: 2 },
@@ -37,9 +38,10 @@ const MemberJoinForm2 = ({ form, toggle }) => {
   // const [totalPT, handleTotalPT] = useInputState("");
   // const [gender, handleGender] = useInputState("");
   // const [height, handleHeight] = useInputState("");
-  const [startDate] = useState(moment());
-  const [days, setDays] = useState([]);
-  const [mon, setMon] = useState(null);
+
+  const [startDate] = useState(moment()); // 시작시간
+  const [days, setDays] = useState([]); // 선택된 요일들, 배열
+  const [mon, setMon] = useState(null); // 시간
   const [tue, setTue] = useState(null);
   const [wed, setWed] = useState(null);
   const [thu, setThu] = useState(null);

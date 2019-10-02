@@ -116,7 +116,7 @@ export function MembersProvider(props) {
         removeMember,
         editMember,
         error: state.error,
-        target: state.target,
+        targetMember: state.target,
         clearErrors,
         clearTarget,
       }}

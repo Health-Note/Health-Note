@@ -4,6 +4,10 @@ const reducer = (state, action) => {
   switch (action.type) {
     case SET_SCHEDULE_TARGET:
       return {
+        selectedSchedule: {
+          scheduleId: action.payload.scheduleId,
+          memberId: action.payload.memberId,
+        },
         schedules: state.schedules.map(schedule => {
           if (schedule.id === action.payload.scheduleId) {
             return {
