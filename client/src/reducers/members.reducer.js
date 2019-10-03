@@ -20,7 +20,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         loading: false,
-        target: action.payload.Name,
+        target: action.payload.name,
         members: [
           {
             ...action.payload, // 멤버 추가 (배열안에 객체 추가)

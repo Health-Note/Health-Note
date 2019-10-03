@@ -1,78 +1,81 @@
 const moment = require('moment');
-require('moment-timezone');
-moment.tz.setDefault('Asia/Seoul');
 const db = require('../models_aws/index');
 const schedulesController = {};
 const calendarColors = require('../utils/seedColors');
 
-const makeFirstWeekDates = (days, firstDate) => {
+const makeFirstWeekDates = (days, firstDate, times) => {
   let startDay = null;
-  const firstDateFormated = moment(firstDate).format();
+  const firstDateFormated = moment(firstDate).format("YYYY-MM-DD");
+  console.log("firstDateFormated", firstDateFormated);
 
-  switch (moment(firstDate).format('dddd')) {
-    case 'Monday':
-      firstDate = 1;
+  switch (moment(firstDate).isoWeekday()) {
+    case 1:
+      startDay = 1;
       break;
-    case 'Tuesday':
-      firstDate = 2;
+    case 2:
+      startDay = 2;
       break;
-    case 'Wednesday':
-      firstDate = 3;
+    case 3:
+      startDay = 3;
       break;
-    case 'Thursday':
-      firstDate = 4;
+    case 4:
+      startDay = 4;
       break;
-    case 'Friday':
-      firstDate = 5;
+    case 5:
+      startDay = 5;
       break;
-    case 'Saturday':
-      firstDate = 6;
+    case 6:
+      startDay = 6;
       break;
-    case 'Sunday':
-      firstDate = 7;
+    case 7:
+      startDay = 7;
       break;
     default:
       break;
   }
 
-  const daysToDateArr = [];
+  const firstWeekDates = [];
   for (let i = 0; i < days.length; i++) {
+    // ex) 선택요일이 수요일인데 수요일 날짜 구할때
     if (startDay === days[i]) {
-      const tempFirstDate1 = moment(firstDateFormated);
-      daysToDateArr.push(tempFirstDate1.format());
-      console.log(
-        '===================daysToDateArr==================',
-        daysToDateArr
-      );
+      const tempString1= firstDateFormated + " " + moment(times[i]).format("HH:mm");
+      const tempFirstDate1 = moment(tempString1)
+      console.log("tempFirstDate1", tempFirstDate1)
+      firstWeekDates.push(tempFirstDate1);
     } else if (startDay > days[i]) {
-      // ex) 수요일인데 그 다음주 월요일 구할때
-      const tempFirstDate2 = moment(firstDateFormated);
+      // ex) 선택요일이 수요일인데 그 다음주 월요일 구할때
+      const tempString2 = firstDateFormated+ " " + moment(times[i]).format("HH:mm");
+      tempFirstDate2 = moment(tempString2);
       const nextWeekDayDiff = startDay - days[i];
       tempFirstDate2.add(7 - nextWeekDayDiff, 'days');
-      daysToDateArr.push(tempFirstDate2.format());
+      firstWeekDates.push(tempFirstDate2);
     } else if (startDay < days[i]) {
-      const tempFirstDate3 = moment(firstDateFormated);
+      // ex) 선택요일이 수요일인데 이번주 금요일 구할때
+      const tempString3 = firstDateFormated+ " " + moment(times[i]).format("HH:mm");
+      const tempFirstDate3 = moment(tempString3)
       tempFirstDate3.add(days[i] - startDay, 'days');
-      daysToDateArr.push(tempFirstDate3.format());
+      firstWeekDates.push(tempFirstDate3);
     }
   }
-  return daysToDateArr.sort();
+  let sortedArray = firstWeekDates.sort((a, b) => a.valueOf() - b.valueOf())
+  console.log( '==========firstWeekDates=====', sortedArray );
+  return sortedArray;
 };
 
-// [ 2013-07-12, , ,]
+// 전체 스케줄 날짜 구하기
 const makeAllSchedule = async (
   firstWeekDates,
   totalPT,
   foundMemberId,
   times
 ) => {
-  console.log('===============firstWeekDates===============', firstWeekDates);
   const allSchedule = [];
   const copyFirstWeekDates = []; // 복사
   const copyFirstWeekDates2 = []; // 복사
   const weekNum = Math.floor(totalPT / firstWeekDates.length); // 10 / 3 = 3
   console.log('weekNum', weekNum);
   const remainDayNum = totalPT % firstWeekDates.length;
+  console.log("remainDayNun", remainDayNum)
 
   // 첫 주 요일들의 날짜를 넣는다.
   for (let i = 0; i < firstWeekDates.length; i++) {
@@ -83,14 +86,13 @@ const makeAllSchedule = async (
 
   // 중간 주의 요일들을 넣는다.
   for (var i = 0; i < firstWeekDates.length; i++) {
-    for (let j = 1; j < weekNum; j++) {
+    for (let j = 0; j < weekNum -1; j++) {
       allSchedule.push(copyFirstWeekDates2[i].add(1, 'weeks').format());
     }
   }
 
-  console.log('===========allSchedule=========', allSchedule);
-
-  if (!remainDayNum === 0) {
+  
+  if (remainDayNum !== 0) {
     // 남은 요일들을 넣는다.
     for (let r = 0; r < remainDayNum; r++) {
       allSchedule.push(copyFirstWeekDates[r].add(weekNum, 'weeks').format());
@@ -98,25 +100,27 @@ const makeAllSchedule = async (
     allSchedule.sort();
   }
 
+  console.log('===========allSchedule=========', allSchedule);
+
   let j = 0;
   const createdAllSchedules = allSchedule.map((cv, i) => {
-    if (j === times.length) {
-      // EX) 배열로 들어온 월, 수, 금 차례로 넣어주기 위한 장치)
-      j = 0;
-    }
-    const date =
-      moment(cv).format('YYYYMMDD') +
-      ' ' +
-      moment(times[j++]).format('HHmm');
-    const finalDate = moment(date).format('YYYY-MM-DD HH:mm');
+    // if (j === times.length) {
+    //   // EX) 배열로 들어온 월, 수, 금 차례로 넣어주기 위한 장치)
+    //   j = 0;
+    // }
+    // const date =
+    //   moment(cv).format('YYYYMMDD') +
+    //   ' ' +
+    //   moment(times[j++]).format('HHmm');
+    // const finalDate = moment(date).format('YYYY-MM-DD HH:mm');
 
     return {
-      StartTime: finalDate,
+      StartTime: cv,
       MemberId: foundMemberId,
       EndTime: '0000',
       IsFinish: false,
       IsTemp: '??',
-      Day: moment(cv).format('E'),
+      Day: moment(cv).isoWeekday(),
     };
   });
 
@@ -142,9 +146,10 @@ schedulesController.setSchedule = async (req, res) => {
     days,
     'date: ',
     moment(firstDate).isoWeekday(),
-    'time: ',
+    'times: ',
     times,
-    'totalPT',
+    moment(times[0]).format("HHmm"),
+    'totalPT: ',
     totalPT
   ); 
 
@@ -156,7 +161,7 @@ schedulesController.setSchedule = async (req, res) => {
   }
 
   try {
-    const firstWeekDates = await makeFirstWeekDates(days, firstDate);
+    const firstWeekDates = await makeFirstWeekDates(days, firstDate, times);
     const foundMemberId = await db.Member.findOne({
       where: { PhoneNum: phoneNum },
       attributes: ['MemberId'],
@@ -177,7 +182,6 @@ schedulesController.setSchedule = async (req, res) => {
 };
 
 schedulesController.getSchedule = async (req, res) => {
-  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!');
   try {
     const foundMembersWithSchedules = await db.Member.findAll({
       where: {
@@ -188,7 +192,7 @@ schedulesController.getSchedule = async (req, res) => {
       },
     });
     const memberSchedules = [];
-    console.log('foundMembersWithSchedules', foundMembersWithSchedules);
+    //console.log('foundMembersWithSchedules', foundMembersWithSchedules);
     for (let i = 0; i < foundMembersWithSchedules.length; i++) {
       memberSchedules.push(
         foundMembersWithSchedules[i].Schedules.map(schedule => {
@@ -203,7 +207,7 @@ schedulesController.getSchedule = async (req, res) => {
         })
       );
     }
-    console.log('!!!!!!!!!!!!memberSchedules!!!!!!!!!!!!!!!', memberSchedules);
+    //console.log('!!!!!!!!!!!!memberSchedules!!!!!!!!!!!!!!!', memberSchedules);
     res.json(memberSchedules);
   } catch (err) {
     console.log(err);

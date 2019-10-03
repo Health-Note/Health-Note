@@ -82,12 +82,12 @@ const MemberTable = ({ toggle }) => {
   useEffect(() => {
     const memberRow = members.map(member => {
       return {
-        key: member.PhoneNum,
-        name: member.Name,
-        gender: member.Gender === 1 ? '남' : '여',
-        phoneNum: member.PhoneNum,
-        usedPT: member.UsedPT,
-        totalPT: member.TotalPT,
+        key: member.phoneNum,
+        name: member.name,
+        gender: member.gender === 1 ? '남' : '여',
+        phoneNum: member.phoneNum,
+        usedPT: member.usedPT,
+        totalPT: member.totalPT,
       };
     });
     setMemberData(memberRow);

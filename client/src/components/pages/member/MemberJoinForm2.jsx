@@ -76,7 +76,8 @@ const MemberJoinForm2 = ({ form, toggle }) => {
             totalPT: values.totalPT,
             firstDate: moment(startDate).format('YYYY-MM-DD'),
             days,
-            times: [mon, tue, wed, thu, fri, sat, sun].filter(cv => cv), // true만 고르기
+            times: [
+              , tue, wed, thu, fri, sat, sun].filter(cv => cv), // true만 고르기
             phoneNum: values.phoneNum,
           });
         }, 2000);

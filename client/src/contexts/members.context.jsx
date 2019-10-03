@@ -37,6 +37,20 @@ export const DispatchContext = createContext();
 export function MembersProvider(props) {
   const [state, dispatch] = useReducer(memberReducer, initialState);
 
+  const changeVarName = (member) => {
+    const memberObj = {};
+    memberObj['name'] = member.Name;
+    memberObj['id'] = member.MemberId;
+    memberObj['phoneNum'] = member.PhoneNum;
+    memberObj['gender'] = member.Gender;
+    memberObj['startDate'] = member.StartDate;
+    memberObj['endDate'] = member.EndDate;
+    memberObj['usedPT'] = member.UsedPT;
+    memberObj['totalPT'] = member.TotalPT;
+    memberObj['height'] = member.Height;
+    return memberObj;
+  };
+
   // 작성일: 2019.08.11
   // 작성자: 박종열
   // 기능: 트레이너들의 회원목록(이름, 등록일, 마감일, 남은pt수) 가져오기, 정적 스케줄 가져오기
@@ -52,7 +66,20 @@ export function MembersProvider(props) {
     try {
       const res = await axios.get('/api/members/getMembers', setting);
       console.log('res.data', res.data);
-      await dispatch({ type: GET_MEMBER, payload: res.data });
+      const members = res.data.map(cv => {
+        return {
+          id: cv.MemberId,
+          name: cv.Name,
+          phoneNum: cv.PhoneNum,
+          gender: cv.Gender,
+          startDate: cv.StartDate,
+          endDate: cv.EndDate,
+          usedPT: cv.UsedPT,
+          totalPT: cv.TotalPT,
+          height: cv.Height,
+        };
+      });
+      await dispatch({ type: GET_MEMBER, payload: members });
     } catch (err) {
       console.log(err);
     }
@@ -70,7 +97,8 @@ export function MembersProvider(props) {
       const res = await axios.post('/api/members/insertMember', formdata);
       if (res.data) {
         console.log('addMember_res.data', res.data);
-        dispatch({ type: ADD_MEMBER, payload: res.data });
+        const addedMemebr = await changeVarName(res.data);
+        dispatch({ type: ADD_MEMBER, payload: addedMemebr });
       } else {
         console.log('어떤 에러');
       }
@@ -88,9 +116,22 @@ export function MembersProvider(props) {
       const res = await axios.post('/api/members/removeMember', selectedRows);
       if (res.data) {
         // 삭제된 row수
-        console.log("removeMember", res.data)
-        console.log("selectedRows", selectedRows)
-        dispatch({ type: REMOVE_MEMBER, payload: res.data });
+        console.log('removeMember', res.data);
+        console.log('selectedRows', selectedRows);
+        const members = res.data.map(cv => {
+          return {
+            id: cv.MemberId,
+            name: cv.Name,
+            phoneNum: cv.PhoneNum,
+            gender: cv.Gender,
+            startDate: cv.StartDate,
+            endDate: cv.EndDate,
+            usedPT: cv.UsedPT,
+            totalPT: cv.TotalPT,
+            height: cv.Height,
+          };
+        });
+        dispatch({ type: REMOVE_MEMBER, payload: members });
       } else {
         console.log('어떤 에러');
       }
