@@ -1,13 +1,14 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { Row, Col, Divider, Typography, Affix, Button } from 'antd';
 import moment from 'moment';
+import axios from 'axios';
 import Calendar from './Calendar/Calendar';
 import { RoutineContext } from '../../../contexts/routine.context';
 import { ScheduleContext } from '../../../contexts/schedule.context';
 import SortableComponent from './routine/SortableHOC';
 import ExerciseSelect from './routine/ExerciseSelect';
 import MyDrawer from '../../context/atoms/Drawer';
-const { Text } = Typography;
+import setAuthToken from '../../../utils/setAuthToken';
 
 const Schedule = () => {
   const { drawerBoolean, setDrawer, schedules, targetSchedule } = useContext(
@@ -57,13 +58,27 @@ const Schedule = () => {
 
   // 다른멤버 선택했을 때 기존에 채우던 state초기화
   useEffect(() => {
-    setRoutines([]);
-  }, [targetSchedule.memberId]);
-
-  // db저장 (ajax)
-  const saveRoutines = () => {
-    insertRoutine(routines);
-  };
+    const getRoutines = async () => {
+      if (localStorage.token) {
+        setAuthToken(localStorage.token);
+      }
+      try {
+        const res = await axios.get(
+          `/api/routine/${targetSchedule.scheduleId}`
+        );
+        console.log("res.data", res.data)
+        if (res.data) {
+          setRoutines(res.data);
+        } else {
+          setRoutines([]);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getRoutines();
+    const routines = getRoutines();
+  }, [targetSchedule.scheduleId]);
 
   return (
     <>
@@ -116,13 +131,6 @@ const Schedule = () => {
             </Row> */}
             <Divider>루틴목록↓</Divider>
             <SortableComponent routines={routines} />
-            <Button
-              type="primary"
-              onClick={saveRoutines}
-              block
-            >
-              저장
-            </Button>
           </Col>
         </MyDrawer>
       </Row>

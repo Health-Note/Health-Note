@@ -32,7 +32,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         loading: false,
-        target: "deleted",
+        target: 'deleted',
         members: [...action.payload],
       };
 

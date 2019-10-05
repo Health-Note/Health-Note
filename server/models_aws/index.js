@@ -10,7 +10,7 @@ const sequelize = new Sequelize(
     define: {
       timestamps: true,
     },
-  }
+  } 
 );
 const db = {};
 
@@ -23,8 +23,13 @@ db['Exercise'] = sequelize.import(path.join(__dirname, 'Exercise.js'));
 db.sequelize = sequelize;
 
 db.Schedule.belongsTo(db.Member, { foreignKey: 'MemberId' });
-db.Member.belongsTo(db.Account, { foreignKey: 'TrainerId' });
 db.Member.hasMany(db.Schedule, { foreignKey: 'MemberId' });
+
+db.Member.belongsTo(db.Account, { foreignKey: 'TrainerId' });
 db.Account.hasMany(db.Member, { foreignKey: 'TrainerId' });
+
+db.Routine.belongsTo(db.Exercise, { foreignKey: 'ExerciseCode' });
+db.Exercise.hasMany(db.Routine, { foreignKey: 'ExerciseCode' });
+
 
 module.exports = db;

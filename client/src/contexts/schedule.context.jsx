@@ -7,7 +7,6 @@ import {
   GET_SCHEDULES,
   SET_SCHEDULE_TARGET,
 } from '../reducers/types';
-import useToggle from '../hooks/useToggle';
 
 export const ScheduleContext = createContext();
 export const DispatchContext = createContext();

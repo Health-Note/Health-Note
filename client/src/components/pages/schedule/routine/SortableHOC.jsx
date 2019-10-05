@@ -5,15 +5,13 @@ import {
   sortableHandle,
 } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
-import { Tag, Row, Col } from 'antd';
+import axios from 'axios';
+import { Tag, Row, Col, Button } from 'antd';
 import uuid from 'uuid/v4';
+import setAuthToken from '../../../../utils/setAuthToken';
 import './routine.css';
 
 // const DragHandle = sortableHandle(() => <span>::</span>);
-
-const makeTargetColor = ({ value }) => {
-  console.log('!!!!!!!!!', value.split('|')[0]);
-};
 
 const SortableItem = SortableElement(({ value }) => (
   <>
@@ -31,7 +29,6 @@ const SortableItem = SortableElement(({ value }) => (
               (value.split('|')[0] === '삼두' && '#aacfd0') ||
               (value.split('|')[0] === '전완' && '#55967e')
             }
-            onClick={makeTargetColor}
           >
             {value.split('|')[0]}{' '}
           </Tag>
@@ -62,13 +59,11 @@ class SortableComponent extends Component {
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    console.log(prevState.items);
-    console.log(nextProps.routines);
     if (prevState.items.length !== nextProps.routines.length) {
       return {
         items: nextProps.routines.map(
           (cv, idx) =>
-            `${cv.target}|${cv.exerciseName}|${cv.setCount}|${cv.repetitions}`
+            `${cv.target}|${cv.exerciseName}|${cv.setCount}|${cv.repetitions}|${cv.exerciseCode}|${cv.scheduleId}|${cv.memberId}`
         ),
       };
     }
@@ -80,8 +75,41 @@ class SortableComponent extends Component {
       items: arrayMove(items, oldIndex, newIndex),
     }));
   };
+
+  // db저장 (ajax)
+  insertRoutine = async () => {
+    console.log(this.state.items);
+    const routines = this.state.items.map((cv, idx) => ({
+      SetCount: cv.split('|')[2],
+      Repetitions: cv.split('|')[3],
+      ExerciseCode: cv.split('|')[4],
+      ScheduleId: cv.split('|')[5],
+      MemberId: cv.split('|')[6],
+      RoutineOrder: idx,
+    }));
+
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+    }
+    try {
+      const res = await axios.post('/api/routine', {
+        routines,
+      });
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   render() {
-    return <SortableList items={this.state.items} onSortEnd={this.onSortEnd} />;
+    return (
+      <>
+        <SortableList items={this.state.items} onSortEnd={this.onSortEnd} />
+        <Button type="primary" onClick={this.insertRoutine} block>
+          저장
+        </Button>
+      </>
+    );
   }
 }
 

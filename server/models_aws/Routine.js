@@ -12,7 +12,7 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     ScheduleId: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
       references: {
@@ -33,6 +33,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     Repetitions: {
+      type: DataTypes.INTEGER(4),
+      allowNull: false
+    },
+    RoutineOrder: {
       type: DataTypes.INTEGER(4),
       allowNull: false
     },

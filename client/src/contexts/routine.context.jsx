@@ -50,20 +50,11 @@ export const RoutineProvider = props => {
   /* <setRoutine api>
    *  body: phonenum, date, reps, sets, exerciseName
    */
-  const insertRoutine = async (exercises) => {
-    console.log(exercises);
-    if (localStorage.token) {
-      setAuthToken(localStorage.token);
-    }
-    const res = await axios.post('/api/routine/setRoutine', {
-      exercises
-    });
-    console.log(res.data);
-  };
+ 
 
   return (
     <RoutineContext.Provider
-      value={{ setSelectedDate, insertRoutine, getRoutine, routineState }}
+      value={{ setSelectedDate, getRoutine, routineState }}
     >
       {props.children}
     </RoutineContext.Provider>

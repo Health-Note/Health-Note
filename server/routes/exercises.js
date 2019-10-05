@@ -5,7 +5,6 @@ const db = require('../models_aws/index');
 router.get('/getExercises', async (req, res) => {
   try {
     const exercises = await db.Exercise.findAll({ attributes: ['ExerciseCode', 'ExerciseName', 'Target']});
-    console.log(exercises);
     res.json(exercises);
   } catch (err) {
     console.log(err);

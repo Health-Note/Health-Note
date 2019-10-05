@@ -52,32 +52,31 @@ const MemberJoinForm2 = ({ form, toggle }) => {
   const [sun, setSun] = useState(null);
   const { getFieldDecorator } = form;
 
-  const onChangeDate = (date) => {
-    setStartDate(date.format("YYYY-MM-DD"))
-    console.log(date.format("E"))
-  }
+  const onChangeDate = date => {
+    setStartDate(date.format('YYYY-MM-DD'));
+    console.log(date.format('E'));
+  };
 
   const handleSubmit = e => {
     e.preventDefault();
 
     form.validateFields((err, values) => {
-      if(!days.includes(moment(startDate).isoWeekday())){
-        console.log("시작일이 요일에 포함x");
-        setAlert("시작일이 선택 요일에 포함되지 않습니다.", "error")
-        return
+      if (!days.includes(moment(startDate).isoWeekday())) {
+        console.log('시작일이 요일에 포함x');
+        setAlert('시작일이 선택 요일에 포함되지 않습니다.', 'error');
+        return;
       }
       if (!err) {
         addMember({
           ...values,
           startDate: moment(startDate).format('YYYY-MM-DD'),
-        });
+        }); 
         setTimeout(() => {
           setSchedule({
             totalPT: values.totalPT,
             firstDate: moment(startDate).format('YYYY-MM-DD'),
             days,
-            times: [
-              , tue, wed, thu, fri, sat, sun].filter(cv => cv), // true만 고르기
+            times: [, tue, wed, thu, fri, sat, sun].filter(cv => cv), // true만 고르기
             phoneNum: values.phoneNum,
           });
         }, 2000);
