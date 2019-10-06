@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { Row, Col, Divider, Typography, Affix, Button } from 'antd';
 import moment from 'moment';
 import axios from 'axios';
+import uuid from 'uuid/v4';
 import Calendar from './Calendar/Calendar';
 import { RoutineContext } from '../../../contexts/routine.context';
 import { ScheduleContext } from '../../../contexts/schedule.context';
@@ -57,11 +58,9 @@ const Schedule = () => {
   };
 
   const removeRoutine = event => {
-    console.log(event.target.name);
     const newItems = routines.filter(
       cv => parseInt(cv.exerciseCode) !== parseInt(event.target.name)
     );
-    console.log(newItems);
     setRoutines(newItems);
   };
 
@@ -100,8 +99,7 @@ const Schedule = () => {
               .filter(schedule => schedule.target === true)
               .map(schedule => {
                 return (
-                  <Row container justify="start" align="middle">
-                    <div key={schedule.id}>
+                  <Row container justify="start" align="middle" key={uuid()}>
                       <Col lg={11}>
                         <h3 style={{ color: schedule.color }}>
                           {schedule.title} 회원
@@ -110,7 +108,6 @@ const Schedule = () => {
                       <Col lg={13}>
                         {moment(schedule.start).format('MM월 DD일 / HH시 mm분')}
                       </Col>
-                    </div>
                   </Row>
                 );
               })}

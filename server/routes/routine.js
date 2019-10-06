@@ -28,7 +28,7 @@ router.post('/', auth, async (req, res) => {
     const result = await db.Routine.bulkCreate(routines, {
       updateOnDuplicate: ['SetCount', 'Repetitions', 'RoutineOrder'],
     });
-    console.log(result);
+    return res.json(result)
   } catch (err) {
     console.log(err);
   }

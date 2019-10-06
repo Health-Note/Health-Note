@@ -9,6 +9,7 @@ import axios from 'axios';
 import { Tag, Row, Col, Button, Icon } from 'antd';
 import uuid from 'uuid/v4';
 import setAuthToken from '../../../../utils/setAuthToken';
+import { AlertContext } from '../../../../contexts/alert.context';
 import './routine.css';
 
 // const DragHandle = sortableHandle(() => <span>::</span>);
@@ -71,6 +72,7 @@ const SortableList = SortableContainer(({ items, removeRoutine }) => {
 });
 
 class SortableComponent extends Component {
+  static contextType = AlertContext;
   state = {
     items: [],
   };
@@ -102,6 +104,7 @@ class SortableComponent extends Component {
 
   // db저장 (ajax)
   insertRoutine = async () => {
+    const { setAlert } = this.context;
     console.log(this.state.items);
     const routines = this.state.items.map((cv, idx) => ({
       SetCount: cv.split('|')[2],
@@ -115,13 +118,15 @@ class SortableComponent extends Component {
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
-  
+
     try {
       const res = await axios.post('/api/routine', {
         routines,
-        scheduleId: this.props.selectedScheduleId
+        scheduleId: this.props.selectedScheduleId,
       });
-      console.log(res.data);
+      if (res.data) {
+        setAlert('저장되었습니다.', 'success');
+      }
     } catch (err) {
       console.log(err);
     }
