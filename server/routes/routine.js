@@ -8,9 +8,23 @@ const db = require('../models_aws/index');
 // @access  Public
 // @req     { exerciseCode, scheduleId, memberId, setCount, repetitions, RoutineOrder }
 router.post('/', auth, async (req, res) => {
-  const { routines } = req.body;
-  console.log(routines);
+  const { routines, scheduleId } = req.body;
+  
+  if (routines.length === 0) {
+    try {
+      const deletedResult = await db.Routine.destroy({
+        where: { ScheduleId: scheduleId },
+      });
+      return res.json(deletedResult);
+    } catch (err) {
+      console.log(err);
+      res.status(500).send('server err');
+    }
+  }
   try {
+    await db.Routine.destroy({
+      where: { ScheduleId: routines[0].ScheduleId },
+    });
     const result = await db.Routine.bulkCreate(routines, {
       updateOnDuplicate: ['SetCount', 'Repetitions', 'RoutineOrder'],
     });
@@ -38,7 +52,6 @@ router.get('/:scheduleId', auth, async (req, res) => {
       repetitions: cv.Repetitions,
       routineOrder: cv.RoutineOrder,
     }));
-
     res.json(routines);
   } catch (err) {
     console.log(err);

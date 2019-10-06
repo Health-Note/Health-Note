@@ -10,7 +10,18 @@ const sequelize = new Sequelize(
     define: {
       timestamps: true,
     },
-  } 
+    dialectOptions: {
+      useUTC: false, //for reading from database
+      dateStrings: true,
+      typeCast: function(field, next) {
+        if (field.type === 'DATETIME') {
+          return field.string();
+        }
+        return next();
+      },
+    },
+    timezone: '+09:00',
+  }
 );
 const db = {};
 
@@ -30,6 +41,5 @@ db.Account.hasMany(db.Member, { foreignKey: 'TrainerId' });
 
 db.Routine.belongsTo(db.Exercise, { foreignKey: 'ExerciseCode' });
 db.Exercise.hasMany(db.Routine, { foreignKey: 'ExerciseCode' });
-
 
 module.exports = db;

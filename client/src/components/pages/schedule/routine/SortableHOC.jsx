@@ -6,48 +6,65 @@ import {
 } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import axios from 'axios';
-import { Tag, Row, Col, Button } from 'antd';
+import { Tag, Row, Col, Button, Icon } from 'antd';
 import uuid from 'uuid/v4';
 import setAuthToken from '../../../../utils/setAuthToken';
 import './routine.css';
 
 // const DragHandle = sortableHandle(() => <span>::</span>);
 
-const SortableItem = SortableElement(({ value }) => (
-  <>
-    <Row container justify="start">
-      <div className="sortableBox">
-        <Col lg={4}>
-          <Tag
-            color={
-              (value.split('|')[0] === '가슴' && '#ffc952') ||
-              (value.split('|')[0] === '등' && '#ff7473') ||
-              (value.split('|')[0] === '하체' && '#47b8e0') ||
-              (value.split('|')[0] === '어깨' && '#cff09e') ||
-              (value.split('|')[0] === '복부' && '#84B1ED') ||
-              (value.split('|')[0] === '이두' && '#79a8a9') ||
-              (value.split('|')[0] === '삼두' && '#aacfd0') ||
-              (value.split('|')[0] === '전완' && '#55967e')
-            }
-          >
-            {value.split('|')[0]}{' '}
-          </Tag>
-        </Col>
-        <Col lg={11}>{value.split('|')[1]}</Col>
-        <Col lg={9}>
-          <Tag>{value.split('|')[2]} 세트</Tag>
-          <Tag>{value.split('|')[3]} 반복</Tag>
-        </Col>
-      </div>
-    </Row>
-  </>
-));
+const SortableItem = SortableElement(({ value, removeRoutine }) => {
+  const type = value.split('|')[0];
+  return (
+    <>
+      <Row container justify="start">
+        <div className="sortableBox">
+          <Col lg={3}>
+            <Tag
+              color={
+                (type === '가슴' && '#ffc952') ||
+                (type === '등' && '#ff7473') ||
+                (type === '하체' && '#47b8e0') ||
+                (type === '어깨' && '#cff09e') ||
+                (type === '복부' && '#84B1ED') ||
+                (type === '이두' && '#79a8a9') ||
+                (type === '삼두' && '#aacfd0') ||
+                (type === '전완' && '#55967e')
+              }
+            >
+              {value.split('|')[0]}{' '}
+            </Tag>
+          </Col>
+          <Col lg={10}>{value.split('|')[1]}</Col>
+          <Col lg={9}>
+            <Tag>{value.split('|')[2]} 세트</Tag>
+            <Tag>{value.split('|')[3]} 반복</Tag>
+          </Col>
+          <Col lg={3}>
+            <Button
+              icon="delete"
+              size="small"
+              onClick={removeRoutine}
+              name={value.split('|')[4]}
+            />
+          </Col>
+        </div>
+      </Row>
+    </>
+  );
+});
 
-const SortableList = SortableContainer(({ items }) => {
+const SortableList = SortableContainer(({ items, removeRoutine }) => {
   return (
     <div>
       {items.map((value, index) => (
-        <SortableItem key={uuid()} index={index} value={value} />
+        <SortableItem
+          key={uuid()}
+          index={index}
+          value={value}
+          items={items}
+          removeRoutine={removeRoutine}
+        />
       ))}
     </div>
   );
@@ -59,11 +76,17 @@ class SortableComponent extends Component {
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (prevState.items.length !== nextProps.routines.length) {
+    console.log('getDerived', prevState.items);
+    const isSame = prevState.items.length === nextProps.routines.length;
+    // prevState.items.every((element, index) => {
+    //   return element === nextProps.routines[index];
+    // });
+    if (!isSame) {
       return {
         items: nextProps.routines.map(
           (cv, idx) =>
-            `${cv.target}|${cv.exerciseName}|${cv.setCount}|${cv.repetitions}|${cv.exerciseCode}|${cv.scheduleId}|${cv.memberId}`
+            `${cv.target}|${cv.exerciseName}|${cv.setCount}|
+            ${cv.repetitions}|${cv.exerciseCode}|${cv.scheduleId}|${cv.memberId}`
         ),
       };
     }
@@ -71,6 +94,7 @@ class SortableComponent extends Component {
   }
 
   onSortEnd = ({ oldIndex, newIndex }) => {
+    console.log(oldIndex, newIndex);
     this.setState(({ items }) => ({
       items: arrayMove(items, oldIndex, newIndex),
     }));
@@ -83,7 +107,7 @@ class SortableComponent extends Component {
       SetCount: cv.split('|')[2],
       Repetitions: cv.split('|')[3],
       ExerciseCode: cv.split('|')[4],
-      ScheduleId: cv.split('|')[5],
+      ScheduleId: this.props.selectedScheduleId,
       MemberId: cv.split('|')[6],
       RoutineOrder: idx,
     }));
@@ -91,9 +115,11 @@ class SortableComponent extends Component {
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
+  
     try {
       const res = await axios.post('/api/routine', {
         routines,
+        scheduleId: this.props.selectedScheduleId
       });
       console.log(res.data);
     } catch (err) {
@@ -104,7 +130,11 @@ class SortableComponent extends Component {
   render() {
     return (
       <>
-        <SortableList items={this.state.items} onSortEnd={this.onSortEnd} />
+        <SortableList
+          items={this.state.items}
+          onSortEnd={this.onSortEnd}
+          removeRoutine={this.props.removeRoutine}
+        />
         <Button type="primary" onClick={this.insertRoutine} block>
           저장
         </Button>

@@ -56,6 +56,15 @@ const Schedule = () => {
     ]);
   };
 
+  const removeRoutine = event => {
+    console.log(event.target.name);
+    const newItems = routines.filter(
+      cv => parseInt(cv.exerciseCode) !== parseInt(event.target.name)
+    );
+    console.log(newItems);
+    setRoutines(newItems);
+  };
+
   // 다른멤버 선택했을 때 기존에 채우던 state초기화
   useEffect(() => {
     const getRoutines = async () => {
@@ -66,18 +75,13 @@ const Schedule = () => {
         const res = await axios.get(
           `/api/routine/${targetSchedule.scheduleId}`
         );
-        console.log("res.data", res.data)
-        if (res.data) {
-          setRoutines(res.data);
-        } else {
-          setRoutines([]);
-        }
+        console.log('res.data', res.data);
+        setRoutines(res.data);
       } catch (err) {
         console.log(err);
       }
     };
     getRoutines();
-    const routines = getRoutines();
   }, [targetSchedule.scheduleId]);
 
   return (
@@ -130,7 +134,11 @@ const Schedule = () => {
               </div>
             </Row> */}
             <Divider>루틴목록↓</Divider>
-            <SortableComponent routines={routines} />
+            <SortableComponent
+              routines={routines}
+              removeRoutine={removeRoutine}
+              selectedScheduleId={targetSchedule.scheduleId}
+            />
           </Col>
         </MyDrawer>
       </Row>

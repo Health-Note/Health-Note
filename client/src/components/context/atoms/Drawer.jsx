@@ -19,6 +19,7 @@ const MyDrawer = props => {
         onClose={onClose}
         visible={props.drawerBoolean}
         width={400}
+        zIndex={0}
       >
         {props.children}
       </Drawer>
