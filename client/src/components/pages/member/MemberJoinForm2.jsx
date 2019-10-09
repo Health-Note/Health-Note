@@ -53,8 +53,9 @@ const MemberJoinForm2 = ({ form, toggle }) => {
   const { getFieldDecorator } = form;
 
   const onChangeDate = date => {
-    setStartDate(date.format('YYYY-MM-DD'));
-    console.log(date.format('E'));
+    if(date){
+      setStartDate(date.format('YYYY-MM-DD'));
+    }
   };
 
   const handleSubmit = e => {

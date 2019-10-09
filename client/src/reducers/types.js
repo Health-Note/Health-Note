@@ -23,6 +23,7 @@ export const GET_FIXED_SCHEDULE = 'GET_FIXED_SCHEDULE';
 export const SET_SCHEDULE = 'SET_SCHEDULE';
 export const GET_SCHEDULES = 'GET_SCHEDULES';
 export const SET_SCHEDULE_TARGET = 'SET_SCHEDULE_TARGET';
+export const UPDATE_SCHEDULE = 'UPDATE_SCHEDULE';
 
 // 루틴
 export const SET_DATE = 'SET_DATE';

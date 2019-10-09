@@ -6,7 +6,9 @@ import {
   SET_SCHEDULE,
   GET_SCHEDULES,
   SET_SCHEDULE_TARGET,
+  UPDATE_SCHEDULE,
 } from '../reducers/types';
+import { async } from 'q';
 
 export const ScheduleContext = createContext();
 export const DispatchContext = createContext();
@@ -14,7 +16,7 @@ export const DispatchContext = createContext();
 const initialState = {
   selectedSchedule: {
     scheduleId: null,
-    memberId: null
+    memberId: null,
   },
   schedules: [
     {
@@ -90,6 +92,24 @@ export const ScheduleProvider = props => {
     }
   };
 
+  const changeSchedule = async (id, afterDate, afterTime) => {
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+    }
+    try {
+      const res = await axios.post('/api/schedules/changeSchedule', {
+        id,
+        afterDate,
+        afterTime,
+      });
+      dispatch({ type: UPDATE_SCHEDULE, payload: res.data });
+      console.log(res.data);
+     
+    } catch (err) {
+      console.log('changeSchedule', err);
+    }
+  };
+
   const [state, dispatch] = useReducer(scheduleReducer, initialState);
 
   return (
@@ -104,6 +124,7 @@ export const ScheduleProvider = props => {
         drawerBoolean, // 드로어 true or false
         setDrawer, // 드로어 토글
         removeSchedule, // 스케줄 삭제
+        changeSchedule,
       }}
     >
       <DispatchContext.Provider value={dispatch}>

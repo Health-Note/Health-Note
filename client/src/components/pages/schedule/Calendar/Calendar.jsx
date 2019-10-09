@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import moment from 'moment';
 import Grid from '@material-ui/core/Grid';
 import FullCalendar from '@fullcalendar/react';
@@ -6,14 +6,15 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
 import koLocale from '@fullcalendar/core/locales/ko';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fullcalendar/core/main.css';
 import '@fullcalendar/daygrid/main.css';
 import '@fullcalendar/timegrid/main.css';
+import { message } from 'antd';
 import './Calendar.css';
 import { ScheduleContext } from '../../../../contexts/schedule.context';
 import { MembersContext } from '../../../../contexts/members.context';
 import { RoutineContext } from '../../../../contexts/routine.context';
+import { AlertContext } from '../../../../contexts/alert.context';
 import Alert from '../../../context/molecules/Alert';
 
 // title, start, id가 포함되어야 함.
@@ -24,11 +25,13 @@ function Calendar() {
     getAllSchedules,
     setDrawer,
     removeSchedule,
+    changeSchedule,
     setScheduleTarget,
-    target
-  } = useContext(ScheduleContext); 
+    target,
+  } = useContext(ScheduleContext);
   const { setSelectedDate } = useContext(RoutineContext);
   const { members } = useContext(MembersContext);
+  const { setAlert } = useContext(AlertContext);
 
   // states
   const [toggle, setToggle] = useState(false);
@@ -47,10 +50,6 @@ function Calendar() {
 
   // 외부 이벤트 초기화
   useEffect(() => {
-    // const exeMember = members.map(cv => ({
-    //   title: cv.name,
-    //   id: cv.phonenum + cv.date
-    // }));
     getAllSchedules();
     setMember(exeMember);
   }, []);
@@ -69,34 +68,6 @@ function Calendar() {
     const startTime = moment(evt.start).format('HHmm');
     evt.remove();
   };
-  /**
-   * 날짜 : 2019-08-07
-   * 작성자: 박종열
-   * 기능 : 서버에서 사용자 이름, 폰넘버, 시작날짜, 시작시간을 받아옴
-   * adding dragable properties to external events through javascript
-   */
-
-  // useEffect(() => {
-  //   const draggableEl = document.getElementById('external-events');
-  //   new Draggable(draggableEl, {
-  //     itemSelector: '.fc-event',
-  //     eventData(eventEl) {
-  //       const title = eventEl.getAttribute('title');
-  //       const id = eventEl.getAttribute('data');
-  //       return {
-  //         title,
-  //         id,
-  //       };
-  //     },
-  //   });
-  // }, []);
-
-  // 서버에서 추가로 가변테이블에 들어오는 것을 받는 라우터를 만들어야 함
-  // const handleEventReceive = eventReceive => {
-  // const phonenum = eventReceive.event.id;
-  // const date = moment(eventReceive.event.start).format("YYMMDD");
-  // const startTime = moment(eventReceive.event.start).format("hhmm");
-  // };
 
   /**
    * 날짜 : 2019-08-07
@@ -105,12 +76,20 @@ function Calendar() {
    *        날짜변환: 20190804 + 1630 => 2019-08-04 16:30
    */
   const drop = info => {
-    const phonenum = info.event.id.substr(0, 11); // 폰넘버
-    const beforDate = moment(info.oldEvent.start).format('YYYYMMDD'); // 변경 전 날짜
-    const afterDate = moment(info.event.start).format('YYYYMMDD'); // 변경 후 날짜
-    const startTime = moment(info.event.start).format('HHmm'); // 변경 후 시작 시간
-    const endTime = moment(info.event.end).format('HHmm'); // 변경 후 종료 시간
-    const finishDNCD = info.event.extendedProps.finishDNCD ? 1 : 0; // 완료 여부 (1: true, 0: false)
+    //oldEvent
+    const id = info.event.id;
+    const title = info.event.title;
+    const afterDate = moment(info.event.start).format('YYYY-MM-DD'); // 변경 후 날짜
+    const startTime = moment(info.event.start).format('HH:mm'); // 변경 후 시작 시간
+    changeSchedule(id, afterDate, startTime);
+    message.success(
+      `${title}님의 스케줄이 ${moment(afterDate + ' ' + startTime).format(
+        'MM월DD일 HH시mm분'
+      )}으로 변경되었습니다 `
+    );
+    //const beforDate = moment(info.oldEvent.start).format('YYYYMMDD'); // 변경 전 날짜
+    // const endTime = moment(info.event.end).format('HHmm'); // 변경 후 종료 시간
+    // const finishDNCD = info.event.extendedProps.finishDNCD ? 1 : 0; // 완료 여부 (1: true, 0: false)
   };
 
   /**
@@ -120,9 +99,9 @@ function Calendar() {
    *        삭제클릭시 phonenum, date, startTime 서버로 보냄
    */
   const handleEventClick = eventClick => {
-    const scheduleId = eventClick.event.id; 
-    const title = eventClick.event.title; 
-    const start = eventClick.event.start; 
+    const scheduleId = eventClick.event.id;
+    const title = eventClick.event.title;
+    const start = eventClick.event.start;
     const memberId = eventClick.event.extendedProps.memberId;
     const date = moment(eventClick.event.start).format('YYYY-MM-DD');
 

@@ -5,8 +5,8 @@ const calendarColors = require('../utils/seedColors');
 
 const makeFirstWeekDates = (days, firstDate, times) => {
   let startDay = null;
-  const firstDateFormated = moment(firstDate).format("YYYY-MM-DD");
-  console.log("firstDateFormated", firstDateFormated);
+  const firstDateFormated = moment(firstDate).format('YYYY-MM-DD');
+  console.log('firstDateFormated', firstDateFormated);
 
   switch (moment(firstDate).isoWeekday()) {
     case 1:
@@ -38,27 +38,30 @@ const makeFirstWeekDates = (days, firstDate, times) => {
   for (let i = 0; i < days.length; i++) {
     // ex) 선택요일이 수요일인데 수요일 날짜 구할때
     if (startDay === days[i]) {
-      const tempString1= firstDateFormated + " " + moment(times[i]).format("HH:mm");
-      const tempFirstDate1 = moment(tempString1)
-      console.log("tempFirstDate1", tempFirstDate1)
+      const tempString1 =
+        firstDateFormated + ' ' + moment(times[i]).format('HH:mm');
+      const tempFirstDate1 = moment(tempString1);
+      console.log('tempFirstDate1', tempFirstDate1);
       firstWeekDates.push(tempFirstDate1);
     } else if (startDay > days[i]) {
       // ex) 선택요일이 수요일인데 그 다음주 월요일 구할때
-      const tempString2 = firstDateFormated+ " " + moment(times[i]).format("HH:mm");
+      const tempString2 =
+        firstDateFormated + ' ' + moment(times[i]).format('HH:mm');
       tempFirstDate2 = moment(tempString2);
       const nextWeekDayDiff = startDay - days[i];
       tempFirstDate2.add(7 - nextWeekDayDiff, 'days');
       firstWeekDates.push(tempFirstDate2);
     } else if (startDay < days[i]) {
       // ex) 선택요일이 수요일인데 이번주 금요일 구할때
-      const tempString3 = firstDateFormated+ " " + moment(times[i]).format("HH:mm");
-      const tempFirstDate3 = moment(tempString3)
+      const tempString3 =
+        firstDateFormated + ' ' + moment(times[i]).format('HH:mm');
+      const tempFirstDate3 = moment(tempString3);
       tempFirstDate3.add(days[i] - startDay, 'days');
       firstWeekDates.push(tempFirstDate3);
     }
   }
-  let sortedArray = firstWeekDates.sort((a, b) => a.valueOf() - b.valueOf())
-  console.log( '==========firstWeekDates=====', sortedArray );
+  let sortedArray = firstWeekDates.sort((a, b) => a.valueOf() - b.valueOf());
+  console.log('==========firstWeekDates=====', sortedArray);
   return sortedArray;
 };
 
@@ -75,7 +78,7 @@ const makeAllSchedule = async (
   const weekNum = Math.floor(totalPT / firstWeekDates.length); // 10 / 3 = 3
   console.log('weekNum', weekNum);
   const remainDayNum = totalPT % firstWeekDates.length;
-  console.log("remainDayNun", remainDayNum)
+  console.log('remainDayNun', remainDayNum);
 
   // 첫 주 요일들의 날짜를 넣는다.
   for (let i = 0; i < firstWeekDates.length; i++) {
@@ -86,12 +89,11 @@ const makeAllSchedule = async (
 
   // 중간 주의 요일들을 넣는다.
   for (var i = 0; i < firstWeekDates.length; i++) {
-    for (let j = 0; j < weekNum -1; j++) {
+    for (let j = 0; j < weekNum - 1; j++) {
       allSchedule.push(copyFirstWeekDates2[i].add(1, 'weeks').format());
     }
   }
 
-  
   if (remainDayNum !== 0) {
     // 남은 요일들을 넣는다.
     for (let r = 0; r < remainDayNum; r++) {
@@ -148,10 +150,10 @@ schedulesController.setSchedule = async (req, res) => {
     moment(firstDate).isoWeekday(),
     'times: ',
     times,
-    moment(times[0]).format("HHmm"),
+    moment(times[0]).format('HHmm'),
     'totalPT: ',
     totalPT
-  ); 
+  );
 
   if (!days.includes(moment(firstDate).isoWeekday())) {
     console.log('시작일이 선택요일에 포함되지 않음');
@@ -181,6 +183,7 @@ schedulesController.setSchedule = async (req, res) => {
   }
 };
 
+// 스케줄 가져오기
 schedulesController.getSchedule = async (req, res) => {
   try {
     const foundMembersWithSchedules = await db.Member.findAll({
@@ -192,7 +195,6 @@ schedulesController.getSchedule = async (req, res) => {
       },
     });
     const memberSchedules = [];
-    //console.log('foundMembersWithSchedules', foundMembersWithSchedules);
     for (let i = 0; i < foundMembersWithSchedules.length; i++) {
       memberSchedules.push(
         foundMembersWithSchedules[i].Schedules.map(schedule => {
@@ -207,13 +209,13 @@ schedulesController.getSchedule = async (req, res) => {
         })
       );
     }
-    //console.log('!!!!!!!!!!!!memberSchedules!!!!!!!!!!!!!!!', memberSchedules);
     res.json(memberSchedules);
   } catch (err) {
     console.log(err);
   }
 };
 
+// 스케줄 삭제
 schedulesController.removeSchedule = async (req, res) => {
   const { scheduleId, memberId } = req.body;
   try {
@@ -227,6 +229,34 @@ schedulesController.removeSchedule = async (req, res) => {
     }
   } catch (err) {
     return res.status(500).send('server err');
+  }
+};
+
+// 스케줄 변경
+schedulesController.changeSchedule = async (req, res) => {
+  const { id, afterDate, afterTime } = req.body;
+  try {
+    const result = await db.Schedule.update(
+      {
+        StartTime: moment(afterDate + ' ' + afterTime).format(
+          'YYYY-MM-DD HH:mm'
+        ),
+        Day: moment(afterDate).isoWeekday(),
+      },
+      {
+        where: { ScheduleId: id },
+      }
+    );
+    if (result) {
+      const foundSchedule = await db.Schedule.findOne({
+        where: {
+          ScheduleId: id,
+        },
+      });
+      res.json(foundSchedule);
+    }
+  } catch (err) {
+    console.log(err);
   }
 };
 module.exports = schedulesController;

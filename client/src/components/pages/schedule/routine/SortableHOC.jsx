@@ -79,20 +79,14 @@ class SortableComponent extends Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     console.log('getDerived', prevState.items);
-    const isSame = prevState.items.length === nextProps.routines.length;
-    // prevState.items.every((element, index) => {
-    //   return element === nextProps.routines[index];
-    // });
-    if (!isSame) {
-      return {
-        items: nextProps.routines.map(
-          (cv, idx) =>
-            `${cv.target}|${cv.exerciseName}|${cv.setCount}|
+    const isSameLength = prevState.items.length === nextProps.routines.length;
+    return {
+      items: nextProps.routines.map(
+        (cv, idx) =>
+          `${cv.target}|${cv.exerciseName}|${cv.setCount}|
             ${cv.repetitions}|${cv.exerciseCode}|${cv.scheduleId}|${cv.memberId}`
-        ),
-      };
-    }
-    return null;
+      ),
+    };
   }
 
   onSortEnd = ({ oldIndex, newIndex }) => {

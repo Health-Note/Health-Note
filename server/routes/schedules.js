@@ -17,4 +17,5 @@ router.get('/getAllSchedules', auth, schedulesController.getSchedule);
 
 router.post('/removeSchedule', auth, schedulesController.removeSchedule);
 
+router.post('/changeSchedule', auth, schedulesController.changeSchedule)
 module.exports = router;

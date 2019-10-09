@@ -1,4 +1,9 @@
-import { SET_SCHEDULE, GET_SCHEDULES, SET_SCHEDULE_TARGET } from './types';
+import {
+  SET_SCHEDULE,
+  GET_SCHEDULES,
+  SET_SCHEDULE_TARGET,
+  UPDATE_SCHEDULE,
+} from './types';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -37,6 +42,21 @@ const reducer = (state, action) => {
         ...state,
         schedules: [...state.schedules, ...action.payload],
       };
+    case UPDATE_SCHEDULE:
+      return {
+        ...state,
+        schedules: state.schedules.map(schedule => {
+          if (schedule.id === action.payload.ScheduleId) {
+            return {
+              ...schedule,
+              start: action.payload.StartTime,
+            };
+          } else {
+            return schedule;
+          }
+        }),
+      };
+
     case 'TOGGLE':
       console.log(action.id);
       return state.map(schedule =>
