@@ -1,10 +1,16 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
+import moment from 'moment';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 
 import SearchSelect from '../../context/molecules/SearchSelect';
 import RadarChart from '../../context/molecules/SimpleRadarChart';
 import RadialBarChart from '../../context/molecules/SimpleRadialBarChart';
+import InteractiveList from '../../context/molecules/InteractiveList';
 import { MembersContext } from '../../../contexts/members.context';
 
 const useStyles = makeStyles(theme => ({
@@ -34,12 +40,27 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(3, 0),
     '& > div': {
       display: 'inline-block',
+      margin: '20px 40px',
     },
   },
   boardWrap: {
     width: '100%',
     border: '1px solid #bdbdbd',
     borderRadius: '10px',
+    overflow: 'auto',
+    wordBreak: 'break-all',
+    padding: theme.spacing(2),
+    boxShadow: '10px 10px 5px -1px rgba(158,158,158,1)',
+  },
+  addNoteWrap: {
+    display: 'flex',
+    margin: '20px 0',
+  },
+  textField: {
+    width: '100%',
+  },
+  fab: {
+    marginLeft: theme.spacing(1),
   },
 }));
 
@@ -54,17 +75,27 @@ const data = [
   { name: '하체', value: 200 },
 ];
 
-function Statistics({ member }) {
+let listScrollTop = 'top';
+function Statistics({ member: curMember, history }) {
   // Routes.js에서 오는 member
   const classes = useStyles();
   const { members } = useContext(MembersContext);
-  const [memberIndex, setMemberIndex] = useState(0);
-  const curMember = members[memberIndex];
-  const list = members.map((member, index) => ({
-    label: member.name,
-    index,
-    phoneNum: member.phoneNum,
-  }));
+  let memberIndex = 0;
+  const [posts, setPosts] = useState([]);
+  const [newNote, setNewNote] = useState('');
+  if (typeof curMember === 'undefined') {
+    curMember = members[0];
+  }
+  const list = members.map((member, index) => {
+    if (member.id === curMember.id) {
+      memberIndex = index;
+    }
+    return {
+      label: member.name,
+      index,
+      phoneNum: member.phoneNum,
+    };
+  });
 
   const ptCountData = [
     {
@@ -79,12 +110,103 @@ function Statistics({ member }) {
     },
   ];
 
+  useEffect(() => {
+    setPosts([
+      {
+        contents: '내용내용내용내용',
+        secondary: moment('2019-10-01').fromNow(),
+      },
+      {
+        contents: '내용내용내용내용222',
+        secondary: moment('2019-10-02').fromNow(),
+      },
+      {
+        contents: '내용내용내용내용3333',
+        secondary: moment('2019-10-02').fromNow(),
+      },
+      {
+        contents: '내용내용내용내용4444',
+        secondary: moment('2019-10-03').fromNow(),
+      },
+      {
+        contents: '내용내용내용내용55555',
+        secondary: moment('2019-10-08').fromNow(),
+      },
+      {
+        contents: '6666666666666666666666666666666',
+        secondary: moment('2019-10-08').fromNow(),
+      },
+      {
+        contents:
+          '7777777777777777777777777777777777777777777777777777777777777777',
+        secondary: moment('2019-10-09').fromNow(),
+      },
+      {
+        contents:
+          '8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888',
+        secondary: moment('2019-10-09').fromNow(),
+      },
+      {
+        contents:
+          '99999999999999999999999999999999999999999999999999999999999999999999999999999',
+        secondary: moment('2019-10-09').fromNow(),
+      },
+      {
+        contents: '10번째 내용',
+        secondary: moment('2019-10-09').fromNow(),
+      },
+      {
+        contents: '11번째 내용',
+        secondary: moment('2019-10-09').fromNow(),
+      },
+    ]);
+    setNewNote('');
+    listScrollTop = 'top';
+  }, [curMember]);
+
   /**
-   *
+   *  맴버 변경
    */
   const handleChangeMember = selectObj => {
-    debugger;
-    setMemberIndex(selectObj.index);
+    // setMemberIndex(selectObj.index);
+    history.push(`/statistic/${selectObj.label}`);
+  };
+
+  /**
+   * 메모 삭제 event
+   * confirm 기능 추가하기
+   */
+  const handleDeletNode = index => {
+    // 메모 삭제하는 api 호출 후 성공하면
+    const newPosts = [...posts];
+    newPosts.splice(index, 1);
+    setPosts(newPosts);
+  };
+
+  /**
+   * 메모 추가 input onChange event
+   */
+  const handleChange = event => {
+    setNewNote(event.target.value);
+  };
+
+  /**
+   * 메모 추가
+   */
+  const handleAddNote = () => {
+    const newNoteObj = {
+      text: newNote,
+    };
+    // 메모 추가하는 api 호출 후 성공하면
+    listScrollTop = 'bottom';
+    setPosts([
+      ...posts,
+      {
+        contents: newNote,
+        secondary: moment().fromNow(),
+      },
+    ]);
+    setNewNote('');
   };
 
   console.dir(members);
@@ -106,17 +228,44 @@ function Statistics({ member }) {
           <div className={classes.infoText}>남은 PT 수 / 전체 PT 수</div>
           <div>
             {curMember.totalPT - curMember.usedPT} / {curMember.totalPT}
-            {/* {curMember.totalPT - curMember.usedPT} / 10 */}
           </div>
         </div>
       </Paper>
       <div className={classes.secondColumn}>
         <RadarChart data={data} />
         <RadialBarChart data={ptCountData} className={classes.chart} />
-        <div className={classes.boardWrap}>메모성 게시판</div>
+        <div className={classes.boardWrap}>
+          <InteractiveList
+            list={posts}
+            makeAppearBtnLabel="등록일 보기"
+            title="메모"
+            listMaxHeight={400}
+            handleDelete={handleDeletNode}
+            // scrollRef={listRef}
+            listScrollTop={listScrollTop}
+          />
+          <div className={classes.addNoteWrap}>
+            <TextField
+              id="add-note-input"
+              label="메모 추가"
+              value={newNote}
+              className={classes.textField}
+              onChange={handleChange}
+              margin="normal"
+            />
+            <Fab
+              color="primary"
+              aria-label="add"
+              className={classes.fab}
+              onClick={handleAddNote}
+            >
+              <AddIcon />
+            </Fab>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-export default Statistics;
+export default withRouter(Statistics);

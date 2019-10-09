@@ -322,7 +322,7 @@ export default function IntegrationReactSelect({
   };
 
   return (
-    <div className={clsx('hn-SearchSelect', classes.root)}>
+    <div className={clsx('h-SearchSelect', classes.root)}>
       {/* <NoSsr> */}
       <Select
         classes={classes}

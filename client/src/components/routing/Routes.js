@@ -27,6 +27,7 @@ function Routes() {
       <Route exact path="/" render={() => <Home />} />
       <Route exact path="/schedule" component={Schedule} />
       <Route exact path="/statistic" render={() => <Statistics />} />
+      {/* <Redirect from="/statistic" to={`/statistic/${members[0].name}`} /> */}
       <Route exact path="/statistic/:name" render={getMember} />
       <Route exact path="/member" render={() => <Members />} />
       <Route exact path="/login" render={() => <Login />} />
