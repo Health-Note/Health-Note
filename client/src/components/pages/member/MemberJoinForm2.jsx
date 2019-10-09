@@ -53,7 +53,7 @@ const MemberJoinForm2 = ({ form, toggle }) => {
   const { getFieldDecorator } = form;
 
   const onChangeDate = date => {
-    if(date){
+    if (date) {
       setStartDate(date.format('YYYY-MM-DD'));
     }
   };
@@ -71,13 +71,13 @@ const MemberJoinForm2 = ({ form, toggle }) => {
         addMember({
           ...values,
           startDate: moment(startDate).format('YYYY-MM-DD'),
-        }); 
+        });
         setTimeout(() => {
           setSchedule({
             totalPT: values.totalPT,
             firstDate: moment(startDate).format('YYYY-MM-DD'),
             days,
-            times: [, tue, wed, thu, fri, sat, sun].filter(cv => cv), // true만 고르기
+            times: [mon, tue, wed, thu, fri, sat, sun].filter(cv => cv), // true만 고르기
             phoneNum: values.phoneNum,
           });
         }, 2000);

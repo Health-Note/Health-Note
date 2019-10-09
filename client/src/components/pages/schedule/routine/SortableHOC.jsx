@@ -77,6 +77,7 @@ class SortableComponent extends Component {
     items: [],
   };
 
+  // 루틴으로부터 계속 원본이 오기에 드래그앤 드롭을 해도 바뀌지 않는다.
   static getDerivedStateFromProps(nextProps, prevState) {
     console.log('getDerived', prevState.items);
     const isSameLength = prevState.items.length === nextProps.routines.length;
