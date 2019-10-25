@@ -105,8 +105,8 @@ const SiderDemo = () => {
         <Alerts />
         <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
+            <Breadcrumb.Item></Breadcrumb.Item>
+            <Breadcrumb.Item></Breadcrumb.Item>
           </Breadcrumb>
           <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
             <Routes />

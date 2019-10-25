@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Select, Input, InputNumber } from 'antd';
 import axios from 'axios';
-import uuid from 'uuid/v4';
 import setAuthToken from '../../../../utils/setAuthToken';
 
 const { Option, OptGroup } = Select;

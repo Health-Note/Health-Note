@@ -4,7 +4,6 @@ import moment from 'moment';
 import axios from 'axios';
 import uuid from 'uuid/v4';
 import Calendar from './Calendar/Calendar';
-import { RoutineContext } from '../../../contexts/routine.context';
 import { ScheduleContext } from '../../../contexts/schedule.context';
 import SortableComponent from './routine/SortableHOC';
 import ExerciseSelect from './routine/ExerciseSelect';
@@ -15,7 +14,6 @@ const Schedule = () => {
   const { drawerBoolean, setDrawer, schedules, targetSchedule } = useContext(
     ScheduleContext
   );
-  const { insertRoutine } = useContext(RoutineContext);
 
   // 자식 컴포넌트에서 가져오는 state
   const [exerciseCode, setExerciseCode] = useState('');
@@ -38,6 +36,7 @@ const Schedule = () => {
   };
 
   const getRepetitions = reptitions => {
+    console.log(repetitions);
     setRepetitions(reptitions);
   };
 
@@ -58,10 +57,12 @@ const Schedule = () => {
   };
 
   const removeRoutine = event => {
-    const newItems = routines.filter(
-      cv => parseInt(cv.exerciseCode) !== parseInt(event.target.name)
-    );
-    setRoutines(newItems);
+    console.log(routines);
+    console.log(event.target.name);
+
+    const deletedItems = routines.filter(cv => cv.exerciseCode !== Number(event.target.name));
+    console.log(deletedItems)
+    setRoutines(deletedItems);
   };
 
   // 다른멤버 선택했을 때 기존에 채우던 state초기화
@@ -74,7 +75,6 @@ const Schedule = () => {
         const res = await axios.get(
           `/api/routine/${targetSchedule.scheduleId}`
         );
-        console.log('res.data', res.data);
         setRoutines(res.data);
       } catch (err) {
         console.log(err);
@@ -100,14 +100,14 @@ const Schedule = () => {
               .map(schedule => {
                 return (
                   <Row container justify="start" align="middle" key={uuid()}>
-                      <Col lg={11}>
-                        <h3 style={{ color: schedule.color }}>
-                          {schedule.title} 회원
-                        </h3>
-                      </Col>
-                      <Col lg={13}>
-                        {moment(schedule.start).format('MM월 DD일 / HH시 mm분')}
-                      </Col>
+                    <Col lg={11}>
+                      <h3 style={{ color: schedule.color }}>
+                        {schedule.title} 회원
+                      </h3>
+                    </Col>
+                    <Col lg={13}>
+                      {moment(schedule.start).format('MM월 DD일 / HH시 mm분')}
+                    </Col>
                   </Row>
                 );
               })}
