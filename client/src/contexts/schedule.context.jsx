@@ -7,8 +7,8 @@ import {
   GET_SCHEDULES,
   SET_SCHEDULE_TARGET,
   UPDATE_SCHEDULE,
+  CREATE_ONE_SCHEDULE,
 } from '../reducers/types';
-import { async } from 'q';
 
 export const ScheduleContext = createContext();
 export const DispatchContext = createContext();
@@ -21,7 +21,7 @@ const initialState = {
   schedules: [
     {
       title: null,
-      id: null, // phonenum
+      id: null,
       start: null,
       color: null,
       finish_dncd: false,
@@ -104,9 +104,30 @@ export const ScheduleProvider = props => {
       });
       dispatch({ type: UPDATE_SCHEDULE, payload: res.data });
       console.log(res.data);
-     
     } catch (err) {
       console.log('changeSchedule', err);
+    }
+  };
+
+  const createOneSchedule = async (date, selectedMember) => {
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+    }
+    try {
+      const res = await axios.post('/api/schedules/createOneSchedule', {
+        date,
+        memberId: selectedMember.id,
+      });
+      let createdMember = {
+        title: selectedMember.name,
+        start: res.data.StartTime,
+        id: res.data.ScheduleId,
+        color: 'red',
+      };
+      console.log('createdMember', createdMember);
+      dispatch({ type: CREATE_ONE_SCHEDULE, payload: createdMember });
+    } catch (err) {
+      console.log('createOneSchedule', err);
     }
   };
 
@@ -125,6 +146,7 @@ export const ScheduleProvider = props => {
         setDrawer, // 드로어 토글
         removeSchedule, // 스케줄 삭제
         changeSchedule,
+        createOneSchedule,
       }}
     >
       <DispatchContext.Provider value={dispatch}>

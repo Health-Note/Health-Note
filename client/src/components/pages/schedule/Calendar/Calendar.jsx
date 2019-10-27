@@ -7,15 +7,15 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
 import koLocale from '@fullcalendar/core/locales/ko';
 import '@fullcalendar/core/main.css';
-import '@fullcalendar/daygrid/main.css';
 import '@fullcalendar/timegrid/main.css';
 import { message } from 'antd';
 import './Calendar.css';
 import { ScheduleContext } from '../../../../contexts/schedule.context';
 import { MembersContext } from '../../../../contexts/members.context';
 import { RoutineContext } from '../../../../contexts/routine.context';
-import { AlertContext } from '../../../../contexts/alert.context';
 import Alert from '../../../context/molecules/Alert';
+import AntdModal from '../../../context/organisms/CalendarModal';
+import useToggle from '../../../../hooks/useToggle';
 
 // title, start, id가 포함되어야 함.
 function Calendar() {
@@ -24,24 +24,24 @@ function Calendar() {
     schedules,
     getAllSchedules,
     setDrawer,
-    removeSchedule,
     changeSchedule,
     setScheduleTarget,
-    target,
+    createOneSchedule,
   } = useContext(ScheduleContext);
   const { setSelectedDate } = useContext(RoutineContext);
   const { members } = useContext(MembersContext);
-  const { setAlert } = useContext(AlertContext);
 
   // states
   const [toggle, setToggle] = useState(false);
-  // const [evtColor] = useState('orange');
+  const [open, setOpen] = useState(false);
+  const [clickedDate, setClickedDate] = useState(false);
   const [targetId, setTargetId] = useState('');
   const [scheduleList, setScheduleList] = useState([]);
   const [evt, setEvt] = useState();
   const [exeMember, setMember] = useState([]);
   const [name, setName] = useState([]);
   const [start, setStart] = useState([]);
+  const [modalState, toggleModal] = useToggle(false);
 
   // 내부 이벤트 초기화
   useEffect(() => {
@@ -116,6 +116,12 @@ function Calendar() {
     // removeSchedule(scheduleId, memberId);
   };
 
+  // 클릭으로 이벤트 만들기
+  const dateClick = info => {
+    toggleModal();
+    setClickedDate(info.dateStr);
+  };
+
   return (
     // 이벤트 창
     <div className="animated fadeIn p-4 demo-app">
@@ -147,6 +153,14 @@ function Calendar() {
           </div>
         </Grid>
         <Grid item xs={11}>
+          <AntdModal
+            title={'스케줄 추가'}
+            modalState={modalState}
+            toggleModal={toggleModal}
+            clickedDate={clickedDate}
+            members={members}
+            createOneSchedule={createOneSchedule}
+          />
           <div className="demo-app-calendar" id="mycalendartest">
             <FullCalendar
               height={700}
@@ -171,6 +185,7 @@ function Calendar() {
               eventDrop={drop}
               // drop={this.drop}
               eventClick={handleEventClick}
+              dateClick={dateClick}
               // eventColor={evtColor}
               // eventReceive={handleEventReceive}
             />

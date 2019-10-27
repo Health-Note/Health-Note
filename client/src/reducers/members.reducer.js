@@ -68,6 +68,7 @@ const reducer = (state, action) => {
     case CLEAR_TARGET:
       return {
         ...state,
+        target: null,
         error: null,
       };
     default:

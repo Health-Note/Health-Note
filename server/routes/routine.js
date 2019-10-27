@@ -9,7 +9,7 @@ const db = require('../models_aws/index');
 // @req     { exerciseCode, scheduleId, memberId, setCount, repetitions, RoutineOrder }
 router.post('/', auth, async (req, res) => {
   const { routines, scheduleId } = req.body;
-  console.log(routines)
+  console.log(routines);
   if (routines.length === 0) {
     try {
       const deletedResult = await db.Routine.destroy({

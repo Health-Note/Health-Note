@@ -259,4 +259,25 @@ schedulesController.changeSchedule = async (req, res) => {
     console.log(err);
   }
 };
+
+schedulesController.createOneSchedule = async (req, res) => {
+  const { date, memberId }= req.body;
+  startTime = moment(date).format('YYYY-MM-DD HH:mm');
+  console.log("date, memberId!!!!!!!!!!!!!!!!!", date, memberId);
+  day = moment(date).isoWeekday();
+  try{
+    const result = await db.Schedule.create({
+      StartTime: startTime,
+      MemberId: memberId,
+      EndTime: '0000',
+      IsFinish: false,
+      Day: day,
+    });
+    console.log("createdResult", result)
+    return res.json(result);
+  } catch(err) {
+    console.log(err)
+    res.status(500).send("server err");
+  }
+};
 module.exports = schedulesController;

@@ -162,11 +162,7 @@ export function MembersProvider(props) {
         clearTarget,
       }}
     >
-      <DispatchContext.Provider value={dispatch}>
-        {' '}
-        {/* dispatch를 계속해서 만들어내지 않게 객체형태로 보내지 않는다 */}
         {props.children}
-      </DispatchContext.Provider>
     </MembersContext.Provider>
   );
 }

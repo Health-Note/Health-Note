@@ -3,6 +3,7 @@ import {
   GET_SCHEDULES,
   SET_SCHEDULE_TARGET,
   UPDATE_SCHEDULE,
+  CREATE_ONE_SCHEDULE
 } from './types';
 
 const reducer = (state, action) => {
@@ -38,9 +39,10 @@ const reducer = (state, action) => {
         schedules,
       };
     case SET_SCHEDULE:
+    case CREATE_ONE_SCHEDULE:
       return {
         ...state,
-        schedules: [...state.schedules, ...action.payload],
+        schedules: [...state.schedules, action.payload],
       };
     case UPDATE_SCHEDULE:
       return {
