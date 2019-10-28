@@ -122,6 +122,33 @@ function Calendar() {
     setClickedDate(info.dateStr);
   };
 
+  const eventRender = ({event, el}) => {
+    
+    // const duration = moment.duration(moment(event.end).diff(event.start))
+    // const hours = duration.asHours()
+  
+    // el.style.border = `1px solid ${event.backgroundColor}`
+    // el.className = `${el.className} event-class` // allows showing the edit and remove buttons only when hovering over the event
+  
+    // if (!event.extendedProps.published && !event.allDay) {
+    //     el.className = el.className + ' unpublished'  //it grays out the event if it hasn't been published
+    // }
+  
+  // const child = document.createElement('span')
+  //   child.innerHTML = `
+  //           <button id="123" class="event-actions" data-event-id=${event.id}> 
+  //           x
+  //           </button>
+  //     `
+  el.querySelector('.fc-title').innerHTML += "<span class='event-actions'>x</span>";
+
+    //  el.appendChild(child)
+     const btns = el.getElementsByClassName('event-actions')
+     const self = this
+    btns[0].addEventListener('click', e => {
+      console.log("삭제")
+   })
+  }
   return (
     // 이벤트 창
     <div className="animated fadeIn p-4 demo-app">
@@ -186,8 +213,7 @@ function Calendar() {
               // drop={this.drop}
               eventClick={handleEventClick}
               dateClick={dateClick}
-              // eventColor={evtColor}
-              // eventReceive={handleEventReceive}
+              eventRender={eventRender}
             />
           </div>
         </Grid>
