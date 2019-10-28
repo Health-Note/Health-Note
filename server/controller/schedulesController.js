@@ -217,14 +217,14 @@ schedulesController.getSchedule = async (req, res) => {
 
 // 스케줄 삭제
 schedulesController.removeSchedule = async (req, res) => {
-  const { scheduleId, memberId } = req.body;
+  const { scheduleId } = req.body;
   try {
     const result = await db.Schedule.destroy({
       where: { ScheduleId: scheduleId },
     });
     if (!result) {
       return res.status(400).send('삭제 대상이 없습니다.');
-    } else {
+    } else if (result) {
       return res.json(result);
     }
   } catch (err) {
@@ -261,11 +261,11 @@ schedulesController.changeSchedule = async (req, res) => {
 };
 
 schedulesController.createOneSchedule = async (req, res) => {
-  const { date, memberId }= req.body;
+  const { date, memberId } = req.body;
   startTime = moment(date).format('YYYY-MM-DD HH:mm');
-  console.log("date, memberId!!!!!!!!!!!!!!!!!", date, memberId);
+  console.log('date, memberId!!!!!!!!!!!!!!!!!', date, memberId);
   day = moment(date).isoWeekday();
-  try{
+  try {
     const result = await db.Schedule.create({
       StartTime: startTime,
       MemberId: memberId,
@@ -273,11 +273,11 @@ schedulesController.createOneSchedule = async (req, res) => {
       IsFinish: false,
       Day: day,
     });
-    console.log("createdResult", result)
+    console.log('createdResult', result);
     return res.json(result);
-  } catch(err) {
-    console.log(err)
-    res.status(500).send("server err");
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('server err');
   }
 };
 module.exports = schedulesController;

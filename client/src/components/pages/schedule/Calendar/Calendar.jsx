@@ -26,6 +26,7 @@ function Calendar() {
     setDrawer,
     changeSchedule,
     setScheduleTarget,
+    removeSchedule,
     createOneSchedule,
   } = useContext(ScheduleContext);
   const { setSelectedDate } = useContext(RoutineContext);
@@ -146,7 +147,7 @@ function Calendar() {
      const btns = el.getElementsByClassName('event-actions')
      const self = this
     btns[0].addEventListener('click', e => {
-      console.log("삭제")
+      removeSchedule(event.id)
    })
   }
   return (

@@ -3,7 +3,8 @@ import {
   GET_SCHEDULES,
   SET_SCHEDULE_TARGET,
   UPDATE_SCHEDULE,
-  CREATE_ONE_SCHEDULE
+  REMOVE_SHCEDULE,
+  CREATE_ONE_SCHEDULE,
 } from './types';
 
 const reducer = (state, action) => {
@@ -66,12 +67,13 @@ const reducer = (state, action) => {
           ? { ...schedule, finish_dncd: !schedule.finish_dncd }
           : schedule
       );
-    case 'DELETE':
-      console.log(action.id);
-      return state.filter(
-        schedule => action.id !== schedule.phonenum + schedule.date
-      );
-
+    case REMOVE_SHCEDULE:
+      return {
+        ...state,
+        schedules: state.schedules.filter(
+          schedule => parseInt(action.payload) !== schedule.id
+        ),
+      };
     default:
       return state;
   }

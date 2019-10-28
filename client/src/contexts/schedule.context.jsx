@@ -7,6 +7,7 @@ import {
   GET_SCHEDULES,
   SET_SCHEDULE_TARGET,
   UPDATE_SCHEDULE,
+  REMOVE_SHCEDULE,
   CREATE_ONE_SCHEDULE,
 } from '../reducers/types';
 
@@ -77,15 +78,17 @@ export const ScheduleProvider = props => {
     }
   };
 
-  const removeSchedule = async (scheduleId, memberId) => {
+  const removeSchedule = async scheduleId => {
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
     try {
       const res = await axios.post('/api/schedules/removeSchedule', {
         scheduleId,
-        memberId,
       });
+      if (res.data === 1) {
+        dispatch({ type: REMOVE_SHCEDULE, payload: scheduleId });
+      }
       console.log('removeSchedule', res.data);
     } catch (err) {
       console.log('removeSchedule', err);
