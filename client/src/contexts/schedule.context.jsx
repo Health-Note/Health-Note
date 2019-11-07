@@ -125,6 +125,7 @@ export const ScheduleProvider = props => {
         title: selectedMember.name,
         start: res.data.StartTime,
         id: res.data.ScheduleId,
+        memberId: res.data.MemberId,
         color: 'red',
       };
       console.log('createdMember', createdMember);

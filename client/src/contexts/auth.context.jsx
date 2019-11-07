@@ -56,12 +56,13 @@ export const AuthProvider = props => {
     try {
       const res = await axios.post('/api/trainers', formData, config);
         dispatch({ type: REGISTER_SUCCESS, payload: res.data }); // res.data = token
+
         console.log(res.data);
         loadUser();
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.msg);
       //console.log("error.response.data.errors", error.response.data.errors[0].msg)
-      //dispatch({ type: REGISTER_FAIL, payload: error.response.data.errors[0].msg }); // express-validatar에서 오는 에러
+      dispatch({ type: REGISTER_FAIL, payload: error.response.data.msg }); // express-validatar에서 오는 에러
     }
   };
 

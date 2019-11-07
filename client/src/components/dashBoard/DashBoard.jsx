@@ -1,20 +1,31 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import { Link } from 'react-router-dom';
 import Routes from '../routing/Routes';
 import Alerts from '../context/atoms/Alerts';
 import { AuthContext } from '../../contexts/auth.context';
 import { AlertContext } from '../../contexts/alert.context';
+import { MembersContext } from '../../contexts/members.context';
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const SiderDemo = () => {
+const Dashboard = () => {
+  // context
   const authContext = useContext(AuthContext);
   const alertContext = useContext(AlertContext);
+  const membersContext = useContext(MembersContext);
   const { isAuthenticated, logout, trainer } = authContext;
   const { setAlert } = alertContext;
 
+  // state
   const [collapsed, setCollapsed] = useState(false);
+
+  useEffect(() => {
+    authContext.loadUser();
+   // membersContext.getMember();
+    // eslint-disable-next-line
+  }, []);
+
 
   const onCollapse = collapsed => {
     setCollapsed(collapsed);
@@ -120,4 +131,4 @@ const SiderDemo = () => {
   );
 };
 
-export default SiderDemo;
+export default Dashboard;

@@ -10,7 +10,7 @@ const AntSelect = props => {
   return (
     <div>
       <Select
-        defaultValue="회원명"
+        defaultValue="회원목록"
         style={{ width: 120 }}
         onChange={handleChange}
       >

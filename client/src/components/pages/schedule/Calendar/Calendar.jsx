@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
+import interactionPlugin from '@fullcalendar/interaction';
 import koLocale from '@fullcalendar/core/locales/ko';
 import '@fullcalendar/core/main.css';
 import '@fullcalendar/timegrid/main.css';
@@ -13,7 +13,6 @@ import './Calendar.css';
 import { ScheduleContext } from '../../../../contexts/schedule.context';
 import { MembersContext } from '../../../../contexts/members.context';
 import { RoutineContext } from '../../../../contexts/routine.context';
-import Alert from '../../../context/molecules/Alert';
 import AntdModal from '../../../context/organisms/CalendarModal';
 import useToggle from '../../../../hooks/useToggle';
 
@@ -33,8 +32,6 @@ function Calendar() {
   const { members } = useContext(MembersContext);
 
   // states
-  const [toggle, setToggle] = useState(false);
-  const [open, setOpen] = useState(false);
   const [clickedDate, setClickedDate] = useState(false);
   const [targetId, setTargetId] = useState('');
   const [scheduleList, setScheduleList] = useState([]);
@@ -60,14 +57,6 @@ function Calendar() {
   const handleTargetId = id => {
     // fullcalendar state에서 날짜형식은 ISO // 2017-03-16T17:40:00+09:00 이여야 함
     setTargetId(id);
-  };
-
-  const handleRemove = () => {
-    // alert.js에서 실행됨
-    const phonenum = evt.id.substr(0, 11);
-    const date = moment(evt.start).format('YYYYMMDD');
-    const startTime = moment(evt.start).format('HHmm');
-    evt.remove();
   };
 
   /**
@@ -101,20 +90,16 @@ function Calendar() {
    */
   const handleEventClick = eventClick => {
     const scheduleId = eventClick.event.id;
-    const title = eventClick.event.title;
-    const start = eventClick.event.start;
     const memberId = eventClick.event.extendedProps.memberId;
     const date = moment(eventClick.event.start).format('YYYY-MM-DD');
 
     setName(eventClick.event.title);
     setEvt(eventClick.event);
     handleTargetId(eventClick.event.id);
-    //setToggle(!toggle); // alert창을 오픈
     setStart(moment(eventClick.event.start).format('MM월 DD일'));
     setSelectedDate(date, memberId);
     setDrawer(true);
     setScheduleTarget(parseInt(scheduleId), parseInt(memberId));
-    // removeSchedule(scheduleId, memberId);
   };
 
   // 클릭으로 이벤트 만들기
@@ -147,21 +132,14 @@ function Calendar() {
      const btns = el.getElementsByClassName('event-actions')
      const self = this
     btns[0].addEventListener('click', e => {
-      removeSchedule(event.id)
+      removeSchedule(event.id);
+      message.success(`${event.title}님 ${moment(event.start).format("HH시 mm분")} 삭제`);
    })
   }
   return (
     // 이벤트 창
     <div className="animated fadeIn p-4 demo-app">
-      <Alert
-        toggle={toggle}
-        setToggle={setToggle}
-        targetId={targetId}
-        handleRemove={handleRemove}
-        evt={evt}
-        name={name}
-        start={start}
-      />
+ 
       <Grid container>
         <Grid item xs={0}>
           <div
@@ -215,6 +193,8 @@ function Calendar() {
               eventClick={handleEventClick}
               dateClick={dateClick}
               eventRender={eventRender}
+              editable={true}
+              eventDurationEditable={true}
             />
           </div>
         </Grid>
