@@ -49,10 +49,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         schedules: state.schedules.map(schedule => {
-          if (schedule.id === action.payload.ScheduleId) {
+          if (schedule.id === action.payload.id) {
+            console.log(schedule.id, action.payload.id)
             return {
               ...schedule,
-              start: action.payload.StartTime,
+              start: action.payload.startTime,
             };
           } else {
             return schedule;

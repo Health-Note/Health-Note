@@ -1,4 +1,5 @@
 import React, { createContext, useReducer, useState } from 'react';
+import moment from 'moment';
 import scheduleReducer from '../reducers/schedule.reducer.js';
 import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken';
@@ -96,17 +97,17 @@ export const ScheduleProvider = props => {
   };
 
   const changeSchedule = async (id, afterDate, afterTime) => {
+    const startTime = afterDate + " " + afterTime;
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.post('/api/schedules/changeSchedule', {
-        id,
-        afterDate,
-        afterTime,
-      });
-      dispatch({ type: UPDATE_SCHEDULE, payload: res.data });
-      console.log(res.data);
+      // const res = await axios.post('/api/schedules/changeSchedule', {
+      //   id,
+      //   afterDate,
+      //   afterTime,
+      // });
+      dispatch({ type: UPDATE_SCHEDULE, payload: { id: Number(id), startTime } });
     } catch (err) {
       console.log('changeSchedule', err);
     }
