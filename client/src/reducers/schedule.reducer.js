@@ -11,6 +11,7 @@ const reducer = (state, action) => {
   switch (action.type) {
     case SET_SCHEDULE_TARGET:
       return {
+        ...state,
         selectedSchedule: {
           scheduleId: action.payload.scheduleId,
           memberId: action.payload.memberId,
@@ -37,6 +38,7 @@ const reducer = (state, action) => {
       const schedules = allSchedules.reduce((acc, cv) => acc.concat(cv), []); // 이중배열 => 일차원배열
       return {
         ...state,
+        isChanging: false,
         schedules,
       };
     case SET_SCHEDULE:
@@ -48,9 +50,9 @@ const reducer = (state, action) => {
     case UPDATE_SCHEDULE:
       return {
         ...state,
+        isChanging: true,
         schedules: state.schedules.map(schedule => {
           if (schedule.id === action.payload.id) {
-            console.log(schedule.id, action.payload.id)
             return {
               ...schedule,
               start: action.payload.startTime,

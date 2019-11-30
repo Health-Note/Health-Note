@@ -32,6 +32,7 @@ const initialState = {
       memberId: null,
     },
   ],
+  isChanging: false
 };
 
 export const ScheduleProvider = props => {
@@ -143,7 +144,8 @@ export const ScheduleProvider = props => {
       value={{
         targetSchedule: state.selectedSchedule,
         schedules: state.schedules, // 전체 스케줄 state
-        target: state.target,
+        //target: state.target,
+        isChanging: state.isChanging,
         setScheduleTarget, // 이벤트 클릭시 해당 이벤트를 state에 킵해둠
         setSchedule, // 멤버추가시 스케줄 추가
         getAllSchedules, // 스케줄 전체 받아오기

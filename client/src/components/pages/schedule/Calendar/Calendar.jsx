@@ -27,6 +27,7 @@ function Calendar() {
     setScheduleTarget,
     removeSchedule,
     createOneSchedule,
+    isChanging
   } = useContext(ScheduleContext);
   const { setSelectedDate } = useContext(RoutineContext);
   const { members } = useContext(MembersContext);
@@ -45,12 +46,21 @@ function Calendar() {
   useEffect(() => {
     setScheduleList(schedules);
   }, [members, schedules]);
-
+  
   // 외부 이벤트 초기화
   useEffect(() => {
+    console.log("!!!!")
     getAllSchedules();
     setMember(exeMember);
   }, []);
+
+
+  
+  const saveButton = (
+    <>
+      { isChanging && <button >저장하기</button>}  
+    </>
+  )
 
   // 달력에 표시될 스케줄 초기화
 
@@ -139,6 +149,7 @@ function Calendar() {
   return (
     // 이벤트 창
     <div className="animated fadeIn p-4 demo-app">
+    {saveButton}
  
       <Grid container>
         <Grid item xs={0}>
