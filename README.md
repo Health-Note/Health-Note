@@ -16,6 +16,7 @@
 3. 회원 운동 기록 분석 기능
 
 **사용기술**
+
 client: Javascript, React.js(hooks, context-api, useReducers based)
 
 server: Node.js, Express.js 
