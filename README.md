@@ -17,5 +17,7 @@
 
 **사용기술**
 client: Javascript, React.js(hooks, context-api, useReducers based)
+
 server: Node.js, Express.js 
+
 database: mySql, AWS RDS
