@@ -1,4 +1,5 @@
 import React, { createContext, useReducer, useState } from 'react';
+import moment from 'moment';
 import scheduleReducer from '../reducers/schedule.reducer.js';
 import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken';
@@ -31,6 +32,7 @@ const initialState = {
       memberId: null,
     },
   ],
+  isChanging: false
 };
 
 export const ScheduleProvider = props => {
@@ -96,17 +98,17 @@ export const ScheduleProvider = props => {
   };
 
   const changeSchedule = async (id, afterDate, afterTime) => {
+    const startTime = afterDate + " " + afterTime;
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.post('/api/schedules/changeSchedule', {
-        id,
-        afterDate,
-        afterTime,
-      });
-      dispatch({ type: UPDATE_SCHEDULE, payload: res.data });
-      console.log(res.data);
+      // const res = await axios.post('/api/schedules/changeSchedule', {
+      //   id,
+      //   afterDate,
+      //   afterTime,
+      // });
+      dispatch({ type: UPDATE_SCHEDULE, payload: { id: Number(id), startTime } });
     } catch (err) {
       console.log('changeSchedule', err);
     }
@@ -142,7 +144,8 @@ export const ScheduleProvider = props => {
       value={{
         targetSchedule: state.selectedSchedule,
         schedules: state.schedules, // 전체 스케줄 state
-        target: state.target,
+        //target: state.target,
+        isChanging: state.isChanging,
         setScheduleTarget, // 이벤트 클릭시 해당 이벤트를 state에 킵해둠
         setSchedule, // 멤버추가시 스케줄 추가
         getAllSchedules, // 스케줄 전체 받아오기

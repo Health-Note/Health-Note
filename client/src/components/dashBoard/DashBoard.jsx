@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+import { Layout, Menu, Breadcrumb, Icon, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import Routes from '../routing/Routes';
 import Alerts from '../context/atoms/Alerts';
 import { AuthContext } from '../../contexts/auth.context';
 import { AlertContext } from '../../contexts/alert.context';
 import { MembersContext } from '../../contexts/members.context';
+import { ScheduleContext } from '../../contexts/schedule.context';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -13,6 +14,7 @@ const Dashboard = () => {
   // context
   const authContext = useContext(AuthContext);
   const alertContext = useContext(AlertContext);
+  const SsheduleContext = useContext(ScheduleContext);
   const membersContext = useContext(MembersContext);
   const { isAuthenticated, logout, trainer } = authContext;
   const { setAlert } = alertContext;
@@ -67,6 +69,7 @@ const Dashboard = () => {
     </>
   );
 
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider
@@ -113,7 +116,7 @@ const Dashboard = () => {
       </Sider>
       <Layout style={{ marginLeft: 200 }}>
         <Header style={{ background: '#fff', padding: 0 }} />
-        <Alerts />
+        <Alerts /> 
         <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
             <Breadcrumb.Item></Breadcrumb.Item>
