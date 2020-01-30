@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
-const db = require('../models_aws/index');
+const db = require('../models');
 const auth = require('../middleware/auth');
 
 router.post('/insertMember', auth, async (req, res) => {

@@ -1,14 +1,16 @@
 const path = require('path');
 const Sequelize = require('sequelize');
+
 const sequelize = new Sequelize(
-  'healthnote',
-  process.env.AWS_user,
-  process.env.AWS_password,
+  process.env.DATABASE,
+  process.env.USER,
+  process.env.PASSWORD,
   {
-    host: process.env.AWS_endpoint,
-    dialect: 'mysql',
+    host: process.env.ENDPOINT,
+    port: 3306,
+    dialect: process.env.DiALECT,
     define: {
-      timestamps: true,
+      timestamps: true,   // sequelize에서 지원해주는 insert 시간을 자동 update
     },
     dialectOptions: {
       useUTC: false, //for reading from database
@@ -23,6 +25,7 @@ const sequelize = new Sequelize(
     timezone: '+09:00',
   }
 );
+
 const db = {};
 
 db['Member'] = sequelize.import(path.join(__dirname, 'Member.js'));

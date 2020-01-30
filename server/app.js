@@ -1,6 +1,24 @@
-require('dotenv').config();
+const dotenv = require('dotenv');
+const path = require('path');
 const express = require('express');
 const app = express();
+
+// DB 설정
+switch (process.env.NODE_ENV) {
+  case 'aws':
+    dotenv.config({ path: path.join(__dirname, '/.env.aws') });
+    console.log('start aws db connection');
+    break;
+  case 'local':
+    dotenv.config({ path: path.join(__dirname, '/.env.local') });
+    console.log('start local db connection');
+    break;
+  default:
+    //throw new Error('process.env.NODE_ENV no setting');
+    console.log('process.env.NODE_ENV no setting then will start aws connection setting!');
+    dotenv.config({ path: path.join(__dirname, '/.env.aws') });
+    break;
+}
 
 // 라우트
 const memberRoutes = require('./routes/members');
