@@ -8,7 +8,7 @@ const sequelize = new Sequelize(
   {
     host: process.env.ENDPOINT,
     port: 3306,
-    dialect: process.env.DiALECT,
+    dialect: process.env.DIALECT,
     define: {
       timestamps: true,   // sequelize에서 지원해주는 insert 시간을 자동 update
     },
