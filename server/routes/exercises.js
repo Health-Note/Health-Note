@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../models_aws/index');
+const db = require('../models');
 
 router.get('/getExercises', async (req, res) => {
   try {

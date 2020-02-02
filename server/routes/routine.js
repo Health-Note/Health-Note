@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
-const db = require('../models_aws/index');
+const db = require('../models');
 
 // @route   POST api/routine/setRoutine
 // @desc    루틴 설정하기

@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
-const db = require('../models_aws/index');
+const db = require('../models');
 const moment = require('moment')
 // @route   POST api/trainers
 // @desc    유저등록

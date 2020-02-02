@@ -1,5 +1,5 @@
 const moment = require('moment');
-const db = require('../models_aws/index');
+const db = require('../models');
 const schedulesController = {};
 const calendarColors = require('../utils/seedColors');
 
