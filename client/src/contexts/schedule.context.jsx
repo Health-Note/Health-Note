@@ -103,12 +103,13 @@ export const ScheduleProvider = props => {
       setAuthToken(localStorage.token);
     }
     try {
-      // const res = await axios.post('/api/schedules/changeSchedule', {
-      //   id,
-      //   afterDate,
-      //   afterTime,
-      // });
-      dispatch({ type: UPDATE_SCHEDULE, payload: { id: Number(id), startTime } });
+      const res = await axios.post('/api/schedules/changeSchedule', {
+        id,
+        afterDate,
+        afterTime,
+      });
+      console.log("res", res.data.ScheduleId)
+      dispatch({ type: UPDATE_SCHEDULE, payload: { scheduleId: Number(res.data.ScheduleId), startTime: res.data.StartTime } });
     } catch (err) {
       console.log('changeSchedule', err);
     }

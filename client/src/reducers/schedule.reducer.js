@@ -37,8 +37,8 @@ const reducer = (state, action) =>  {
         case UPDATE_SCHEDULE:
           return produce(state, draft => {
             draft.schedules.forEach(schedule => {
-              if (schedule.id === action.payload.ScheduleId) {
-                  schedule.start = action.payload.StartTime
+              if (schedule.id === action.payload.scheduleId) {
+                  schedule.start = action.payload.startTime
               }
             })
           });

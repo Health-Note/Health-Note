@@ -247,14 +247,17 @@ schedulesController.changeSchedule = async (req, res) => {
         where: { ScheduleId: id },
       }
     );
+
     if (result) {
       const foundSchedule = await db.Schedule.findOne({
         where: {
           ScheduleId: id,
         },
       });
+      console.log("fountSchedule", foundSchedule)
       res.json(foundSchedule);
     }
+
   } catch (err) {
     console.log(err);
   }
