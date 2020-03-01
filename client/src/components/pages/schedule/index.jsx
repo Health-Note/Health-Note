@@ -9,6 +9,7 @@ import SortableComponent from './routine/SortableHOC';
 import ExerciseSelect from './routine/ExerciseSelect';
 import MyDrawer from '../../context/atoms/Drawer';
 import setAuthToken from '../../../utils/setAuthToken';
+import EachRow from './routine/EachRow';
 
 const Schedule = () => {
   const { drawerBoolean, setDrawer, schedules, targetSchedule } = useContext(
@@ -25,10 +26,10 @@ const Schedule = () => {
   // 운동 리스트
   const [routines, setRoutines] = useState([]);
 
-  const getExerCodeAndName = value => {
-    setExerciseCode(value.split('|')[0]);
-    setExerciseName(value.split('|')[1]);
-    setTarget(value.split('|')[2]);
+  const getExerCodeAndName = obj => {
+    setExerciseCode(obj.exerciseCode);
+    setExerciseName(obj.exerciseName);
+    setTarget(obj.target);
   };
 
   const getSetCount = setCount => {
@@ -57,11 +58,7 @@ const Schedule = () => {
   };
 
   const removeRoutine = event => {
-    console.log(routines);
-    console.log(event.target.name);
-
     const deletedItems = routines.filter(cv => cv.exerciseCode !== Number(event.target.name));
-    console.log(deletedItems)
     setRoutines(deletedItems);
   };
 
@@ -116,6 +113,7 @@ const Schedule = () => {
               getRepetitions={getRepetitions}
               getExerCodeAndName={getExerCodeAndName}
             />
+            <EachRow removeRoutine={removeRoutine}/>
             <Button style={{ marginTop: '5px' }} onClick={insertExercise} block>
               추가하기
             </Button>
