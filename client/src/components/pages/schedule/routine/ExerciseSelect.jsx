@@ -49,7 +49,9 @@ const ExerciseSelect = ({
       <Menu>
         {exercises.filter(cv => cv.ExerciseCode >= num1 && cv.ExerciseCode < num2).map(cv => (
               <Menu.Item>
-                <a onClick={() => getExerCodeAndName({exerciseName: cv.ExerciseName, exerciseCode: cv.ExerciseCode, target: cv.Target})}>
+                <a onClick={() => {
+                  getExerCodeAndName(cv.ExerciseName, cv.ExerciseCode, cv.Target)
+                  }}>
                   {cv.ExerciseName}
                 </a>
               </Menu.Item>
@@ -84,7 +86,7 @@ const ExerciseSelect = ({
       <Row justify="space-between">
         <Col span={5}>
           <Dropdown overlay={dropDown(500, 599)} placement={"bottomLeft"}>
-            <Button>삼두</Button>
+            <Button>복부</Button>
           </Dropdown>
         </Col>
         <Col span={5}>
@@ -93,13 +95,18 @@ const ExerciseSelect = ({
           </Dropdown>
         </Col>
         <Col span={5}>
-          <Dropdown overlay={dropDown(600, 699)} placement={"bottomLeft"}>
-            <Button>전완</Button>
+          <Dropdown overlay={dropDown(700, 799)} placement={"bottomLeft"}>
+            <Button>삼두</Button>
           </Dropdown>
         </Col>
         <Col span={5}>
-        <Dropdown overlay={dropDown(600, 699)} placement={"bottomLeft"}>
-          <Button>유산소</Button>
+        <Dropdown overlay={dropDown(800, 899)} placement={"bottomLeft"}>
+          <Button>전완</Button>
+        </Dropdown>
+        </Col>
+        <Col span={5}>
+        <Dropdown overlay={dropDown(800, 899)} placement={"bottomLeft"}>
+          <Button>유산소 준비중</Button>
         </Dropdown>
         </Col>
       </Row>

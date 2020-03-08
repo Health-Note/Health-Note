@@ -10,6 +10,7 @@ const db = require('../models');
 router.post('/', auth, async (req, res) => {
   const { routines, scheduleId } = req.body;
   console.log(routines);
+  console.log("~~~~~~~~~~~~~~~~~~~", scheduleId);
   if (routines.length === 0) {
     try {
       const deletedResult = await db.Routine.destroy({
@@ -25,6 +26,7 @@ router.post('/', auth, async (req, res) => {
     await db.Routine.destroy({
       where: { ScheduleId: routines[0].ScheduleId },
     });
+    console.log("destroyed")
     const result = await db.Routine.bulkCreate(routines, {
       updateOnDuplicate: ['SetCount', 'Repetitions', 'RoutineOrder'],
     });
