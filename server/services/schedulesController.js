@@ -1,5 +1,5 @@
 const moment = require('moment');
-const db = require('../models');
+const db = require('../loaders/sequelize');
 const schedulesController = {};
 const calendarColors = require('../utils/seedColors');
 
@@ -188,7 +188,7 @@ schedulesController.getSchedule = async (req, res) => {
   try {
     const foundMembersWithSchedules = await db.Member.findAll({
       where: {
-        TrainerId: req.trainer,
+        TrainerId: req.user,
       },
       include: {
         model: db.Schedule,

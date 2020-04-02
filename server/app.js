@@ -1,44 +1,30 @@
-const dotenv = require('dotenv');
-const path = require('path');
+// switch 문이 적용되야 config가 인식 됨
 const express = require('express');
-const app = express();
+const config = require('./config');
+const logger = require('./loaders/logger');
 
-// DB 설정
-switch (process.env.NODE_ENV) {
-  case 'aws':
-    dotenv.config({ path: path.join(__dirname, '/.env.aws') });
-    console.log('start aws db connection');
-    break;
-  case 'local':
-    dotenv.config({ path: path.join(__dirname, '/.env.local') });
-    console.log('start local db connection');
-    break;
-  default:
-    //throw new Error('process.env.NODE_ENV no setting');
-    console.log('process.env.NODE_ENV no setting then will start aws connection setting!');
-    dotenv.config({ path: path.join(__dirname, '/.env.aws') });
-    break;
-}
+startServer = async () => {
+  const app = express();
 
-// 라우트
-const memberRoutes = require('./routes/members');
-const trainerRoutes = require('./routes/trainers');
-const authRoutes = require('./routes/auth');
-const scheduleRoutes = require('./routes/schedules');
-const routineRoutes = require('./routes/routine');
-const exerciseRoutes = require('./routes/exercises');
-const statisticsRoutes = require('./routes/statistics');
+  /**
+   * A little hack here
+   * Import/Export can only be used in 'top-level code'
+   * Well, at least in node 10 without babel and at the time of writing
+   * So we are using good old require.
+   * import 가 아닌 require 를 쓴다는 것인 듯
+   **/
+  await require('./loaders').default({ expressApp: app });
 
-// 미들웨어
-app.use(express.json());
-app.use('/api/trainers', trainerRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/members', memberRoutes);
-app.use('/api/schedules', scheduleRoutes);
-app.use('/api/routine', routineRoutes);
-app.use('/api/exercises', exerciseRoutes);
-app.use('/api/statistics', statisticsRoutes);
+  // config가 가장 먼저 입력이 되어야 한다
+  app.listen(config.port, err => {
+    if (err) {
+      logger.error(err);
+      process.exit(1);
+      return;
+    }
+    //console.log('client-dev-server (express) started');
+    logger.info(`🛡️  Server listening on port: ${config.port}  🛡️`);
+  });
+};
 
-app.listen(8080, () => {
-  console.log('client-dev-server (express) started');
-});
+startServer();
