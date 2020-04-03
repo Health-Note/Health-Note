@@ -6,6 +6,9 @@ const routes =  require('../api');
 const logger = require('./logger');
 const express = require('express');
 const morgan = require('morgan');
+const swaggerUI = require('swagger-ui-express');
+const swaggerSpec = require('./swagger');
+const CustomError = require('../common/error');
 
 module.exports = ({ app }) => {
   /**
@@ -46,9 +49,11 @@ module.exports = ({ app }) => {
   // Load API routes
   app.use(config.api.prefix, routes());
 
+  // Swagger UI set up
+  app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+
   /// catch 404 and forward to error handler
   app.use((req, res, next) => {
-    console.log("aaa");
     const err = new Error('Not Found');
     err['status'] = 404;
     next(err);
@@ -56,14 +61,11 @@ module.exports = ({ app }) => {
 
   /// error handlers
   app.use((err, req, res, next) => {
-    /**
-     * Handle 401 thrown by express-jwt library
-     */
-    console.log(err);
-    if (err.name === 'UnauthorizedError') {
+
+    if(err instanceof CustomError) {
       return res
         .status(err.status)
-        .send({ message: err.message })
+        .send({ message:err.message })
         .end();
     }
     
@@ -71,7 +73,8 @@ module.exports = ({ app }) => {
   });
   
   app.use((err, req, res, next) => {
-    console.log("aaaaaa");
+    
+    //console.log("여기서하자2");
     res.status(err.status || 500);
     res.json({
       errors: {

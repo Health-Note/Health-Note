@@ -4,24 +4,105 @@ const middleware = require('../middlewares');
 const logger = require('../../loaders/logger');
 const authService = require('../../services/auth');
 
+/**
+ * @swagger
+ * tags:
+ *  name: Auth
+ *  description: all about auth
+ * definitions:
+ *  account:
+ *    type: object
+ *    required:
+ *      - trainerId
+ *    properties:
+ *      trainerId:
+ *        type: integer
+ *      email:
+ *        type: string
+ *      createdAt:
+ *        type: string
+ *      updatedAt:
+ *        type: string
+ *  signupReq:
+ *    type: object
+ *    required:
+ *      - email
+ *      - password
+ *      - trainerName
+ *      - agreementVersion
+ *    properties:
+ *      trainerName:
+ *        type: string
+ *      email:
+ *        type: string
+ *      password:
+ *        type: string
+ *      agreementVersion:
+ *        type: integer
+ */
 const route = Router();
 module.exports = app => {
   app.use('/auth', route);
-  // @route   GET api/auth
-  // @desc    Get logged in user
-  // @access  Private
+  
+  /**
+   * @swagger
+   * /auth/me:
+   *  get:
+   *    summary: get current user
+   *    description: identify current user
+   *    tags: [Auth]
+   *    produces:
+   *      - application/json
+   *    responses:
+   *      200:
+   *        description: OK
+   *        schema:
+   *          type: object
+   *          $ref: '#/definitions/account'
+   */
   route.get(
     '/me',
     middleware.isAuth,
     middleware.attachCurrentUser,
-    (req, res, next) => {
+    async (req, res, next) => {
       res.json({ user: req.currentUser });
     }
   );
 
-  // @route   POST api/auth
-  // @desc    Auth user & get Token
-  // @access  Public
+  /**
+   * @swagger
+   * /auth/signin:
+   *  post:
+   *    summary: signin user
+   *    description: signin user
+   *    tags: [Auth]
+   *    operationId: signin
+   *    parameters:
+   *     - in: body
+   *       name: user
+   *       description: user infomation
+   *       schema:
+   *         type: object
+   *         required:
+   *           - email
+   *           - password
+   *         properties:
+   *           email:
+   *            type: string
+   *           password:
+   *            type: string
+   *    produces:
+   *      - application/json
+   *    consumes:
+   *      - application/json
+   *    responses:
+   *      200:
+   *        description: success to get access token
+   *        schema:
+   *          properties:
+   *            token:
+   *              type: string
+   */
   route.post(
     '/signin',
     [
@@ -50,6 +131,32 @@ module.exports = app => {
     }
   );
 
+  /**
+   * @swagger
+   * /auth/signup:
+   *  post:
+   *    summary: signup user
+   *    description: signup user
+   *    tags: [Auth]
+   *    operationId: signup
+   *    parameters:
+   *     - in: body
+   *       name: user
+   *       description: user infomation
+   *       schema:
+   *         $ref: '#/definitions/signupReq'
+   *    produces:
+   *      - application/json
+   *    consumes:
+   *      - application/json
+   *    responses:
+   *      200:
+   *        description: success to get access token
+   *        schema:
+   *          properties:
+   *            token:
+   *              type: string
+   */
   route.post(
     '/signup',
     [
