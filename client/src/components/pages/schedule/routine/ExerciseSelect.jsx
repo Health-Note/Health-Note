@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Select, Input, InputNumber } from 'antd';
+import { Input, InputNumber, Select } from 'antd';
+import React, { useCallback, useEffect, useState } from 'react';
+
 import axios from 'axios';
 import setAuthToken from '../../../../utils/setAuthToken';
 
@@ -16,7 +17,7 @@ const ExerciseSelect = ({
   }
   useEffect(() => {
     const fetchData = async () => {
-      const res = await axios('/api/exercises/getExercises');
+      const res = await axios('/api/exercises/');
       setExercises(res.data);
     };
     fetchData();
