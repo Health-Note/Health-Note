@@ -19,9 +19,7 @@ const authService = require('../../services/auth');
  *        type: integer
  *      email:
  *        type: string
- *      createdAt:
- *        type: string
- *      updatedAt:
+ *      trainerName:
  *        type: string
  *  signupReq:
  *    type: object
@@ -115,9 +113,6 @@ module.exports = app => {
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const { email, password } = req.body;
-      logger.info('로그인: %o', req.body);
-
       try {
         const token = await authService.signin(req.body);
         res.json({ token });
@@ -167,7 +162,7 @@ module.exports = app => {
       check('password', '6자리 이상 문자를 입력하세요').isLength({ min: 6 }),
     ],
     async (req, res, next) => {
-      logger.debug(req.body);
+      
       const errors = validationResult(req);
       logger.debug(errors.array());
 
@@ -175,15 +170,11 @@ module.exports = app => {
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const { nickname, email, password } = req.body;
-
       try {
         const token = await authService.signup(req.body);
         res.status(201).json({ token });
       } catch (err) {
-        //logger.error('error: %o', err);
         return next(err);
-        //res.status(500).send('server err');
       }
     }
   );
