@@ -1,17 +1,18 @@
-import React, { createContext, useReducer } from 'react';
-import axios from 'axios';
-import authReducer from '../reducers/auth.reducer';
-import setAuthToken from '../utils/setAuthToken';
 import {
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
-  CLEAR_ERRORS,
-  USER_LOADED,
   AUTH_ERROR,
-  LOGIN_SUCCESS,
+  CLEAR_ERRORS,
   LOGIN_FAIL,
+  LOGIN_SUCCESS,
   LOGOUT,
+  REGISTER_FAIL,
+  REGISTER_SUCCESS,
+  USER_LOADED,
 } from '../reducers/types';
+import React, { createContext, useReducer } from 'react';
+
+import authReducer from '../reducers/auth.reducer';
+import axios from 'axios';
+import setAuthToken from '../utils/setAuthToken';
 
 export const AuthContext = createContext();
 export const AuthProvider = props => {
@@ -33,7 +34,7 @@ export const AuthProvider = props => {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.get('/api/auth');
+      const res = await axios.get('/api/auth/me');
       await dispatch({ type: USER_LOADED, payload: res.data }); // payload는 찾은 trainer
       console.log('로드 유저', res.data);
     } catch (err) {
@@ -54,7 +55,7 @@ export const AuthProvider = props => {
       },
     };
     try {
-      const res = await axios.post('/api/trainers', formData, config);
+      const res = await axios.post('/api/auth/signup', formData, config);
         dispatch({ type: REGISTER_SUCCESS, payload: res.data }); // res.data = token
 
         console.log(res.data);
@@ -75,7 +76,7 @@ export const AuthProvider = props => {
       },
     };
     try {
-      const res = await axios.post('/api/auth', formData, config);
+      const res = await axios.post('/api/auth/signin', formData, config);
       if (res.status === 200 || res.status === 201) {
         // response.ok (200~299)
         console.log(res.data);
