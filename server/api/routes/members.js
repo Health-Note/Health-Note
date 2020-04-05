@@ -5,7 +5,7 @@ const { Router } = require('express');
 /**
  * @swagger
  * tags:
- *  name: member
+ *  name: Member
  *  description: all about member
  * definitions:
  *  memberSetReq:

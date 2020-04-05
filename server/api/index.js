@@ -3,7 +3,7 @@ const express = require('express');
 const auth = require('./routes/auth');
 const exercises = require('./routes/exercises');
 const members = require('./routes/members');
-const routine = require('./routes/routine');
+const routines = require('./routes/routines');
 const schedules = require('./routes/schedules');
 const statistics = require('./routes/statistics');
 const trainers = require('./routes/trainers');
@@ -14,7 +14,7 @@ module.exports = () => {
 	auth(router);
 	exercises(router);
 	members(router);
-	routine(router);
+	routines(router);
 	schedules(router);
 	statistics(router);
 	trainers(router);
