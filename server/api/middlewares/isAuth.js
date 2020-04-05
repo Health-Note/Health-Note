@@ -6,7 +6,6 @@ module.exports = function(req, res, next){
     const token = req.header('x-auth-token');
     // 토큰이 있는지 확인한다.
     if (!token) {
-        console.log("empty token");
         return res.status(401).json({ msg: "토큰이 없습니다. 인증이 거부되었습니다." });
     }
     try {
@@ -14,7 +13,7 @@ module.exports = function(req, res, next){
         req.user = decoded.trainer.trainerId; // 페이로드의 trainer정보를 req.trainer에 담는다.
         next();
     } catch(err) {
-        console.log("invalid token");
-        return res.status(401).json({msg: 'token is not valid'});
+        //err.name === 'TokenExpiredError' // 토큰 만료 
+        return res.status(401).json({msg: err.message});
     }
 }

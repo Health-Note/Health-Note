@@ -1,6 +1,6 @@
 //import bodyParser from 'body-parser';
-//import cors from 'cors';
 
+const cors = require('cors');
 const config = require('../config');
 const routes =  require('../api');
 const logger = require('./logger');
@@ -9,6 +9,11 @@ const morgan = require('morgan');
 const swaggerUI = require('swagger-ui-express');
 const swaggerSpec = require('./swagger');
 const CustomError = require('../common/error');
+
+const corsOptions = {
+  origin: 'http://localhost:3000', // 허락하고자 하는 요청 주소
+  credentials: true, // true로 하면 설정한 내용을 response 헤더에 추가 해줍니다.
+};
 
 module.exports = ({ app }) => {
   /**
@@ -26,10 +31,10 @@ module.exports = ({ app }) => {
 //   // It shows the real origin IP in the heroku or Cloudwatch logs
 //   app.enable('trust proxy');
 
-//   // The magic package that prevents frontend developers going nuts
-//   // Alternate description:
-//   // Enable Cross Origin Resource Sharing to all origins by default
-//   app.use(cors());
+   // The magic package that prevents frontend developers going nuts
+   // Alternate description:
+   // Enable Cross Origin Resource Sharing to all origins by default
+   app.use(cors(corsOptions));
 
 //   // Some sauce that always add since 2014
 //   // "Lets you use HTTP verbs such as PUT or DELETE in places where the client doesn't support it."
