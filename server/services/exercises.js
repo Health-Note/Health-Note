@@ -2,7 +2,7 @@ const { db } = require('../models');
 
 const getAll = async () => {
   return await db.Exercise.findAll({
-    attributes: ['ExerciseCode', 'ExerciseName', 'Target'],
+    attributes: ['exerciseCode', 'exerciseName'],
   })
     .then(result => {
       return result.dataValues;

@@ -1,25 +1,22 @@
 const { db } = require('../models');
+const CustomError = require('../common/error');
 
 const create = async body => {
-  const { name, phoneNum, gender, startDate, endDate, totalPT, height } = body;
+  const { name, phoneNum, gender, totalPT, age } = body;
 
   await db.Member.create({
-    PhoneNum: phoneNum,
-    Name: name,
-    Gender: gender,
-    StartTime: startDate,
-    EndTime: endDate,
-    TotalPT: totalPT,
-    UsedPT: 0,
-    Height: height,
-    IsRegistered: true,
-    TrainerId: req.user,
+    phoneNum: phoneNum,
+    name: name,
+    gender: gender,
+    age: age,
+    totalPT: totalPT,
+    usedPT: 0,
+    registration: 1,
+    trainerId: req.user,
   })
     .catch(err => {
       if (err.name === 'SequelizeUniqueConstraintError') {
-        //return res.status(400).json({ msg: '회원이 이미 존재합니다.' });
-        // res.status(409).end();
-        throw new Error('회원이 이미 존재합니다.');
+        throw new CustomError('NotUniqueId', 409, err);  // 409
       } else {
         throw new Error(err);
       }
@@ -32,8 +29,6 @@ const getAll = async id => {
       return result.dataValues;
     })
     .catch(err => {
-      //console.log(err);
-      //res.status(500).send('server err');
       throw new Error(err);
     });
 };

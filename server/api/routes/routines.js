@@ -1,11 +1,11 @@
 const middlewares = require('../middlewares');
-const routineService = require('../../services/routine');
+const routineService = require('../../services/routines');
 const { Router } = require('express');
 
 const route = Router();
 
 module.exports = app => {
-  app.use('/routine', route);
+  app.use('/routines', route);
 
   // @route   POST api/routine/setRoutine
   // @desc    루틴 설정하기
