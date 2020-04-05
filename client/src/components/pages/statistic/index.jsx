@@ -1,168 +1,106 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { withRouter } from 'react-router-dom';
-import moment from 'moment';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid';
+// import { DatePicker } from '@material-ui/pickers';
 
 import SearchSelect from '../../context/molecules/SearchSelect';
-import RadarChart from '../../context/molecules/SimpleRadarChart';
-import RadialBarChart from '../../context/molecules/SimpleRadialBarChart';
-import InteractiveList from '../../context/molecules/InteractiveList';
 import { MembersContext } from '../../../contexts/members.context';
+import CustomLineChart from '../../context/molecules/CustomLineChart';
+import CustomRadarChart from '../../context/molecules/CustomRadarChart';
+import RangeMonthPicker from '../../context/molecules/RangeMonthPicker';
+
+function TabPanel(props) {
+  const { children, value, tabValue, ...other } = props;
+
+  return (
+    <Typography
+      component="div"
+      role="tabpanel"
+      hidden={value !== tabValue}
+      id={`simple-tabpanel-${tabValue}`}
+      aria-labelledby={`simple-tab-${tabValue}`}
+      {...other}
+    >
+      {value === tabValue && <Box p={3}>{children}</Box>}
+    </Typography>
+  );
+}
 
 const useStyles = makeStyles(theme => ({
-  select: {
+  paperRoot: {
     display: 'flex',
     alignItems: 'center',
+    padding: '10px 20px 2px 20px',
   },
-  paper: {
-    padding: theme.spacing(3, 2),
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-  },
-  ptContWrap: {
-    textAlign: 'center',
-  },
-  infoText: {
-    color: 'rgba(0, 0, 0, 0.54)',
-    fontSize: '12px',
-    fontWeight: 400,
-    lineHeight: 1,
-    letterSpacing: '0.00938em',
-    paddingBottom: theme.spacing(1),
-  },
-  secondColumn: {
-    display: 'flex',
-    padding: theme.spacing(3, 0),
-    '& > div': {
-      display: 'inline-block',
-      margin: '20px 40px',
-    },
-  },
-  boardWrap: {
+  chartWrap: {
     width: '100%',
-    border: '1px solid #bdbdbd',
-    borderRadius: '10px',
-    overflow: 'auto',
-    wordBreak: 'break-all',
-    padding: theme.spacing(2),
-    boxShadow: '10px 10px 5px -1px rgba(158,158,158,1)',
-  },
-  addNoteWrap: {
-    display: 'flex',
-    margin: '20px 0',
-  },
-  textField: {
-    width: '100%',
-  },
-  fab: {
-    marginLeft: theme.spacing(1),
+    height: 300,
   },
 }));
 
-// 추후 api 에서 데이터 받아올
-const data = [
-  { name: '등', value: 400 },
-  { name: '유산소', value: 300 },
-  { name: '가슴', value: 300 },
-  { name: '삼두', value: 400 },
-  { name: '이두', value: 350 },
-  { name: '어깨', value: 300 },
-  { name: '하체', value: 200 },
-];
+function a11yProps(tabValue) {
+  return {
+    id: `statics-tab-${tabValue}`,
+    'aria-controls': `statics-tabpanel-${tabValue}`,
+  };
+}
 
-let listScrollTop = 'top';
+const initFilter = {
+  startDate: new Date(),
+  endDate: new Date(),
+};
+
 function Statistics({ member: curMember, history }) {
   // Routes.js에서 오는 member
-  const classes = useStyles();
+  // let memberIndex = 0;
   const { members } = useContext(MembersContext);
-  let memberIndex = 0;
-  const [posts, setPosts] = useState([]);
-  const [newNote, setNewNote] = useState('');
   if (typeof curMember === 'undefined') {
     curMember = members[0];
   }
-  const list = members.map((member, index) => {
-    if (member.id === curMember.id) {
-      memberIndex = index;
-    }
-    return {
-      label: member.name,
-      index,
-      phoneNum: member.phoneNum,
-    };
-  });
+  const classes = useStyles();
+  const { list, memberIndex } = useMemo(() => {
+    let memberIndex = 0;
+    const list = members.map((member, index) => {
+      if (member.id === curMember.id) {
+        memberIndex = index;
+      }
+      return {
+        label: member.name,
+        index,
+        phoneNum: member.phoneNum,
+      };
+    });
 
-  const ptCountData = [
-    {
-      name: '전체 PT 수',
-      uv: curMember.totalPT,
-      fill: '#d0ed57',
-    },
-    {
-      name: '출석일',
-      uv: curMember.usedPT,
-      fill: '#ffc658',
-    },
-  ];
+    return { list, memberIndex };
+  }, [members, curMember]);
+  const [value, setValue] = React.useState(0);
+  const [filter, setFilter] = useState({ ...initFilter });
 
   useEffect(() => {
-    setPosts([
-      {
-        contents: '내용내용내용내용',
-        secondary: moment('2019-10-01').fromNow(),
-      },
-      {
-        contents: '내용내용내용내용222',
-        secondary: moment('2019-10-02').fromNow(),
-      },
-      {
-        contents: '내용내용내용내용3333',
-        secondary: moment('2019-10-02').fromNow(),
-      },
-      {
-        contents: '내용내용내용내용4444',
-        secondary: moment('2019-10-03').fromNow(),
-      },
-      {
-        contents: '내용내용내용내용55555',
-        secondary: moment('2019-10-08').fromNow(),
-      },
-      {
-        contents: '6666666666666666666666666666666',
-        secondary: moment('2019-10-08').fromNow(),
-      },
-      {
-        contents:
-          '7777777777777777777777777777777777777777777777777777777777777777',
-        secondary: moment('2019-10-09').fromNow(),
-      },
-      {
-        contents:
-          '8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888',
-        secondary: moment('2019-10-09').fromNow(),
-      },
-      {
-        contents:
-          '99999999999999999999999999999999999999999999999999999999999999999999999999999',
-        secondary: moment('2019-10-09').fromNow(),
-      },
-      {
-        contents: '10번째 내용',
-        secondary: moment('2019-10-09').fromNow(),
-      },
-      {
-        contents: '11번째 내용',
-        secondary: moment('2019-10-09').fromNow(),
-      },
-    ]);
-    setNewNote('');
-    listScrollTop = 'top';
+    setFilter({ ...initFilter });
   }, [curMember]);
+
+  // let memberIndex = 0;
+  // if (typeof curMember === 'undefined') {
+  //   curMember = members[0];
+  // }
+  // const list = members.map((member, index) => {
+  //   if (member.id === curMember.id) {
+  //     memberIndex = index;
+  //   }
+  //   return {
+  //     label: member.name,
+  //     index,
+  //     phoneNum: member.phoneNum,
+  //   };
+  // });
 
   /**
    *  맴버 변경
@@ -172,98 +110,55 @@ function Statistics({ member: curMember, history }) {
     history.push(`/statistic/${selectObj.label}`);
   };
 
-  /**
-   * 메모 삭제 event
-   * confirm 기능 추가하기
-   */
-  const handleDeletNode = index => {
-    // 메모 삭제하는 api 호출 후 성공하면
-    const newPosts = [...posts];
-    newPosts.splice(index, 1);
-    setPosts(newPosts);
+  const handleTabChange = (event, newValue) => {
+    setValue(newValue);
   };
 
-  /**
-   * 메모 추가 input onChange event
-   */
-  const handleChange = event => {
-    setNewNote(event.target.value);
+  const handleDateChange = ({ name, value }) => {
+    setFilter({ ...filter, [name]: value });
   };
-
-  /**
-   * 메모 추가
-   */
-  const handleAddNote = () => {
-    const newNoteObj = {
-      text: newNote,
-    };
-    // 메모 추가하는 api 호출 후 성공하면
-    listScrollTop = 'bottom';
-    setPosts([
-      ...posts,
-      {
-        contents: newNote,
-        secondary: moment().fromNow(),
-      },
-    ]);
-    setNewNote('');
-  };
-
-  console.dir(members);
 
   return (
     <div className="h-Statistic">
-      <Paper className={classes.paper}>
-        <div className={classes.select}>
-          <SearchSelect
-            label="회원"
-            placeholder="이름"
-            list={list}
-            value={list[memberIndex]}
-            onChange={handleChangeMember}
-          />
-          <span> 회원님</span>
-        </div>
-        <div className={classes.ptContWrap}>
-          <div className={classes.infoText}>남은 PT 수 / 전체 PT 수</div>
-          <div>
-            {curMember.totalPT - curMember.usedPT} / {curMember.totalPT}
-          </div>
-        </div>
+      <Paper className={classes.paperRoot}>
+        <SearchSelect
+          label="회원"
+          placeholder="이름"
+          list={list}
+          value={list[memberIndex]}
+          onChange={handleChangeMember}
+        />
+        <span> 회원님</span>
       </Paper>
-      <div className={classes.secondColumn}>
-        <RadarChart data={data} />
-        <RadialBarChart data={ptCountData} className={classes.chart} />
-        <div className={classes.boardWrap}>
-          <InteractiveList
-            list={posts}
-            makeAppearBtnLabel="등록일 보기"
-            title="메모"
-            listMaxHeight={400}
-            handleDelete={handleDeletNode}
-            // scrollRef={listRef}
-            listScrollTop={listScrollTop}
-          />
-          <div className={classes.addNoteWrap}>
-            <TextField
-              id="add-note-input"
-              label="메모 추가"
-              value={newNote}
-              className={classes.textField}
-              onChange={handleChange}
-              margin="normal"
+
+      <AppBar position="static">
+        <Tabs value={value} onChange={handleTabChange}>
+          <Tab label="차트" {...a11yProps(0)} />
+          <Tab label="메모" {...a11yProps(1)} />
+        </Tabs>
+      </AppBar>
+      <TabPanel value={value} tabValue={0}>
+        <Grid container spacing={2}>
+          <Grid item xs="auto">
+            <RangeMonthPicker
+              startDate={filter.startDate}
+              endDate={filter.endDate}
+              onChange={handleDateChange}
             />
-            <Fab
-              color="primary"
-              aria-label="add"
-              className={classes.fab}
-              onClick={handleAddNote}
-            >
-              <AddIcon />
-            </Fab>
-          </div>
-        </div>
-      </div>
+            <div className={classes.chartWrap}>
+              <CustomLineChart />
+            </div>
+          </Grid>
+          <Grid item xs="auto">
+            <div className={classes.chartWrap}>
+              <CustomRadarChart />
+            </div>
+          </Grid>
+        </Grid>
+      </TabPanel>
+      <TabPanel value={value} tabValue={1}>
+        Item Two
+      </TabPanel>
     </div>
   );
 }

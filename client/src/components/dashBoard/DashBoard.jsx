@@ -24,10 +24,9 @@ const Dashboard = () => {
 
   useEffect(() => {
     authContext.loadUser();
-   // membersContext.getMember();
+    membersContext.getMember();
     // eslint-disable-next-line
   }, []);
-
 
   const onCollapse = collapsed => {
     setCollapsed(collapsed);
@@ -35,7 +34,11 @@ const Dashboard = () => {
 
   const handleLogout = () => {
     logout();
-    setAlert(`${trainer.Email}님, 로그아웃 하셨습니다.`, 'success', trainer.nickname);
+    setAlert(
+      `${trainer.Email}님, 로그아웃 하셨습니다.`,
+      'success',
+      trainer.nickname
+    );
   };
 
   const authLinks = (
@@ -68,7 +71,6 @@ const Dashboard = () => {
       <Link to={'/register'}></Link>
     </>
   );
-
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -116,7 +118,7 @@ const Dashboard = () => {
       </Sider>
       <Layout style={{ marginLeft: 200 }}>
         <Header style={{ background: '#fff', padding: 0 }} />
-        <Alerts /> 
+        <Alerts />
         <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
             <Breadcrumb.Item></Breadcrumb.Item>
