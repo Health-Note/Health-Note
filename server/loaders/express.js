@@ -1,6 +1,5 @@
 //import bodyParser from 'body-parser';
 
-const cors = require('cors');
 const config = require('../config');
 const routes =  require('../api');
 const logger = require('./logger');
