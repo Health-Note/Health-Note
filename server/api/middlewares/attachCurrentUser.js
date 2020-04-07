@@ -7,7 +7,7 @@ module.exports = async (req, res, next) => {
         return res.status(401).json({ msg: "user 정보가 불확실" });
     }
     const trainer = await authService.get(req.user);
-    req.currentUser = trainer;
+    req.user = trainer;
     
     return next();
   } catch (err) {

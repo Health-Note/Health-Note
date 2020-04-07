@@ -9,7 +9,7 @@ const CustomError = require('../common/error');
 const get = async user => {
   const account = await db.Account.findOne({
     where: { trainerId: user },
-    attributes: ['trainerId', 'email', 'trainerName'],
+    attributes: ['trainerId', 'email', /*trainerName*/ ],
   }).catch(err => {
     throw new Error(err);
   });
@@ -41,7 +41,7 @@ const signin = async body => {
     };
 
     // 로그인 성공시 토큰 발행
-    const token = jwt.sign(payload, config.jwtSecret, { expiresIn: 360000 });
+    const token = jwt.sign(payload, config.jwtSecret, { expiresIn: config.jwtExpires });
     return token;
   })
   
@@ -77,7 +77,7 @@ const signup = async body => {
       },
     };
 
-    const token = jwt.sign(payload, config.jwtSecret, { expiresIn: 3600000 });
+    const token = jwt.sign(payload, config.jwtSecret, { expiresIn: config.jwtExpires });
     return token;
   }).catch(err => {
     if(err.name === "SequelizeUniqueConstraintError") 

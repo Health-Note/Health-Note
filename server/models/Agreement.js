@@ -2,17 +2,17 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('Agreement', {
-    AgreementVersion: {
+    agreementVersion: {
       type: DataTypes.INTEGER(4),
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    Title: {
+    title: {
       type: DataTypes.STRING(30),
       allowNull: false
     },
-    Data: {
+    data: {
       type: DataTypes.TEXT,
       allowNull: false
     },

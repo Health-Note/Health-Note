@@ -29,6 +29,8 @@ module.exports = {
    * Your secret sauce
    */
   jwtSecret: process.env.JWT_SECRET,
+  jwtExpires: 60 * 5,
+
 
   /**
    * Used by winston logger

@@ -1,4 +1,3 @@
-const path = require('path');
 const Sequelize = require('sequelize');
 const logger = require('./logger');
 const config = require('../config/db')[process.env.NODE_ENV];
@@ -11,6 +10,11 @@ const sequelize = new Sequelize(
     host: config.host,
     port: config.port,
     dialect: config.dialect,
+    pool: {
+      max: 10,
+      min: 0,
+      idle: 100000
+    },
     define: {
       timestamps: true, // sequelize에서 지원해주는 insert 시간을 자동 update
     },
