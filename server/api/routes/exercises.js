@@ -38,11 +38,8 @@ module.exports = app => {
   route.get('/', async (req, res, next) => {
     try {
       const result = await exerciseService.getAll();
-      //console.log(result);
       res.json(result);
     } catch (err) {
-      //console.log(err);
-      //res.status(500).send('server err');
       return next(err);
     }
   });

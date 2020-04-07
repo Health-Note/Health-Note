@@ -2,33 +2,29 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('Member', {
-    MemberId: {
+    memberId: {
       type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    Name: {
+    name: {
       type: DataTypes.STRING(30),
       allowNull: false
     },
-    PhoneNum: {
+    phoneNum: {
       type: DataTypes.STRING(15),
       allowNull: false
     },
-    Gender: {
+    gender: {
       type: DataTypes.INTEGER(4),
       allowNull: false
     },
-    Height: {
+    totalPT: {
       type: DataTypes.INTEGER(11),
       allowNull: false
     },
-    TotalPT: {
-      type: DataTypes.INTEGER(11),
-      allowNull: false
-    },
-    UsedPT: {
+    usedPT: {
       type: DataTypes.INTEGER(11),
       allowNull: false
     },
@@ -40,16 +36,17 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: false
     },
-    IsRegistered: {
+    registration: {
       type: DataTypes.INTEGER(4),
       allowNull: false
     },
-    TrainerId: {
+    trainerId: {
       type: DataTypes.INTEGER(11),
+      primaryKey: true,
       allowNull: false,
       references: {
         model: 'Account',
-        key: 'TrainerId'
+        key: 'trainerId'
       }
     }
   }, {

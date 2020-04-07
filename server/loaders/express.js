@@ -1,21 +1,23 @@
 //import bodyParser from 'body-parser';
 
-const cors = require('cors');
 const config = require('../config');
 const routes =  require('../api');
 const logger = require('./logger');
 const express = require('express');
 const morgan = require('morgan');
+const helmet = require('helmet');
+const cors = require('cors');
 const swaggerUI = require('swagger-ui-express');
 const swaggerSpec = require('./swagger');
 const CustomError = require('../common/error');
 
 const corsOptions = {
-  origin: 'http://localhost:3000', // 허락하고자 하는 요청 주소
+  origin: 'http://localhost', // 허락하고자 하는 요청 주소
   credentials: true, // true로 하면 설정한 내용을 response 헤더에 추가 해줍니다.
 };
 
 module.exports = ({ app }) => {
+  app.use(helmet());
   /**
    * Health Check endpoints
    * @TODO Explain why they are here
@@ -41,11 +43,14 @@ module.exports = ({ app }) => {
 //   // Maybe not needed anymore ?
 //   app.use(require('method-override')());
 
-
+  // to support gzip compress but isn't good into nodejs, use nginx, haproxy or cloud service like real middleware
+  //app.use(compression());
 //   // Middleware that transforms the raw string of req.body into json
 //   app.use(bodyParser.json()); // 최신버전에서는 아래와 같이 사용한다
   app.use(express.json());
-  //app.use(express.urlencoded({ extended: false }));
+  
+  // parse application/x-www-form-urlencoded
+  //app.use(express.urlencoded({ extended: false }));  
   //app.use(express.static(path.join(__dirname, 'public')));
 
   // Request object logging
@@ -76,10 +81,12 @@ module.exports = ({ app }) => {
     next(err);
   });
 
-  /// error handlers
+  // if(app.get("env") == "production") 일 경우 detail error msg가 아닌 일반 유저용 msg 필요 
+  /// error handlers 
   app.use((err, req, res, next) => {
 
     if(err instanceof CustomError) {
+      console.log(err);
       return res
         .status(err.status)
         .send({ message:err.message })
@@ -91,7 +98,7 @@ module.exports = ({ app }) => {
   
   app.use((err, req, res, next) => {
     
-    //console.log("여기서하자2");
+    console.log(err);
     res.status(err.status || 500);
     res.json({
       errors: {

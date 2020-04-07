@@ -49,6 +49,11 @@ module.exports = app => {
    *    summary: get current user
    *    description: identify current user
    *    tags: [Auth]
+   *    parameters:
+   *     - in: header
+   *       name: x-auth-token
+   *       type: string
+   *       required: true
    *    produces:
    *      - application/json
    *    responses:
@@ -63,7 +68,7 @@ module.exports = app => {
     middleware.isAuth,
     middleware.attachCurrentUser,
     async (req, res, next) => {
-      res.json({ user: req.currentUser });
+      res.json({ user: req.user });
     }
   );
 
@@ -117,10 +122,6 @@ module.exports = app => {
         const token = await authService.signin(req.body);
         res.json({ token });
       } catch (err) {
-        //logger.error(err);
-        console.log(err);
-        //console.error(err);
-        //res.status(500).send('server err');
         return next(err);
       }
     }
@@ -179,7 +180,30 @@ module.exports = app => {
     }
   );
 
+  // /**
+  //  * @swagger
+  //  * /auth/logout:
+  //  *  post:
+  //  *    summary: logout user
+  //  *    description: logout user
+  //  *    tags: [Auth]
+  //  *    operationId: logout
+  //  *    parameters:
+  //  *     - in: header
+  //  *       name: x-auth-token
+  //  *       type: string
+  //  *       required: true
+  //  *    produces:
+  //  *      - application/json
+  //  *    consumes:
+  //  *      - application/json
+  //  *    responses:
+  //  *      200:
+  //  *        description: logout user
+  //  */
   route.post('/logout', middleware.isAuth, async (req, res, next) => {
-    return res.json({});
+    // 오로지 토큰으로만 처리되기 때문에 클라이언트 영역에서 토큰을 지워야 한다 서버쪽에 관리하는 체계가 없다 
+    // 마지막 로그인 시간을 기억한다면 DB 업데이트 정도 할 일이 있으나 현재로서는 인증 부분에서 로그아웃을 따로 구현이 안된다
+    return res.status(200).end();
   });
 };
