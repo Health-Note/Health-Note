@@ -3,7 +3,7 @@ const { db, sequelize } = require('../models');
 const Op = sequelize.Op;
 
 const get = async () => {
-  const result = await db.Routine.findAndCountAll({
+  const result = await db.routine.findAndCountAll({
     where: {
       MemberId: 21,
       ExerciseCode: {

@@ -7,9 +7,9 @@ const logger = require('../loaders/logger');
 const CustomError = require('../common/error');
 
 const get = async user => {
-  const account = await db.Account.findOne({
+  const account = await db.account.findOne({
     where: { trainerId: user },
-    attributes: ['trainerId', 'email', /*trainerName*/ ],
+    attributes: ['trainerId', 'email', 'trainerName' ],
   }).catch(err => {
     throw new Error(err);
   });
@@ -20,7 +20,7 @@ const get = async user => {
 
 const signin = async body => {
   const { email, password } = body;
-  const result = await db.Account.findOne({
+  const result = await db.account.findOne({
     where: { email: email },
   }).then(async account => {
     
@@ -59,7 +59,7 @@ const signup = async body => {
   const agreementDate = moment().format('YYYY-MM-DD HH:mm:ss');
   const initialDate = moment('1900-01-01',"YYYY-MM-DD").format()
 
-  const result = await db.Account.create({
+  const result = await db.account.create({
     agreementVersion: agreementVersion,
     agreementDate: agreementDate,
     deletedDate: initialDate,

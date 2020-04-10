@@ -1,9 +1,9 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Exercise', {
+  return sequelize.define('exercise', {
     exerciseCode: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },

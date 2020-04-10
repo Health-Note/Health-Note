@@ -1,28 +1,28 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Memo', {
-    MemoId: {
-      type: DataTypes.INTEGER(11),
+  return sequelize.define('memo', {
+    memoId: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    MemberId: {
+    memberId: {
       type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
       references: {
         model: 'Member',
-        key: 'MemberId'
+        key: 'memberId'
       }
     },
-    Text: {
+    text: {
       type: DataTypes.STRING(2000),
       allowNull: false
     },
-    IsAlarm: {
-      type: DataTypes.INTEGER(4),
+    isAlarm: {
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     createdAt: {

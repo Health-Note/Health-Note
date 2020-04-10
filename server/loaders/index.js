@@ -11,7 +11,7 @@ const sequelize = require('./sequelize');
 module.exports['default'] = async ({ expressApp }) => {
   //const mongoConnection = await mongooseLoader();
   await sequelize
-    .sync()
+    .sync() // or authenticate()
     .then(result => {
       logger.debug(result.options);
       logger.debug(result.models);

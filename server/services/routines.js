@@ -5,7 +5,7 @@ const create = async body => {
 
   //???
   if (routines.length === 0) {
-    await db.Routine.destroy({
+    await db.routine.destroy({
       where: { ScheduleId: scheduleId },
     })
       .catch(err => {
@@ -13,12 +13,12 @@ const create = async body => {
       });
   }
 
-  await db.Routine.destroy({
+  await db.routine.destroy({
     where: { ScheduleId: routines[0].ScheduleId },
   })
     .then(async result => {
 
-      await db.Routine.bulkCreate(routines, {
+      await db.routine.bulkCreate(routines, {
         updateOnDuplicate: ['SetCount', 'Repetitions', 'RoutineOrder'],
       })
 
@@ -32,23 +32,12 @@ const create = async body => {
 
 const getByScheduleId = async params => {
 
-  const result = await db.Routine.findAll({
-    where: { ScheduleId: params.scheduleId },
-    include: { model: db.Exercise },
-  }).then(result => {
+  const { scheduleId } = params;
 
-    const routines = result.dataValues.map(cv => ({
-        exerciseCode: cv.ExerciseCode,
-        scheduleId: cv.ScheduleId,
-        memberId: cv.MemberId,
-        exerciseName: cv.Exercise.ExerciseName,
-        target: cv.Exercise.Target,
-        setCount: cv.SetCount,
-        repetitions: cv.Repetitions,
-        routineOrder: cv.RoutineOrder,
-      }));
-
-      return routines;    
+  const result = await db.routine.findAll({
+    where: { scheduleId: scheduleId },
+    //include: { model: db.exercise }, 
+    raw: true, nest: true
   }).catch(err => {
       throw new Error(err);
   });
