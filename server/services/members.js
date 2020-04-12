@@ -1,7 +1,8 @@
 const { db } = require('../models');
 const CustomError = require('../common/error');
 
-const create = async body => {
+const create = async (body, id) => {
+  
   const { name, phoneNum, gender, totalPT, age } = body;
 
   await db.Member.create({
@@ -12,7 +13,7 @@ const create = async body => {
     totalPT: totalPT,
     usedPT: 0,
     registration: 1,
-    trainerId: req.user,
+    trainerId: id,
   })
     .catch(err => {
       if (err.name === 'SequelizeUniqueConstraintError') {
@@ -24,37 +25,26 @@ const create = async body => {
 };
 
 const getAll = async id => {
-  return await db.Member.findAll({ where: { TrainerId: id } })
+  return await db.Member.findAll({ where: { TrainerId: id }, raw: true })
     .then(result => {
-      return result.dataValues;
+      return result;
     })
     .catch(err => {
       throw new Error(err);
     });
 };
 
-const remove = async body => {
-  const selectedRow = body;
-  console.log('selectedRow', selectedRow);
-  
-  if (selectedRow.length === 1) {
-    await db.Member.destroy({
-      where: { PhoneNum: selectedRow[0].key },
-    })
-      .catch(err => {
-        throw new Error(err);
-      });
-  } else if (selectedRow.length > 1) {
-    const keys = selectedRow.map(cv => cv.key);
+const remove = async query => {
+  const { ids } = query;
+  const array = JSON.parse(ids);
 
-    await db.Member.destroy({
-      where: { PhoneNum: keys },
-    })
-      .catch(err => {
-        throw new Error(err);
-      });
-  } 
+  const count = await db.Member.destroy({
+    where: { memberId: array }
+  }).catch(err => {
+    throw new Error(err);
+  })
 
+  //console.log(count);
 };
 
 module.exports = { create, getAll, remove };

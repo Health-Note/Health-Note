@@ -1,16 +1,17 @@
+import {
+  ADD_MEMBER,
+  CLEAR_ERRORS,
+  CLEAR_TARGET,
+  EDIT_MEMBER,
+  GET_MEMBER,
+  MEMBER_ERROR,
+  REMOVE_MEMBER,
+} from '../reducers/types';
 import React, { createContext, useReducer } from 'react';
+
 import axios from 'axios';
 import memberReducer from '../reducers/members.reducer.js';
 import setAuthToken from '../utils/setAuthToken';
-import {
-  ADD_MEMBER,
-  GET_MEMBER,
-  REMOVE_MEMBER,
-  EDIT_MEMBER,
-  MEMBER_ERROR,
-  CLEAR_ERRORS,
-  CLEAR_TARGET,
-} from '../reducers/types';
 
 const initialState = {
   loading: true,
@@ -64,19 +65,19 @@ export function MembersProvider(props) {
       },
     };
     try {
-      const res = await axios.get('/api/members/getMembers', setting);
+      const res = await axios.get('/api/members/', setting);
       console.log('res.data', res.data);
       const members = res.data.map(cv => {
         return {
-          id: cv.MemberId,
-          name: cv.Name,
-          phoneNum: cv.PhoneNum,
-          gender: cv.Gender,
-          startDate: cv.StartDate,
-          endDate: cv.EndDate,
-          usedPT: cv.UsedPT,
-          totalPT: cv.TotalPT,
-          height: cv.Height,
+          id: cv.memberId,
+          name: cv.name,
+          phoneNum: cv.phoneNum,
+          gender: cv.gender,
+          startDate: cv.startDate,
+          endDate: cv.endDate,
+          usedPT: cv.usedPT,
+          totalPT: cv.totalPT,
+          height: cv.height,
         };
       });
       await dispatch({ type: GET_MEMBER, payload: members });

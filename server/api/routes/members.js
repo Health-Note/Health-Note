@@ -35,6 +35,10 @@ module.exports = app => {
    *    tags: [Member]
    *    operationId: createMember
    *    parameters:
+   *     - in: header
+   *       name: x-auth-token
+   *       type: string
+   *       required: true
    *     - in: body
    *       name: user
    *       description: user infomation
@@ -50,11 +54,9 @@ module.exports = app => {
    */
   route.post('/', middleware.isAuth, async (req, res, next) => {
     try {
-      await memberService.create(req.body);
-      res.staus(204).end();
+      await memberService.create(req.body, req.user);
+      res.status(204).end();
     } catch (err) {
-      //console.log(err);
-      //res.status(500).send('server err');
       return next(err);
     }
   });
@@ -67,7 +69,11 @@ module.exports = app => {
    *    description: get all member of trainer
    *    tags: [Member]
    *    operationId: getMember
-   *    parameters: []
+   *    parameters:
+   *     - in: header
+   *       name: x-auth-token
+   *       type: string
+   *       required: true
    *    produces:
    *      - application/json
    *    consumes:
@@ -90,10 +96,17 @@ module.exports = app => {
    * /members:
    *  delete:
    *    summary: delete member
-   *    description: delete member
+   *    description: delete member (ids is string but it can parse json array)
    *    tags: [Member]
    *    operationId: deleteMember
-   *    parameters: []
+   *    parameters: 
+   *     - in: header
+   *       name: x-auth-token
+   *       type: string
+   *       required: true
+   *     - in: query
+   *       name: ids
+   *       type: string
    *    produces:
    *      - application/json
    *    consumes:
@@ -103,11 +116,9 @@ module.exports = app => {
    *        description: success to delete members
    */
   route.delete('/', middleware.isAuth, async (req, res, next) => {
-    const selectedRow = req.body;
-    console.log('selectedRow', selectedRow);
     
     try {
-      await memberService.remove(req.body);
+      await memberService.remove(req.query, req.user);
       res.status(204).end();
     } catch(err) {
       return next(err);

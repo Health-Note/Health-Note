@@ -3,14 +3,22 @@ const expressLoader = require('./express');
 //import mongooseLoader from './mongoose';
 //import jobsLoader from './jobs';
 const logger = require('./logger');
+const sequelize = require('./sequelize');
 
 ////We have to import at least all the events once so they can be triggered
 //import './events';
 
 module.exports['default'] = async ({ expressApp }) => {
   //const mongoConnection = await mongooseLoader();
-  //logger.info('✌️ DB loaded and connected!');
-
+  await sequelize
+    .sync()
+    .then(result => {
+      logger.debug(result.options);
+      logger.debug(result.models);
+      logger.info('✌️ DB loaded and connected!');
+    })
+    .catch(err => console.error(err));
+  
   /**
    * WTF is going on here?
    *

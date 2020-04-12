@@ -2,11 +2,8 @@ const { db } = require('../models');
 
 const getAll = async () => {
   return await db.Exercise.findAll({
-    attributes: ['exerciseCode', 'exerciseName'],
+    attributes: ['exerciseCode', 'exerciseName'], raw: true // data 만 취급할거다
   })
-    .then(result => {
-      return result.dataValues;
-    })
     .catch(err => {
       throw new Error(err);
     });
