@@ -35,8 +35,8 @@ export const AuthProvider = props => {
     }
     try {
       const res = await axios.get('/api/auth/me');
-      await dispatch({ type: USER_LOADED, payload: res.data }); // payload는 찾은 trainer
-      console.log('로드 유저', res.data);
+      await dispatch({ type: USER_LOADED, payload: res.data.user }); // payload는 찾은 trainer
+      console.log('loadUser', res.data);
     } catch (err) {
       console.log(err);
       dispatch({ type: AUTH_ERROR });
@@ -57,8 +57,7 @@ export const AuthProvider = props => {
     try {
       const res = await axios.post('/api/auth/signup', formData, config);
         dispatch({ type: REGISTER_SUCCESS, payload: res.data }); // res.data = token
-
-        console.log(res.data);
+        console.log("register", res.data);
         loadUser();
     } catch (error) {
       console.log(error.response.data.msg);
@@ -79,7 +78,7 @@ export const AuthProvider = props => {
       const res = await axios.post('/api/auth/signin', formData, config);
       if (res.status === 200 || res.status === 201) {
         // response.ok (200~299)
-        console.log(res.data);
+        console.log("login", res.data);
         await dispatch({ type: LOGIN_SUCCESS, payload: res.data }); // res.data = token
         await loadUser();
       }

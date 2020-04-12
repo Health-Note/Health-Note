@@ -156,7 +156,7 @@ module.exports = app => {
   route.post(
     '/signup',
     [
-      check('nickname', '이름을 필수값 입니다.')
+      check('trainerName', '이름을 필수값 입니다.')
         .not()
         .isEmpty(),
       check('email', '올바른 이메일 형식을 입력하세요').isEmail(),

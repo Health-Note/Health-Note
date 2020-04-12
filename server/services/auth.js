@@ -9,7 +9,7 @@ const CustomError = require('../common/error');
 const get = async user => {
   const account = await db.Account.findOne({
     where: { trainerId: user },
-    attributes: ['trainerId', 'email', /*trainerName*/ ],
+    attributes: ['trainerId', 'email', 'trainerName' ],
   }).catch(err => {
     throw new Error(err);
   });
@@ -49,7 +49,7 @@ const signin = async body => {
 };
 
 const signup = async body => {
-  logger.info(body);
+  console.log(body);
 
   const { trainerName, email, password, agreementVersion } = body;
 

@@ -35,16 +35,16 @@ const Dashboard = () => {
   const handleLogout = () => {
     logout();
     setAlert(
-      `${trainer.Email}님, 로그아웃 하셨습니다.`,
+      `${trainer.trainerName}님, 로그아웃 하셨습니다.`,
       'success',
-      trainer.nickname
+      trainer.trainerName
     );
   };
 
   const authLinks = (
     <>
       <Icon type="user" />
-      <span> {trainer && trainer.Email} 접속중 </span>
+      <span> {trainer && trainer.trainerName} 접속중 </span>
     </>
   );
 

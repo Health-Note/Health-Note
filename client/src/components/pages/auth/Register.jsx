@@ -27,13 +27,14 @@ function Register(props) {
   
   const [agreement, toggle] = useToggle();
   const [user, setUser] = useState({
-    nickname: '',
+    trainerName: '',
     email: '',
     password: '',
     password2: '',
+    agreementVersion: ''
   });
 
-  const { nickname, email, password, password2 } = user;
+  const { trainerName, email, password, password2 } = user;
 
   const onChange = e =>
     setUser({
@@ -43,14 +44,14 @@ function Register(props) {
 
   const onSubmit = e => {
     e.preventDefault();
-    if (nickname === '' || email === '' || password === '') {
+    if (trainerName === '' || email === '' || password === '') {
       setAlert('모든 항목을 채우세요', 'error');
     } else if (password !== password2) {
       setAlert('비밀번호가 일치하지 않습니다.', 'error');
     } else if (!agreement) {
       setAlert('회원약관에 동의하지 않았습니다.')
     } else  {
-      register({ nickname, email, password });
+      register({ trainerName, email, password, "agreementVersion": 1 });
     } 
   };
 
@@ -66,12 +67,12 @@ function Register(props) {
       <Row type="flex" justify="center">
         <form onSubmit={onSubmit}>
           <div>
-            <label htmlFor="nickname">닉네임</label>
+            <label htmlFor="trainerName">트레이너 이름</label>
             <Input
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-              name="nickname"
-              value={nickname}
-              placeholder="닉네임"
+              name="trainerName"
+              value={trainerName}
+              placeholder="트레이너 이름"
               required
               onChange={onChange}
             />
