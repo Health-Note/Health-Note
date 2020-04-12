@@ -1,9 +1,9 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Account', {
+  return sequelize.define('account', {
     trainerId: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
@@ -21,6 +21,22 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.CHAR(60),
       allowNull: false
     },
+    trainerName: {
+      type: DataTypes.STRING(20),
+      allowNull: false
+    },
+    manMemberCount: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    womenMemberCount: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    trainerMemo: {
+      type: DataTypes.STRING(100),
+      allowNull: false
+    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false
@@ -29,8 +45,12 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: false
     },
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
     agreementVersion: {
-      type: DataTypes.INTEGER(4),
+      type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'Agreement',
@@ -38,6 +58,7 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   }, {
+    paranoid: true, // deletedAt 의 사용
     tableName: 'Account'
   });
 };

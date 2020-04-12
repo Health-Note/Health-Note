@@ -4,21 +4,42 @@ const sequelize = require('../loaders/sequelize');
 const db = {};
 //db.sequelize = sequelize;
 
-db['Member'] = sequelize.import(path.join(__dirname, './member.js'));
-db['Account'] = sequelize.import(path.join(__dirname, './account.js'));
-db['Trainer'] = sequelize.import(path.join(__dirname, './trainer.js'));
-db['Schedule'] = sequelize.import(path.join(__dirname, './schedule.js'));
-db['Routine'] = sequelize.import(path.join(__dirname, './routine.js'));
-db['Exercise'] = sequelize.import(path.join(__dirname, './exercise.js'));
+// 파일을 하나씩 캐싱하는 방식
+db['member'] = sequelize.import(path.join(__dirname, './member.js'));
+db['account'] = sequelize.import(path.join(__dirname, './account.js'));
+db['schedule'] = sequelize.import(path.join(__dirname, './schedule.js'));
+db['routine'] = sequelize.import(path.join(__dirname, './routine.js'));
+db['exercise'] = sequelize.import(path.join(__dirname, './exercise.js'));
+db['biologicalHistory'] = sequelize.import(path.join(__dirname, './biologicalHistory.js'));
+db['memo'] = sequelize.import(path.join(__dirname, './memo.js'));
+db['weightTraining'] = sequelize.import(path.join(__dirname, './weightTraining.js'));
+db['weightTarget'] = sequelize.import(path.join(__dirname, './weightTarget.js'));
+db['agreement'] = sequelize.import(path.join(__dirname, './agreement.js'));
 
-db.Schedule.belongsTo(db.Member, { foreignKey: 'MemberId' });
-db.Member.hasMany(db.Schedule, { foreignKey: 'MemberId' });
+// 아래와 같은 관계는 model에서 association에서 할 수도 있다
+db.account.belongsTo(db.agreement, { foreignKey: 'agreementVersion' });
 
-db.Member.belongsTo(db.Account, { foreignKey: 'trainerId' });
-db.Account.hasMany(db.Member, { foreignKey: 'trainerId' });
+db.schedule.belongsTo(db.member, { foreignKey: 'memberId' });
+db.member.hasMany(db.schedule);
 
-db.Routine.belongsTo(db.Exercise, { foreignKey: 'ExerciseCode' });
-db.Exercise.hasMany(db.Routine, { foreignKey: 'ExerciseCode' });
+db.member.belongsTo(db.account, { foreignKey: 'trainerId' });
+db.account.hasMany(db.member);
+
+db.member.hasMany(db.biologicalHistory);
+db.biologicalHistory.belongsTo(db.member, { foreignKey: 'memberId'});
+
+db.member.hasMany(db.memo);
+db.memo.belongsTo(db.member, { foreignKey: 'memberId' });
+
+//db.exercise.hasMany(db.routine, { foreignKey: 'ExerciseCode' });
+
+db.routine.belongsTo(db.schedule, { foreignKey: 'scheduleId' });
+db.routine.belongsTo(db.exercise, { foreignKey: 'exerciseCode' });
+
+//db.weightTarget.hasMany(db.weightTraining, { foreignKey: 'targetCode' });
+
+db.weightTraining.belongsTo(db.routine, { foreignKey: 'scheduleId' });
+db.weightTraining.belongsTo(db.routine, { foreignKey: 'exerciseCode' });
+db.weightTraining.belongsTo(db.weightTarget, { foreignKey: 'tartgetCode' });
 
 module.exports = { sequelize, db };
-

@@ -1,43 +1,35 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Routine', {
-    ExerciseCode: {
-      type: DataTypes.INTEGER(11),
+  return sequelize.define('routine', {
+    exerciseCode: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       references: {
         model: 'Exercise',
-        key: 'ExerciseCode'
+        key: 'exerciseCode'
       }
     },
-    ScheduleId: {
+    scheduleId: {
       type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
       references: {
         model: 'Schedule',
-        key: 'ScheduleId'
+        key: 'scheduleId'
       }
     },
-    MemberId: {
+    memberId: {
       type: DataTypes.BIGINT,
       allowNull: false,
       references: {
         model: 'Schedule',
-        key: 'MemberId'
+        key: 'memberId'
       }
     },
-    SetCount: {
-      type: DataTypes.INTEGER(4),
-      allowNull: false
-    },
-    Repetitions: {
-      type: DataTypes.INTEGER(4),
-      allowNull: false
-    },
-    RoutineOrder: {
-      type: DataTypes.INTEGER(4),
+    routineOrder: {
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     createdAt: {
@@ -46,6 +38,14 @@ module.exports = function(sequelize, DataTypes) {
     },
     updatedAt: {
       type: DataTypes.DATE,
+      allowNull: false
+    },
+    isCardio: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    cardioTime: {
+      type: DataTypes.TIME,
       allowNull: false
     }
   }, {

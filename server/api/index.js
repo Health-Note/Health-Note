@@ -6,7 +6,6 @@ const members = require('./routes/members');
 const routines = require('./routes/routines');
 const schedules = require('./routes/schedules');
 const statistics = require('./routes/statistics');
-const trainers = require('./routes/trainers');
 
 // guaranteed to get dependencies
 module.exports = () => {
@@ -17,7 +16,6 @@ module.exports = () => {
 	routines(router);
 	schedules(router);
 	statistics(router);
-	trainers(router);
 
 	return router
 }

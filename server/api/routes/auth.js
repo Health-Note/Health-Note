@@ -120,7 +120,10 @@ module.exports = app => {
 
       try {
         const token = await authService.signin(req.body);
-        res.json({ token });
+        res.cookie('user', token, {
+          expires: new Date(Date.now() + (1000 * 60 * 5)),
+          httpOnly: true
+        }).json({ token });
       } catch (err) {
         return next(err);
       }
@@ -173,37 +176,37 @@ module.exports = app => {
 
       try {
         const token = await authService.signup(req.body);
-        res.status(201).json({ token });
+        res.status(201).cookie('user', token).json({ token });
       } catch (err) {
         return next(err);
       }
     }
   );
 
-  // /**
-  //  * @swagger
-  //  * /auth/logout:
-  //  *  post:
-  //  *    summary: logout user
-  //  *    description: logout user
-  //  *    tags: [Auth]
-  //  *    operationId: logout
-  //  *    parameters:
-  //  *     - in: header
-  //  *       name: x-auth-token
-  //  *       type: string
-  //  *       required: true
-  //  *    produces:
-  //  *      - application/json
-  //  *    consumes:
-  //  *      - application/json
-  //  *    responses:
-  //  *      200:
-  //  *        description: logout user
-  //  */
+  /**
+   * @swagger
+   * /auth/logout:
+   *  post:
+   *    summary: logout user
+   *    description: logout user
+   *    tags: [Auth]
+   *    operationId: logout
+   *    parameters:
+   *     - in: header
+   *       name: x-auth-token
+   *       type: string
+   *       required: true
+   *    produces:
+   *      - application/json
+   *    consumes:
+   *      - application/json
+   *    responses:
+   *      200:
+   *        description: logout user
+   */
   route.post('/logout', middleware.isAuth, async (req, res, next) => {
-    // 오로지 토큰으로만 처리되기 때문에 클라이언트 영역에서 토큰을 지워야 한다 서버쪽에 관리하는 체계가 없다 
-    // 마지막 로그인 시간을 기억한다면 DB 업데이트 정도 할 일이 있으나 현재로서는 인증 부분에서 로그아웃을 따로 구현이 안된다
-    return res.status(200).end();
+    // 오로지 토큰으로만 처리되기 때문에 클라이언트 영역에서 토큰을 지워야 한다 서버쪽에 관리하는 체계가 없다 (지금은 쿠키만으로)
+    // 마지막 로그인 시간을 기억한다면 DB 업데이트 정도 할 일이 있으나 현재로서는 인증 부분 쿠키만 지운다
+    res.clearCookie('user').status(200).end();
   });
 };

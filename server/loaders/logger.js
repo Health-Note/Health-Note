@@ -10,7 +10,7 @@ const myFormat = winston.format.printf(
     info => `${new Date().toFormat('YYYY-MM-DD HH24:MI:SS')} [${info.level.toUpperCase()}] - ${info.message}`
 )
 
-if(process.env.NODE_ENV !== 'aws') {
+if(process.env.NODE_ENV === 'production') {
     // winston-daily-ratate-file
     transports.push(
         new winston.transports.DailyRotateFile({

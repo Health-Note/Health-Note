@@ -16,9 +16,9 @@ const route = express.Router({ mergeParams: true });
 module.exports = app => {
   app.use('/schedules', route);
 
-  route.post('/setSchedule', middlewares.isAuth, schedulesController.setSchedule);
+  route.get('/schedules', middlewares.isAuth, schedulesController.get);
 
-  route.get('/getAllSchedules', middlewares.isAuth, schedulesController.getSchedule);
+  route.post('/setSchedule', middlewares.isAuth, schedulesController.setSchedule);
 
   route.post('/removeSchedule', middlewares.isAuth, schedulesController.removeSchedule);
 

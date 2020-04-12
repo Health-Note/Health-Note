@@ -5,7 +5,7 @@ const create = async (body, id) => {
   
   const { name, phoneNum, gender, totalPT, age } = body;
 
-  await db.Member.create({
+  await db.member.create({
     phoneNum: phoneNum,
     name: name,
     gender: gender,
@@ -25,7 +25,7 @@ const create = async (body, id) => {
 };
 
 const getAll = async id => {
-  return await db.Member.findAll({ where: { TrainerId: id }, raw: true })
+  return await db.member.findAll({ where: { TrainerId: id }, raw: true })
     .then(result => {
       return result;
     })
@@ -38,7 +38,7 @@ const remove = async query => {
   const { ids } = query;
   const array = JSON.parse(ids);
 
-  const count = await db.Member.destroy({
+  const count = await db.member.destroy({
     where: { memberId: array }
   }).catch(err => {
     throw new Error(err);

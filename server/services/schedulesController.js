@@ -134,7 +134,7 @@ const createAllSchedules = async createdAllSchedules => {
   console.log('createdAllSchedules', createdAllSchedules);
   let createdDbSchedules;
   try {
-    createdDbSchedules = await db.Schedule.bulkCreate(createdAllSchedules);
+    createdDbSchedules = await db.schedule.bulkCreate(createdAllSchedules);
   } catch (err) {
     console.log(err);
   }
@@ -164,7 +164,7 @@ schedulesController.setSchedule = async (req, res) => {
 
   try {
     const firstWeekDates = await makeFirstWeekDates(days, firstDate, times);
-    const foundMemberId = await db.Member.findOne({
+    const foundMemberId = await db.member.findOne({
       where: { PhoneNum: phoneNum },
       attributes: ['MemberId'],
     });
@@ -184,14 +184,14 @@ schedulesController.setSchedule = async (req, res) => {
 };
 
 // 스케줄 가져오기
-schedulesController.getSchedule = async (req, res) => {
+schedulesController.get = async (req, res) => {
   try {
-    const foundMembersWithSchedules = await db.Member.findAll({
+    const foundMembersWithSchedules = await db.member.findAll({
       where: {
         TrainerId: req.user,
       },
       include: {
-        model: db.Schedule,
+        model: db.schedule,
       },
     });
     const memberSchedules = [];
@@ -219,7 +219,7 @@ schedulesController.getSchedule = async (req, res) => {
 schedulesController.removeSchedule = async (req, res) => {
   const { scheduleId } = req.body;
   try {
-    const result = await db.Schedule.destroy({
+    const result = await db.schedule.destroy({
       where: { ScheduleId: scheduleId },
     });
     if (!result) {
@@ -236,7 +236,7 @@ schedulesController.removeSchedule = async (req, res) => {
 schedulesController.changeSchedule = async (req, res) => {
   const { id, afterDate, afterTime } = req.body;
   try {
-    const result = await db.Schedule.update(
+    const result = await db.schedule.update(
       {
         StartTime: moment(afterDate + ' ' + afterTime).format(
           'YYYY-MM-DD HH:mm'
@@ -249,7 +249,7 @@ schedulesController.changeSchedule = async (req, res) => {
     );
 
     if (result) {
-      const foundSchedule = await db.Schedule.findOne({
+      const foundSchedule = await db.schedule.findOne({
         where: {
           ScheduleId: id,
         },
@@ -269,7 +269,7 @@ schedulesController.createOneSchedule = async (req, res) => {
   console.log('date, memberId!!!!!!!!!!!!!!!!!', date, memberId);
   day = moment(date).isoWeekday();
   try {
-    const result = await db.Schedule.create({
+    const result = await db.schedule.create({
       StartTime: startTime,
       MemberId: memberId,
       EndTime: '0000',
