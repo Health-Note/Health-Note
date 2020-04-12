@@ -1,23 +1,15 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Trainer', {
-    TrainerId: {
-      type: DataTypes.INTEGER(11),
+  return sequelize.define('agreement', {
+    agreementVersion: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    Name: {
-      type: DataTypes.STRING(30),
-      allowNull: false
-    },
-    ManMemberCount: {
-      type: DataTypes.INTEGER(4),
-      allowNull: false
-    },
-    WomenMemberCount: {
-      type: DataTypes.INTEGER(4),
+    data: {
+      type: DataTypes.TEXT,
       allowNull: false
     },
     createdAt: {
@@ -29,6 +21,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     }
   }, {
-    tableName: 'Trainer'
+    tableName: 'Agreement'
   });
 };

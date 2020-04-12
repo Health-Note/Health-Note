@@ -1,37 +1,45 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Schedule', {
-    ScheduleId: {
+  return sequelize.define('schedule', {
+    scheduleId: {
       type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    MemberId: {
+    memberId: {
       type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
       references: {
         model: 'Member',
-        key: 'MemberId'
+        key: 'memberId'
       }
     },
-    StartTime: {
-      type: DataTypes.DATE,
+    startTime: {
+      type: DataTypes.TIME,
       allowNull: false
     },
-    EndTime: {
-      type: DataTypes.DATE,
+    endTime: {
+      type: DataTypes.TIME,
       allowNull: false
     },
-    IsFinish: {
-      type: DataTypes.INTEGER(4),
+    isFinish: {
+      type: DataTypes.INTEGER,
       allowNull: false
     },
-    Day: {
-      type: DataTypes.INTEGER(4),
+    isReschedule: {
+      type: DataTypes.INTEGER,
       allowNull: false
+    },
+    day: {
+      type: DataTypes.DATEONLY,
+      allowNull: false
+    },
+    tooltipText: {
+      type: DataTypes.STRING(100),
+      allowNull: true
     },
     createdAt: {
       type: DataTypes.DATE,

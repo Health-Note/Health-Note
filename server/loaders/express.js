@@ -57,6 +57,7 @@ module.exports = ({ app }) => {
   app.use((req, res, next) => {
     console.log(req.query);
 
+    // 이건 여기서 검출 안됨??
     console.log(req.params);
 
     console.log(req.body);
