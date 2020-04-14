@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import MemberJoinForm2 from './MemberJoinForm2';
 import MemberTable from './MemberTable';

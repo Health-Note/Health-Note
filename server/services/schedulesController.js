@@ -1,5 +1,5 @@
 const moment = require('moment');
-const db = require('../loaders/sequelize');
+const db = require('../loaders/sequelize'); // 여기 부분이 문제인가?
 const schedulesController = {};
 const calendarColors = require('../utils/seedColors');
 

@@ -54,6 +54,7 @@ module.exports = app => {
    */
   route.post('/', middleware.isAuth, async (req, res, next) => {
     try {
+      console.log(req.body);
       await memberService.create(req.body, req.user);
       res.status(204).end();
     } catch (err) {
