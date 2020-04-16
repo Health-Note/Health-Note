@@ -18,6 +18,7 @@ if(process.env.NODE_ENV === 'production') {
             zippedArchive: false,
             format: myFormat,
             handleExceptions: true,
+            prettyPrint: true
         })
     );
 } else {
@@ -29,9 +30,12 @@ if(process.env.NODE_ENV === 'production') {
                 //winston.format.errors({ stack: true }),
                 //winston.format.json(),
                 //winston.format.prettyPrint()
+                //winston.format.simple()
             //),
             handleExceptions: true,
             colorize: true,
+            // json?? true / false
+            // timestamp?? true / false
         })
     );
     // transports.push(

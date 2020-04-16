@@ -20,10 +20,10 @@ db['agreement'] = sequelize.import(path.join(__dirname, './agreement.js'));
 db.account.belongsTo(db.agreement, { foreignKey: 'agreementVersion' });
 
 db.schedule.belongsTo(db.member, { foreignKey: 'memberId' });
-db.member.hasMany(db.schedule);
+db.member.hasMany(db.schedule, { foreignKey: 'memberId' });
 
 db.member.belongsTo(db.account, { foreignKey: 'trainerId' });
-db.account.hasMany(db.member);
+db.account.hasMany(db.member, { foreignKey: 'trainerId' });
 
 db.member.hasMany(db.biologicalHistory);
 db.biologicalHistory.belongsTo(db.member, { foreignKey: 'memberId'});

@@ -1,8 +1,9 @@
+import { GET_ROUTINE, SET_DATE } from '../reducers/types';
 import React, { createContext, useReducer, useState } from 'react';
+
 import axios from 'axios';
 import routineReducer from '../reducers/routine.reducer.js';
 import setAuthToken from '../utils/setAuthToken';
-import { GET_ROUTINE, SET_DATE } from '../reducers/types';
 
 export const RoutineContext = createContext();
 export const DispatchContext = createContext();
@@ -40,7 +41,8 @@ export const RoutineProvider = props => {
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
-    const res = await axios.post('/api/routine/getRoutine', {
+    console.log(scheduleId);
+    const res = await axios.post(`/api/routine/${scheduleId}`, {
       scheduleId,
       date,
     });

@@ -18,7 +18,8 @@ module.exports = function(sequelize, DataTypes) {
     },
     phoneNum: {
       type: DataTypes.STRING(20),
-      allowNull: false
+      allowNull: false,
+      unique: true
     },
     gender: {
       type: DataTypes.INTEGER,

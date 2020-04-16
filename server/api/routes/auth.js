@@ -176,7 +176,10 @@ module.exports = app => {
 
       try {
         const token = await authService.signup(req.body);
-        res.status(201).cookie('user', token).json({ token });
+        res.cookie('user', token, {
+          expires: new Date(Date.now() + (1000 * 60 * 5)),
+          httpOnly: true
+        }).json({ token });
       } catch (err) {
         return next(err);
       }

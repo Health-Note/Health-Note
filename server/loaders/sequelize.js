@@ -26,7 +26,7 @@ const sequelize = new Sequelize(
     logging: msg => logger.debug(msg),
     // https://www.npmjs.com/package/mysql#connection-options mysql 옵션
     dialectOptions: {
-      //useUTC: false, //for reading from database (mssql option)
+      //useUTC: false, //for reading from database (mssql option?)
       dateStrings: true,  // Date 객체로 바꾸지 않고 문자열로 처리한다는 옵션 (날짜연산 할 일이 없다면?)
       typeCast: function(field, next) {
         if (field.type === 'DATETIME') {

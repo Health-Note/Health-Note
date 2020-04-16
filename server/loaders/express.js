@@ -55,12 +55,12 @@ module.exports = ({ app }) => {
 
   // Request object logging
   app.use((req, res, next) => {
-    console.log(req.query);
 
-    // 이건 여기서 검출 안됨??
-    console.log(req.params);
-
-    console.log(req.body);
+    if(Object.keys().length > 0 || req.query.constructor !== Object)
+      console.log(req.query);
+      
+    if(Object.keys().length > 0 || req.body.constructor !== Object)
+      console.log(req.body);
 
     next();
   });
