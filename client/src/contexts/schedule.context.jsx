@@ -1,16 +1,17 @@
-import React, { createContext, useReducer, useState } from 'react';
-import moment from 'moment';
-import scheduleReducer from '../reducers/schedule.reducer.js';
-import axios from 'axios';
-import setAuthToken from '../utils/setAuthToken';
 import {
-  SET_SCHEDULE,
+  CREATE_ONE_SCHEDULE,
   GET_SCHEDULES,
+  REMOVE_SHCEDULE,
+  SET_SCHEDULE,
   SET_SCHEDULE_TARGET,
   UPDATE_SCHEDULE,
-  REMOVE_SHCEDULE,
-  CREATE_ONE_SCHEDULE,
 } from '../reducers/types';
+import React, { createContext, useReducer, useState } from 'react';
+
+import axios from 'axios';
+import moment from 'moment';
+import scheduleReducer from '../reducers/schedule.reducer.js';
+import setAuthToken from '../utils/setAuthToken';
 
 export const ScheduleContext = createContext();
 export const DispatchContext = createContext();
@@ -56,7 +57,7 @@ export const ScheduleProvider = props => {
     };
     try {
       const res = await axios.post(
-        '/api/schedules/setSchedule',
+        '/api/schedules/initializing',
         data,
         settings
       );
@@ -72,7 +73,7 @@ export const ScheduleProvider = props => {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.get('/api/schedules/getAllSchedules');
+      const res = await axios.get('/api/schedules');
       dispatch({ type: GET_SCHEDULES, payload: res.data });
       console.log('schedule.context/getAllSchedules/res.data', res.data);
     } catch (err) {
@@ -120,7 +121,7 @@ export const ScheduleProvider = props => {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.post('/api/schedules/createOneSchedule', {
+      const res = await axios.post('/api/schedules', {
         date,
         memberId: selectedMember.id,
       });

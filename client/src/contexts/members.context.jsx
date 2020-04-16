@@ -95,7 +95,7 @@ export function MembersProvider(props) {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.post('/api/members/', formdata);
+      const res = await axios.post('/api/members', formdata);
       if (res.data) {
         console.log('addMember_res.data', res.data);
         const addedMemebr = await changeVarName(res.data);

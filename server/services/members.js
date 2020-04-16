@@ -25,7 +25,7 @@ const create = async (body, id) => {
 };
 
 const getAll = async id => {
-  return await db.member.findAll({ where: { TrainerId: id }, raw: true })
+  return await db.member.findAll({ where: { trainerId: id }, raw: true })
     .then(result => {
       return result;
     })

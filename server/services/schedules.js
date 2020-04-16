@@ -1,6 +1,6 @@
-const moment = require('moment');
-const db = require('../loaders/sequelize'); // 여기 부분이 문제인가?
+const { db } = require('../models');
 const schedulesController = {};
+const moment = require('moment');
 const calendarColors = require('../utils/seedColors');
 
 const makeFirstWeekDates = (days, firstDate, times) => {
@@ -41,7 +41,7 @@ const makeFirstWeekDates = (days, firstDate, times) => {
       const tempString1 =
         firstDateFormated + ' ' + moment(times[i]).format('HH:mm');
       const tempFirstDate1 = moment(tempString1);
-      console.log('tempFirstDate1', tempFirstDate1);
+      //console.log('tempFirstDate1', tempFirstDate1);
       firstWeekDates.push(tempFirstDate1);
     } else if (startDay > days[i]) {
       // ex) 선택요일이 수요일인데 그 다음주 월요일 구할때
@@ -61,7 +61,9 @@ const makeFirstWeekDates = (days, firstDate, times) => {
     }
   }
   let sortedArray = firstWeekDates.sort((a, b) => a.valueOf() - b.valueOf());
-  console.log('==========firstWeekDates=====', sortedArray);
+
+  //console.log('==========firstWeekDates=====', sortedArray);
+
   return sortedArray;
 };
 
@@ -76,8 +78,11 @@ const makeAllSchedule = async (
   const copyFirstWeekDates = []; // 복사
   const copyFirstWeekDates2 = []; // 복사
   const weekNum = Math.floor(totalPT / firstWeekDates.length); // 10 / 3 = 3
+
   console.log('weekNum', weekNum);
+
   const remainDayNum = totalPT % firstWeekDates.length;
+
   console.log('remainDayNun', remainDayNum);
 
   // 첫 주 요일들의 날짜를 넣는다.
@@ -102,7 +107,7 @@ const makeAllSchedule = async (
     allSchedule.sort();
   }
 
-  console.log('===========allSchedule=========', allSchedule);
+  //console.log('===========allSchedule=========', allSchedule);
 
   let j = 0;
   const createdAllSchedules = allSchedule.map((cv, i) => {
@@ -118,7 +123,7 @@ const makeAllSchedule = async (
 
     return {
       StartTime: cv,
-      MemberId: foundMemberId,
+      memberId: foundMemberId,
       EndTime: '0000',
       IsFinish: false,
       IsTemp: '??',
@@ -130,19 +135,20 @@ const makeAllSchedule = async (
 };
 
 // createdAllSchedules = [date, date, date ...]
-const createAllSchedules = async createdAllSchedules => {
+const createAllSchedules = async (createdAllSchedules) => {
   console.log('createdAllSchedules', createdAllSchedules);
-  let createdDbSchedules;
-  try {
-    createdDbSchedules = await db.schedule.bulkCreate(createdAllSchedules);
-  } catch (err) {
-    console.log(err);
-  }
+
+  const createdDbSchedules = await db.schedule
+    .bulkCreate(createdAllSchedules)
+    .catch((err) => {
+      throw new Error(err);
+    });
   return createdDbSchedules;
 };
 
-schedulesController.setSchedule = async (req, res) => {
-  const { firstDate, times, totalPT, days, phoneNum } = req.body; // 시작일, 횟수, 요일배열
+const initialize = async (body) => {
+  const { firstDate, times, totalPT, days, memberId } = body; // 시작일, 횟수, 요일배열
+
   console.log(
     'days: ',
     days,
@@ -157,130 +163,143 @@ schedulesController.setSchedule = async (req, res) => {
 
   if (!days.includes(moment(firstDate).isoWeekday())) {
     console.log('시작일이 선택요일에 포함되지 않음');
-    return res
-      .status(400)
-      .json({ msg: '시작일이 선택요일에 포함되지 않습니다.' });
+    //return res.status(400).json({ msg: '시작일이 선택요일에 포함되지 않습니다.' });
+    throw new Error();
   }
 
-  try {
-    const firstWeekDates = await makeFirstWeekDates(days, firstDate, times);
-    const foundMemberId = await db.member.findOne({
-      where: { PhoneNum: phoneNum },
-      attributes: ['MemberId'],
-    });
-    console.log('foundMemberId', foundMemberId.dataValues.MemberId);
-    const allSchedules = await makeAllSchedule(
-      firstWeekDates,
-      totalPT,
-      foundMemberId.dataValues.MemberId,
-      times
-    );
-    const createdDbSchedules = await createAllSchedules(allSchedules, phoneNum);
-    console.log('createdDbSchedules', createdDbSchedules);
-    res.json(createdDbSchedules);
-  } catch (err) {
-    console.log(err);
-  }
+  //try {
+  const firstWeekDates = await makeFirstWeekDates(days, firstDate, times);
+
+  //const foundMemberId = await db.member.findOne({
+  //  where: { PhoneNum: phoneNum },
+  //  attributes: ['MemberId'],
+  //});
+
+  console.log('foundMemberId', memberId);
+
+  const allSchedules = await makeAllSchedule(
+    firstWeekDates,
+    totalPT,
+    memberId,
+    times
+  );
+  const createdDbSchedules = await createAllSchedules(allSchedules, phoneNum);
+
+  //console.log('createdDbSchedules', createdDbSchedules);
+
+  //res.json(createdDbSchedules);
+  // } catch (err) {
+  //   //console.log(err);
+  //   throw new Error(err);
+  // }
 };
 
 // 스케줄 가져오기
-schedulesController.get = async (req, res) => {
-  try {
-    const foundMembersWithSchedules = await db.member.findAll({
+const get = async (id) => {
+  const foundMembersWithSchedules = await db.member
+    .findAll({
       where: {
-        TrainerId: req.user,
+        trainerId: id,
       },
       include: {
         model: db.schedule,
       },
+      raw: true,
+      nest: true,
+    })
+    .catch((err) => {
+      throw new Error(err);
     });
-    const memberSchedules = [];
-    for (let i = 0; i < foundMembersWithSchedules.length; i++) {
-      memberSchedules.push(
-        foundMembersWithSchedules[i].Schedules.map(schedule => {
-          return {
-            title: foundMembersWithSchedules[i].Name,
-            start: schedule.StartTime,
-            id: schedule.ScheduleId,
-            color: calendarColors[3].colors[i].color,
-            isFinish: schedule.IsFinish,
-            memberId: foundMembersWithSchedules[i].MemberId,
-          };
-        })
-      );
+
+  const memberSchedules = [];
+  for (let i = 0; i < foundMembersWithSchedules.length; i++) {
+    if (foundMembersWithSchedules[i].schedule) {
+      memberSchedules.push({
+        title: foundMembersWithSchedules[i].name,
+        start: foundMembersWithSchedules[i].schedule.startTime,
+        id: foundMembersWithSchedules[i].schedule.scheduleId,
+        color: calendarColors[3].colors[i].color,
+        isFinish: foundMembersWithSchedules[i].schedule.isFinish,
+        memberId: foundMembersWithSchedules[i].memberId,
+      });
     }
-    res.json(memberSchedules);
-  } catch (err) {
-    console.log(err);
   }
+
+  console.log(memberSchedules);
+
+  return memberSchedules;
 };
 
 // 스케줄 삭제
-schedulesController.removeSchedule = async (req, res) => {
-  const { scheduleId } = req.body;
-  try {
-    const result = await db.schedule.destroy({
-      where: { ScheduleId: scheduleId },
+const remove = async (id) => {
+  const count = await db.schedule
+    .destroy({
+      where: { scheduleId: id },
+    })
+    .catch((err) => {
+      throw new Error(err);
     });
-    if (!result) {
-      return res.status(400).send('삭제 대상이 없습니다.');
-    } else if (result) {
-      return res.json(result);
-    }
-  } catch (err) {
-    return res.status(500).send('server err');
-  }
 };
 
 // 스케줄 변경
-schedulesController.changeSchedule = async (req, res) => {
-  const { id, afterDate, afterTime } = req.body;
-  try {
-    const result = await db.schedule.update(
+const update = async (body, id) => {
+  const {
+    memberId,
+    startTime,
+    endTime,
+    isFinish,
+    isReschedule,
+    day,
+    tooltipText,
+  } = body;
+
+  await db.schedule
+    .update(
       {
-        StartTime: moment(afterDate + ' ' + afterTime).format(
-          'YYYY-MM-DD HH:mm'
-        ),
-        Day: moment(afterDate).isoWeekday(),
+        startTime: startTime, //moment(afterDate + ' ' + afterTime).format('YYYY-MM-DD HH:mm'),
+        endTime: endTime,
+        isFinish: isFinish,
+        isReschedule: isReschedule,
+        day: day, //moment(afterDate).isoWeekday(),
+        tooltipText: tooltipText,
       },
       {
-        where: { ScheduleId: id },
+        where: { scheduleId: id, memberId: memberId },
       }
-    );
-
-    if (result) {
-      const foundSchedule = await db.schedule.findOne({
-        where: {
-          ScheduleId: id,
-        },
-      });
-      console.log("fountSchedule", foundSchedule)
-      res.json(foundSchedule);
-    }
-
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-schedulesController.createOneSchedule = async (req, res) => {
-  const { date, memberId } = req.body;
-  startTime = moment(date).format('YYYY-MM-DD HH:mm');
-  console.log('date, memberId!!!!!!!!!!!!!!!!!', date, memberId);
-  day = moment(date).isoWeekday();
-  try {
-    const result = await db.schedule.create({
-      StartTime: startTime,
-      MemberId: memberId,
-      EndTime: '0000',
-      IsFinish: false,
-      Day: day,
+    )
+    .catch((err) => {
+      throw new Error(err);
     });
-    console.log('createdResult', result);
-    return res.json(result);
-  } catch (err) {
-    console.log(err);
-    res.status(500).send('server err');
-  }
 };
-module.exports = schedulesController;
+
+const create = async (body) => {
+  const {
+    memberId,
+    startTime,
+    endTime,
+    isFinish,
+    isReschedule,
+    day,
+    tooltipText,
+  } = body;
+
+  //startTime = moment(date).format('YYYY-MM-DD HH:mm');
+  //console.log('date, memberId!!!!!!!!!!!!!!!!!', date, memberId);
+  //day = moment(date).isoWeekday();
+
+  await db.schedule
+    .create({
+      memberId: memberId,
+      startTime: startTime, //moment(afterDate + ' ' + afterTime).format('YYYY-MM-DD HH:mm'),
+      endTime: endTime,
+      isFinish: isFinish,
+      isReschedule: isReschedule,
+      day: day, //moment(afterDate).isoWeekday(),
+      tooltipText: tooltipText,
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
+};
+
+module.exports = { get, update, remove, create, initialize };
