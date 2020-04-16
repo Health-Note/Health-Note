@@ -56,12 +56,12 @@ module.exports = ({ app }) => {
   // Request object logging
   app.use((req, res, next) => {
 
-    if(Object.keys().length > 0 || req.query.constructor !== Object)
+    if(Object.keys(req.query).length > 0 || req.query.constructor !== Object)
       console.log(req.query);
       
-    if(Object.keys().length > 0 || req.body.constructor !== Object)
+    if(Object.keys(req.body).length > 0 || req.body.constructor !== Object)
       console.log(req.body);
-
+      
     next();
   });
 
