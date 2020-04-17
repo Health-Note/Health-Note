@@ -2,7 +2,7 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('account', {
-    trainerId: {
+    id: {
       type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
@@ -49,12 +49,12 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: true
     },
-    agreementVersion: {
+    agreement_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'Agreement',
-        key: 'agreementVersion'
+        key: 'id'
       }
     }
   }, {

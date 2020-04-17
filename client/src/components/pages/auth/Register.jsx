@@ -51,7 +51,7 @@ function Register(props) {
     } else if (!agreement) {
       setAlert('회원약관에 동의하지 않았습니다.')
     } else  {
-      register({ trainerName, email, password, "agreementVersion": 1 });
+      register({ trainerName, email, password, "agreementID": 1 });
     } 
   };
 

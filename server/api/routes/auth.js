@@ -117,17 +117,16 @@ module.exports = app => {
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
-
       try {
         const token = await authService.signin(req.body);
         res.cookie('user', token, {
           expires: new Date(Date.now() + (1000 * 60 * 5)),
-          httpOnly: true
+          httpOnly: true,
         }).json({ token });
       } catch (err) {
         return next(err);
       }
-    }
+    },
   );
 
   /**

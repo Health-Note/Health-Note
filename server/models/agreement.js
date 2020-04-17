@@ -2,28 +2,15 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('memo', {
-    memoId: {
+    id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    memberId: {
-      type: DataTypes.BIGINT,
+    contents: {
+      type: DataTypes.TEXT,
       allowNull: false,
-      primaryKey: true,
-      references: {
-        model: 'Member',
-        key: 'memberId'
-      }
-    },
-    text: {
-      type: DataTypes.STRING(2000),
-      allowNull: false
-    },
-    isAlarm: {
-      type: DataTypes.INTEGER,
-      allowNull: false
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -34,6 +21,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     }
   }, {
-    tableName: 'Memo'
+    tableName: 'Agreement'
   });
 };

@@ -217,10 +217,10 @@ const get = async (id) => {
       memberSchedules.push({
         title: foundMembersWithSchedules[i].name,
         start: foundMembersWithSchedules[i].schedule.startTime,
-        id: foundMembersWithSchedules[i].schedule.scheduleId,
+        id: foundMembersWithSchedules[i].schedule.id,
         color: calendarColors[3].colors[i].color,
         isFinish: foundMembersWithSchedules[i].schedule.isFinish,
-        memberId: foundMembersWithSchedules[i].memberId,
+        memberID: foundMembersWithSchedules[i].id,
       });
     }
   }

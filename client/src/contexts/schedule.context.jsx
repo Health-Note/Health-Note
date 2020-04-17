@@ -23,7 +23,7 @@ const initialState = {
   },
   schedules: [
     {
-      title: null,
+      title: null, // memberName
       id: null,
       start: null,
       color: null,

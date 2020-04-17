@@ -17,29 +17,29 @@ db['weightTarget'] = sequelize.import(path.join(__dirname, './weightTarget.js'))
 db['agreement'] = sequelize.import(path.join(__dirname, './agreement.js'));
 
 // 아래와 같은 관계는 model에서 association에서 할 수도 있다
-db.account.belongsTo(db.agreement, { foreignKey: 'agreementVersion' });
+db.account.belongsTo(db.agreement, { foreignKey: 'agreement_id' });
 
-db.schedule.belongsTo(db.member, { foreignKey: 'memberId' });
-db.member.hasMany(db.schedule, { foreignKey: 'memberId' });
+db.schedule.belongsTo(db.member, { foreignKey: 'member_id' });
+db.member.hasMany(db.schedule, { foreignKey: 'id' });
 
-db.member.belongsTo(db.account, { foreignKey: 'trainerId' });
-db.account.hasMany(db.member, { foreignKey: 'trainerId' });
+db.member.belongsTo(db.account, { foreignKey: 'account_id' });
+db.account.hasMany(db.member, { foreignKey: 'id' });
 
 db.member.hasMany(db.biologicalHistory);
-db.biologicalHistory.belongsTo(db.member, { foreignKey: 'memberId'});
+db.biologicalHistory.belongsTo(db.member, { foreignKey: 'member_id'});
 
 db.member.hasMany(db.memo);
-db.memo.belongsTo(db.member, { foreignKey: 'memberId' });
+db.memo.belongsTo(db.member, { foreignKey: 'member_id' });
 
 //db.exercise.hasMany(db.routine, { foreignKey: 'ExerciseCode' });
 
-db.routine.belongsTo(db.schedule, { foreignKey: 'scheduleId' });
-db.routine.belongsTo(db.exercise, { foreignKey: 'exerciseCode' });
+db.routine.belongsTo(db.schedule, { foreignKey: 'schedule_id' });
+db.routine.belongsTo(db.exercise, { foreignKey: 'exercise_id' });
 
 //db.weightTarget.hasMany(db.weightTraining, { foreignKey: 'targetCode' });
 
-db.weightTraining.belongsTo(db.routine, { foreignKey: 'scheduleId' });
-db.weightTraining.belongsTo(db.routine, { foreignKey: 'exerciseCode' });
-db.weightTraining.belongsTo(db.weightTarget, { foreignKey: 'tartgetCode' });
+db.weightTraining.belongsTo(db.routine, { foreignKey: 'schedule_id' });
+db.weightTraining.belongsTo(db.routine, { foreignKey: 'exercise_id' });
+db.weightTraining.belongsTo(db.weightTarget, { foreignKey: 'weightTarget_id' });
 
 module.exports = { sequelize, db };

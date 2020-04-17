@@ -43,10 +43,12 @@ export const AuthProvider = props => {
     }
   };
 
-  // 유저 등록
-  // - 회원가입 양식 데이터를 서버로 보낸다.
-  // - 토큰을 받아온다.
-  // - 성공일 경우 토큰을 state에 담고 에러일 경우 state.error에 에러 메세지를 담는다.
+  /**
+   * @desc [회원가입] 유저가 입력한 데이터를 보내고 토큰을 받아온다.
+   * @req trainerName, eamil, password, agreement_id
+   * @res 성공일 경우 토큰을 state에 담고 에러일 경우 state.error에 에러 메세지를 담는다.
+   * @param formData (trainerName, eamil, password, agreement_id)
+   */
   const register = async formData => {
     const config = {
       method: 'POST',
@@ -54,6 +56,7 @@ export const AuthProvider = props => {
         'Content-Type': 'application/json',
       },
     };
+
     try {
       const res = await axios.post('/api/auth/signup', formData, config);
         dispatch({ type: REGISTER_SUCCESS, payload: res.data }); // res.data = token
