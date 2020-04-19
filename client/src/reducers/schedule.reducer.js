@@ -12,10 +12,10 @@ const reducer = (state, action) =>  {
       switch (action.type) {
         case SET_SCHEDULE_TARGET:
           return produce(state, draft => {
-            draft.selectedSchedule.scheduleId = action.payload.scheduleId;
-            draft.selectedSchedule.memberId = action.payload.memberId;
+            draft.selectedSchedule.id = action.payload.id;
+            draft.selectedSchedule.member_id = action.payload.member_id;
             draft.schedules.forEach(schedule => {
-              if (schedule.id === action.payload.scheduleId) {
+              if (schedule.id === action.payload.id) {
                 schedule.target = true;
                 schedule.borderColor = 'blue';
               } else {
@@ -37,7 +37,7 @@ const reducer = (state, action) =>  {
         case UPDATE_SCHEDULE:
           return produce(state, draft => {
             draft.schedules.forEach(schedule => {
-              if (schedule.id === action.payload.scheduleId) {
+              if (schedule.id === action.payload.id) {
                   schedule.start = action.payload.startTime
               }
             })

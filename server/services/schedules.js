@@ -122,12 +122,12 @@ const makeAllSchedule = async (
     // const finalDate = moment(date).format('YYYY-MM-DD HH:mm');
 
     return {
-      StartTime: cv,
-      memberId: foundMemberId,
-      EndTime: '0000',
-      IsFinish: false,
-      IsTemp: '??',
-      Day: moment(cv).isoWeekday(),
+      startTime: cv,
+      member_id: foundMemberId,
+      endTime: '0000',
+      isFinish: false,
+      isTemp: '??',
+      day: moment(cv).isoWeekday(),
     };
   });
 
@@ -147,7 +147,7 @@ const createAllSchedules = async (createdAllSchedules) => {
 };
 
 const initialize = async (body) => {
-  const { firstDate, times, totalPT, days, memberId } = body; // 시작일, 횟수, 요일배열
+  const { firstDate, times, totalPT, days, phoneNum } = body; // 시작일, 횟수, 요일배열
 
   console.log(
     'days: ',
@@ -167,31 +167,31 @@ const initialize = async (body) => {
     throw new Error();
   }
 
-  //try {
-  const firstWeekDates = await makeFirstWeekDates(days, firstDate, times);
+  try {
+    const firstWeekDates = await makeFirstWeekDates(days, firstDate, times);
 
-  //const foundMemberId = await db.member.findOne({
-  //  where: { PhoneNum: phoneNum },
-  //  attributes: ['MemberId'],
-  //});
+    const foundMemberId = await db.member.findOne({
+      where: { phoneNum: phoneNum },
+      attributes: ['id'],
+    });
 
-  console.log('foundMemberId', memberId);
+    console.log('foundMemberId', foundMemberId.dataValues.id);
 
-  const allSchedules = await makeAllSchedule(
-    firstWeekDates,
-    totalPT,
-    memberId,
-    times
-  );
-  const createdDbSchedules = await createAllSchedules(allSchedules, phoneNum);
+    const allSchedules = await makeAllSchedule(
+      firstWeekDates,
+      totalPT,
+      foundMemberId.dataValues.id,
+      times,
+    );
+    const createdDbSchedules = await createAllSchedules(allSchedules, phoneNum);
 
-  //console.log('createdDbSchedules', createdDbSchedules);
+    console.log('createdDbSchedules', createdDbSchedules);
+    return createdDbSchedules;
 
-  //res.json(createdDbSchedules);
-  // } catch (err) {
-  //   //console.log(err);
-  //   throw new Error(err);
-  // }
+  } catch (err) {
+    console.error(err);
+    throw new Error(err);
+  }
 };
 
 // 스케줄 가져오기
@@ -199,7 +199,7 @@ const get = async (id) => {
   const foundMembersWithSchedules = await db.member
     .findAll({
       where: {
-        trainerId: id,
+        account_id: id,
       },
       include: {
         model: db.schedule,
@@ -234,7 +234,7 @@ const get = async (id) => {
 const remove = async (id) => {
   const count = await db.schedule
     .destroy({
-      where: { scheduleId: id },
+      where: { id: id },
     })
     .catch((err) => {
       throw new Error(err);
@@ -244,7 +244,7 @@ const remove = async (id) => {
 // 스케줄 변경
 const update = async (body, id) => {
   const {
-    memberId,
+    member_id,
     startTime,
     endTime,
     isFinish,
@@ -264,7 +264,7 @@ const update = async (body, id) => {
         tooltipText: tooltipText,
       },
       {
-        where: { scheduleId: id, memberId: memberId },
+        where: { id: id, member_id: member_id },
       }
     )
     .catch((err) => {
@@ -274,7 +274,7 @@ const update = async (body, id) => {
 
 const create = async (body) => {
   const {
-    memberId,
+    member_id,
     startTime,
     endTime,
     isFinish,
@@ -289,7 +289,7 @@ const create = async (body) => {
 
   await db.schedule
     .create({
-      memberId: memberId,
+      member_id: member_id,
       startTime: startTime, //moment(afterDate + ' ' + afterTime).format('YYYY-MM-DD HH:mm'),
       endTime: endTime,
       isFinish: isFinish,

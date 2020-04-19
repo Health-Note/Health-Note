@@ -54,7 +54,7 @@ module.exports = app => {
    */
   route.post('/', middleware.isAuth, async (req, res, next) => {
     try {
-      console.log(req.body);
+      console.log("service(create member)", req.body);
       await memberService.create(req.body, req.user);
       res.status(204).end();
     } catch (err) {
@@ -86,6 +86,7 @@ module.exports = app => {
   route.get('/', middleware.isAuth, async (req, res, next) => {
     try {
       const result = await memberService.getAll(req.user);
+      console.log("[service] api/member(get) result", result);
       res.json(result);
     } catch(err) {
       return next(err);

@@ -13,9 +13,9 @@ const authService = require('../../services/auth');
  *  account:
  *    type: object
  *    required:
- *      - trainerId
+ *      - id
  *    properties:
- *      trainerId:
+ *      id:
  *        type: integer
  *      email:
  *        type: string
@@ -35,7 +35,7 @@ const authService = require('../../services/auth');
  *        type: string
  *      password:
  *        type: string
- *      agreementVersion:
+ *      agreement_id:
  *        type: integer
  */
 const route = Router();

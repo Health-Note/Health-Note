@@ -2,19 +2,19 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('schedule', {
-    scheduleId: {
+    id: {
       type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    memberId: {
+    member_id: {
       type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
       references: {
         model: 'Member',
-        key: 'memberId'
+        key: 'id'
       }
     },
     startTime: {

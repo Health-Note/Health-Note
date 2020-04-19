@@ -38,7 +38,7 @@ const signin = async body => {
   }
 
   const payload = {
-    trainer: {
+    account: {
       id: dataValues.id, // 유저 아이디를 권한 인증 및 접근 가능
     },
   };
@@ -54,7 +54,7 @@ const signin = async body => {
 
 const signup = async body => {
   console.log(body);
-  const { trainerName, email, password, agreementVersion } = body;
+  const { trainerName, email, password, agreement_id } = body;
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -64,7 +64,7 @@ const signup = async body => {
 
   try {
     const result = await db.account.create({
-      agreementVersion: agreementVersion,
+      agreement_id: agreement_id,
       agreementDate: agreementDate,
       deletedDate: initialDate,
       email: email,
@@ -76,8 +76,8 @@ const signup = async body => {
     });
 
     const payload = {
-      trainer: {
-        trainerId: result.dataValues.id, // 유저 아이디를 권한 인증 및 접근 가능
+      account: {
+        id: result.dataValues.id, // 유저 아이디를 권한 인증 및 접근 가능
       },
     };
 

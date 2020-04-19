@@ -18,8 +18,8 @@ export const DispatchContext = createContext();
 
 const initialState = {
   selectedSchedule: {
-    scheduleId: null,
-    memberId: null,
+    id: null,
+    member_id: null,
   },
   schedules: [
     {
@@ -30,7 +30,7 @@ const initialState = {
       finish_dncd: false,
       target: null,
       borderColor: null,
-      memberId: null,
+      member_id: null,
     },
   ],
   isChanging: false
@@ -39,10 +39,10 @@ const initialState = {
 export const ScheduleProvider = props => {
   const [drawerBoolean, setDrawer] = useState(false);
 
-  const setScheduleTarget = (scheduleId, memberId) => {
+  const setScheduleTarget = (schedule_id, member_id) => {
     dispatch({
       type: SET_SCHEDULE_TARGET,
-      payload: { scheduleId, memberId },
+      payload: { schedule_id, member_id },
     });
   };
 
@@ -81,16 +81,16 @@ export const ScheduleProvider = props => {
     }
   };
 
-  const removeSchedule = async scheduleId => {
+  const removeSchedule = async id => {
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
     try {
       const res = await axios.post('/api/schedules/removeSchedule', {
-        scheduleId,
+        id,
       });
       if (res.data === 1) {
-        dispatch({ type: REMOVE_SHCEDULE, payload: scheduleId });
+        dispatch({ type: REMOVE_SHCEDULE, payload: id });
       }
       console.log('removeSchedule', res.data);
     } catch (err) {
@@ -109,8 +109,8 @@ export const ScheduleProvider = props => {
         afterDate,
         afterTime,
       });
-      console.log("res", res.data.ScheduleId)
-      dispatch({ type: UPDATE_SCHEDULE, payload: { scheduleId: Number(res.data.ScheduleId), startTime: res.data.StartTime } });
+      console.log("res", res.data.id);
+      dispatch({ type: UPDATE_SCHEDULE, payload: { id: Number(res.data.id), startTime: res.data.startTime } });
     } catch (err) {
       console.log('changeSchedule', err);
     }
@@ -123,17 +123,17 @@ export const ScheduleProvider = props => {
     try {
       const res = await axios.post('/api/schedules', {
         date,
-        memberId: selectedMember.id,
+        member_id: selectedMember.id,
       });
-      let createdMember = {
+      let createdSchedule = {
         title: selectedMember.name,
-        start: res.data.StartTime,
-        id: res.data.ScheduleId,
-        memberId: res.data.MemberId,
+        start: res.data.startTime,
+        id: res.data.id,
+        member_id: res.data.member_id,
         color: 'red',
       };
-      console.log('createdMember', createdMember);
-      dispatch({ type: CREATE_ONE_SCHEDULE, payload: createdMember });
+      console.log('createdSchedule', createdSchedule);
+      dispatch({ type: CREATE_ONE_SCHEDULE, payload: createdSchedule });
     } catch (err) {
       console.log('createOneSchedule', err);
     }

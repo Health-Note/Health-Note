@@ -9,20 +9,20 @@ export default initialMembers => {
     addTodo: newMember => {
       setTodos([...members, { id: uuid(), name: newMember, completed: false }]);
     },
-    ToggleTodo: memberId => {
+    ToggleTodo: member_id => {
       const updatedMember = members.map(member =>
-        memberId === member.id
+        member_id === member.id
           ? { ...member, completed: !member.completed }
           : member
       );
       setTodos(updatedMember);
     },
-    removeTodo: memberId => {
-      setTodos(members.filter(member => memberId !== member.id));
+    removeTodo: member_id => {
+      setTodos(members.filter(member => member_id !== member.id));
     },
-    EditTodo: (memberId, fixedName) => {
+    EditTodo: (member_id, fixedName) => {
       const editedMembers = members.map(member =>
-        memberId === member.id ? { ...member, name: fixedName } : member
+        member_id === member.id ? { ...member, name: fixedName } : member
       );
       setTodos(editedMembers);
     },

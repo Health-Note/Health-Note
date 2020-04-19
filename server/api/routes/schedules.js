@@ -21,7 +21,7 @@ const { Router } = require('express');
  *  scheduleInitialReq:
  *    type: object
  *    properties:
- *      memberId:
+ *      id:
  *        type: integer
  *      startTime:
  *        type: string
@@ -32,7 +32,7 @@ const { Router } = require('express');
  *  scheduleSetReq:
  *    type: object
  *    properties:
- *      memberId:
+ *      member_id:
  *        type: integer
  *      startTime:
  *        type: string
@@ -110,8 +110,8 @@ module.exports = app => {
    */  
   route.post('/initializing', middlewares.isAuth, async (req, res, next) => {
     try {
-      await scheduleService.initialize(req.body);
-      res.status(204).end();
+      const result = await scheduleService.initialize(req.body);
+      //res.status(204).json(result);
     } catch(err) {
       throw next(err);
     }
@@ -119,7 +119,7 @@ module.exports = app => {
 
   /**
    * @swagger
-   * /schedules/{scheduleId}:
+   * /schedules/{id}:
    *  delete:
    *    summary: delete schedule
    *    description: delete schedule 
@@ -131,7 +131,7 @@ module.exports = app => {
    *       type: string
    *       required: true
    *     - in: path
-   *       name: scheduleId
+   *       name: id
    *       type: integer
    *       required: true
    *    produces:
@@ -142,9 +142,9 @@ module.exports = app => {
    *      204:
    *        description: success to delete a schedule
    */
-  route.delete('/:scheduleId', middlewares.isAuth, async (req, res, next) => {
+  route.delete('/:id', middlewares.isAuth, async (req, res, next) => {
     try {
-      await scheduleService.remove(req.params.scheduleId);
+      await scheduleService.remove(req.params.schedule_id);
       res.status(204).end();
     } catch(err) {
       return next(err);
@@ -153,7 +153,7 @@ module.exports = app => {
 
   /**
    * @swagger
-   * /schedules/{scheduleId}:
+   * /schedules/{id}:
    *  patch:
    *    summary: update a schedule
    *    description: update a schedule
@@ -177,7 +177,7 @@ module.exports = app => {
    *      204:
    *        description: success to update a schedule
    */
-  route.patch('/:scheduleId', middlewares.isAuth, async (req, res, next) => {
+  route.patch('/:id', middlewares.isAuth, async (req, res, next) => {
     try {
       await scheduleService.update(req.body, req.params.scheduldId);
       res.status(204).end();

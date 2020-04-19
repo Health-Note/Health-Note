@@ -2,30 +2,30 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('routine', {
-    exerciseCode: {
+    exercise_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       references: {
         model: 'Exercise',
-        key: 'exerciseCode'
+        key: 'id'
       }
     },
-    scheduleId: {
+    schedule_id: {
       type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
       references: {
         model: 'Schedule',
-        key: 'scheduleId'
+        key: 'id'
       }
     },
-    memberId: {
+    member_id: {
       type: DataTypes.BIGINT,
       allowNull: false,
       references: {
         model: 'Schedule',
-        key: 'memberId'
+        key: 'member_id'
       }
     },
     routineOrder: {

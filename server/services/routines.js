@@ -29,11 +29,11 @@ const createOrUpdate = async (body) => {
 };
 
 const getByScheduleId = async (params) => {
-  const { scheduleId } = params;
+  const { schedule_id } = params;
 
   const result = await db.routine
     .findAll({
-      where: { scheduleId: scheduleId },
+      where: { schedule_id: schedule_id },
       //include: { model: db.exercise },
       raw: true,
       nest: true,
@@ -46,11 +46,11 @@ const getByScheduleId = async (params) => {
 };
 
 const remove = async (query) => {
-  const { scheduleId, routineId } = query;
+  const { schedule_id, id } = query;
 
   await db.routine
     .destroy({
-      where: { scheduleId: scheduleId, routineId: routineId },
+      where: { schedule_id: schedule_id, id: id },
     })
     .catch((err) => {
       throw new Error(err);

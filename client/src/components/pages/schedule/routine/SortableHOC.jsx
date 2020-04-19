@@ -90,9 +90,9 @@ class SortableComponent extends Component {
         exerciseName: cv.exerciseName,
         setCount: cv.setCount,
         repetitions: cv.repetitions,
-        exerciseCode: cv.exerciseCode,
-        scheduleId: cv.scheduleId,
-        memberId: cv.memberId,
+        exercise_id: cv.exercise_id,
+        schedule_id: cv.schedule_id,
+        member_id: cv.member_id,
       })),
     };
   }
@@ -108,12 +108,12 @@ class SortableComponent extends Component {
   insertRoutine = async () => {
     const { setAlert } = this.context;
     const routines = this.state.items.map((cv, idx) => ({
-      SetCount: cv.setCount,
-      Repetitions: cv.repetitions,
-      ExerciseCode: cv.exerciseCode,
-      ScheduleId: this.props.selectedScheduleId,
-      MemberId: cv.memberId,
-      RoutineOrder: idx,
+      setCount: cv.setCount,
+      repetitions: cv.repetitions,
+      exerciseCode: cv.exerciseCode,
+      schedule_id: this.props.selectedSchedule_id,
+      member_id: cv.member_id,
+      routineOrder: idx,
     }));
 
     if (localStorage.token) {
@@ -123,7 +123,7 @@ class SortableComponent extends Component {
     try {
       const res = await axios.post('/api/routine', {
         routines,
-        scheduleId: this.props.selectedScheduleId,
+        schedule_id: this.props.selectedSchedule_id,
       });
       if (res.data) {
         setAlert('저장되었습니다.', 'success');

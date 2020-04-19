@@ -13,7 +13,7 @@ const create = async (body, id) => {
     totalPT: totalPT,
     usedPT: 0,
     registration: 1,
-    trainerId: id,
+    account_id: id,
   })
     .catch(err => {
       if (err.name === 'SequelizeUniqueConstraintError') {
@@ -24,14 +24,17 @@ const create = async (body, id) => {
     });
 };
 
-const getAll = async id => {
-  return await db.member.findAll({ where: { trainerId: id }, raw: true })
-    .then(result => {
-      return result;
-    })
-    .catch(err => {
-      throw new Error(err);
-    });
+/**
+ * @desc [서비스] 트레이너가 보유한 모든 회원목록을 가져온다.
+ * @param account_id
+ * */
+const getAll = async account_id => {
+  try {
+    const result = await db.member.findAll({ where: { account_id: account_id }, raw: true });
+    return result;
+  } catch (err) {
+    throw new Error(err);
+  }
 };
 
 const remove = async query => {
@@ -39,7 +42,7 @@ const remove = async query => {
   const array = JSON.parse(ids);
 
   const count = await db.member.destroy({
-    where: { memberId: array }
+    where: { id: array }
   }).catch(err => {
     throw new Error(err);
   })

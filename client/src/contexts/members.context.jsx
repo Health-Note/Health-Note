@@ -40,15 +40,15 @@ export function MembersProvider(props) {
 
   const changeVarName = (member) => {
     const memberObj = {};
-    memberObj['name'] = member.Name;
-    memberObj['id'] = member.MemberId;
-    memberObj['phoneNum'] = member.PhoneNum;
-    memberObj['gender'] = member.Gender;
-    memberObj['startDate'] = member.StartDate;
-    memberObj['endDate'] = member.EndDate;
-    memberObj['usedPT'] = member.UsedPT;
-    memberObj['totalPT'] = member.TotalPT;
-    memberObj['height'] = member.Height;
+    memberObj['name'] = member.name;
+    memberObj['id'] = member.id;
+    memberObj['phoneNum'] = member.phoneNum;
+    memberObj['gender'] = member.gender;
+    memberObj['startDate'] = member.startDate;
+    memberObj['endDate'] = member.endDate;
+    memberObj['usedPT'] = member.usedPT;
+    memberObj['totalPT'] = member.totalPT;
+    memberObj['height'] = member.height;
     return memberObj;
   };
 
@@ -65,11 +65,12 @@ export function MembersProvider(props) {
       },
     };
     try {
-      const res = await axios.get('/api/members/', setting);
-      console.log('res.data', res.data);
+      const res = await axios.get('/api/members', setting);
+      console.log(res)
+      console.log('[context] getMember res.data', res.data);
       const members = res.data.map(cv => {
         return {
-          id: cv.memberId,
+          id: cv.id,
           name: cv.name,
           phoneNum: cv.phoneNum,
           gender: cv.gender,
@@ -121,15 +122,15 @@ export function MembersProvider(props) {
         console.log('selectedRows', selectedRows);
         const members = res.data.map(cv => {
           return {
-            id: cv.MemberId,
+            id: cv.id,
             name: cv.Name,
-            phoneNum: cv.PhoneNum,
-            gender: cv.Gender,
-            startDate: cv.StartDate,
-            endDate: cv.EndDate,
-            usedPT: cv.UsedPT,
-            totalPT: cv.TotalPT,
-            height: cv.Height,
+            phoneNum: cv.phoneNum,
+            gender: cv.gender,
+            startDate: cv.startDate,
+            endDate: cv.endDate,
+            usedPT: cv.usedPT,
+            totalPT: cv.totalPT,
+            height: cv.height,
           };
         });
         dispatch({ type: REMOVE_MEMBER, payload: members });

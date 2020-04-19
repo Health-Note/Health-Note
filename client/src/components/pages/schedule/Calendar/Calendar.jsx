@@ -99,17 +99,17 @@ function Calendar() {
    *        삭제클릭시 phonenum, date, startTime 서버로 보냄
    */
   const handleEventClick = eventClick => {
-    const scheduleId = eventClick.event.id;
-    const memberId = eventClick.event.extendedProps.memberId;
+    const id = eventClick.event.id;
+    const member_id = eventClick.event.extendedProps.member_id;
     const date = moment(eventClick.event.start).format('YYYY-MM-DD');
 
     setName(eventClick.event.title);
     setEvt(eventClick.event);
     handleTargetId(eventClick.event.id);
     setStart(moment(eventClick.event.start).format('MM월 DD일'));
-    setSelectedDate(date, memberId);
+    setSelectedDate(date, member_id);
     setDrawer(true);
-    setScheduleTarget(parseInt(scheduleId), parseInt(memberId));
+    setScheduleTarget(parseInt(id), parseInt(member_id));
   };
 
   // 클릭으로 이벤트 만들기

@@ -10,7 +10,7 @@ const ExerciseSelect = ({
   getRepetitions,
   getSetCount,
   getExerciseCode,
-  getExerCodeAndName,
+  getExerIdAndName,
 }) => {
   if (localStorage.token) {
     setAuthToken(localStorage.token);
@@ -29,7 +29,7 @@ const ExerciseSelect = ({
   const [setCounts, setSetCount] = useState('');
 
   const handleSelectExercise = value => {
-    getExerCodeAndName(value);
+    getExerIdAndName(value);
   };
 
   const handleRepetitions = useCallback(

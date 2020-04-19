@@ -2,22 +2,22 @@ module.exports = function (sequelize, DataTypes) {
   return sequelize.define(
     'weightTraining',
     {
-      exerciseCode: {
+      exercise_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         references: {
           model: 'Routine',
-          key: 'exerciseCode',
+          key: 'exercise_id',
         },
       },
-      scheduleId: {
+      schedule_id: {
         type: DataTypes.BIGINT,
         allowNull: false,
         primaryKey: true,
         references: {
           model: 'Routine',
-          key: 'scheduleId',
+          key: 'schedule_id',
         },
       },
       setCount: {
@@ -32,12 +32,12 @@ module.exports = function (sequelize, DataTypes) {
           type: DataTypes.INTEGER,
           allowNull: false
       },
-      targetCode: {
+      weightTarget_id: {
           type: DataTypes.INTEGER,
           allowNull: false,
           references: {
             model: 'WeightTarget',
-            key: 'targetCode'
+            key: 'id'
           }
       }
     },

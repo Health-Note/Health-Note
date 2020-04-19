@@ -25,15 +25,15 @@ const Schedule = () => {
   const [routines, setRoutines] = useState([]);
 
   // 자식컴포넌트로 보내서 운동코드, 운동이름, 타겟을 가져오는 함수
-  const getExerCodeAndName = (exerciseName, exerciseCode, target) => {
+  const getExerIdAndName = (exerciseName, exercise_id, target) => {
     setRoutines(prevState => [
       ...prevState,
       {
-        exerciseCode,
+        exercise_id,
         exerciseName,
         target,
-        scheduleId: targetSchedule.scheduleId,
-        memberId: targetSchedule.memberId,
+        schedule_id: targetSchedule.id,
+        member_id: targetSchedule.member_id,
         setCount,
         repetitions,
       },
@@ -63,7 +63,7 @@ const Schedule = () => {
       }
       try {
         const res = await axios.get(
-          `/api/routine/${targetSchedule.scheduleId}`
+          `/api/routine/${targetSchedule.id}`
         );
         setRoutines(res.data);
       } catch (err) {
@@ -71,18 +71,18 @@ const Schedule = () => {
       }
     };
     getRoutines();
-  }, [targetSchedule.scheduleId]);
+  }, [targetSchedule.id]);
 
   // 루틴 저장
   const saveRoutines = async () => {
     const db_routines = routines.map(cv => ({
-      ExerciseCode: cv.exerciseCode,
-      ExerciseName: cv.exerciseName,
-      Target: cv.Target,
-      ScheduleId: targetSchedule.scheduleId,
-      MemberId: targetSchedule.memberId,
-      SetCount: setCount,
-      Repetitions: repetitions, 
+      exercise_id: cv.exericse_id,
+      exerciseName: cv.exerciseName,
+      target: cv.target,
+      schedule_id: targetSchedule.schedule_id,
+      member_id: targetSchedule.member_id,
+      setCount: setCount,
+      repetitions: repetitions,
     }))
 
     if (localStorage.token) {
@@ -91,7 +91,7 @@ const Schedule = () => {
     try {
       const res = await axios.post('/api/routine', {
         routines: db_routines,
-        scheduleId: targetSchedule.scheduleId,
+        schedule_id: targetSchedule.id,
       });
       if (res.data) {
         setAlert('저장되었습니다.', 'success');
@@ -129,7 +129,7 @@ const Schedule = () => {
                   </Row>
                 );
               })}
-            <ExerciseSelect getExerCodeAndName={getExerCodeAndName} />
+            <ExerciseSelect getExerIdAndName={getExerIdAndName} />
             <Divider>루틴목록↓</Divider>
             <EachRow
               getSetCount={getSetCount}
@@ -157,7 +157,7 @@ const Schedule = () => {
             {/* <SortableComponent
               routines={routines}
               removeRoutine={removeRoutine}
-              selectedScheduleId={targetSchedule.scheduleId}
+              selectedSchedule_id={targetSchedule.schedule_id}
             /> */}
           </Col>
         </MyDrawer>

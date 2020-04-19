@@ -2,13 +2,13 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('biologicalHistory', {
-    memberId: {
+    member_id: {
       type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
       references: {
         model: 'Member',
-        key: 'memberId'
+        key: 'id'
       }
     },
     updatedAt: {
