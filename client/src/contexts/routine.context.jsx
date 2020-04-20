@@ -11,19 +11,19 @@ export const DispatchContext = createContext();
 export const RoutineProvider = props => {
   const initialState = [
     {
-      exercise_id: null, //멤버
-      schedule_id: null, //멤버
-      member_id: null, //루틴
+      exerciseId: null, //멤버
+      scheduleId: null, //멤버
+      memberId: null, //루틴
       setCount: null, //루틴
       repetitions: null, //루틴(모델링에 따라 변경)
     },
   ];
 
   const [routineState, dispatch] = useReducer(routineReducer, initialState);
-  const [schedule_id, setSchedule_id] = useState('');
+  const [scheduleId, setScheduleId] = useState('');
 
-  const setSelectedDate = (date, schedule_id) => {
-    setSchedule_id(schedule_id);
+  const setSelectedDate = (date, scheduleId) => {
+    setScheduleId(scheduleId);
     dispatch({ type: SET_DATE, payload: { date } });
     //getRoutine(date, phonenum);
   };
@@ -37,13 +37,13 @@ export const RoutineProvider = props => {
    *    recentWorkout: [],
    *  }
    */
-  const getRoutine = async (schedule_id, date) => {
+  const getRoutine = async (scheduleId, date) => {
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
-    console.log(schedule_id);
-    const res = await axios.post(`/api/routine/${schedule_id}`, {
-      schedule_id,
+    console.log(scheduleId);
+    const res = await axios.post(`/api/routine/${scheduleId}`, {
+      scheduleId,
       date,
     });
     console.log(res.data);

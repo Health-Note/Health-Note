@@ -5,8 +5,8 @@ const Op = sequelize.Op;
 const get = async () => {
   const result = await db.routine.findAndCountAll({
     where: {
-      member_id: 21,
-      exercise_id: {
+      memberId: 21,
+      exerciseId: {
         [Op.between]: [100, 199],
       },
     },

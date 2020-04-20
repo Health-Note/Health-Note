@@ -25,15 +25,15 @@ const Schedule = () => {
   const [routines, setRoutines] = useState([]);
 
   // 자식컴포넌트로 보내서 운동코드, 운동이름, 타겟을 가져오는 함수
-  const getExerIdAndName = (exerciseName, exercise_id, target) => {
+  const getExerIdAndName = (exerciseName, exerciseId, target) => {
     setRoutines(prevState => [
       ...prevState,
       {
-        exercise_id,
+        exerciseId,
         exerciseName,
         target,
-        schedule_id: targetSchedule.id,
-        member_id: targetSchedule.member_id,
+        scheduleId: targetSchedule.id,
+        memberId: targetSchedule.memberId,
         setCount,
         repetitions,
       },
@@ -76,11 +76,11 @@ const Schedule = () => {
   // 루틴 저장
   const saveRoutines = async () => {
     const db_routines = routines.map(cv => ({
-      exercise_id: cv.exericse_id,
+      exerciseId: cv.exericseId,
       exerciseName: cv.exerciseName,
       target: cv.target,
-      schedule_id: targetSchedule.schedule_id,
-      member_id: targetSchedule.member_id,
+      scheduleId: targetSchedule.scheduleId,
+      memberId: targetSchedule.memberId,
       setCount: setCount,
       repetitions: repetitions,
     }))
@@ -91,7 +91,7 @@ const Schedule = () => {
     try {
       const res = await axios.post('/api/routine', {
         routines: db_routines,
-        schedule_id: targetSchedule.id,
+        scheduleId: targetSchedule.id,
       });
       if (res.data) {
         setAlert('저장되었습니다.', 'success');
@@ -157,7 +157,7 @@ const Schedule = () => {
             {/* <SortableComponent
               routines={routines}
               removeRoutine={removeRoutine}
-              selectedSchedule_id={targetSchedule.schedule_id}
+              selectedScheduleId={targetSchedule.scheduleId}
             /> */}
           </Col>
         </MyDrawer>

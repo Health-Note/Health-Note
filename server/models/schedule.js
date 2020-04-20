@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
-    member_id: {
+    memberId: {
       type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,

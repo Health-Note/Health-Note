@@ -11,13 +11,13 @@ const { Router } = require('express');
  *  routineSetReq:
  *    type: object
  *    properties:
- *      schedule_id:
+ *      scheduleId:
  *        type: integer
  *      exerciseCode:
  *        type: integer
  *      routineOrder:
  *        type: integer
- *      member_id:
+ *      memberId:
  *        type: integer
  *      isCadio:
  *        type: integer
@@ -79,7 +79,7 @@ module.exports = app => {
 
   /**
    * @swagger
-   * /routines/{schedule_id}:
+   * /routines/{scheduleId}:
    *  get:
    *    summary: get all routines of schedule
    *    description: get all routines of schedule
@@ -91,7 +91,7 @@ module.exports = app => {
    *       type: string
    *       required: true
    *     - in: path
-   *       name: schedule_id
+   *       name: scheduleId
    *       type: integer
    *       required: true
    *    produces:
@@ -102,7 +102,7 @@ module.exports = app => {
    *      200:
    *        description: success to get routines
    */
-  route.get('/:schedule_id', middlewares.isAuth, async (req, res, next) => {
+  route.get('/:scheduleId', middlewares.isAuth, async (req, res, next) => {
     try {
       const result = await routineService.getByScheduleId(req.params);
       res.json(result);
@@ -125,7 +125,7 @@ module.exports = app => {
    *       type: string
    *       required: true
    *     - in: query
-   *       name: schedule_id
+   *       name: scheduleId
    *       type: integer
    *       required: true
    *     - in: query

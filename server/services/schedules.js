@@ -123,7 +123,7 @@ const makeAllSchedule = async (
 
     return {
       startTime: cv,
-      member_id: foundMemberId,
+      memberId: foundMemberId,
       endTime: '0000',
       isFinish: false,
       isTemp: '??',
@@ -199,7 +199,7 @@ const get = async (id) => {
   const foundMembersWithSchedules = await db.member
     .findAll({
       where: {
-        account_id: id,
+        accountId: id,
       },
       include: {
         model: db.schedule,
@@ -244,7 +244,7 @@ const remove = async (id) => {
 // 스케줄 변경
 const update = async (body, id) => {
   const {
-    member_id,
+    memberId,
     startTime,
     endTime,
     isFinish,
@@ -264,7 +264,7 @@ const update = async (body, id) => {
         tooltipText: tooltipText,
       },
       {
-        where: { id: id, member_id: member_id },
+        where: { id: id, memberId: memberId },
       }
     )
     .catch((err) => {
@@ -274,7 +274,7 @@ const update = async (body, id) => {
 
 const create = async (body) => {
   const {
-    member_id,
+    memberId,
     startTime,
     endTime,
     isFinish,
@@ -289,7 +289,7 @@ const create = async (body) => {
 
   await db.schedule
     .create({
-      member_id: member_id,
+      memberId: memberId,
       startTime: startTime, //moment(afterDate + ' ' + afterTime).format('YYYY-MM-DD HH:mm'),
       endTime: endTime,
       isFinish: isFinish,

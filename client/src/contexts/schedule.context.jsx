@@ -19,7 +19,7 @@ export const DispatchContext = createContext();
 const initialState = {
   selectedSchedule: {
     id: null,
-    member_id: null,
+    memberId: null,
   },
   schedules: [
     {
@@ -30,7 +30,7 @@ const initialState = {
       finish_dncd: false,
       target: null,
       borderColor: null,
-      member_id: null,
+      memberId: null,
     },
   ],
   isChanging: false
@@ -39,10 +39,10 @@ const initialState = {
 export const ScheduleProvider = props => {
   const [drawerBoolean, setDrawer] = useState(false);
 
-  const setScheduleTarget = (schedule_id, member_id) => {
+  const setScheduleTarget = (scheduleId, memberId) => {
     dispatch({
       type: SET_SCHEDULE_TARGET,
-      payload: { schedule_id, member_id },
+      payload: { scheduleId, memberId },
     });
   };
 
@@ -123,13 +123,13 @@ export const ScheduleProvider = props => {
     try {
       const res = await axios.post('/api/schedules', {
         date,
-        member_id: selectedMember.id,
+        memberId: selectedMember.id,
       });
       let createdSchedule = {
         title: selectedMember.name,
         start: res.data.startTime,
         id: res.data.id,
-        member_id: res.data.member_id,
+        memberId: res.data.memberId,
         color: 'red',
       };
       console.log('createdSchedule', createdSchedule);

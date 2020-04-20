@@ -90,9 +90,9 @@ class SortableComponent extends Component {
         exerciseName: cv.exerciseName,
         setCount: cv.setCount,
         repetitions: cv.repetitions,
-        exercise_id: cv.exercise_id,
-        schedule_id: cv.schedule_id,
-        member_id: cv.member_id,
+        exerciseId: cv.exerciseId,
+        scheduleId: cv.scheduleId,
+        memberId: cv.memberId,
       })),
     };
   }
@@ -111,8 +111,8 @@ class SortableComponent extends Component {
       setCount: cv.setCount,
       repetitions: cv.repetitions,
       exerciseCode: cv.exerciseCode,
-      schedule_id: this.props.selectedSchedule_id,
-      member_id: cv.member_id,
+      scheduleId: this.props.selectedScheduleId,
+      memberId: cv.memberId,
       routineOrder: idx,
     }));
 
@@ -123,7 +123,7 @@ class SortableComponent extends Component {
     try {
       const res = await axios.post('/api/routine', {
         routines,
-        schedule_id: this.props.selectedSchedule_id,
+        scheduleId: this.props.selectedScheduleId,
       });
       if (res.data) {
         setAlert('저장되었습니다.', 'success');

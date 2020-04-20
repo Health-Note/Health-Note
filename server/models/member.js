@@ -45,7 +45,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    account_id: {
+    accountId: {
       type: DataTypes.BIGINT,
       primaryKey: true,
       allowNull: false,

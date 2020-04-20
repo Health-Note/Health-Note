@@ -32,7 +32,7 @@ const { Router } = require('express');
  *  scheduleSetReq:
  *    type: object
  *    properties:
- *      member_id:
+ *      memberId:
  *        type: integer
  *      startTime:
  *        type: string
@@ -144,7 +144,7 @@ module.exports = app => {
    */
   route.delete('/:id', middlewares.isAuth, async (req, res, next) => {
     try {
-      await scheduleService.remove(req.params.schedule_id);
+      await scheduleService.remove(req.params.scheduleId);
       res.status(204).end();
     } catch(err) {
       return next(err);

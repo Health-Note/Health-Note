@@ -100,16 +100,16 @@ function Calendar() {
    */
   const handleEventClick = eventClick => {
     const id = eventClick.event.id;
-    const member_id = eventClick.event.extendedProps.member_id;
+    const memberId = eventClick.event.extendedProps.memberId;
     const date = moment(eventClick.event.start).format('YYYY-MM-DD');
 
     setName(eventClick.event.title);
     setEvt(eventClick.event);
     handleTargetId(eventClick.event.id);
     setStart(moment(eventClick.event.start).format('MM월 DD일'));
-    setSelectedDate(date, member_id);
+    setSelectedDate(date, memberId);
     setDrawer(true);
-    setScheduleTarget(parseInt(id), parseInt(member_id));
+    setScheduleTarget(parseInt(id), parseInt(memberId));
   };
 
   // 클릭으로 이벤트 만들기

@@ -35,7 +35,7 @@ const authService = require('../../services/auth');
  *        type: string
  *      password:
  *        type: string
- *      agreement_id:
+ *      agreementId:
  *        type: integer
  */
 const route = Router();

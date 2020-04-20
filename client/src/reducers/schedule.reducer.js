@@ -13,7 +13,7 @@ const reducer = (state, action) =>  {
         case SET_SCHEDULE_TARGET:
           return produce(state, draft => {
             draft.selectedSchedule.id = action.payload.id;
-            draft.selectedSchedule.member_id = action.payload.member_id;
+            draft.selectedSchedule.memberId = action.payload.memberId;
             draft.schedules.forEach(schedule => {
               if (schedule.id === action.payload.id) {
                 schedule.target = true;

@@ -54,7 +54,7 @@ const signin = async body => {
 
 const signup = async body => {
   console.log(body);
-  const { trainerName, email, password, agreement_id } = body;
+  const { trainerName, email, password, agreementId } = body;
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -64,7 +64,7 @@ const signup = async body => {
 
   try {
     const result = await db.account.create({
-      agreement_id: agreement_id,
+      agreementId: agreementId,
       agreementDate: agreementDate,
       deletedDate: initialDate,
       email: email,

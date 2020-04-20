@@ -19,7 +19,7 @@ const create = async (body, id) => {
       totalPT: totalPT,
       usedPT: 0,
       registration: 1,
-      account_id: id,
+      accountId: id,
     });
     console.log("[service] createResult.id", createResult.id);
     if (createResult) {
@@ -38,11 +38,11 @@ const create = async (body, id) => {
  * @module service
  * @function
  * @desc 트레이너가 보유한 모든 회원목록을 가져온다.
- * @param account_id {int}
+ * @param accountId {int}
  * */
-const getAll = async account_id => {
+const getAll = async accountId => {
   try {
-    const result = await db.member.findAll({ where: { account_id: account_id }, raw: true });
+    const result = await db.member.findAll({ where: { accountId: accountId }, raw: true });
     return result;
   } catch (err) {
     throw new Error(err);
