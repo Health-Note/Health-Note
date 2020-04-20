@@ -26,7 +26,7 @@ const reducer = (state, action) => {
       return produce(state, draft => {
         draft.loading = false;
         draft.target = 'deleted';
-        draft.members = action.payload;
+        draft.members = state.members.filter(member => !action.payload.includes(member.id)); // filter an array from all elements of another array
       });
     case 'TOGGLE':
       return produce(state, draft => {
