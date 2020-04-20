@@ -37,17 +37,17 @@ const getAll = async account_id => {
   }
 };
 
-const remove = async query => {
-  const { ids } = query;
-  const array = JSON.parse(ids);
-
-  const count = await db.member.destroy({
-    where: { id: array }
-  }).catch(err => {
+const remove = async ids => {
+  console.log('[service] member remove ids', ids);
+  try {
+    const count = await db.member.destroy({
+      where: { id: ids },
+    });
+    return count;
+  } catch (err) {
     throw new Error(err);
-  })
-
-  //console.log(count);
+  }
 };
+
 
 module.exports = { create, getAll, remove };

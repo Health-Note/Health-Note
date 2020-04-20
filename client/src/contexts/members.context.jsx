@@ -99,8 +99,8 @@ export function MembersProvider(props) {
       const res = await axios.post('/api/members', formdata);
       if (res.data) {
         console.log('addMember_res.data', res.data);
-        const addedMemebr = await changeVarName(res.data);
-        dispatch({ type: ADD_MEMBER, payload: addedMemebr });
+        const addedMember = await changeVarName(res.data);
+        dispatch({ type: ADD_MEMBER, payload: addedMember });
       } else {
         console.log('어떤 에러');
       }
@@ -110,20 +110,37 @@ export function MembersProvider(props) {
     }
   };
 
+  /**
+   * @module member context
+   * @function
+   * @desc 회원 삭제
+   * @param selectedRows {array} [{key, id, name, gender, phoneNum, totalPT, usedPT}, ...]
+   * @res {Object} The JSON payload.
+   */
   const removeMember = async selectedRows => {
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.post('/api/members/removeMember', selectedRows);
+      console.log('[context] removeMember selectedRoes', selectedRows);
+      const ids = selectedRows.map(cv => {
+        return cv.id
+      });
+      const strids = JSON.stringify(ids);
+      console.log('[context] removeMember strids', strids);
+
+      const res = await axios.delete('/api/members', {
+        data: {
+          ids: ids,
+        },
+      });
       if (res.data) {
         // 삭제된 row수
-        console.log('removeMember', res.data);
-        console.log('selectedRows', selectedRows);
+        console.log('[context] removeMember res.data', res.data);
         const members = res.data.map(cv => {
           return {
             id: cv.id,
-            name: cv.Name,
+            name: cv.name,
             phoneNum: cv.phoneNum,
             gender: cv.gender,
             startDate: cv.startDate,

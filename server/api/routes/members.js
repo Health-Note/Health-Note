@@ -118,13 +118,13 @@ module.exports = app => {
    *        description: success to delete members
    */
   route.delete('/', middleware.isAuth, async (req, res, next) => {
-    
+    console.log('[routes] delete req.body', req.body.ids);
+    const ids = req.body.data;
     try {
-      await memberService.remove(req.query, req.user);
-      res.status(204).end();
+      const count = await memberService.remove(req.body.ids);
+      res.status(204).json(count);
     } catch(err) {
       return next(err);
     }
-
   });
 };

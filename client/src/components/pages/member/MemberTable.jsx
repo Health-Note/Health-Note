@@ -82,7 +82,8 @@ const MemberTable = ({ toggle }) => {
   useEffect(() => {
     const memberRow = members.map(member => {
       return {
-        key: member.phoneNum,
+        key: member.id,
+        id: member.id,
         name: member.name,
         gender: member.gender === 1 ? '남' : '여',
         phoneNum: member.phoneNum,
@@ -91,7 +92,6 @@ const MemberTable = ({ toggle }) => {
       };
     });
     setMemberData(memberRow);
-    console.log(members);
   }, [MembersContext, members]);
 
   const handleRemove = () => {
