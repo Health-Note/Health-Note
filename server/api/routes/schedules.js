@@ -110,8 +110,8 @@ module.exports = app => {
    */  
   route.post('/initializing', middlewares.isAuth, async (req, res, next) => {
     try {
-      const result = await scheduleService.initialize(req.body);
-      //res.status(204).json(result);
+      await scheduleService.initialize(req.body);
+      res.status(204).end();
     } catch(err) {
       throw next(err);
     }
@@ -119,7 +119,7 @@ module.exports = app => {
 
   /**
    * @swagger
-   * /schedules/{id}:
+   * /schedules/{scheduleId}:
    *  delete:
    *    summary: delete schedule
    *    description: delete schedule 
@@ -131,7 +131,7 @@ module.exports = app => {
    *       type: string
    *       required: true
    *     - in: path
-   *       name: id
+   *       name: scheduleId
    *       type: integer
    *       required: true
    *    produces:
@@ -142,7 +142,7 @@ module.exports = app => {
    *      204:
    *        description: success to delete a schedule
    */
-  route.delete('/:id', middlewares.isAuth, async (req, res, next) => {
+  route.delete('/:scheduleId', middlewares.isAuth, async (req, res, next) => {
     try {
       await scheduleService.remove(req.params.scheduleId);
       res.status(204).end();
@@ -153,7 +153,7 @@ module.exports = app => {
 
   /**
    * @swagger
-   * /schedules/{id}:
+   * /schedules/{scheduleId}:
    *  patch:
    *    summary: update a schedule
    *    description: update a schedule
@@ -163,6 +163,10 @@ module.exports = app => {
    *     - in: header
    *       name: x-auth-token
    *       type: string
+   *       required: true
+   *     - in: path
+   *       name: scheduleId
+   *       type: integer
    *       required: true
    *     - in: body
    *       name: schedule
@@ -177,9 +181,9 @@ module.exports = app => {
    *      204:
    *        description: success to update a schedule
    */
-  route.patch('/:id', middlewares.isAuth, async (req, res, next) => {
+  route.patch('/:scheduleId', middlewares.isAuth, async (req, res, next) => {
     try {
-      await scheduleService.update(req.body, req.params.scheduldId);
+      await scheduleService.update(req.body, req.params.scheduleId);
       res.status(204).end();
     } catch(err) {
       return next(err);

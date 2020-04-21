@@ -155,8 +155,8 @@ const initialize = async (body) => {
     'date: ',
     moment(firstDate).isoWeekday(),
     'times: ',
-    times,
-    moment(times[0]).format('HHmm'),
+    //times,
+    //moment(times[0]).format('HHmm'),
     'totalPT: ',
     totalPT
   );
@@ -196,7 +196,7 @@ const initialize = async (body) => {
 
 // 스케줄 가져오기
 const get = async (id) => {
-  const foundMembersWithSchedules = await db.member
+  const allSchedulesOfMember = await db.member
     .findAll({
       where: {
         accountId: id,
@@ -205,29 +205,31 @@ const get = async (id) => {
         model: db.schedule,
       },
       raw: true,
-      nest: true,
+      nest: false,
     })
     .catch((err) => {
       throw new Error(err);
     });
 
-  const memberSchedules = [];
-  for (let i = 0; i < foundMembersWithSchedules.length; i++) {
-    if (foundMembersWithSchedules[i].schedule) {
-      memberSchedules.push({
-        title: foundMembersWithSchedules[i].name,
-        start: foundMembersWithSchedules[i].schedule.startTime,
-        id: foundMembersWithSchedules[i].schedule.id,
-        color: calendarColors[3].colors[i].color,
-        isFinish: foundMembersWithSchedules[i].schedule.isFinish,
-        memberID: foundMembersWithSchedules[i].id,
-      });
-    }
-  }
+    //console.log(allSchedulesOfMember);
 
-  console.log(memberSchedules);
+  // const memberSchedules = [];
+  // for (let i = 0; i < foundMembersWithSchedules.length; i++) {
+  //   if (foundMembersWithSchedules[i].schedule) {
+  //     memberSchedules.push({
+  //       title: foundMembersWithSchedules[i].name,
+  //       start: foundMembersWithSchedules[i].schedule.startTime,
+  //       id: foundMembersWithSchedules[i].schedule.scheduleId,
+  //       color: calendarColors[3].colors[i].color,
+  //       isFinish: foundMembersWithSchedules[i].schedule.isFinish,
+  //       memberId: foundMembersWithSchedules[i].id,
+  //     });
+  //   }
+  // }
 
-  return memberSchedules;
+  // console.log(memberSchedules);
+
+  return allSchedulesOfMember;
 };
 
 // 스케줄 삭제

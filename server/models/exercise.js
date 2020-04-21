@@ -2,7 +2,7 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('exercise', {
-    exerciseId: {
+    id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true

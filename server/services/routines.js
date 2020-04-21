@@ -1,12 +1,10 @@
 const { db } = require('../models');
 
 const createOrUpdate = async (body) => {
-  const { routines } = body;
-
   // Routine 과 WeightTraining Table이 분리되어 있기 때문에 비즈니스에서 분기 처리한다
   const cardioArray = [];
   const weightArray = [];
-  for (let item of routines) {
+  for (let item of body) {
     if (item.isCadio == true) cardioArray.push(item);
     else weightArray.push(item);
   }
@@ -19,7 +17,7 @@ const createOrUpdate = async (body) => {
       throw new Error(err);
     });
 
-  await db.routine
+  await db.weightTraining
     .bulkCreate(weightArray, {
       updateOnDuplicate: ['setCount', 'repetitions', 'maxWeight'],
     })
@@ -36,7 +34,7 @@ const getByScheduleId = async (params) => {
       where: { scheduleId: scheduleId },
       //include: { model: db.exercise },
       raw: true,
-      nest: true,
+      //nest: true,
     })
     .catch((err) => {
       throw new Error(err);

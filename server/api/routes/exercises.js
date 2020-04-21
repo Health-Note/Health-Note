@@ -10,7 +10,7 @@ const exerciseService = require('../../services/exercises');
  *  exercise:
  *    type: object
  *    properties:
- *      exerciseCode:
+ *      id:
  *        type: integer
  *      exerciseName:
  *        type: string

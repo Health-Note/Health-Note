@@ -13,7 +13,7 @@ const { Router } = require('express');
  *    properties:
  *      scheduleId:
  *        type: integer
- *      exerciseCode:
+ *      exerciseId:
  *        type: integer
  *      routineOrder:
  *        type: integer
@@ -27,7 +27,7 @@ const { Router } = require('express');
  *        type: integer
  *      repetitions:
  *        type: integer
- *      targetCode:
+ *      weightTargetId:
  *        type: integer
  *      maxWeight:
  *        type: integer
@@ -64,10 +64,6 @@ module.exports = app => {
    *        description: success to create member
    */
   route.post('/', middlewares.isAuth, async (req, res, next) => {
-    
-    const { routines } = req.body;
-    console.log(routines);
-    
     try {
       await routineService.createOrUpdate(req.body); 
       res.status(204).end();
@@ -129,7 +125,7 @@ module.exports = app => {
    *       type: integer
    *       required: true
    *     - in: query
-   *       name: routineId
+   *       name: exerciseId
    *       type: integer
    *       required: true
    *    produces:

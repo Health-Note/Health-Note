@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('memo', {
+  return sequelize.define('agreement', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,

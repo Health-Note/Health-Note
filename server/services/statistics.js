@@ -11,9 +11,6 @@ const get = async () => {
       },
     },
   })
-  .then(result => {
-    return result.dataValues
-  })
   .catch(err => {
     throw new Error(err);
   });

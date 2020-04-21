@@ -49,16 +49,13 @@ module.exports = app => {
    *    consumes:
    *      - application/json
    *    responses:
-   *      201:
-   *        type: json
-   *        description: createdMember
+   *      204:
+   *        description: success to create a member
    */
   route.post('/', middleware.isAuth, async (req, res, next) => {
     try {
-      console.log('[routes] member create req.body', req.body);
-      const createdMember = await memberService.create(req.body, req.user);
-      res.status(201);
-      res.json(createdMember);
+      await memberService.create(req.body, req.user);
+      res.status(204).end();
     } catch (err) {
       return next(err);
     }
@@ -88,7 +85,6 @@ module.exports = app => {
   route.get('/', middleware.isAuth, async (req, res, next) => {
     try {
       const result = await memberService.getAll(req.user);
-      console.log("[service] api/member(get) result", result);
       res.json(result);
     } catch(err) {
       return next(err);
@@ -120,10 +116,8 @@ module.exports = app => {
    *        description: success to delete members
    */
   route.delete('/', middleware.isAuth, async (req, res, next) => {
-    console.log('[routes] delete req.body.ids', req.body.ids);
-    const ids = req.body.ids;
     try {
-      const count = await memberService.remove(ids);
+      await memberService.remove(req.query);
       res.status(204).end();
     } catch(err) {
       return next(err);
