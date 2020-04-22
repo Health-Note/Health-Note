@@ -8,26 +8,45 @@ const { Router } = require('express');
  *  name: Routine
  *  description: all about routines
  * definitions:
+ *  routine:
+ *   type: object
+ *   properties:
+ *    exerciseId:
+ *      type: integer
+ *    scheduleId:
+ *      type: integer
+ *    memberId:
+ *      type: integer
+ *    routineOrder:
+ *      type: integer
+ *    createdAt:
+ *      type: string
+ *    updatedAt:
+ *      type: string
+ *    isCardio:
+ *      type: integer
+ *    cardioTime:
+ *      type: string
  *  routineSetReq:
  *    type: object
  *    properties:
  *      scheduleId:
  *        type: integer
- *      exerciseCode:
+ *      exerciseId:
  *        type: integer
  *      routineOrder:
  *        type: integer
  *      memberId:
  *        type: integer
- *      isCadio:
+ *      isCardio:
  *        type: integer
- *      cardiotime:
+ *      cardioTime:
  *        type: string
  *      setCount:
  *        type: integer
  *      repetitions:
  *        type: integer
- *      targetCode:
+ *      weightTargetId:
  *        type: integer
  *      maxWeight:
  *        type: integer
@@ -64,10 +83,6 @@ module.exports = app => {
    *        description: success to create member
    */
   route.post('/', middlewares.isAuth, async (req, res, next) => {
-    
-    const { routines } = req.body;
-    console.log(routines);
-    
     try {
       await routineService.createOrUpdate(req.body); 
       res.status(204).end();
@@ -101,6 +116,10 @@ module.exports = app => {
    *    responses:
    *      200:
    *        description: success to get routines
+   *        schema:
+   *          type: array
+   *          items:
+   *            $ref: '#/definitions/routine'
    */
   route.get('/:scheduleId', middlewares.isAuth, async (req, res, next) => {
     try {
@@ -129,7 +148,11 @@ module.exports = app => {
    *       type: integer
    *       required: true
    *     - in: query
-   *       name: routineId
+   *       name: exerciseId
+   *       type: integer
+   *       required: true
+   *     - in: query
+   *       name: isCardio
    *       type: integer
    *       required: true
    *    produces:

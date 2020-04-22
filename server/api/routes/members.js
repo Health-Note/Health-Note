@@ -8,10 +8,35 @@ const { Router } = require('express');
  *  name: Member
  *  description: all about member
  * definitions:
+ *  member:
+ *    type: object
+ *    properties:
+ *      id:
+ *        type: integer
+ *      memberName:
+ *        type: string
+ *      age:
+ *        type: integer
+ *      phoneNum:
+ *        type: string
+ *      gender:
+ *        type: integer
+ *      totalPT:
+ *        type: integer
+ *      usedPT:
+ *        type: integer
+ *      createdAt:
+ *        type: string
+ *      updatedAt:
+ *        type: string
+ *      registration:
+ *        type: integer
+ *      accountId:
+ *        type: integer
  *  memberSetReq:
  *    type: object
  *    properties:
- *      name:
+ *      memberName:
  *        type: string
  *      phoneNum:
  *        type: string
@@ -49,16 +74,13 @@ module.exports = app => {
    *    consumes:
    *      - application/json
    *    responses:
-   *      201:
-   *        type: json
-   *        description: createdMember
+   *      204:
+   *        description: success to create a member
    */
   route.post('/', middleware.isAuth, async (req, res, next) => {
     try {
-      console.log('[routes] member create req.body', req.body);
-      const createdMember = await memberService.create(req.body, req.user);
-      res.status(201);
-      res.json(createdMember);
+      await memberService.create(req.body, req.user);
+      res.status(204).end();
     } catch (err) {
       return next(err);
     }
@@ -84,11 +106,14 @@ module.exports = app => {
    *    responses:
    *      200:
    *        description: success to get members
+   *        schema:
+   *          type: array
+   *          items:
+   *           $ref: '#/definitions/member'
    */
   route.get('/', middleware.isAuth, async (req, res, next) => {
     try {
       const result = await memberService.getAll(req.user);
-      console.log("[service] api/member(get) result", result);
       res.json(result);
     } catch(err) {
       return next(err);
@@ -120,10 +145,8 @@ module.exports = app => {
    *        description: success to delete members
    */
   route.delete('/', middleware.isAuth, async (req, res, next) => {
-    console.log('[routes] delete req.body.ids', req.body.ids);
-    const ids = req.body.ids;
     try {
-      const count = await memberService.remove(ids);
+      await memberService.remove(req.query);
       res.status(204).end();
     } catch(err) {
       return next(err);

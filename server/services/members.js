@@ -8,62 +8,45 @@ const CustomError = require('../common/error');
  * @param body {object} name, phoneNum, gender, totalPT, age
  * @param id {int}
  * */
-const create = async (body, id) => {
-  const { name, phoneNum, gender, totalPT, age } = body;
-  try {
-    const createResult = await db.member.create({
-      phoneNum: phoneNum,
-      name: name,
-      gender: gender,
-      age: age,
-      totalPT: totalPT,
-      usedPT: 0,
-      registration: 1,
-      accountId: id,
+const create = async (body, accountId) => {
+  const { memberName, phoneNum, gender, totalPT, age } = body;
+
+  await db.member.create({
+    phoneNum: phoneNum,
+    memberName: memberName,
+    gender: gender,
+    age: age,
+    totalPT: totalPT,
+    usedPT: 0,
+    registration: 1,
+    accountId: accountId,
+  })
+    .catch(err => {
+      if (err.name === 'SequelizeUniqueConstraintError') {
+        throw new CustomError('NotUniqueId', 409, err);  // 409
+      } else {
+        throw new Error(err);
+      }
     });
-    console.log("[service] createResult.id", createResult.id);
-    if (createResult) {
-      return await db.member.findOne({ where: { id: createResult.id } });
-    }
-  } catch (err) {
-    if (err.name === 'SequelizeUniqueConstraintError') {
-      throw new CustomError('NotUniqueId', 409, err);  // 409
-    } else {
+};
+
+const getAll = async id => {
+  return await db.member.findAll({ where: { accountId: id }, raw: true })
+    .catch(err => {
       throw new Error(err);
-    }
-  }
-};
-
-/**
- * @module service
- * @function
- * @desc 트레이너가 보유한 모든 회원목록을 가져온다.
- * @param accountId {int}
- * */
-const getAll = async accountId => {
-  try {
-    const result = await db.member.findAll({ where: { accountId: accountId }, raw: true });
-    return result;
-  } catch (err) {
-    throw new Error(err);
-  }
-};
-
-/**
- * @module service
- * @function
- * @desc 회원을 삭제한다.
- * @param ids {array}
- * */
-const remove = async ids => {
-  try {
-    const count = await db.member.destroy({
-      where: { id: ids },
     });
-    return count;
-  } catch (err) {
-    throw new Error(err);
-  }
 };
+
+const remove = async query => {
+  const { ids } = query;
+  const array = JSON.parse(ids);
+
+  const count = await db.member.destroy({
+    where: { id: array }
+  }).catch(err => {
+    throw new Error(err);
+  });
+};
+
 
 module.exports = { create, getAll, remove };

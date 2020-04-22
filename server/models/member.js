@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
-    name: {
+    memberName: {
       type: DataTypes.STRING(20),
       allowNull: false
     },

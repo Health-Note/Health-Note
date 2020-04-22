@@ -12,8 +12,6 @@ const authService = require('../../services/auth');
  * definitions:
  *  account:
  *    type: object
- *    required:
- *      - id
  *    properties:
  *      id:
  *        type: integer
@@ -27,7 +25,7 @@ const authService = require('../../services/auth');
  *      - email
  *      - password
  *      - trainerName
- *      - agreementVersion
+ *      - agreementId
  *    properties:
  *      trainerName:
  *        type: string
@@ -68,7 +66,7 @@ module.exports = app => {
     middleware.isAuth,
     middleware.attachCurrentUser,
     async (req, res, next) => {
-      res.json({ user: req.user });
+      res.json({ id:req.user.id, email: req.user.email, trainerName: req.user.trainerName });
     }
   );
 
@@ -117,6 +115,7 @@ module.exports = app => {
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
+      
       try {
         const token = await authService.signin(req.body);
         res.cookie('user', token, {

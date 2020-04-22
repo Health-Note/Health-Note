@@ -18,6 +18,57 @@ const { Router } = require('express');
  *  name: Schedule
  *  description: all about schedules
  * definitions:
+ *  schedulesOfMember:
+ *    type: object
+ *    properties:
+ *     id:
+ *      type: integer
+ *     memberName:
+ *      type: string
+ *     age:
+ *      type: integer
+ *     phoneNum:
+ *      type: string
+ *     gender:
+ *      type: integer
+ *     totalPT:
+ *      type: interger
+ *     usedPT:
+ *      type: integer
+ *     createdAt:
+ *      type: string
+ *     updatedAt:
+ *      type: string
+ *     registration:
+ *      type: integer
+ *     accountId:
+ *      type: integer
+ *     schedules:
+ *      type: object
+ *      $ref: '#/definitions/schedule'
+ *  schedule:
+ *    type: object
+ *    properties:
+ *     id:
+ *      type: integer
+ *     memberId:
+ *      type: integer
+ *     startTime:
+ *      type: string
+ *     endTime:
+ *      type: string
+ *     isFinish:
+ *      type: integer
+ *     isReschedule:
+ *      type: integer
+ *     day:
+ *      type: integer
+ *     tooltipText:
+ *      type: string
+ *     createdAt:
+ *      type: string
+ *     updatedAt:
+ *      type: string
  *  scheduleInitialReq:
  *    type: object
  *    properties:
@@ -71,6 +122,10 @@ module.exports = app => {
    *    responses:
    *      200:
    *        description: success to get all schedules of members
+   *        schema:
+   *          type: array
+   *          items:
+   *           $ref: '#/definitions/scheduleOfMember'
    */
   route.get('/', middlewares.isAuth, async (req, res, next) => {
     try {
@@ -110,8 +165,8 @@ module.exports = app => {
    */  
   route.post('/initializing', middlewares.isAuth, async (req, res, next) => {
     try {
-      const result = await scheduleService.initialize(req.body);
-      //res.status(204).json(result);
+      await scheduleService.initialize(req.body);
+      res.status(204).end();
     } catch(err) {
       throw next(err);
     }
@@ -119,7 +174,7 @@ module.exports = app => {
 
   /**
    * @swagger
-   * /schedules/{id}:
+   * /schedules:
    *  delete:
    *    summary: delete schedule
    *    description: delete schedule 
@@ -130,8 +185,12 @@ module.exports = app => {
    *       name: x-auth-token
    *       type: string
    *       required: true
-   *     - in: path
+   *     - in: query
    *       name: id
+   *       type: integer
+   *       required: true
+   *     - in: query
+   *       name: memberId
    *       type: integer
    *       required: true
    *    produces:
@@ -142,9 +201,9 @@ module.exports = app => {
    *      204:
    *        description: success to delete a schedule
    */
-  route.delete('/:id', middlewares.isAuth, async (req, res, next) => {
+  route.delete('/', middlewares.isAuth, async (req, res, next) => {
     try {
-      await scheduleService.remove(req.params.scheduleId);
+      await scheduleService.remove(req.query);
       res.status(204).end();
     } catch(err) {
       return next(err);
@@ -153,7 +212,7 @@ module.exports = app => {
 
   /**
    * @swagger
-   * /schedules/{id}:
+   * /schedules/{scheduleId}:
    *  patch:
    *    summary: update a schedule
    *    description: update a schedule
@@ -163,6 +222,10 @@ module.exports = app => {
    *     - in: header
    *       name: x-auth-token
    *       type: string
+   *       required: true
+   *     - in: path
+   *       name: scheduleId
+   *       type: integer
    *       required: true
    *     - in: body
    *       name: schedule
@@ -177,9 +240,9 @@ module.exports = app => {
    *      204:
    *        description: success to update a schedule
    */
-  route.patch('/:id', middlewares.isAuth, async (req, res, next) => {
+  route.patch('/:scheduleId', middlewares.isAuth, async (req, res, next) => {
     try {
-      await scheduleService.update(req.body, req.params.scheduldId);
+      await scheduleService.update(req.body, req.params.scheduleId);
       res.status(204).end();
     } catch(err) {
       return next(err);

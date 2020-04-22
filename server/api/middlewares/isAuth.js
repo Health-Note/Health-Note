@@ -10,7 +10,7 @@ module.exports = function(req, res, next){
     }
     try {
         const decoded = jwt.verify(token, config.jwtSecret);
-        req.user = decoded.account.id; // 페이로드의 trainer정보를 req.trainer에 담는다.
+        req.user = decoded.trainer.trainerId; // 페이로드의 trainer정보를 req.user 담는다.
         next();
     } catch(err) {
         //err.name === 'TokenExpiredError' // 토큰 만료 
