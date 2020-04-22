@@ -19,7 +19,7 @@ const initialState = {
   members: [
     {
       id: null,
-      name: null,
+      memberName: null,
       phoneNum: null,
       gender: null,
       startDate: null,
@@ -39,7 +39,7 @@ export function MembersProvider(props) {
 
   const changeVarName = (member) => {
     const memberObj = {};
-    memberObj['name'] = member.name;
+    memberObj['memberName'] = member.memberName;
     memberObj['id'] = member.id;
     memberObj['phoneNum'] = member.phoneNum;
     memberObj['gender'] = member.gender;
@@ -69,7 +69,7 @@ export function MembersProvider(props) {
       const members = res.data.map(cv => {
         return {
           id: cv.id,
-          name: cv.name,
+          memberName: cv.memberName,
           phoneNum: cv.phoneNum,
           gender: cv.gender,
           startDate: cv.startDate,
@@ -90,7 +90,7 @@ export function MembersProvider(props) {
    * @module members.context
    * @function
    * @desc 회원 추가
-   * @param formdata {object} {name, startTime, endTime, phonenum, gender, totalPT, height}
+   * @param formdata {object} {memberName, startTime, endTime, phonenum, gender, totalPT, height}
    */
   const addMember = async formdata => {
     if (localStorage.token) {
@@ -116,7 +116,7 @@ export function MembersProvider(props) {
    * @module members.context
    * @function
    * @desc 회원 삭제
-   * @param selectedRows {array} [{key, id, name, gender, phoneNum, totalPT, usedPT}, ...]
+   * @param selectedRows {array} [{key, id, memberName, gender, phoneNum, totalPT, usedPT}, ...]
    * @res {Object} The JSON payload.
    */
   const removeMember = async selectedRows => {
@@ -130,11 +130,7 @@ export function MembersProvider(props) {
       });
       const strids = JSON.stringify(ids);
       console.log('[context] removeMember strids', strids);
-      const res = await axios.delete('/api/members', {
-        data: {
-          ids: ids,
-        },
-      });
+      const res = await axios.delete(`/api/members/?ids=${strids}`);
       if (res.status === 204) {
         console.log('[context] removeMember res.data', res.data);
         dispatch({ type: REMOVE_MEMBER, payload: ids });

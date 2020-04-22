@@ -35,7 +35,7 @@ export const AuthProvider = props => {
     }
     try {
       const res = await axios.get('/api/auth/me');
-      await dispatch({ type: USER_LOADED, payload: res.data.user }); // payload는 찾은 trainer
+      await dispatch({ type: USER_LOADED, payload: res.data }); // payload는 찾은 trainer
       console.log('loadUser', res.data);
     } catch (err) {
       console.log(err);
@@ -59,6 +59,7 @@ export const AuthProvider = props => {
     };
 
     try {
+      console.log(formData);
       const res = await axios.post('/api/auth/signup', formData, config);
         dispatch({ type: REGISTER_SUCCESS, payload: res.data }); // res.data = token
         console.log("register", res.data);

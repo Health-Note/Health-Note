@@ -19,7 +19,7 @@ const reducer = (state, action) => {
     case ADD_MEMBER:
       return produce(state, draft => {
         draft.loading = false;
-        draft.target = action.payload.name;
+        draft.target = action.payload.memberName;
         draft.members.push(action.payload); // 멤버 추가 (배열안에 객체 추가)
       });
     case REMOVE_MEMBER:
@@ -40,7 +40,7 @@ const reducer = (state, action) => {
       return produce(state, draft => {
         draft.members.forEach(member => {
           if (member.id === action.id) {
-            member.name = action.newName;
+            member.memberName = action.newName;
             member.phonenum = action.newPhoneNum;
             member.gender = action.newGender;
             member.totalPT = action.newTotalPT;
