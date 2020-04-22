@@ -203,9 +203,10 @@ const get = async (id) => {
       },
       include: {
         model: db.schedule,
+        required: true, // false는 left outer join, true 는 inner join 
       },
       raw: true,
-      nest: false,
+      nest: true,
     })
     .catch((err) => {
       throw new Error(err);
@@ -233,10 +234,11 @@ const get = async (id) => {
 };
 
 // 스케줄 삭제
-const remove = async (id) => {
+const remove = async (query) => {
+  const { id, memberId } = query 
   const count = await db.schedule
     .destroy({
-      where: { id: id },
+      where: { id: id, memberId: memberId },
     })
     .catch((err) => {
       throw new Error(err);

@@ -8,7 +8,6 @@ module.exports = async (req, res, next) => {
     }
     const trainer = await authService.get(req.user);
     req.user = trainer;
-    
     return next();
   } catch (err) {
     return next(err);

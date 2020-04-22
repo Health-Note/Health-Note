@@ -32,8 +32,9 @@ module.exports = app => {
    *      200:
    *        description: OK
    *        schema:
-   *          type: object
-   *          $ref: '#/definitions/exercise'
+   *          type: array
+   *          items:
+   *           $ref: '#/definitions/exercise'
    */
   route.get('/', async (req, res, next) => {
     try {

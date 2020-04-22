@@ -8,10 +8,35 @@ const { Router } = require('express');
  *  name: Member
  *  description: all about member
  * definitions:
+ *  member:
+ *    type: object
+ *    properties:
+ *      id:
+ *        type: integer
+ *      memberName:
+ *        type: string
+ *      age:
+ *        type: integer
+ *      phoneNum:
+ *        type: string
+ *      gender:
+ *        type: integer
+ *      totalPT:
+ *        type: integer
+ *      usedPT:
+ *        type: integer
+ *      createdAt:
+ *        type: string
+ *      updatedAt:
+ *        type: string
+ *      registration:
+ *        type: integer
+ *      accountId:
+ *        type: integer
  *  memberSetReq:
  *    type: object
  *    properties:
- *      name:
+ *      memberName:
  *        type: string
  *      phoneNum:
  *        type: string
@@ -81,6 +106,10 @@ module.exports = app => {
    *    responses:
    *      200:
    *        description: success to get members
+   *        schema:
+   *          type: array
+   *          items:
+   *           $ref: '#/definitions/member'
    */
   route.get('/', middleware.isAuth, async (req, res, next) => {
     try {

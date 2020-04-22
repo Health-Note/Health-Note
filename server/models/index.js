@@ -26,20 +26,20 @@ db.member.belongsTo(db.account, { foreignKey: 'id' });
 db.account.hasMany(db.member, { foreignKey: 'accountId' });
 
 db.member.hasMany(db.biologicalHistory);
-db.biologicalHistory.belongsTo(db.member, { foreignKey: 'id'});
+db.biologicalHistory.belongsTo(db.member, { foreignKey: 'memberId'});
 
 db.member.hasMany(db.memo);
 db.memo.belongsTo(db.member, { foreignKey: 'id' });
 
 //db.exercise.hasMany(db.routine, { foreignKey: 'ExerciseCode' });
-
 db.routine.belongsTo(db.schedule, );
 db.routine.belongsTo(db.exercise, { foreignKey: 'exerciseId' });
+db.routine.hasOne(db.weightTraining, { foreignKey: 'scheduleId' });
+db.routine.hasOne(db.weightTraining, { foreignKey: 'exerciseId' });
 
-//db.weightTarget.hasMany(db.weightTraining, { foreignKey: 'targetCode' });
-
+db.weightTarget.hasMany(db.weightTraining, { foreignKey: 'weightTargetId' });
 db.weightTraining.belongsTo(db.routine, { foreignKey: 'scheduleId' });
 db.weightTraining.belongsTo(db.routine, { foreignKey: 'exerciseId' });
-db.weightTraining.belongsTo(db.weightTarget, { foreignKey: 'id' });
+//db.weightTraining.belongsTo(db.weightTarget, { foreignKey: 'weightTargetId' });
 
 module.exports = { sequelize, db };

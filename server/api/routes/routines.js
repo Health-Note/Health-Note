@@ -8,6 +8,25 @@ const { Router } = require('express');
  *  name: Routine
  *  description: all about routines
  * definitions:
+ *  routine:
+ *   type: object
+ *   properties:
+ *    exerciseId:
+ *      type: integer
+ *    scheduleId:
+ *      type: integer
+ *    memberId:
+ *      type: integer
+ *    routineOrder:
+ *      type: integer
+ *    createdAt:
+ *      type: string
+ *    updatedAt:
+ *      type: string
+ *    isCardio:
+ *      type: integer
+ *    cardioTime:
+ *      type: string
  *  routineSetReq:
  *    type: object
  *    properties:
@@ -19,9 +38,9 @@ const { Router } = require('express');
  *        type: integer
  *      memberId:
  *        type: integer
- *      isCadio:
+ *      isCardio:
  *        type: integer
- *      cardiotime:
+ *      cardioTime:
  *        type: string
  *      setCount:
  *        type: integer
@@ -97,6 +116,10 @@ module.exports = app => {
    *    responses:
    *      200:
    *        description: success to get routines
+   *        schema:
+   *          type: array
+   *          items:
+   *            $ref: '#/definitions/routine'
    */
   route.get('/:scheduleId', middlewares.isAuth, async (req, res, next) => {
     try {
@@ -126,6 +149,10 @@ module.exports = app => {
    *       required: true
    *     - in: query
    *       name: exerciseId
+   *       type: integer
+   *       required: true
+   *     - in: query
+   *       name: isCardio
    *       type: integer
    *       required: true
    *    produces:

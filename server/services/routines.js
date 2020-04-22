@@ -5,8 +5,31 @@ const createOrUpdate = async (body) => {
   const cardioArray = [];
   const weightArray = [];
   for (let item of body) {
-    if (item.isCadio == true) cardioArray.push(item);
-    else weightArray.push(item);
+    if (item['isCardio'] === 1) {
+      cardioArray.push({
+        scheduleId: item.scheduleId,
+        exerciseId: item.exerciseId,
+        memberId: item.memberId,
+        routineOrder: item.routineOrder,
+        isCardio: item.isCardio,
+        cardioTime: item.cardioTime,
+      });
+    } else {
+      cardioArray.push({
+        scheduleId: item.scheduleId,
+        exerciseId: item.exerciseId,
+        memberId: item.memberId,
+        routineOrder: item.routineOrder,
+      });
+      weightArray.push({
+        scheduleId: item.scheduleId,
+        exerciseId: item.exerciseId,
+        setCount: item.setCount,
+        repetitions: item.repetitions,
+        maxWeight: item.maxWeight,
+        weightTargetId: item.weightTargetId,
+      });
+    }
   }
 
   await db.routine
@@ -32,27 +55,44 @@ const getByScheduleId = async (params) => {
   const result = await db.routine
     .findAll({
       where: { scheduleId: scheduleId },
-      //include: { model: db.exercise },
+      include: { model: db.weightTraining, required: false },
       raw: true,
-      //nest: true,
+      nest: true
     })
     .catch((err) => {
       throw new Error(err);
     });
 
+    for(item of result) {
+      console.log(item);
+      if(item['isCardio'] === 1) {
+        delete item.weightTraining;
+      }
+    }
   return result;
 };
 
 const remove = async (query) => {
-  const { scheduleId, id } = query;
+  const { scheduleId, exerciseId, isCardio } = query;
 
   await db.routine
     .destroy({
-      where: { scheduleId: scheduleId, id: id },
+      where: { scheduleId: scheduleId, exerciseId: exerciseId },
     })
     .catch((err) => {
       throw new Error(err);
     });
+
+  if(isCardio != 1 ) {
+    await db.weightTraining
+    .destroy({
+      where: { scheduleId: scheduleId, exerciseId: exerciseId },
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
+  }
+  
 };
 
 module.exports = { createOrUpdate, getByScheduleId, remove };
