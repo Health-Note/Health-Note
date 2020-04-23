@@ -125,11 +125,12 @@ module.exports = app => {
    *        schema:
    *          type: array
    *          items:
-   *           $ref: '#/definitions/scheduleOfMember'
+   *           $ref: '#/definitions/schedulesOfMember'
    */
   route.get('/', middlewares.isAuth, async (req, res, next) => {
     try {
       const result = await scheduleService.get(req.user);
+      //console.log(result);
       res.json(result);
     } catch(err) {
       return next(err);
@@ -272,13 +273,17 @@ module.exports = app => {
    *    consumes:
    *      - application/json
    *    responses:
-   *      204:
+   *      201:
    *        description: success to create a schdule
+   *        schema:
+   *          properties:
+   *            id:
+   *              type: integer
    */
   route.post('/', middlewares.isAuth, async (req, res, next) => {
     try {
-      await scheduleService.create(req.body);
-      res.status(204).end();
+      const id = await scheduleService.create(req.body);
+      res.status(201).json(id);
     } catch(err) {
       return next(err);
     }

@@ -208,9 +208,6 @@ const get = async (id) => {
       raw: true,
       nest: true,
     })
-    .catch((err) => {
-      throw new Error(err);
-    });
 
     //console.log(allSchedulesOfMember);
 
@@ -240,9 +237,7 @@ const remove = async (query) => {
     .destroy({
       where: { id: id, memberId: memberId },
     })
-    .catch((err) => {
-      throw new Error(err);
-    });
+
 };
 
 // 스케줄 변경
@@ -271,9 +266,7 @@ const update = async (body, id) => {
         where: { id: id, memberId: memberId },
       }
     )
-    .catch((err) => {
-      throw new Error(err);
-    });
+
 };
 
 const create = async (body) => {
@@ -291,7 +284,7 @@ const create = async (body) => {
   //console.log('date, memberId!!!!!!!!!!!!!!!!!', date, memberId);
   //day = moment(date).isoWeekday();
 
-  await db.schedule
+  const result = await db.schedule
     .create({
       memberId: memberId,
       startTime: startTime, //moment(afterDate + ' ' + afterTime).format('YYYY-MM-DD HH:mm'),
@@ -301,9 +294,8 @@ const create = async (body) => {
       day: day, //moment(afterDate).isoWeekday(),
       tooltipText: tooltipText,
     })
-    .catch((err) => {
-      throw new Error(err);
-    });
+
+  return { id: result.id };
 };
 
 module.exports = { get, update, remove, create, initialize };
