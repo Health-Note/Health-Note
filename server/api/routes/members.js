@@ -74,13 +74,18 @@ module.exports = app => {
    *    consumes:
    *      - application/json
    *    responses:
-   *      204:
+   *      201:
    *        description: success to create a member
+   *        schema:
+   *          properties:
+   *            id:
+   *              type: integer
+   *          
    */
   route.post('/', middleware.isAuth, async (req, res, next) => {
     try {
-      await memberService.create(req.body, req.user);
-      res.status(204).end();
+      const id = await memberService.create(req.body, req.user);
+      res.status(201).json(id);
     } catch (err) {
       return next(err);
     }

@@ -36,17 +36,11 @@ const createOrUpdate = async (body) => {
     .bulkCreate(cardioArray, {
       updateOnDuplicate: ['routineOrder', 'cardioTime'],
     })
-    .catch((err) => {
-      throw new Error(err);
-    });
 
   await db.weightTraining
     .bulkCreate(weightArray, {
       updateOnDuplicate: ['setCount', 'repetitions', 'maxWeight'],
     })
-    .catch((err) => {
-      throw new Error(err);
-    });
 };
 
 const getByScheduleId = async (params) => {
@@ -59,9 +53,6 @@ const getByScheduleId = async (params) => {
       raw: true,
       nest: true
     })
-    .catch((err) => {
-      throw new Error(err);
-    });
 
     for(item of result) {
       console.log(item);
@@ -79,18 +70,12 @@ const remove = async (query) => {
     .destroy({
       where: { scheduleId: scheduleId, exerciseId: exerciseId },
     })
-    .catch((err) => {
-      throw new Error(err);
-    });
 
   if(isCardio != 1 ) {
     await db.weightTraining
     .destroy({
       where: { scheduleId: scheduleId, exerciseId: exerciseId },
     })
-    .catch((err) => {
-      throw new Error(err);
-    });
   }
   
 };

@@ -29,7 +29,7 @@ module.exports = {
    * Your secret sauce
    */
   jwtSecret: process.env.JWT_SECRET,
-  jwtExpires: 60 * 5,
+  jwtExpires: 60 * 30,
 
 
   /**
