@@ -1,16 +1,7 @@
 const middlewares = require('../middlewares');
 const scheduleService = require('../../services/schedules');
+const memberService = require('../../services/members');
 const { Router } = require('express');
-// 월, 수, 금
-// ========== 시작 요일
-//     11, 13
-// 16,
-//=========== 중간 요일
-//     18, 20
-// 23, 25, 27
-// ========== 남은 요일
-// 30, 2
-
 
 /**
  * @swagger
@@ -72,14 +63,29 @@ const { Router } = require('express');
  *  scheduleInitialReq:
  *    type: object
  *    properties:
- *      id:
+ *      memberName:
+ *        type: string
+ *      phoneNum:
+ *        type: string
+ *      gender:
+ *        type: integer
+ *      totalPT:
+ *        type: integer
+ *      age:
  *        type: integer
  *      startTime:
  *        type: string
- *      endTime:
- *        type: string
- *      day:
- *        type: integer
+ *      days:
+ *        type: array
+ *        items:
+ *          type: object
+ *          properties:
+ *            day:
+ *              type: integer
+ *            hour:
+ *              type: integer
+ *            min:
+ *              type: integer
  *  scheduleSetReq:
  *    type: object
  *    properties:
@@ -153,8 +159,7 @@ module.exports = app => {
    *     - in: body
    *       name: schedules
    *       description: schedule infomation
-   *       type: array
-   *       items:
+   *       schema:
    *        $ref: '#/definitions/scheduleInitialReq'
    *    produces:
    *      - application/json
@@ -166,7 +171,8 @@ module.exports = app => {
    */  
   route.post('/initializing', middlewares.isAuth, async (req, res, next) => {
     try {
-      await scheduleService.initialize(req.body);
+      const { id } = await memberService.create(req.body, req.user);
+      await scheduleService.initialize(req.body, id);
       res.status(204).end();
     } catch(err) {
       throw next(err);
