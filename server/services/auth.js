@@ -11,9 +11,7 @@ const get = async user => {
     where: { id: user },
     attributes: ['id', 'email', 'trainerName' ],
     raw: true
-  }).catch(err => {
-    throw new Error(err);
-  });
+  })
 
   return account;
 };
@@ -23,9 +21,7 @@ const signin = async body => {
   const account = await db.account.findOne({
     where: { email: email },
     raw: true
-  }).catch(err => {
-    throw new Error(err);
-  });
+  })
 
   if (!account) {
     throw new CustomError('badRequest', 400, '존재하지 않는 계정');
@@ -67,12 +63,7 @@ const signup = async body => {
     manMemberCount: 0,
     womenMemberCount: 0,
     trainerMemo: '',
-  }).catch(err => {
-    if(err.name === "SequelizeUniqueConstraintError") 
-      throw new CustomError('NotUniqueId', 409, err);  // 409
-    else
-      throw new Error(err); // 500
-  });
+  })
 
   const payload = {
     trainer: {

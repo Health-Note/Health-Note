@@ -1,7 +1,7 @@
 const { db } = require('../models');
-const schedulesController = {};
 const moment = require('moment');
 const calendarColors = require('../utils/seedColors');
+const CustomError = require('../common/error');
 
 const makeFirstWeekDates = (days, firstDate, times) => {
   let startDay = null;
@@ -146,52 +146,66 @@ const createAllSchedules = async (createdAllSchedules) => {
   return createdDbSchedules;
 };
 
-const initialize = async (body) => {
-  const { firstDate, times, totalPT, days, phoneNum } = body; // 시작일, 횟수, 요일배열
 
-  console.log(
-    'days: ',
-    days,
-    'date: ',
-    moment(firstDate).isoWeekday(),
-    'times: ',
-    //times,
-    //moment(times[0]).format('HHmm'),
-    'totalPT: ',
-    totalPT
-  );
 
-  if (!days.includes(moment(firstDate).isoWeekday())) {
-    console.log('시작일이 선택요일에 포함되지 않음');
-    //return res.status(400).json({ msg: '시작일이 선택요일에 포함되지 않습니다.' });
-    throw new Error();
+const initialize = async (body, memberId) => {
+  const { startTime, totalPT, days } = body; // 시작일, 시작시간(아래 test data)
+  // test data - days
+  // const days = [
+  //   { day:1, hour: 8, min: 30 },
+  //   { day:3, hour: 5, min:0 },
+  //   { day:5, hour: 1, min: 30 }
+  // ]
+  // -- 
+  const date = new Date(startTime);
+  let result = false;  
+  for(const check of days) {
+    if(check.day === date.getDay()) {
+      result = true;
+    }
   }
-
-  try {
-    const firstWeekDates = await makeFirstWeekDates(days, firstDate, times);
-
-    const foundMemberId = await db.member.findOne({
-      where: { phoneNum: phoneNum },
-      attributes: ['id'],
-    });
-
-    console.log('foundMemberId', foundMemberId.dataValues.id);
-
-    const allSchedules = await makeAllSchedule(
-      firstWeekDates,
-      totalPT,
-      foundMemberId.dataValues.id,
-      times,
-    );
-    const createdDbSchedules = await createAllSchedules(allSchedules, phoneNum);
-
-    console.log('createdDbSchedules', createdDbSchedules);
-    return createdDbSchedules;
-
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
+  if(result === false)
+    throw new CustomError('badRequest', 400, '시작일이 선택요일에 포함되지 않음'); // 400
+   
+  let pt = 0;
+  const dateArr = [];
+  while(pt < totalPT) {
+    const addDay = date.getDay();     // 계속 원하는 요일을 구한다 range: [0~6]
+    for(let data of days) {
+      if(addDay === data.day) {        // 원하는 요일이 나타나면 pt권 하나를 셋팅할 날짜를 지정한다(시간까지 포함한다)
+        //console.log(data.day);
+        pt++;
+        const startDate = new Date(date.valueOf());           // 참조 객체이기 때문에 clone해서 추가해야 한다 
+        startDate.setHours(startDate.getHours() + data.hour);   // 시간
+        startDate.setMinutes(startDate.getMinutes() + data.min);      // 분
+        dateArr.push(startDate);
+      }
+    }
+    date.setDate(date.getDate() + 1);  // 날짜 + 1 시키면서 계속 원하는 요일을 구한다 range: [0~6]
   }
+  //console.log(dateArr);
+
+  const initailSchedules = [];          // DB에 bulk insert 할 데이터를 셋팅한다 위에가 알고리즘이고 여긴 데이터 셋팅
+  for(let PTDay of dateArr) {
+    const endTime = new Date(PTDay.valueOf());
+    endTime.setHours(endTime.getHours() + 1);
+    
+    const schedule = {
+      memberId: memberId,
+      day: PTDay.getDay(),
+      startTime: PTDay,
+      endTime: endTime,
+      isFinish: 0,
+      isReschedule: 0,
+      tooltipText: ''
+    }
+    initailSchedules.push(schedule);
+  }
+  //console.log(initailSchedules);
+
+  //  DB 입력 
+  await db.schedule.bulkCreate(initailSchedules);
+  // 끝 
 };
 
 // 스케줄 가져오기
@@ -208,9 +222,6 @@ const get = async (id) => {
       raw: true,
       nest: true,
     })
-    .catch((err) => {
-      throw new Error(err);
-    });
 
     //console.log(allSchedulesOfMember);
 
@@ -240,9 +251,7 @@ const remove = async (query) => {
     .destroy({
       where: { id: id, memberId: memberId },
     })
-    .catch((err) => {
-      throw new Error(err);
-    });
+
 };
 
 // 스케줄 변경
@@ -271,9 +280,7 @@ const update = async (body, id) => {
         where: { id: id, memberId: memberId },
       }
     )
-    .catch((err) => {
-      throw new Error(err);
-    });
+
 };
 
 const create = async (body) => {
@@ -291,7 +298,7 @@ const create = async (body) => {
   //console.log('date, memberId!!!!!!!!!!!!!!!!!', date, memberId);
   //day = moment(date).isoWeekday();
 
-  await db.schedule
+  const result = await db.schedule
     .create({
       memberId: memberId,
       startTime: startTime, //moment(afterDate + ' ' + afterTime).format('YYYY-MM-DD HH:mm'),
@@ -301,9 +308,8 @@ const create = async (body) => {
       day: day, //moment(afterDate).isoWeekday(),
       tooltipText: tooltipText,
     })
-    .catch((err) => {
-      throw new Error(err);
-    });
+
+  return { id: result.id };
 };
 
 module.exports = { get, update, remove, create, initialize };
