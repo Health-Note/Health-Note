@@ -98,9 +98,7 @@ export function MembersProvider(props) {
     }
     try {
       const res = await axios.post('/api/members', formdata);
-      console.log('[context] members addMember res', res);
-      console.log('[context] members addMember res.data', res.data);
-      if (res.data) {
+      if (res.ok) {
         const addedMember = await changeVarName(res.data);
         dispatch({ type: ADD_MEMBER, payload: addedMember });
       } else {
