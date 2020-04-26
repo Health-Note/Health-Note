@@ -12,8 +12,8 @@ const onChange = (pagination, filters, sorter) => {
 const columns = [
   {
     title: '이름',
-    dataIndex: 'name',
-    key: 'name',
+    dataIndex: 'memberName',
+    key: 'memberName',
   },
   {
     title: '연락처',
@@ -84,7 +84,7 @@ const MemberTable = ({ toggle }) => {
       return {
         key: member.id,
         id: member.id,
-        name: member.name,
+        memberName: member.memberName,
         gender: member.gender === 1 ? '남' : '여',
         phoneNum: member.phoneNum,
         usedPT: member.usedPT,
@@ -100,11 +100,10 @@ const MemberTable = ({ toggle }) => {
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        'selectedRows: ',
-        selectedRows
-      );
+      // console.log(
+      //   'selectedRows: ',
+      //   selectedRows
+      // );
       setChedckedRows(selectedRows);
     },
     getCheckboxProps: record => ({
