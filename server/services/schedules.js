@@ -222,7 +222,7 @@ const get = async (id) => {
         attributes: ['id', 'startTime', 'endTime', 'isFinish', 'isReschedule', 'day', 'tooltipText'],
       },
       raw: true,
-      nest: false,
+      nest: true,
     })
 
     //console.log(allSchedulesOfMember);

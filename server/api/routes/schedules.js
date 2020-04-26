@@ -16,24 +16,6 @@ const { Router } = require('express');
  *      type: integer
  *     memberName:
  *      type: string
- *     age:
- *      type: integer
- *     phoneNum:
- *      type: string
- *     gender:
- *      type: integer
- *     totalPT:
- *      type: interger
- *     usedPT:
- *      type: integer
- *     createdAt:
- *      type: string
- *     updatedAt:
- *      type: string
- *     registration:
- *      type: integer
- *     accountId:
- *      type: integer
  *     schedules:
  *      type: object
  *      $ref: '#/definitions/schedule'
@@ -41,8 +23,6 @@ const { Router } = require('express');
  *    type: object
  *    properties:
  *     id:
- *      type: integer
- *     memberId:
  *      type: integer
  *     startTime:
  *      type: string
@@ -55,10 +35,6 @@ const { Router } = require('express');
  *     day:
  *      type: integer
  *     tooltipText:
- *      type: string
- *     createdAt:
- *      type: string
- *     updatedAt:
  *      type: string
  *  scheduleInitialReq:
  *    type: object
