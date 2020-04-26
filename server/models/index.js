@@ -17,7 +17,7 @@ db['weightTarget'] = sequelize.import(path.join(__dirname, './weightTarget.js'))
 db['agreement'] = sequelize.import(path.join(__dirname, './agreement.js'));
 
 // 아래와 같은 관계는 model에서 association에서 할 수도 있다
-db.account.belongsTo(db.agreement, { foreignKey: 'agreementId' });
+db.account.belongsTo(db.agreement, { foreignKey: 'id' });
 
 db.schedule.belongsTo(db.member, { foreignKey: 'id' });
 db.member.hasMany(db.schedule, { foreignKey: 'memberId' });

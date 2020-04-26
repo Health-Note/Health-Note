@@ -172,10 +172,11 @@ module.exports = app => {
   route.post('/initializing', middlewares.isAuth, async (req, res, next) => {
     try {
       const { id } = await memberService.create(req.body, req.user);
+      // 비구조화 할당?? 값만 끄내려면 위와 같이 받아와야 한다
       await scheduleService.initialize(req.body, id);
-      res.status(204).end();
+      res.status(201).json({ id });   // 응답 셋팅
     } catch(err) {
-      throw next(err);
+      return next(err);
     }
   });
 

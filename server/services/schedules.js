@@ -215,12 +215,14 @@ const get = async (id) => {
       where: {
         accountId: id,
       },
+      attributes: ['id', 'memberName'],
       include: {
         model: db.schedule,
         required: true, // false는 left outer join, true 는 inner join 
+        attributes: ['id', 'startTime', 'endTime', 'isFinish', 'isReschedule', 'day', 'tooltipText'],
       },
       raw: true,
-      nest: true,
+      nest: false,
     })
 
     //console.log(allSchedulesOfMember);
