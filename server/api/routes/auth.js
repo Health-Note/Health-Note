@@ -119,7 +119,7 @@ module.exports = app => {
       try {
         const token = await authService.signin(req.body);
         res.cookie('user', token, {
-          expires: new Date(Date.now() + (1000 * 60 * 5)),
+          expires: new Date(Date.now() + (1000 * 60 * 30)),
           httpOnly: true,
         }).json({ token });
       } catch (err) {
