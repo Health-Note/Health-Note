@@ -30,8 +30,6 @@ const { Router } = require('express');
  *      type: string
  *     isFinish:
  *      type: integer
- *     isReschedule:
- *      type: integer
  *     day:
  *      type: integer
  *     tooltipText:
@@ -73,8 +71,6 @@ const { Router } = require('express');
  *        type: string
  *      isFinish:
  *        type: integer
- *      isReschedule:
- *        type: integer
  *      day:
  *        type: integer
  *      tooltipText:
@@ -112,7 +108,6 @@ module.exports = app => {
   route.get('/', middlewares.isAuth, async (req, res, next) => {
     try {
       const result = await scheduleService.get(req.user);
-      //console.log(result);
       res.json(result);
     } catch(err) {
       return next(err);

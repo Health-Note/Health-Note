@@ -11,7 +11,7 @@ const { Router } = require('express');
  *  routine:
  *   type: object
  *   properties:
- *    exerciseId:
+ *    exerciseCode:
  *      type: integer
  *    scheduleId:
  *      type: integer
@@ -32,24 +32,36 @@ const { Router } = require('express');
  *    properties:
  *      scheduleId:
  *        type: integer
- *      exerciseId:
- *        type: integer
- *      routineOrder:
- *        type: integer
- *      memberId:
- *        type: integer
- *      isCardio:
- *        type: integer
- *      cardioTime:
- *        type: string
- *      setCount:
- *        type: integer
- *      repetitions:
- *        type: integer
- *      weightTargetId:
- *        type: integer
- *      maxWeight:
- *        type: integer
+ *      deleteRoutine:
+ *        type: array
+ *        items:
+ *          type: integer 
+ *          properties:
+ *           exerciseCode:
+ *            type: integer
+ *      updateRoutine:
+ *        type: array
+ *        items:
+ *          type: object
+ *          properties:
+ *           exerciseCode:
+ *             type: integer
+ *           routineOrder:
+ *             type: integer
+ *           memberId:
+ *             type: integer
+ *           isCardio:
+ *             type: integer
+ *           cardioTime:
+ *             type: string
+ *           setCount:
+ *             type: integer
+ *           repetitions:
+ *             type: integer
+ *           targetCode:
+ *             type: integer
+ *           maxWeight:
+ *             type: integer
  */
 const route = Router();
 module.exports = app => {
@@ -71,8 +83,8 @@ module.exports = app => {
    *     - in: body
    *       name: routines
    *       description: routines infomation
-   *       type: array
-   *       items:
+   *       type: object
+   *       schema:
    *        $ref: '#/definitions/routineSetReq'
    *    produces:
    *      - application/json
