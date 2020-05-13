@@ -2,12 +2,20 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('exercise', {
-    id: {
+    exerciseCode: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
     exerciseName: {
+      type: DataTypes.STRING(20),
+      allowNull: false
+    },
+    targetCode: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    targetName: {
       type: DataTypes.STRING(20),
       allowNull: false
     }
