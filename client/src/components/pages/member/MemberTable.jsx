@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Table, Button, Icon } from 'antd';
-import uuid from 'uuid/v4'
+import { Table, Button } from 'antd';
+import { UserAddOutlined, UserDeleteOutlined } from '@ant-design/icons';
+import { v4 as uuid } from 'uuid';
 import { MembersContext } from '../../../contexts/members.context';
 import { AlertContext } from '../../../contexts/alert.context';
 import { useIsMount } from '../../../hooks/useIsMount';
@@ -115,11 +116,11 @@ const MemberTable = ({ toggle }) => {
   return (
     <>
       <Button onClick={toggle}>
-        <Icon type="user-add" style={{ fontSize: '20px' }} />
+        <UserAddOutlined style={{ fontSize: '20px' }} />
         회원 등록
       </Button>
       <Button onClick={handleRemove}>
-        <Icon type="user-delete" style={{ fontSize: '20px' }} />
+        <UserDeleteOutlined style={{ fontSize: '20px' }} />
         회원 삭제
       </Button>
       <Table

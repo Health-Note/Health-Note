@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Row, Col, Divider, Button } from 'antd';
 import moment from 'moment';
 import axios from 'axios';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 import Calendar from './Calendar/Calendar';
 import { ScheduleContext } from '../../../contexts/schedule.context';
 import { AlertContext } from '../../../contexts/alert.context';

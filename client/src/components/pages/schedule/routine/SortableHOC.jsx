@@ -6,7 +6,7 @@ import {
 } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import axios from 'axios';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 import { Tag, Row, Col, Button, Icon } from 'antd';
 import setAuthToken from '../../../../utils/setAuthToken';
 import { AlertContext } from '../../../../contexts/alert.context';
