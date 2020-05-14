@@ -10,10 +10,14 @@ const exerciseService = require('../../services/exercises');
  *  exercise:
  *    type: object
  *    properties:
- *      id:
+ *      exerciseCode:
  *        type: integer
  *      exerciseName:
  *        type: string
+ *      targetCode:
+ *        type: integer
+ *      targetName:
+ *         type: string
  */
 const route = Router();
 module.exports = app => {

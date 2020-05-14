@@ -196,7 +196,6 @@ const initialize = async (body, memberId) => {
       startTime: PTDay,
       endTime: endTime,
       isFinish: 0,
-      isReschedule: 0,
       tooltipText: ''
     }
     initailSchedules.push(schedule);
@@ -215,9 +214,11 @@ const get = async (id) => {
       where: {
         accountId: id,
       },
+      attributes: ['id', 'memberName'],
       include: {
         model: db.schedule,
         required: true, // false는 left outer join, true 는 inner join 
+        attributes: ['id', 'startTime', 'endTime', 'isFinish', 'day', 'tooltipText'],
       },
       raw: true,
       nest: true,
@@ -261,7 +262,6 @@ const update = async (body, id) => {
     startTime,
     endTime,
     isFinish,
-    isReschedule,
     day,
     tooltipText,
   } = body;
@@ -272,7 +272,6 @@ const update = async (body, id) => {
         startTime: startTime, //moment(afterDate + ' ' + afterTime).format('YYYY-MM-DD HH:mm'),
         endTime: endTime,
         isFinish: isFinish,
-        isReschedule: isReschedule,
         day: day, //moment(afterDate).isoWeekday(),
         tooltipText: tooltipText,
       },
@@ -289,7 +288,6 @@ const create = async (body) => {
     startTime,
     endTime,
     isFinish,
-    isReschedule,
     day,
     tooltipText,
   } = body;
@@ -304,7 +302,6 @@ const create = async (body) => {
       startTime: startTime, //moment(afterDate + ' ' + afterTime).format('YYYY-MM-DD HH:mm'),
       endTime: endTime,
       isFinish: isFinish,
-      isReschedule: isReschedule,
       day: day, //moment(afterDate).isoWeekday(),
       tooltipText: tooltipText,
     })

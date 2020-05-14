@@ -16,24 +16,6 @@ const { Router } = require('express');
  *      type: integer
  *     memberName:
  *      type: string
- *     age:
- *      type: integer
- *     phoneNum:
- *      type: string
- *     gender:
- *      type: integer
- *     totalPT:
- *      type: interger
- *     usedPT:
- *      type: integer
- *     createdAt:
- *      type: string
- *     updatedAt:
- *      type: string
- *     registration:
- *      type: integer
- *     accountId:
- *      type: integer
  *     schedules:
  *      type: object
  *      $ref: '#/definitions/schedule'
@@ -42,23 +24,15 @@ const { Router } = require('express');
  *    properties:
  *     id:
  *      type: integer
- *     memberId:
- *      type: integer
  *     startTime:
  *      type: string
  *     endTime:
  *      type: string
  *     isFinish:
  *      type: integer
- *     isReschedule:
- *      type: integer
  *     day:
  *      type: integer
  *     tooltipText:
- *      type: string
- *     createdAt:
- *      type: string
- *     updatedAt:
  *      type: string
  *  scheduleInitialReq:
  *    type: object
@@ -97,8 +71,6 @@ const { Router } = require('express');
  *        type: string
  *      isFinish:
  *        type: integer
- *      isReschedule:
- *        type: integer
  *      day:
  *        type: integer
  *      tooltipText:
@@ -136,7 +108,6 @@ module.exports = app => {
   route.get('/', middlewares.isAuth, async (req, res, next) => {
     try {
       const result = await scheduleService.get(req.user);
-      //console.log(result);
       res.json(result);
     } catch(err) {
       return next(err);
@@ -172,10 +143,11 @@ module.exports = app => {
   route.post('/initializing', middlewares.isAuth, async (req, res, next) => {
     try {
       const { id } = await memberService.create(req.body, req.user);
+      // 비구조화 할당?? 값만 끄내려면 위와 같이 받아와야 한다
       await scheduleService.initialize(req.body, id);
-      res.status(204).end();
+      res.status(201).json({ id });   // 응답 셋팅
     } catch(err) {
-      throw next(err);
+      return next(err);
     }
   });
 

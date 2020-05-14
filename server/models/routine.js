@@ -2,13 +2,13 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('routine', {
-    exerciseId: {
+    exerciseCode: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       references: {
         model: 'Exercise',
-        key: 'id'
+        key: 'exerciseCode'
       }
     },
     scheduleId: {

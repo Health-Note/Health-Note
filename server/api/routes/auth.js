@@ -119,7 +119,7 @@ module.exports = app => {
       try {
         const token = await authService.signin(req.body);
         res.cookie('user', token, {
-          expires: new Date(Date.now() + (1000 * 60 * 5)),
+          expires: new Date(Date.now() + (1000 * 60 * 30)),
           httpOnly: true,
         }).json({ token });
       } catch (err) {
@@ -210,4 +210,8 @@ module.exports = app => {
     // 마지막 로그인 시간을 기억한다면 DB 업데이트 정도 할 일이 있으나 현재로서는 인증 부분 쿠키만 지운다
     res.clearCookie('user').status(200).end();
   });
+
+  // route.get('/agreement', async (req, res, next) => {
+
+  // })
 };
