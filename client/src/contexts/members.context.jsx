@@ -85,10 +85,20 @@ export function MembersProvider(props) {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.post('/api/members', formdata);
+      const res = await axios.post('/api/schedules/initializing', formdata);
       console.log("res.data.id", res.data.id)
       if (res.status === 201) {
-        const addedMember = await res.data.id;
+        const addedMember = {
+          id: res.data.id,
+          memberName: formdata.memberName,
+          phoneNum: formdata.phoneNum,
+          gender: formdata.gender,
+          startDate: formdata.startDate,
+          endDate: formdata.endDate,
+          usedPT: 0,
+          totalPT: formdata.totalPT,
+          height: null
+        }
         dispatch({ type: ADD_MEMBER, payload: addedMember });
       } else {
         console.log('어떤 에러');

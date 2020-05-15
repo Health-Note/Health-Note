@@ -10,10 +10,10 @@ function Member() {
   return (
     <>
       <Row justify="center">
-        <Col sm={24} xl={10}>
+        <Col md={24} lg={24} xl={12}>
           <MemberTable toggle={toggle}/>
         </Col>
-        <Col sm={24} xl={5}>
+        <Col md={22} lg={24} xl={7}>
           <MemberJoinForm3/>
         </Col>
       </Row>

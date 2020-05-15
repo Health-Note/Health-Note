@@ -25,34 +25,27 @@ const columns = [
     title: '성별',
     dataIndex: 'gender',
     key: 'gender',
-    defaultSortOrder: 'descend',
-    sorter: (a, b) => a.gender.length - b.gender.length,
-    sortDirections: ['descend', 'ascend'],
   },
   {
     title: '결제한PT수',
     dataIndex: 'totalPT',
     key: 'totalPT',
-    defaultSortOrder: 'descend',
     sorter: (a, b) => a.totalPT - b.totalPT,
   },
   {
     title: '진행된PT수',
     dataIndex: 'usedPT',
     key: 'usedPT',
-    defaultSortOrder: 'descend',
     sorter: (a, b) => a.usedPT - b.usedPT,
   },
 ];
 
 const MemberTable = ({ toggle }) => {
   const isMount = useIsMount();
-  
   const { members, error, getMember, removeMember, targetMember, clearErrors, clearTarget } = useContext(
     MembersContext
   );
   const { setAlert } = useContext(AlertContext);
-
   const [memberData, setMemberData] = useState([]);
   const [checkedRows, setChedckedRows] = useState([]);
 
@@ -115,10 +108,10 @@ const MemberTable = ({ toggle }) => {
 
   return (
     <>
-      <Button onClick={toggle}>
-        <UserAddOutlined style={{ fontSize: '20px' }} />
-        회원 등록
-      </Button>
+      {/*<Button onClick={toggle}>*/}
+      {/*  <UserAddOutlined style={{ fontSize: '20px' }} />*/}
+      {/*  회원 등록*/}
+      {/*</Button>*/}
       <Button onClick={handleRemove}>
         <UserDeleteOutlined style={{ fontSize: '20px' }} />
         회원 삭제
