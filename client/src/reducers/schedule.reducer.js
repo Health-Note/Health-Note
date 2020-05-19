@@ -27,7 +27,12 @@ const reducer = (state, action) =>  {
         case GET_SCHEDULES:
           return produce(state, draft => {
             const allSchedules = action.payload;
-            draft.schedules = allSchedules.reduce((acc, cv) => acc.concat(cv), []); // 이중배열 => 일차원배열
+            draft.schedules = allSchedules.map(cv => ({
+              title: cv.memberName,
+              id: cv.schedules.id,
+              start: cv.schedules.day + ' ' + cv.schedules.startTime,
+            }));
+            // reduce((acc, cv) => acc.concat(cv), []); // 이중배열 => 일차원배열
           });
         case SET_SCHEDULE:
         case CREATE_ONE_SCHEDULE:

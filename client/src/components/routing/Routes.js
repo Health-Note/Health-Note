@@ -11,7 +11,6 @@ import { MembersContext } from '../../contexts/members.context';
 
 function Routes() {
   const { members } = useContext(MembersContext);
-  console.log(members);
   function getMember(props) {
     // 괄호안에 props는 라우터에서 넣어주는 프롭스
     const name = props.match.params.name; // 파라미터를 통해 멤버정보 가져오기
