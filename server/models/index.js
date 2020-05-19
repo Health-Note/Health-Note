@@ -22,7 +22,6 @@ db.agreement.hasMany(db.account, { foreignKey: 'agreementId' });
 db.schedule.belongsTo(db.member, { foreignKey: 'id' });
 db.member.hasMany(db.schedule, { foreignKey: 'memberId' });
 
-db.member.belongsTo(db.account, { foreignKey: 'id' });
 db.account.hasMany(db.member, { foreignKey: 'accountId' });
 
 db.member.hasMany(db.biologicalHistory);
