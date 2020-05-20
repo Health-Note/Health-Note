@@ -53,8 +53,6 @@ function Calendar() {
     setMember(exeMember);
   }, []);
 
-
-  
   const saveButton = (
     <>
       { isChanging && <button >저장하기</button>}  
@@ -62,7 +60,6 @@ function Calendar() {
   )
 
   // 달력에 표시될 스케줄 초기화
-
   const handleTargetId = id => {
     // fullcalendar state에서 날짜형식은 ISO // 2017-03-16T17:40:00+09:00 이여야 함
     setTargetId(id);
@@ -76,13 +73,16 @@ function Calendar() {
    */
   const drop = info => {
     //oldEvent
-    const id = info.event.id;
+    const id = parseInt(info.event.id);
     const title = info.event.title;
     const afterDate = moment(info.event.start).format('YYYY-MM-DD'); // 변경 후 날짜
     const startTime = moment(info.event.start).format('HH:mm'); // 변경 후 시작 시간
-    changeSchedule(id, afterDate, startTime);
+    const endTime = moment(info.event.end).format('HH:mm'); // 변경 후 시작 시간
+    console.log("endtime", endTime)
+    const memberId = info.event.extendedProps.memberId; // 멤버 아이디
+    changeSchedule(id, afterDate, startTime, endTime, memberId);
     message.success(
-      `${title}님의 스케줄이 ${moment(afterDate + ' ' + startTime).format(
+      `[${title}] 회원님의 스케줄이 ${moment(afterDate + ' ' + startTime).format(
         'MM월DD일 HH시mm분'
       )}으로 변경되었습니다 `
     );
@@ -116,6 +116,18 @@ function Calendar() {
     toggleModal();
     setClickedDate(info.dateStr);
   };
+
+  const eventResize = info => {
+    const id = parseInt(info.event.id);
+    const title = info.event.title;
+    const afterDate = moment(info.event.start).format('YYYY-MM-DD'); // 변경 후 날짜
+    const afterStartTime = moment(info.event.start).format('HH:mm'); // 변경 후 시작 시간
+    const afterEndTime = moment(info.event.end).format('HH:mm'); // 변경 후 시작 시간
+    const memberId = info.event.extendedProps.memberId; // 멤버 아이디
+    changeSchedule(id, afterDate, afterStartTime, afterEndTime, memberId);
+    // alert
+    message.success(`[${title}] 회원 \n\n ${afterStartTime} ~ ${afterEndTime} 시간 변경!`);
+  }
 
   // const eventRender = ({event, el}) => {
   //
@@ -194,6 +206,7 @@ function Calendar() {
               eventClick={handleEventClick}
               dateClick={dateClick}
               eventDurationEditable={true}
+              eventResize={eventResize}
               // eventRender={eventRender}
               // ref={calendarComponentRef}
               // weekends={this.state.calendarWeekends}

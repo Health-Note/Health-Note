@@ -17,7 +17,7 @@ const reducer = (state, action) =>  {
             draft.schedules.forEach(schedule => {
               if (schedule.id === action.payload.id) {
                 schedule.target = true;
-                schedule.borderColor = 'blue';
+                schedule.borderColor = 'red';
               } else {
                 schedule.target = false;
                 schedule.borderColor = 'white';
@@ -26,12 +26,22 @@ const reducer = (state, action) =>  {
           });
         case GET_SCHEDULES:
           return produce(state, draft => {
-            const allSchedules = action.payload;
-            draft.schedules = allSchedules.map(cv => ({
-              title: cv.memberName,
-              id: cv.schedules.id,
-              start: cv.schedules.day + ' ' + cv.schedules.startTime,
-            }));
+            const allSchedules = action.payload.data;
+            const seedColors = action.payload.seedColors;
+            let colorIdx = 0;
+            draft.schedules = allSchedules.map((cv, i) => {
+              if (i < allSchedules.length - 1 && cv.id !== allSchedules[i + 1].id) {
+                colorIdx++;
+              }
+              return {
+                title: cv.memberName,
+                id: cv.schedules.id,
+                start: cv.schedules.day + ' ' + cv.schedules.startTime,
+                end: cv.schedules.day + ' ' + cv.schedules.endTime,
+                color: seedColors[1].colors[colorIdx].color,
+                memberId: cv.id,
+              };
+            });
             // reduce((acc, cv) => acc.concat(cv), []); // 이중배열 => 일차원배열
           });
         case SET_SCHEDULE:
@@ -43,7 +53,8 @@ const reducer = (state, action) =>  {
           return produce(state, draft => {
             draft.schedules.forEach(schedule => {
               if (schedule.id === action.payload.id) {
-                  schedule.start = action.payload.startTime
+                  schedule.start = action.payload.startTime;
+                  schedule.end = action.payload.endTime;
               }
             })
           });

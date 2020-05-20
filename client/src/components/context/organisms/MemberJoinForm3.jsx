@@ -64,19 +64,16 @@ const RegistrationForm = () => {
   const { addMember } = useContext(MembersContext);
 
   const onFinish = values => {
-    console.log(values.startTime)
-    console.log('Received values of form: ', values);
     const days = [];
-    for (let i = 0; i < 7; i++) {
-      let time = values['time_' + i];
-      if (time) {
-        days.push({
-          day: time.isoWeekday(),
-          hour: parseInt(time.format('HH')),
-          min: parseInt(time.format('mm')),
-        });
-      }
-    }
+    console.log('Received values of form: ', values);
+    values.days.forEach((day, i) => {
+      days.push({
+        day: parseInt(day),
+        hour: parseInt(values.startTime.format('HH')),
+        min: parseInt(values.startTime.format('mm')),
+      });
+    });
+
     const member = {};
     member.memberName = values.name;
     member.age = values.age;
@@ -84,6 +81,7 @@ const RegistrationForm = () => {
     member.phoneNum = values.prefix + values.phoneNum;
     member.totalPT = parseInt(values.totalPT);
     member.startTime = values.startTime.format('YYYY-MM-DD').toString();
+    member.endTime = values.startTime.add(1, 'hours').format('YYYY-MM-DD').toString();
     member.days = days;
     addMember(member);
   };

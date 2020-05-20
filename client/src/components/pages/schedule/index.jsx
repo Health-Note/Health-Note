@@ -104,7 +104,7 @@ const Schedule = () => {
   return (
     <>
       <Row container spacing={0} justify="center">
-        <Col xs={5} md={5} lg={18}>
+        <Col xs={5} md={5} lg={14}>
           <Calendar />
         </Col>
         <MyDrawer
