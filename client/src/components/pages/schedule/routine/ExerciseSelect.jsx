@@ -1,23 +1,16 @@
 import { Input, InputNumber, Select } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
-
 import axios from 'axios';
 import setAuthToken from '../../../../utils/setAuthToken';
 
 const { Option, OptGroup } = Select;
 
-const ExerciseSelect = ({
-  getRepetitions,
-  getSetCount,
-  getExerciseCode,
-  getExerIdAndName,
-}) => {
-  if (localStorage.token) {
-    setAuthToken(localStorage.token);
-  }
+const ExerciseSelect = ({getRepetitions, getSetCount, getExerIdAndName,  }) => {
+
   useEffect(() => {
     const fetchData = async () => {
-      const res = await axios('/api/exercises/');
+      const res = await axios.get('/api/exercises/');
+      console.log(res);
       setExercises(res.data);
     };
     fetchData();
@@ -29,7 +22,10 @@ const ExerciseSelect = ({
   const [setCounts, setSetCount] = useState('');
 
   const handleSelectExercise = value => {
-    getExerIdAndName(value);
+    const exerciseCode = value.split("|")[0];
+    const exerciseName = value.split("|")[1];
+    const exerciseTarget = value.split("|")[2];
+    getExerIdAndName(exerciseCode, exerciseName, exerciseTarget);
   };
 
   const handleRepetitions = useCallback(
@@ -54,99 +50,99 @@ const ExerciseSelect = ({
       >
         <OptGroup label="가슴">
           {exercises
-            .filter(exercise => exercise.Target === '가슴')
+            .filter(exercise => exercise.targetName === '가슴')
             .map(cv => (
               <Option
                 value={
-                  cv.ExerciseCode + '|' + cv.ExerciseName + '|' + cv.Target
+                  cv.exerciseCode + '|' + cv.exerciseName + '|' + cv.targetName
                 }
-                key={cv.ExerciseCode}
+                key={cv.exerciseCode}
               >
-                {cv.ExerciseName}
+                {cv.exerciseName}
               </Option>
             ))}
         </OptGroup>
         <OptGroup label="등">
           {exercises
-            .filter(exercise => exercise.Target === '등')
+            .filter(exercise => exercise.targetName === '등')
             .map(cv => (
               <Option
-                value={`${cv.ExerciseCode}|${cv.ExerciseName}|${cv.Target}`}
-                key={cv.ExerciseCode}
+                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetName}`}
+                key={cv.exerciseCode}
               >
-                {cv.ExerciseName}
+                {cv.exerciseName}
               </Option>
             ))}
         </OptGroup>
         <OptGroup label="하체">
           {exercises
-            .filter(exercise => exercise.Target === '하체')
+            .filter(exercise => exercise.targetName === '하체')
             .map(cv => (
               <Option
-                value={`${cv.ExerciseCode}|${cv.ExerciseName}|${cv.Target}`}
-                key={cv.ExerciseName}
+                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetName}`}
+                key={cv.exerciseName}
               >
-                {cv.ExerciseName}
+                {cv.exerciseName}
               </Option>
             ))}
         </OptGroup>
         <OptGroup label="어깨">
           {exercises
-            .filter(exercise => exercise.Target === '어깨')
+            .filter(exercise => exercise.targetName === '어깨')
             .map(cv => (
               <Option
-                value={`${cv.ExerciseCode}|${cv.ExerciseName}|${cv.Target}`}
-                key={cv.ExerciseName}
+                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetName}`}
+                key={cv.exerciseName}
               >
-                {cv.ExerciseName}
+                {cv.exerciseName}
               </Option>
             ))}
         </OptGroup>
         <OptGroup label="복부">
           {exercises
-            .filter(exercise => exercise.Target === '복부')
+            .filter(exercise => exercise.targetName === '복부')
             .map(cv => (
               <Option
-                value={`${cv.ExerciseCode}|${cv.ExerciseName}|${cv.Target}`}
-                key={cv.ExerciseName}
+                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetName}`}
+                key={cv.exerciseName}
               >
-                {cv.ExerciseName}
+                {cv.exerciseName}
               </Option>
             ))}
         </OptGroup>
         <OptGroup label="이두">
           {exercises
-            .filter(exercise => exercise.Target === '이두')
+            .filter(exercise => exercise.targetName === '이두')
             .map(cv => (
               <Option
-                value={`${cv.ExerciseCode}|${cv.ExerciseName}|${cv.Target}`}
-                key={cv.ExerciseName}
+                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetName}`}
+                key={cv.exerciseName}
               >
-                {cv.ExerciseName}
+                {cv.exerciseName}
               </Option>
             ))}
         </OptGroup>
         <OptGroup label="삼두">
           {exercises
-            .filter(exercise => exercise.Target === '삼두')
+            .filter(exercise => exercise.targetName === '삼두')
             .map(cv => (
               <Option
-                value={`${cv.ExerciseCode}|${cv.ExerciseName}|${cv.Target}`}
-                key={cv.ExerciseName}
+                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetName}`}
+                key={cv.exerciseName}
               >
-                {cv.ExerciseName}
+                {cv.exerciseName}
               </Option>
             ))}
         </OptGroup>
         <OptGroup label="전완">
           {exercises
-            .filter(exercise => exercise.Target === '전완')
+            .filter(exercise => exercise.targetName === '전완')
             .map(cv => (
               <Option
-                value={`${cv.ExerciseCode}|${cv.ExerciseName}|${cv.Target}`}
-                key={cv.ExerciseName}
+                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetName}`}
+                key={cv.exerciseName}
               >
-                {cv.ExerciseName}
+                {cv.exerciseName}
               </Option>
             ))}
         </OptGroup>

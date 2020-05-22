@@ -25,11 +25,11 @@ const Schedule = () => {
   const [routines, setRoutines] = useState([]);
 
   // 자식컴포넌트로 보내서 운동코드, 운동이름, 타겟을 가져오는 함수
-  const getExerIdAndName = (exerciseName, exerciseId, target) => {
+  const getExerIdAndName = (exerciseName, exerciseCode, target) => {
     setRoutines(prevState => [
       ...prevState,
       {
-        exerciseId,
+        exerciseCode,
         exerciseName,
         target,
         scheduleId: targetSchedule.id,
@@ -76,7 +76,7 @@ const Schedule = () => {
   // 루틴 저장
   const saveRoutines = async () => {
     const db_routines = routines.map(cv => ({
-      exerciseId: cv.exericseId,
+      exerciseCode: cv.exerciseCodeseId,
       exerciseName: cv.exerciseName,
       target: cv.target,
       scheduleId: targetSchedule.scheduleId,
@@ -103,8 +103,8 @@ const Schedule = () => {
 
   return (
     <>
-      <Row container spacing={0} justify="center">
-        <Col xs={5} md={5} lg={14}>
+      <Row>
+        <Col span={12}>
           <Calendar />
         </Col>
         <MyDrawer
@@ -129,7 +129,7 @@ const Schedule = () => {
                   </Row>
                 );
               })}
-            <ExerciseSelect getExerIdAndName={getExerIdAndName} />
+             <ExerciseSelect getExerIdAndName={getExerIdAndName} />
             <Divider>루틴목록↓</Divider>
             <EachRow
               getSetCount={getSetCount}

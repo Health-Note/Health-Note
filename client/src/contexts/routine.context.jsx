@@ -1,6 +1,5 @@
 import { GET_ROUTINE, SET_DATE } from '../reducers/types';
 import React, { createContext, useReducer, useState } from 'react';
-
 import axios from 'axios';
 import routineReducer from '../reducers/routine.reducer.js';
 import setAuthToken from '../utils/setAuthToken';
@@ -11,13 +10,33 @@ export const DispatchContext = createContext();
 export const RoutineProvider = props => {
   const initialState = [
     {
-      exerciseId: null, //멤버
+      exerciseCode: null, //멤버
       scheduleId: null, //멤버
       memberId: null, //루틴
       setCount: null, //루틴
       repetitions: null, //루틴(모델링에 따라 변경)
     },
   ];
+
+  const initial = [{
+    "scheduleId": 0,
+    "deleteRoutine": [
+      0
+    ],
+    "updateRoutine": [
+      {
+        "exerciseCode": 0,
+        "routineOrder": 0,
+        "memberId": 0,
+        "isCardio": 0,
+        "cardioTime": "string",
+        "setCount": 0,
+        "repetitions": 0,
+        "targetCode": 0,
+        "maxWeight": 0
+      }
+    ]
+  }]
 
   const [routineState, dispatch] = useReducer(routineReducer, initialState);
   const [scheduleId, setScheduleId] = useState('');
@@ -41,12 +60,8 @@ export const RoutineProvider = props => {
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
-    console.log(scheduleId);
-    const res = await axios.post(`/api/routine/${scheduleId}`, {
-      scheduleId,
-      date,
-    });
-    console.log(res.data);
+    const res = await axios.get(`/api/routine/${scheduleId}`);
+    console.log("getRoutine", res.data);
   };
 
   /* <setRoutine api>

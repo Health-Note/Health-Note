@@ -90,7 +90,7 @@ class SortableComponent extends Component {
         exerciseName: cv.exerciseName,
         setCount: cv.setCount,
         repetitions: cv.repetitions,
-        exerciseId: cv.exerciseId,
+        exerciseCode: cv.exerciseCode,
         scheduleId: cv.scheduleId,
         memberId: cv.memberId,
       })),
