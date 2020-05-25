@@ -56,7 +56,7 @@ const initialize = async (body, accountId) => {
         age: age,
         totalPT: totalPT,
         usedPT: 0,
-        registration: 1,
+        registrationStatus: 1,
         accountId: accountId,
       },
       { transaction: t }

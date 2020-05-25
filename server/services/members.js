@@ -49,11 +49,11 @@ const remove = async query => {
     })
 
     await db.memo.destroy({
-      where: { id: array }
+      where: { memberId: array }
     })
 
     await db.biologicalHistory.destroy({
-      where: { id: array }
+      where: { memberId: array }
     })
 
     const count = await db.member.destroy({
