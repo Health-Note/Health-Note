@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Input, Icon, Button, Row, Col, Checkbox } from 'antd';
+import { Input, Button, Row, Col, Checkbox } from 'antd';
+import { UserAddOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { showConfirm } from '../../../components/context/atoms/ComfirmModal';
 import { AlertContext } from '../../../contexts/alert.context';
@@ -69,7 +70,7 @@ function Register(props) {
           <div>
             <label htmlFor="trainerName">트레이너 이름</label>
             <Input
-              prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
               name="trainerName"
               value={trainerName}
               placeholder="트레이너 이름"

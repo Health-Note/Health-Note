@@ -9,7 +9,7 @@ import {
 import React, { createContext, useReducer, useState } from 'react';
 
 import axios from 'axios';
-import moment from 'moment';
+import seedColors from '../utils/seedColors';
 import scheduleReducer from '../reducers/schedule.reducer.js';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -26,6 +26,7 @@ const initialState = {
       title: null, // memberName
       id: null,
       start: null,
+      end: null,
       color: null,
       finish_dncd: false,
       target: null,
@@ -39,10 +40,10 @@ const initialState = {
 export const ScheduleProvider = props => {
   const [drawerBoolean, setDrawer] = useState(false);
 
-  const setScheduleTarget = (scheduleId, memberId) => {
+  const setScheduleTarget = (id, memberId) => {
     dispatch({
       type: SET_SCHEDULE_TARGET,
-      payload: { scheduleId, memberId },
+      payload: { id, memberId },
     });
   };
 
@@ -74,7 +75,7 @@ export const ScheduleProvider = props => {
     }
     try {
       const res = await axios.get('/api/schedules');
-      dispatch({ type: GET_SCHEDULES, payload: res.data });
+      dispatch({ type: GET_SCHEDULES, payload: { data: res.data, seedColors: seedColors} });
       console.log('schedule.context/getAllSchedules/res.data', res.data);
     } catch (err) {
       console.log(err);
@@ -98,19 +99,29 @@ export const ScheduleProvider = props => {
     }
   };
 
-  const changeSchedule = async (id, afterDate, afterTime) => {
-    const startTime = afterDate + " " + afterTime;
+  const changeSchedule = async (id, afterDate, afterStartTime, afterEndTime, memberId) => {
+    console.log("test", id, afterDate, afterStartTime, afterEndTime, memberId)
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.post('/api/schedules/changeSchedule', {
-        id,
-        afterDate,
-        afterTime,
+      const res = await axios.patch(`/api/schedules/${id}`, {
+        memberId: memberId,
+        day: afterDate,
+        startTime: afterStartTime,
+        endTime: afterEndTime,
+        isFinish: false,
+        tooltipText: null
       });
-      console.log("res", res.data.id);
-      dispatch({ type: UPDATE_SCHEDULE, payload: { id: Number(res.data.id), startTime: res.data.startTime } });
+      console.log("res.status", res.status);
+      if (res.status === 204) {
+        dispatch({ type: UPDATE_SCHEDULE, payload: {
+            id: id,
+            startTime: afterDate + ' ' + afterStartTime,
+            endTime: afterDate + ' ' + afterEndTime
+          }
+        });
+      }
     } catch (err) {
       console.log('changeSchedule', err);
     }

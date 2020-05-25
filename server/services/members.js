@@ -9,6 +9,7 @@ const CustomError = require('../common/error');
  * @param id {int}
  * */
 const create = async (body, accountId) => {
+  console.log("body", body);
   const { memberName, phoneNum, gender, totalPT, age } = body;
 
   const result = await db.member.create({

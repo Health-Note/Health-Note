@@ -1,19 +1,23 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import MemberJoinForm2 from './MemberJoinForm2';
+import MemberJoinForm3 from '../../context/organisms/MemberJoinForm3';
 import MemberTable from './MemberTable';
+import { Row, Col } from 'antd';
 import useToggle from '../../../hooks/useToggle';
 
 function Member() {
   const [isOpen, toggle] = useToggle();
 
   return (
-    <Grid container justify="center" style={{ marginTop: '1rem' }}>
-      <Grid item xs={12} md={10} lg={10}>
-          {isOpen && <MemberJoinForm2 toggle={toggle} />}
-          <MemberTable toggle={toggle} />
-      </Grid>
-    </Grid>
+    <>
+      <Row justify="center">
+        <Col md={24} lg={24} xl={12}>
+          <MemberTable toggle={toggle}/>
+        </Col>
+        <Col md={22} lg={24} xl={7}>
+          <MemberJoinForm3/>
+        </Col>
+      </Row>
+    </>
   );
 }
 

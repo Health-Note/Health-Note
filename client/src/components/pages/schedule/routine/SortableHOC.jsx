@@ -6,7 +6,7 @@ import {
 } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import axios from 'axios';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 import { Tag, Row, Col, Button, Icon } from 'antd';
 import setAuthToken from '../../../../utils/setAuthToken';
 import { AlertContext } from '../../../../contexts/alert.context';
@@ -90,7 +90,7 @@ class SortableComponent extends Component {
         exerciseName: cv.exerciseName,
         setCount: cv.setCount,
         repetitions: cv.repetitions,
-        exerciseId: cv.exerciseId,
+        exerciseCode: cv.exerciseCode,
         scheduleId: cv.scheduleId,
         memberId: cv.memberId,
       })),
