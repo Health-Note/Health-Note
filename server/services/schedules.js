@@ -1,5 +1,4 @@
 const { db, sequelize } = require('../models');
-const calendarColors = require('../utils/seedColors');
 const CustomError = require('../common/error');
 
 const initialize = async (body, accountId) => {

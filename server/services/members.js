@@ -1,4 +1,4 @@
-const { db } = require('../models');
+const { db, sequelize } = require('../models');
 const CustomError = require('../common/error');
 
 /**
@@ -19,7 +19,7 @@ const create = async (body, accountId) => {
     age: age,
     totalPT: totalPT,
     usedPT: 0,
-    registration: 1,
+    registrationStatus: 1,
     accountId: accountId,
   })
   
@@ -34,10 +34,46 @@ const remove = async query => {
   const { ids } = query;
   const array = JSON.parse(ids);
 
-  const count = await db.member.destroy({
-    where: { id: array }
+  await sequelize.transaction(async (t) => {
+
+    await db.weightTraining.destroy({
+      where: { memberId: array }
+    })
+
+    await db.routine.destroy({
+      where: { memberId: array }
+    })
+
+    await db.schedule.destroy({
+      where: { memberId: array }
+    })
+
+    await db.memo.destroy({
+      where: { id: array }
+    })
+
+    await db.biologicalHistory.destroy({
+      where: { id: array }
+    })
+
+    const count = await db.member.destroy({
+      where: { id: array }
+    })
+
   })
+  
 };
 
+const hold = async params => {
+  const { memberId } = params; 
 
-module.exports = { create, getAll, remove };
+  await db.member.update({
+    registrationStatus: 2
+  }, {
+    where: { id : memberId }
+  })
+
+}
+
+
+module.exports = { create, getAll, remove, hold };
