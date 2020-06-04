@@ -20,6 +20,14 @@ module.exports = function (sequelize, DataTypes) {
           key: 'scheduleId',
         },
       },
+      memberId: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        references: {
+          model: 'Routine',
+          key: 'memberId'
+        }
+      },
       setCount: {
           type: DataTypes.INTEGER,
           allowNull: false

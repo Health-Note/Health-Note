@@ -1,5 +1,4 @@
 const { db, sequelize } = require('../models');
-const calendarColors = require('../utils/seedColors');
 const CustomError = require('../common/error');
 
 const initialize = async (body, accountId) => {
@@ -57,7 +56,7 @@ const initialize = async (body, accountId) => {
         age: age,
         totalPT: totalPT,
         usedPT: 0,
-        registration: 1,
+        registrationStatus: 1,
         accountId: accountId,
       },
       { transaction: t }
