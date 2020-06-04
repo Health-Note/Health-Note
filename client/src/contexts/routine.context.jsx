@@ -3,6 +3,9 @@ import React, { createContext, useReducer, useState } from 'react';
 import axios from 'axios';
 import routineReducer from '../reducers/routine.reducer.js';
 import setAuthToken from '../utils/setAuthToken';
+import {
+  SET_ROUTINE
+} from '../reducers/types';
 
 export const RoutineContext = createContext();
 export const DispatchContext = createContext();
@@ -63,6 +66,10 @@ export const RoutineProvider = props => {
     const res = await axios.get(`/api/routine/${scheduleId}`);
     console.log("getRoutine", res.data);
   };
+
+  const setRoutine = (exerciseCode, targetCode, routineOrder, isCardio, cardioTime, setCount, repetitions, maxWeight) => {
+    dispatch({ type: SET_ROUTINE, payload: {exerciseCode, targetCode, routineOrder, isCardio, cardioTime, setCount, repetitions, maxWeight} })
+  }
 
   /* <setRoutine api>
    *  body: phonenum, date, reps, sets, exerciseName

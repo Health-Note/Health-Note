@@ -30,6 +30,7 @@ export const CREATE_ONE_SCHEDULE = 'CREATE_ONE_SCHEDULE';
 // 루틴
 export const SET_DATE = 'SET_DATE';
 export const GET_ROUTINE = 'GET_ROUTINE';
+export const SET_ROUTINE = 'SET_ROUTINE';
 
 // 회원분석
 

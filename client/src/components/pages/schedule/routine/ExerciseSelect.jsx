@@ -5,12 +5,11 @@ import setAuthToken from '../../../../utils/setAuthToken';
 
 const { Option, OptGroup } = Select;
 
-const ExerciseSelect = ({getRepetitions, getSetCount, getExerIdAndName,  }) => {
+const ExerciseSelect = ({ getExerIdAndName }) => {
 
   useEffect(() => {
     const fetchData = async () => {
       const res = await axios.get('/api/exercises/');
-      console.log(res);
       setExercises(res.data);
     };
     fetchData();
@@ -18,27 +17,13 @@ const ExerciseSelect = ({getRepetitions, getSetCount, getExerIdAndName,  }) => {
 
   const InputGroup = Input.Group;
   const [exercises, setExercises] = useState([]); // 최초 fetch용
-  const [repetitions, setRepetitions] = useState('');
-  const [setCounts, setSetCount] = useState('');
 
   const handleSelectExercise = value => {
     const exerciseCode = value.split("|")[0];
     const exerciseName = value.split("|")[1];
-    const exerciseTarget = value.split("|")[2];
-    getExerIdAndName(exerciseCode, exerciseName, exerciseTarget);
-  };
-
-  const handleRepetitions = useCallback(
-    repetitions => {
-      getRepetitions(repetitions);
-      setRepetitions(repetitions);
-    },
-    [repetitions]
-  );
-
-  const handleSetCount = setCount => {
-    getSetCount(setCount);
-    setSetCount(setCount);
+    const targetCode = value.split("|")[2];
+    const targetName = value.split("|")[3];
+    getExerIdAndName(exerciseCode, exerciseName, targetCode, targetName);
   };
 
   return (
@@ -50,12 +35,10 @@ const ExerciseSelect = ({getRepetitions, getSetCount, getExerIdAndName,  }) => {
       >
         <OptGroup label="가슴">
           {exercises
-            .filter(exercise => exercise.targetName === '가슴')
+            .filter(exercise => exercise.targetCode === 1)
             .map(cv => (
               <Option
-                value={
-                  cv.exerciseCode + '|' + cv.exerciseName + '|' + cv.targetName
-                }
+                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetCode}|${cv.targetName}`}
                 key={cv.exerciseCode}
               >
                 {cv.exerciseName}
@@ -64,10 +47,10 @@ const ExerciseSelect = ({getRepetitions, getSetCount, getExerIdAndName,  }) => {
         </OptGroup>
         <OptGroup label="등">
           {exercises
-            .filter(exercise => exercise.targetName === '등')
+            .filter(exercise => exercise.targetCode === 2)
             .map(cv => (
               <Option
-                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetName}`}
+                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetCode}|${cv.targetName}`}
                 key={cv.exerciseCode}
               >
                 {cv.exerciseName}
@@ -76,10 +59,10 @@ const ExerciseSelect = ({getRepetitions, getSetCount, getExerIdAndName,  }) => {
         </OptGroup>
         <OptGroup label="하체">
           {exercises
-            .filter(exercise => exercise.targetName === '하체')
+            .filter(exercise => exercise.targetCode === 3)
             .map(cv => (
               <Option
-                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetName}`}
+                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetCode}|${cv.targetName}`}
                 key={cv.exerciseName}
               >
                 {cv.exerciseName}
@@ -88,10 +71,10 @@ const ExerciseSelect = ({getRepetitions, getSetCount, getExerIdAndName,  }) => {
         </OptGroup>
         <OptGroup label="어깨">
           {exercises
-            .filter(exercise => exercise.targetName === '어깨')
+            .filter(exercise => exercise.targetCode === 4)
             .map(cv => (
               <Option
-                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetName}`}
+                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetCode}|${cv.targetName}`}
                 key={cv.exerciseName}
               >
                 {cv.exerciseName}
@@ -100,10 +83,10 @@ const ExerciseSelect = ({getRepetitions, getSetCount, getExerIdAndName,  }) => {
         </OptGroup>
         <OptGroup label="복부">
           {exercises
-            .filter(exercise => exercise.targetName === '복부')
+            .filter(exercise => exercise.targetCode === 5)
             .map(cv => (
               <Option
-                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetName}`}
+                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetCode}|${cv.targetName}`}
                 key={cv.exerciseName}
               >
                 {cv.exerciseName}
@@ -112,10 +95,10 @@ const ExerciseSelect = ({getRepetitions, getSetCount, getExerIdAndName,  }) => {
         </OptGroup>
         <OptGroup label="이두">
           {exercises
-            .filter(exercise => exercise.targetName === '이두')
+            .filter(exercise => exercise.targetCode === 6)
             .map(cv => (
               <Option
-                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetName}`}
+                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetCode}|${cv.targetName}`}
                 key={cv.exerciseName}
               >
                 {cv.exerciseName}
@@ -124,10 +107,10 @@ const ExerciseSelect = ({getRepetitions, getSetCount, getExerIdAndName,  }) => {
         </OptGroup>
         <OptGroup label="삼두">
           {exercises
-            .filter(exercise => exercise.targetName === '삼두')
+            .filter(exercise => exercise.targetCode === 7)
             .map(cv => (
               <Option
-                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetName}`}
+                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetCode}|${cv.targetName}`}
                 key={cv.exerciseName}
               >
                 {cv.exerciseName}
@@ -136,10 +119,10 @@ const ExerciseSelect = ({getRepetitions, getSetCount, getExerIdAndName,  }) => {
         </OptGroup>
         <OptGroup label="전완">
           {exercises
-            .filter(exercise => exercise.targetName === '전완')
+            .filter(exercise => exercise.targetCode === 8)
             .map(cv => (
               <Option
-                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetName}`}
+                value={`${cv.exerciseCode}|${cv.exerciseName}|${cv.targetCode}|${cv.targetName}`}
                 key={cv.exerciseName}
               >
                 {cv.exerciseName}
@@ -147,19 +130,6 @@ const ExerciseSelect = ({getRepetitions, getSetCount, getExerIdAndName,  }) => {
             ))}
         </OptGroup>
       </Select>
-      ,
-      <InputNumber
-        value={setCounts}
-        onChange={handleSetCount}
-        style={{ width: '20%' }}
-        placeholder={'세트'}
-      />
-      <InputNumber
-        value={repetitions}
-        onChange={handleRepetitions}
-        style={{ width: '20%' }}
-        placeholder={'반복'}
-      />
     </InputGroup>
   );
 };
