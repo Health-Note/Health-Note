@@ -100,10 +100,8 @@ Database schema is written by AqueryTool
 
 ![Alt Text](./doc/Health-Note-Schema.png)<br/>
 
-
-
 # Testing the project
-Testing is also just swagger-ui
+Testing is possible using swagger-ui
 
 ![Alt Text](./doc/Health-Note-Swagger.png)<br/>
 
