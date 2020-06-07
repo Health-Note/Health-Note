@@ -1,7 +1,3 @@
-# 동작화면
-![Alt Text](./doc/Health-Note1.gif)<br/>
-![Alt Text](./doc/Health-Note2.gif)<br/>
-
 > Specification
 
 - node.js express
@@ -96,7 +92,7 @@ This runs the `{DBConfiguration}` script specified in our `package.json`.
 Typically the server runs at `http://localhost:8080`.
 
 # Database design
-Database schema is written by AqueryTool
+Database schema is written by AqueryTool (https://aquerytool.com/)
 
 ![Alt Text](./doc/Health-Note-Schema.png)<br/>
 
