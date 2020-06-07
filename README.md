@@ -16,5 +16,5 @@
 3. 회원 운동 기록 분석 기능
 
 # 동작화면
-![Alt Text](./doc/Health-Note1.gif)<br/>
-![Alt Text](./doc/Health-Note2.gif)<br/>
+![Alt Text](./server/doc/Health-Note1.gif)<br/>
+![Alt Text](./server/doc/Health-Note2.gif)<br/>
