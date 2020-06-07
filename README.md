@@ -14,3 +14,7 @@
 1. 회원 PT 스케줄 관리 기능
 2. PT 세부 계획 작성 기능
 3. 회원 운동 기록 분석 기능
+
+# 동작화면
+![Alt Text](./doc/Health-Note1.gif)<br/>
+![Alt Text](./doc/Health-Note2.gif)<br/>
