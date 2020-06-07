@@ -1,4 +1,4 @@
-import { SET_DATE, GET_ROUTINE } from './types';
+import { SET_DATE, GET_ROUTINE, SET_ROUTINE } from './types';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -6,6 +6,10 @@ const reducer = (state, action) => {
       return { ...state, date: action.payload };
     case GET_ROUTINE: // [{},{},{}]
       return { name: action.name };
+    case SET_ROUTINE:
+      return{
+
+      }
     case 'DELETE':
       return state.filter(
         schedule => action.id !== schedule.phonenum + schedule.date
