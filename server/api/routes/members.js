@@ -29,7 +29,7 @@ const { Router } = require('express');
  *        type: string
  *      updatedAt:
  *        type: string
- *      registration:
+ *      registrationStatus:
  *        type: integer
  *      accountId:
  *        type: integer
@@ -157,4 +157,39 @@ module.exports = app => {
       return next(err);
     }
   });
+
+  /**
+   * @swagger
+   * /members/{memberId}/hold:
+   *  patch:
+   *    summary: patch member
+   *    description: change registration status of member
+   *    tags: [Member]
+   *    operationId: holdMember
+   *    parameters: 
+   *     - in: header
+   *       name: x-auth-token
+   *       type: string
+   *       required: true
+   *     - in: path
+   *       name: memberId
+   *       type: string
+   *       required: true
+   *    produces:
+   *      - application/json
+   *    consumes:
+   *      - application/json
+   *    responses:
+   *      204:
+   *        description: success to update members
+   */
+  route.patch('/:memberId/hold', middleware.isAuth, async (req, res, next) => {
+    try {
+      await memberService.hold(req.params);
+      res.status(204).end();
+    } catch(err) {
+      return next(err);
+    }
+  });
+
 };

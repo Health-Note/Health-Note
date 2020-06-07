@@ -13,33 +13,28 @@ db['exercise'] = sequelize.import(path.join(__dirname, './exercise.js'));
 db['biologicalHistory'] = sequelize.import(path.join(__dirname, './biologicalHistory.js'));
 db['memo'] = sequelize.import(path.join(__dirname, './memo.js'));
 db['weightTraining'] = sequelize.import(path.join(__dirname, './weightTraining.js'));
-db['weightTarget'] = sequelize.import(path.join(__dirname, './weightTarget.js'));
 db['agreement'] = sequelize.import(path.join(__dirname, './agreement.js'));
 
 // 아래와 같은 관계는 model에서 association에서 할 수도 있다
-db.account.belongsTo(db.agreement, { foreignKey: 'id' });
+db.agreement.hasMany(db.account, { foreignKey: 'agreementId' });
 
-db.schedule.belongsTo(db.member, { foreignKey: 'id' });
-db.member.hasMany(db.schedule, { foreignKey: 'memberId' });
-
-db.member.belongsTo(db.account, { foreignKey: 'id' });
 db.account.hasMany(db.member, { foreignKey: 'accountId' });
 
-db.member.hasMany(db.biologicalHistory);
-db.biologicalHistory.belongsTo(db.member, { foreignKey: 'memberId'});
+db.member.hasMany(db.schedule, { foreignKey: 'memberId' });
 
-db.member.hasMany(db.memo);
+db.biologicalHistory.belongsTo(db.member, { foreignKey: 'id'});
+
 db.memo.belongsTo(db.member, { foreignKey: 'id' });
 
-//db.exercise.hasMany(db.routine, { foreignKey: 'ExerciseCode' });
-db.routine.belongsTo(db.schedule, );
-db.routine.belongsTo(db.exercise, { foreignKey: 'exerciseId' });
-db.routine.hasOne(db.weightTraining, { foreignKey: 'scheduleId' });
-db.routine.hasOne(db.weightTraining, { foreignKey: 'exerciseId' });
+db.schedule.hasMany(db.routine, { foreignKey: 'scheduleId' })
 
-db.weightTarget.hasMany(db.weightTraining, { foreignKey: 'weightTargetId' });
+db.routine.belongsTo(db.exercise, { foreignKey: 'exerciseCode' });
+db.routine.hasOne(db.weightTraining, { foreignKey: 'scheduleId' });
+db.routine.hasOne(db.weightTraining, { foreignKey: 'exerciseCode' });
+
+db.exercise.hasMany(db.weightTraining, { foreignKey: 'targetCode' })
+db.weightTraining.belongsTo(db.routine, { foreignKey: 'memberId' })
 db.weightTraining.belongsTo(db.routine, { foreignKey: 'scheduleId' });
-db.weightTraining.belongsTo(db.routine, { foreignKey: 'exerciseId' });
-//db.weightTraining.belongsTo(db.weightTarget, { foreignKey: 'weightTargetId' });
+db.weightTraining.belongsTo(db.routine, { foreignKey: 'exerciseCode' });
 
 module.exports = { sequelize, db };

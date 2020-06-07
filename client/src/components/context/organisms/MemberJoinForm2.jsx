@@ -125,15 +125,17 @@ const MemberJoinForm2 = ({ form, toggle }) => {
     }
   };
   return (
+    <Row>
+      <Col span={15}>
     <Form onSubmit={handleSubmit}>
       <Descriptions
         title="회원등록"
         bordered
-        column={{ xxl: 4, xl: 3, lg: 3, md: 2, sm: 1, xs: 1 }}
+        column={{ xxl: 3, xl: 3, lg: 3, md: 2, sm: 1, xs: 1 }}
       >
         <Descriptions.Item label="이름">
           <Form.Item style={{ margin: 0 }}>
-            {getFieldDecorator('name', {
+            {getFieldDecorator('memberName', {
               rules: [{ required: true, message: '이름을 입력하세요' }],
             })(<Input />)}
           </Form.Item>
@@ -150,12 +152,19 @@ const MemberJoinForm2 = ({ form, toggle }) => {
             )}
           </Form.Item>
         </Descriptions.Item>
-        <Descriptions.Item label="연락처">
+        <Descriptions.Item label="나이">
           <Form.Item style={{ margin: 0 }}>
-            {getFieldDecorator('phoneNum', {
-              rules: [{ required: true, message: '핸드폰 번호를 입력하세요' }],
-            })(<Input />)}
+            {getFieldDecorator('age', {
+              rules: [{ required: true, message: '나이를 입력하세요' }],
+            })(<Input maxLength={2}/>)}
           </Form.Item>
+        </Descriptions.Item>
+        <Descriptions.Item label="연락처">
+            <Form.Item style={{ margin: 0 }}>
+              {getFieldDecorator('phoneNum', {
+                rules: [{ required: true, message: '핸드폰 번호를 입력하세요' }],
+              })(<Input maxLength={4}/>)}
+            </Form.Item>
         </Descriptions.Item>
         <Descriptions.Item label="시작일">
           <Form.Item style={{ margin: 0 }}>
@@ -169,7 +178,7 @@ const MemberJoinForm2 = ({ form, toggle }) => {
           <Form.Item style={{ margin: 0 }}>
             {getFieldDecorator('totalPT', {
               rules: [{ required: true, message: '등록PT수를 입력하세요' }],
-            })(<Input />)}
+            })(<Input maxLength="11"/>)}
           </Form.Item>
         </Descriptions.Item>
         <Descriptions.Item label="키">
@@ -239,6 +248,8 @@ const MemberJoinForm2 = ({ form, toggle }) => {
         </Col>
       </Row>
     </Form>
+      </Col>
+    </Row>
   );
 };
 const WrappedMemberJoinForm2 = Form.create({ name: 'MemberJoinForm2' })(

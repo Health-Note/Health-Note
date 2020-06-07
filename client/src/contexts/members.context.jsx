@@ -37,20 +37,6 @@ export const DispatchContext = createContext();
 export function MembersProvider(props) {
   const [state, dispatch] = useReducer(memberReducer, initialState);
 
-  const changeVarName = (member) => {
-    const memberObj = {};
-    memberObj['memberName'] = member.memberName;
-    memberObj['id'] = member.id;
-    memberObj['phoneNum'] = member.phoneNum;
-    memberObj['gender'] = member.gender;
-    memberObj['startDate'] = member.startDate;
-    memberObj['endDate'] = member.endDate;
-    memberObj['usedPT'] = member.usedPT;
-    memberObj['totalPT'] = member.totalPT;
-    memberObj['height'] = member.height;
-    return memberObj;
-  };
-
   // 작성일: 2019.08.11
   // 작성자: 박종열
   // 기능: 트레이너들의 회원목록(이름, 등록일, 마감일, 남은pt수) 가져오기, 정적 스케줄 가져오기
@@ -90,18 +76,29 @@ export function MembersProvider(props) {
    * @module members.context
    * @function
    * @desc 회원 추가
-   * @param formdata {object} {memberName, startTime, endTime, phonenum, gender, totalPT, height}
+   * @param formdata {object} {memberName, age, startTime, endTime, phonenum, gender, totalPT, height}
    */
+
   const addMember = async formdata => {
+    console.log('formdata', formdata)
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.post('/api/members', formdata);
-      console.log('[context] members addMember res', res);
-      console.log('[context] members addMember res.data', res.data);
-      if (res.data) {
-        const addedMember = await changeVarName(res.data);
+      const res = await axios.post('/api/schedules/initializing', formdata);
+      console.log("res.data.id", res.data.id)
+      if (res.status === 201) {
+        const addedMember = {
+          id: res.data.id,
+          memberName: formdata.memberName,
+          phoneNum: formdata.phoneNum,
+          gender: formdata.gender,
+          startDate: formdata.startDate,
+          endDate: formdata.endDate,
+          usedPT: 0,
+          totalPT: formdata.totalPT,
+          height: null
+        }
         dispatch({ type: ADD_MEMBER, payload: addedMember });
       } else {
         console.log('어떤 에러');
