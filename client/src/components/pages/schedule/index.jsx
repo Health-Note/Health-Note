@@ -19,7 +19,7 @@ const Schedule = () => {
   // 루틴 저장
   const saveRoutines = async (deleteRoutine, updateRoutine) => {
     const routines = {
-      scheduleId: targetSchedule,
+      scheduleId: targetSchedule.id,
       deleteRoutine: deleteRoutine,
       updateRoutine: updateRoutine,
     }
@@ -28,7 +28,7 @@ const Schedule = () => {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.post('/api/routine', routines);
+      const res = await axios.post('/api/routines', routines);
       if (res.data) {
         setAlert('저장되었습니다.', 'success');
       }
