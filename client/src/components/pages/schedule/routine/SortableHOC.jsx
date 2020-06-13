@@ -6,7 +6,7 @@ import {
 } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import axios from 'axios';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 import { Tag, Row, Col, Button, Icon } from 'antd';
 import setAuthToken from '../../../../utils/setAuthToken';
 import { AlertContext } from '../../../../contexts/alert.context';
@@ -108,12 +108,12 @@ class SortableComponent extends Component {
   insertRoutine = async () => {
     const { setAlert } = this.context;
     const routines = this.state.items.map((cv, idx) => ({
-      SetCount: cv.setCount,
-      Repetitions: cv.repetitions,
-      ExerciseCode: cv.exerciseCode,
-      ScheduleId: this.props.selectedScheduleId,
-      MemberId: cv.memberId,
-      RoutineOrder: idx,
+      setCount: cv.setCount,
+      repetitions: cv.repetitions,
+      exerciseCode: cv.exerciseCode,
+      scheduleId: this.props.selectedScheduleId,
+      memberId: cv.memberId,
+      routineOrder: idx,
     }));
 
     if (localStorage.token) {

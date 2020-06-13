@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+import { Layout, Menu, Breadcrumb, Button } from 'antd';
+import { UserAddOutlined, UserOutlined, LogoutOutlined, TeamOutlined, CalendarOutlined, PieChartOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import Routes from '../routing/Routes';
 import Alerts from '../context/atoms/Alerts';
 import { AuthContext } from '../../contexts/auth.context';
 import { AlertContext } from '../../contexts/alert.context';
 import { MembersContext } from '../../contexts/members.context';
+import { ScheduleContext } from '../../contexts/schedule.context';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -13,6 +15,7 @@ const Dashboard = () => {
   // context
   const authContext = useContext(AuthContext);
   const alertContext = useContext(AlertContext);
+  const scheduleContext = useContext(ScheduleContext);
   const membersContext = useContext(MembersContext);
   const { isAuthenticated, logout, trainer } = authContext;
   const { setAlert } = alertContext;
@@ -22,10 +25,9 @@ const Dashboard = () => {
 
   useEffect(() => {
     authContext.loadUser();
-   // membersContext.getMember();
+    membersContext.getMember();
     // eslint-disable-next-line
   }, []);
-
 
   const onCollapse = collapsed => {
     setCollapsed(collapsed);
@@ -33,19 +35,23 @@ const Dashboard = () => {
 
   const handleLogout = () => {
     logout();
-    setAlert(`${trainer.Email}님, 로그아웃 하셨습니다.`, 'success', trainer.nickname);
+    setAlert(
+      `${trainer.trainerName}님, 로그아웃 하셨습니다.`,
+      'success',
+      trainer.trainerName
+    );
   };
 
   const authLinks = (
     <>
-      <Icon type="user" />
-      <span> {trainer && trainer.Email} 접속중 </span>
+      <UserOutlined />
+      <span> {trainer && trainer.trainerName} 접속중 </span>
     </>
   );
 
   const logoutLinks = (
     <>
-      <Icon type="logout" />
+      <LogoutOutlined />
       <span>로그아웃</span>
       <Link to={'/login'} onClick={handleLogout}></Link>
     </>
@@ -53,7 +59,7 @@ const Dashboard = () => {
 
   const guestLoginLinks = (
     <>
-      <Icon type="desktop" />
+      <UserOutlined />
       <span>로그인</span>
       <Link to={'/login'}></Link>
     </>
@@ -61,7 +67,7 @@ const Dashboard = () => {
 
   const guestRegisterLinks = (
     <>
-      <Icon type="desktop" />
+      <UserAddOutlined />
       <span> 회원가입</span>
       <Link to={'/register'}></Link>
     </>
@@ -95,17 +101,17 @@ const Dashboard = () => {
           </Menu.Item>
           <Menu.Item></Menu.Item>
           <Menu.Item key="9">
-            <Icon type="team" />
+            <TeamOutlined />
             <span>회원 관리</span>
             <Link to={'/member'}></Link>
           </Menu.Item>
           <Menu.Item key="10">
-            <Icon type="calendar"></Icon>
+            <CalendarOutlined />
             <span>일정 관리</span>
             <Link to={'/schedule'}></Link>
           </Menu.Item>
           <Menu.Item key="11">
-            <Icon type="pie-chart" />
+            <PieChartOutlined />
             <span>회원 분석</span>
             <Link to={'/statistic'}></Link>
           </Menu.Item>

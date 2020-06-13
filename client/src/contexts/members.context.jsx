@@ -1,16 +1,16 @@
+import {
+  ADD_MEMBER,
+  CLEAR_ERRORS,
+  CLEAR_TARGET,
+  EDIT_MEMBER,
+  GET_MEMBER,
+  MEMBER_ERROR,
+  REMOVE_MEMBER,
+} from '../reducers/types';
 import React, { createContext, useReducer } from 'react';
 import axios from 'axios';
 import memberReducer from '../reducers/members.reducer.js';
 import setAuthToken from '../utils/setAuthToken';
-import {
-  ADD_MEMBER,
-  GET_MEMBER,
-  REMOVE_MEMBER,
-  EDIT_MEMBER,
-  MEMBER_ERROR,
-  CLEAR_ERRORS,
-  CLEAR_TARGET,
-} from '../reducers/types';
 
 const initialState = {
   loading: true,
@@ -19,7 +19,7 @@ const initialState = {
   members: [
     {
       id: null,
-      name: null,
+      memberName: null,
       phoneNum: null,
       gender: null,
       startDate: null,
@@ -37,20 +37,6 @@ export const DispatchContext = createContext();
 export function MembersProvider(props) {
   const [state, dispatch] = useReducer(memberReducer, initialState);
 
-  const changeVarName = (member) => {
-    const memberObj = {};
-    memberObj['name'] = member.Name;
-    memberObj['id'] = member.MemberId;
-    memberObj['phoneNum'] = member.PhoneNum;
-    memberObj['gender'] = member.Gender;
-    memberObj['startDate'] = member.StartDate;
-    memberObj['endDate'] = member.EndDate;
-    memberObj['usedPT'] = member.UsedPT;
-    memberObj['totalPT'] = member.TotalPT;
-    memberObj['height'] = member.Height;
-    return memberObj;
-  };
-
   // 작성일: 2019.08.11
   // 작성자: 박종열
   // 기능: 트레이너들의 회원목록(이름, 등록일, 마감일, 남은pt수) 가져오기, 정적 스케줄 가져오기
@@ -64,79 +50,92 @@ export function MembersProvider(props) {
       },
     };
     try {
-      const res = await axios.get('/api/members/getMembers', setting);
-      console.log('res.data', res.data);
+      const res = await axios.get('/api/members', setting);
+      console.log('[context] getMember res.data', res.data);
       const members = res.data.map(cv => {
         return {
-          id: cv.MemberId,
-          name: cv.Name,
-          phoneNum: cv.PhoneNum,
-          gender: cv.Gender,
-          startDate: cv.StartDate,
-          endDate: cv.EndDate,
-          usedPT: cv.UsedPT,
-          totalPT: cv.TotalPT,
-          height: cv.Height,
+          id: cv.id,
+          memberName: cv.memberName,
+          phoneNum: cv.phoneNum,
+          gender: cv.gender,
+          startDate: cv.startDate,
+          endDate: cv.endDate,
+          usedPT: cv.usedPT,
+          totalPT: cv.totalPT,
+          height: cv.height,
         };
       });
+      console.log(members)
       await dispatch({ type: GET_MEMBER, payload: members });
     } catch (err) {
       console.log(err);
     }
   };
 
-  // 작성일: 2019.09.07
-  // 작성자: 박종열
-  // 기능: 맴버 추가
+  /**
+   * @module members.context
+   * @function
+   * @desc 회원 추가
+   * @param formdata {object} {memberName, age, startTime, endTime, phonenum, gender, totalPT, height}
+   */
+
   const addMember = async formdata => {
-    // name, startTime, endTime, phonenum, gender, totalPT, height
+    console.log('formdata', formdata)
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.post('/api/members/insertMember', formdata);
-      if (res.data) {
-        console.log('addMember_res.data', res.data);
-        const addedMemebr = await changeVarName(res.data);
-        dispatch({ type: ADD_MEMBER, payload: addedMemebr });
+      const res = await axios.post('/api/schedules/initializing', formdata);
+      console.log("res.data.id", res.data.id)
+      if (res.status === 201) {
+        const addedMember = {
+          id: res.data.id,
+          memberName: formdata.memberName,
+          phoneNum: formdata.phoneNum,
+          gender: formdata.gender,
+          startDate: formdata.startDate,
+          endDate: formdata.endDate,
+          usedPT: 0,
+          totalPT: formdata.totalPT,
+          height: null
+        }
+        dispatch({ type: ADD_MEMBER, payload: addedMember });
       } else {
         console.log('어떤 에러');
       }
     } catch (error) {
-      console.log(error.response.data.msg);
-      dispatch({ type: MEMBER_ERROR, payload: error.response.data.msg });
+      console.log(error);
+      // dispatch({ type: MEMBER_ERROR, payload: error.response.data.msg });
     }
   };
 
+  /**
+   * @module members.context
+   * @function
+   * @desc 회원 삭제
+   * @param selectedRows {array} [{key, id, memberName, gender, phoneNum, totalPT, usedPT}, ...]
+   * @res {Object} The JSON payload.
+   */
   const removeMember = async selectedRows => {
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.post('/api/members/removeMember', selectedRows);
-      if (res.data) {
-        // 삭제된 row수
-        console.log('removeMember', res.data);
-        console.log('selectedRows', selectedRows);
-        const members = res.data.map(cv => {
-          return {
-            id: cv.MemberId,
-            name: cv.Name,
-            phoneNum: cv.PhoneNum,
-            gender: cv.Gender,
-            startDate: cv.StartDate,
-            endDate: cv.EndDate,
-            usedPT: cv.UsedPT,
-            totalPT: cv.TotalPT,
-            height: cv.Height,
-          };
-        });
-        dispatch({ type: REMOVE_MEMBER, payload: members });
+      console.log('[context] removeMember selectedRows', selectedRows);
+      const ids = selectedRows.map(cv => {
+        return cv.id
+      });
+      const strids = JSON.stringify(ids);
+      console.log('[context] removeMember strids', strids);
+      const res = await axios.delete(`/api/members/?ids=${strids}`);
+      if (res.status === 204) {
+        console.log('[context] removeMember res.data', res.data);
+        dispatch({ type: REMOVE_MEMBER, payload: ids });
       } else {
         console.log('어떤 에러');
       }
     } catch (error) {
-      console.log(error.response.data.msg);
+      console.log(error);
       // dispatch({ type: MEMBER_ERROR, payload: error.response.data.msg });
     }
   };

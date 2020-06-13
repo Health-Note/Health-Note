@@ -1,24 +1,30 @@
-require('dotenv').config();
+// switch 문이 적용되야 config가 인식 됨
 const express = require('express');
-const app = express();
+const config = require('./config');
+const logger = require('./loaders/logger');
 
-// 라우트
-const memberRoutes = require('./routes/members');
-const trainerRoutes = require('./routes/trainers');
-const authRoutes = require('./routes/auth');
-const scheduleRoutes = require('./routes/schedules');
-const routineRoutes = require('./routes/routine');
-const exerciseRoutes = require('./routes/exercises');
+startServer = async () => {
+  const app = express();
 
-// 미들웨어
-app.use(express.json());
-app.use('/api/trainers', trainerRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/members', memberRoutes);
-app.use('/api/schedules', scheduleRoutes);
-app.use('/api/routine', routineRoutes);
-app.use('/api/exercises', exerciseRoutes);
+  /**
+   * A little hack here
+   * Import/Export can only be used in 'top-level code'
+   * Well, at least in node 10 without babel and at the time of writing
+   * So we are using good old require.
+   * import 가 아닌 require 를 쓴다는 것인 듯
+   **/
+  await require('./loaders').default({ expressApp: app });
 
-app.listen(8080, () => {
-  console.log('client-dev-server (express) started');
-});
+  // config가 가장 먼저 입력이 되어야 한다
+  app.listen(config.port, err => {
+    if (err) {
+      logger.error(err);
+      process.exit(1);
+      return;
+    }
+    //console.log('client-dev-server (express) started');
+    logger.info(`🛡️  Server listening on port: ${config.port}  🛡️`);
+  });
+};
+
+startServer();

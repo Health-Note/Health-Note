@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Table, Button, Icon } from 'antd';
-import uuid from 'uuid/v4'
+import { Table, Button } from 'antd';
+import { UserAddOutlined, UserDeleteOutlined } from '@ant-design/icons';
+import { v4 as uuid } from 'uuid';
 import { MembersContext } from '../../../contexts/members.context';
 import { AlertContext } from '../../../contexts/alert.context';
 import { useIsMount } from '../../../hooks/useIsMount';
@@ -12,8 +13,8 @@ const onChange = (pagination, filters, sorter) => {
 const columns = [
   {
     title: '이름',
-    dataIndex: 'name',
-    key: 'name',
+    dataIndex: 'memberName',
+    key: 'memberName',
   },
   {
     title: '연락처',
@@ -24,34 +25,27 @@ const columns = [
     title: '성별',
     dataIndex: 'gender',
     key: 'gender',
-    defaultSortOrder: 'descend',
-    sorter: (a, b) => a.gender.length - b.gender.length,
-    sortDirections: ['descend', 'ascend'],
   },
   {
     title: '결제한PT수',
     dataIndex: 'totalPT',
     key: 'totalPT',
-    defaultSortOrder: 'descend',
     sorter: (a, b) => a.totalPT - b.totalPT,
   },
   {
     title: '진행된PT수',
     dataIndex: 'usedPT',
     key: 'usedPT',
-    defaultSortOrder: 'descend',
     sorter: (a, b) => a.usedPT - b.usedPT,
   },
 ];
 
 const MemberTable = ({ toggle }) => {
   const isMount = useIsMount();
-  
   const { members, error, getMember, removeMember, targetMember, clearErrors, clearTarget } = useContext(
     MembersContext
   );
   const { setAlert } = useContext(AlertContext);
-
   const [memberData, setMemberData] = useState([]);
   const [checkedRows, setChedckedRows] = useState([]);
 
@@ -82,8 +76,9 @@ const MemberTable = ({ toggle }) => {
   useEffect(() => {
     const memberRow = members.map(member => {
       return {
-        key: member.phoneNum,
-        name: member.name,
+        key: member.id,
+        id: member.id,
+        memberName: member.memberName,
         gender: member.gender === 1 ? '남' : '여',
         phoneNum: member.phoneNum,
         usedPT: member.usedPT,
@@ -91,7 +86,6 @@ const MemberTable = ({ toggle }) => {
       };
     });
     setMemberData(memberRow);
-    console.log(members);
   }, [MembersContext, members]);
 
   const handleRemove = () => {
@@ -100,11 +94,10 @@ const MemberTable = ({ toggle }) => {
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        'selectedRows: ',
-        selectedRows
-      );
+      // console.log(
+      //   'selectedRows: ',
+      //   selectedRows
+      // );
       setChedckedRows(selectedRows);
     },
     getCheckboxProps: record => ({
@@ -115,12 +108,12 @@ const MemberTable = ({ toggle }) => {
 
   return (
     <>
-      <Button onClick={toggle}>
-        <Icon type="user-add" style={{ fontSize: '20px' }} />
-        회원 등록
-      </Button>
+      {/*<Button onClick={toggle}>*/}
+      {/*  <UserAddOutlined style={{ fontSize: '20px' }} />*/}
+      {/*  회원 등록*/}
+      {/*</Button>*/}
       <Button onClick={handleRemove}>
-        <Icon type="user-delete" style={{ fontSize: '20px' }} />
+        <UserDeleteOutlined style={{ fontSize: '20px' }} />
         회원 삭제
       </Button>
       <Table

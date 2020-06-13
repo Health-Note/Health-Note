@@ -1,4 +1,6 @@
 import React from 'react';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import setAuthToken from './utils/setAuthToken';
 import { BrowserRouter } from 'react-router-dom';
 import DashBoard from './components/dashBoard/DashBoard';
@@ -22,7 +24,9 @@ function App() {
             <ScheduleProvider>
               <RoutineProvider>
                 <BrowserRouter>
-                  <DashBoard />
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <DashBoard />
+                  </MuiPickersUtilsProvider>
                 </BrowserRouter>
               </RoutineProvider>
             </ScheduleProvider>

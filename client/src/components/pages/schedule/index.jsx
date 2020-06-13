@@ -1,143 +1,52 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Row, Col, Divider, Button } from 'antd';
-import moment from 'moment';
 import axios from 'axios';
-import uuid from 'uuid/v4';
 import Calendar from './Calendar/Calendar';
 import { ScheduleContext } from '../../../contexts/schedule.context';
-import SortableComponent from './routine/SortableHOC';
-import ExerciseSelect from './routine/ExerciseSelect';
-import MyDrawer from '../../context/atoms/Drawer';
+import { MembersContext } from '../../../contexts/members.context';
+import { AlertContext } from '../../../contexts/alert.context';
 import setAuthToken from '../../../utils/setAuthToken';
+import Routine from './routine2/Routine';
 
 const Schedule = () => {
-  const { drawerBoolean, setDrawer, schedules, targetSchedule } = useContext(
+  const { targetSchedule } = useContext(
     ScheduleContext
   );
 
-  // 자식 컴포넌트에서 가져오는 state
-  const [exerciseCode, setExerciseCode] = useState('');
-  const [exerciseName, setExerciseName] = useState('');
-  const [target, setTarget] = useState('');
-  const [setCount, setSetCount] = useState('');
-  const [repetitions, setRepetitions] = useState('');
+  const { target } = useContext(MembersContext);
+  const { setAlert } = useContext(AlertContext);
 
-  // 운동 리스트
-  const [routines, setRoutines] = useState([]);
-
-  const getExerCodeAndName = value => {
-    setExerciseCode(value.split('|')[0]);
-    setExerciseName(value.split('|')[1]);
-    setTarget(value.split('|')[2]);
-  };
-
-  const getSetCount = setCount => {
-    setSetCount(setCount);
-  };
-
-  const getRepetitions = reptitions => {
-    console.log(repetitions);
-    setRepetitions(reptitions);
-  };
-
-  // state추가
-  const insertExercise = () => {
-    setRoutines(prevState => [
-      ...prevState,
-      {
-        exerciseCode,
-        exerciseName,
-        target,
-        scheduleId: targetSchedule.scheduleId,
-        memberId: targetSchedule.memberId,
-        setCount,
-        repetitions,
-      },
-    ]);
-  };
-
-  const removeRoutine = event => {
+  // 루틴 저장
+  const saveRoutines = async (deleteRoutine, updateRoutine) => {
+    const routines = {
+      scheduleId: targetSchedule,
+      deleteRoutine: deleteRoutine,
+      updateRoutine: updateRoutine,
+    }
     console.log(routines);
-    console.log(event.target.name);
-
-    const deletedItems = routines.filter(cv => cv.exerciseCode !== Number(event.target.name));
-    console.log(deletedItems)
-    setRoutines(deletedItems);
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+    }
+    try {
+      const res = await axios.post('/api/routine', routines);
+      if (res.data) {
+        setAlert('저장되었습니다.', 'success');
+      }
+    } catch (err) {
+      setAlert('저장실패', 'fail')
+    }
   };
-
-  // 다른멤버 선택했을 때 기존에 채우던 state초기화
-  useEffect(() => {
-    const getRoutines = async () => {
-      if (localStorage.token) {
-        setAuthToken(localStorage.token);
-      }
-      try {
-        const res = await axios.get(
-          `/api/routine/${targetSchedule.scheduleId}`
-        );
-        setRoutines(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getRoutines();
-  }, [targetSchedule.scheduleId]);
 
   return (
     <>
-      <Row container spacing={0} justify="center">
-        <Col xs={5} md={5} lg={18}>
+      <Row gutter={20}>
+        <Col span={12}>
           <Calendar />
         </Col>
-        <MyDrawer
-          title={'루틴관리'}
-          setDrawer={setDrawer}
-          drawerBoolean={drawerBoolean}
-        >
-          <Col lg={24}>
-            {schedules
-              .filter(schedule => schedule.target === true)
-              .map(schedule => {
-                return (
-                  <Row container justify="start" align="middle" key={uuid()}>
-                    <Col lg={11}>
-                      <h3 style={{ color: schedule.color }}>
-                        {schedule.title} 회원
-                      </h3>
-                    </Col>
-                    <Col lg={13}>
-                      {moment(schedule.start).format('MM월 DD일 / HH시 mm분')}
-                    </Col>
-                  </Row>
-                );
-              })}
-            <ExerciseSelect
-              getSetCount={getSetCount}
-              getRepetitions={getRepetitions}
-              getExerCodeAndName={getExerCodeAndName}
-            />
-            <Button style={{ marginTop: '5px' }} onClick={insertExercise} block>
-              추가하기
-            </Button>
-            {/* <Row container justify="start">
-              <div style={{marginTop: "10px"}}>
-                <Col lg={15}>
-                  {"운동명"}
-                </Col>
-                <Col lg={9}>
-                  <Tag>세트수</Tag>
-                  <Tag>반복수</Tag>
-                </Col>
-              </div>
-            </Row> */}
-            <Divider>루틴목록↓</Divider>
-            <SortableComponent
-              routines={routines}
-              removeRoutine={removeRoutine}
-              selectedScheduleId={targetSchedule.scheduleId}
-            />
-          </Col>
-        </MyDrawer>
+        <Col>
+          <h2>운동루틴</h2>
+          <Routine saveRoutines={saveRoutines}/>
+        </Col>
       </Row>
       <Row container justify="center">
         <Col xs={12} md={12} lg={12}></Col>

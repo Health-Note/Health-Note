@@ -11,13 +11,12 @@ import { MembersContext } from '../../contexts/members.context';
 
 function Routes() {
   const { members } = useContext(MembersContext);
-
   function getMember(props) {
     // 괄호안에 props는 라우터에서 넣어주는 프롭스
-    let name = props.match.params.name; // 파라미터를 통해 멤버정보 가져오기
-    let currentMember = members.find(
+    const name = props.match.params.name; // 파라미터를 통해 멤버정보 가져오기
+    const currentMember = members.find(
       // 프롭스의 멤버와 파라미터의 멤버를 비교
-      member => member.name.toLowerCase() === name.toLowerCase()
+      member => member.name && member.name.toLowerCase() === name.toLowerCase()
     );
     return <Statistics {...props} member={currentMember} />;
   }

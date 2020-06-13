@@ -1,17 +1,18 @@
-import React, { createContext, useReducer } from 'react';
-import axios from 'axios';
-import authReducer from '../reducers/auth.reducer';
-import setAuthToken from '../utils/setAuthToken';
 import {
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
-  CLEAR_ERRORS,
-  USER_LOADED,
   AUTH_ERROR,
-  LOGIN_SUCCESS,
+  CLEAR_ERRORS,
   LOGIN_FAIL,
+  LOGIN_SUCCESS,
   LOGOUT,
+  REGISTER_FAIL,
+  REGISTER_SUCCESS,
+  USER_LOADED,
 } from '../reducers/types';
+import React, { createContext, useReducer } from 'react';
+
+import authReducer from '../reducers/auth.reducer';
+import axios from 'axios';
+import setAuthToken from '../utils/setAuthToken';
 
 export const AuthContext = createContext();
 export const AuthProvider = props => {
@@ -33,19 +34,22 @@ export const AuthProvider = props => {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.get('/api/auth');
+      const res = await axios.get('/api/auth/me');
       await dispatch({ type: USER_LOADED, payload: res.data }); // payload는 찾은 trainer
-      console.log('로드 유저', res.data);
+      console.log('loadUser', res.data);
     } catch (err) {
       console.log(err);
       dispatch({ type: AUTH_ERROR });
     }
   };
 
-  // 유저 등록
-  // - 회원가입 양식 데이터를 서버로 보낸다.
-  // - 토큰을 받아온다.
-  // - 성공일 경우 토큰을 state에 담고 에러일 경우 state.error에 에러 메세지를 담는다.
+  /**
+   * @module auth.context
+   * @desc [회원가입] 유저가 입력한 데이터를 보내고 토큰을 받아온다.
+   * @req trainerName, eamil, password, agreementId
+   * @res 성공일 경우 토큰을 state에 담고 에러일 경우 state.error에 에러 메세지를 담는다.
+   * @param formData {object} (trainerName, eamil, password, agreementId)
+   */
   const register = async formData => {
     const config = {
       method: 'POST',
@@ -53,11 +57,12 @@ export const AuthProvider = props => {
         'Content-Type': 'application/json',
       },
     };
-    try {
-      const res = await axios.post('/api/trainers', formData, config);
-        dispatch({ type: REGISTER_SUCCESS, payload: res.data }); // res.data = token
 
-        console.log(res.data);
+    try {
+      console.log(formData);
+      const res = await axios.post('/api/auth/signup', formData, config);
+        dispatch({ type: REGISTER_SUCCESS, payload: res.data }); // res.data = token
+        console.log("register", res.data);
         loadUser();
     } catch (error) {
       console.log(error.response.data.msg);
@@ -75,10 +80,10 @@ export const AuthProvider = props => {
       },
     };
     try {
-      const res = await axios.post('/api/auth', formData, config);
+      const res = await axios.post('/api/auth/signin', formData, config);
       if (res.status === 200 || res.status === 201) {
         // response.ok (200~299)
-        console.log(res.data);
+        console.log("login", res.data);
         await dispatch({ type: LOGIN_SUCCESS, payload: res.data }); // res.data = token
         await loadUser();
       }

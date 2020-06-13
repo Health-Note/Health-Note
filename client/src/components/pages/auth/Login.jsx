@@ -16,7 +16,7 @@ function Login(props) {
       // 로그인이 되어있으면 홈으로 보냄
       props.history.push('/');
       setAlert(
-        `안녕하세요, ${trainer.Email}님! 헬스노트에 로그인 하셨습니다.`,
+        `안녕하세요, ${trainer.trainerName}님! 헬스노트에 로그인 하셨습니다.`,
         'success'
       );
       console.log(trainer, isAuthenticated);
@@ -97,3 +97,4 @@ function Login(props) {
 }
 
 export default withRouter(Login);
+

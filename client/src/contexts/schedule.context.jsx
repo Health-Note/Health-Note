@@ -1,29 +1,32 @@
-import React, { createContext, useReducer, useState } from 'react';
-import scheduleReducer from '../reducers/schedule.reducer.js';
-import axios from 'axios';
-import setAuthToken from '../utils/setAuthToken';
 import {
-  SET_SCHEDULE,
+  CREATE_ONE_SCHEDULE,
   GET_SCHEDULES,
+  REMOVE_SHCEDULE,
+  SET_SCHEDULE,
   SET_SCHEDULE_TARGET,
   UPDATE_SCHEDULE,
-  REMOVE_SHCEDULE,
-  CREATE_ONE_SCHEDULE,
 } from '../reducers/types';
+import React, { createContext, useReducer, useState } from 'react';
+
+import axios from 'axios';
+import seedColors from '../utils/seedColors';
+import scheduleReducer from '../reducers/schedule.reducer.js';
+import setAuthToken from '../utils/setAuthToken';
 
 export const ScheduleContext = createContext();
 export const DispatchContext = createContext();
 
 const initialState = {
   selectedSchedule: {
-    scheduleId: null,
+    id: null,
     memberId: null,
   },
   schedules: [
     {
-      title: null,
+      title: null, // memberName
       id: null,
       start: null,
+      end: null,
       color: null,
       finish_dncd: false,
       target: null,
@@ -31,15 +34,16 @@ const initialState = {
       memberId: null,
     },
   ],
+  isChanging: false
 };
 
 export const ScheduleProvider = props => {
   const [drawerBoolean, setDrawer] = useState(false);
 
-  const setScheduleTarget = (scheduleId, memberId) => {
+  const setScheduleTarget = (id, memberId) => {
     dispatch({
       type: SET_SCHEDULE_TARGET,
-      payload: { scheduleId, memberId },
+      payload: { id, memberId },
     });
   };
 
@@ -54,7 +58,7 @@ export const ScheduleProvider = props => {
     };
     try {
       const res = await axios.post(
-        '/api/schedules/setSchedule',
+        '/api/schedules/initializing',
         data,
         settings
       );
@@ -70,24 +74,24 @@ export const ScheduleProvider = props => {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.get('/api/schedules/getAllSchedules');
-      dispatch({ type: GET_SCHEDULES, payload: res.data });
+      const res = await axios.get('/api/schedules');
+      dispatch({ type: GET_SCHEDULES, payload: { data: res.data, seedColors: seedColors} });
       console.log('schedule.context/getAllSchedules/res.data', res.data);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const removeSchedule = async scheduleId => {
+  const removeSchedule = async id => {
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
     try {
       const res = await axios.post('/api/schedules/removeSchedule', {
-        scheduleId,
+        id,
       });
       if (res.data === 1) {
-        dispatch({ type: REMOVE_SHCEDULE, payload: scheduleId });
+        dispatch({ type: REMOVE_SHCEDULE, payload: id });
       }
       console.log('removeSchedule', res.data);
     } catch (err) {
@@ -95,18 +99,29 @@ export const ScheduleProvider = props => {
     }
   };
 
-  const changeSchedule = async (id, afterDate, afterTime) => {
+  const changeSchedule = async (id, afterDate, afterStartTime, afterEndTime, memberId) => {
+    console.log("test", id, afterDate, afterStartTime, afterEndTime, memberId)
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.post('/api/schedules/changeSchedule', {
-        id,
-        afterDate,
-        afterTime,
+      const res = await axios.patch(`/api/schedules/${id}`, {
+        memberId: memberId,
+        day: afterDate,
+        startTime: afterStartTime,
+        endTime: afterEndTime,
+        isFinish: false,
+        tooltipText: null
       });
-      dispatch({ type: UPDATE_SCHEDULE, payload: res.data });
-      console.log(res.data);
+      console.log("res.status", res.status);
+      if (res.status === 204) {
+        dispatch({ type: UPDATE_SCHEDULE, payload: {
+            id: id,
+            startTime: afterDate + ' ' + afterStartTime,
+            endTime: afterDate + ' ' + afterEndTime
+          }
+        });
+      }
     } catch (err) {
       console.log('changeSchedule', err);
     }
@@ -117,19 +132,19 @@ export const ScheduleProvider = props => {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.post('/api/schedules/createOneSchedule', {
+      const res = await axios.post('/api/schedules', {
         date,
         memberId: selectedMember.id,
       });
-      let createdMember = {
+      let createdSchedule = {
         title: selectedMember.name,
-        start: res.data.StartTime,
-        id: res.data.ScheduleId,
-        memberId: res.data.MemberId,
+        start: res.data.startTime,
+        id: res.data.id,
+        memberId: res.data.memberId,
         color: 'red',
       };
-      console.log('createdMember', createdMember);
-      dispatch({ type: CREATE_ONE_SCHEDULE, payload: createdMember });
+      console.log('createdSchedule', createdSchedule);
+      dispatch({ type: CREATE_ONE_SCHEDULE, payload: createdSchedule });
     } catch (err) {
       console.log('createOneSchedule', err);
     }
@@ -142,7 +157,8 @@ export const ScheduleProvider = props => {
       value={{
         targetSchedule: state.selectedSchedule,
         schedules: state.schedules, // 전체 스케줄 state
-        target: state.target,
+        //target: state.target,
+        isChanging: state.isChanging,
         setScheduleTarget, // 이벤트 클릭시 해당 이벤트를 state에 킵해둠
         setSchedule, // 멤버추가시 스케줄 추가
         getAllSchedules, // 스케줄 전체 받아오기

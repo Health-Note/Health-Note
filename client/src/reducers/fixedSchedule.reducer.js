@@ -10,7 +10,7 @@ const reducer = (state, action) => {
         ...state,
         {
           title: action.payload.name,
-          id: action.payload.member_id,
+          id: action.payload.memberId,
           start: action.payload.start_time,
         },
       ];
