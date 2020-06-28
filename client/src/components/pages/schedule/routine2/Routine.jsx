@@ -1,32 +1,24 @@
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import ExerciseSelect from '../routine/ExerciseSelect';
-import RoutineList from '../routine/RoutineList';
+import RoutineRow from './RoutineRow';
 import { v4 as uuid } from 'uuid';
 import { Button } from 'antd';
-import { ScheduleContext } from '../../../../contexts/schedule.context';
+import RowHeader from './RowHeader';
 
 const Routine = ({ saveRoutines }) => {
   const [updateRoutines, setUpdateRoutines] = useState([]);
-  const [delExerCode, setDelExerCode] = useState([]);
-  const { targetSchedule } = useContext(
-    ScheduleContext
-  );
+  const [delExerCodes, setDelExerCodes] = useState(new Set());
 
+  // update routines 설정
   const getExerIdAndName = (exerciseCode, exerciseName, targetCode, targetName) => {
-    setDelExerCode(prevState => (
-      prevState.filter(cv => {
-        return cv !== exerciseCode;
-      })
-    ));
     setUpdateRoutines(prevState => ([
       ...prevState,
       {
         uuid: uuid(),
         exerciseCode: exerciseCode,
         exerciseName: exerciseName,
-        targetCode: parseInt(targetCode),
+        targetCode: targetCode,
         targetName: targetName,
-        memberId: targetSchedule.memberId,
         isCardio: 0,
         setCount: 0,
         repetitions: 0,
@@ -35,7 +27,8 @@ const Routine = ({ saveRoutines }) => {
     ]));
   };
 
-  const insertCounts = (uuid, setCount, repetitions) => {
+  // update routines에서 카운트와 세트수 설정
+  const insertCounts = useCallback((uuid, setCount, repetitions) => {
     const result = updateRoutines.map(routine => {
       if (routine.uuid === uuid) {
         return {
@@ -50,34 +43,35 @@ const Routine = ({ saveRoutines }) => {
       }
     });
     setUpdateRoutines(result);
-  };
+  }, [updateRoutines]);
 
-  const getDelExerCode = exerciseCode => {
-    setDelExerCode([...delExerCode, exerciseCode]);
-    setUpdateRoutines(prevState => (
-      prevState.filter(cv => {
-        return cv.exerciseCode !== exerciseCode;
-      })
-    ));
+  // deleted exercode 설정
+  const getDelExerCode = (exerciseCode) => {
+    setDelExerCodes((prevState) => {
+      return new Set(prevState).add(exerciseCode);
+    });
+    const routines = updateRoutines.filter(routine => routine.exerciseCode !== exerciseCode);
+    setUpdateRoutines(routines);
   };
 
   const onClickSave = () => {
-    saveRoutines(delExerCode, updateRoutines);
+    saveRoutines(delExerCodes, updateRoutines);
   };
 
   return (
     <>
       <ExerciseSelect getExerIdAndName={getExerIdAndName}/>
+      <RowHeader/>
       {updateRoutines.map(routine => {
         return (
           <>
-            <RoutineList key={routine.uuid} routine={routine} insertCounts={insertCounts}
-                         getDelExerCode={getDelExerCode}/>
+            <RoutineRow key={routine.uuid} routine={routine} insertCounts={insertCounts}
+                        getDelExerCode={getDelExerCode}/>
           </>
         );
       })
       }
-      <Button onClick={onClickSave}>저장</Button>
+      <Button onClick={onClickSave} style={{marginTop: 10, width: '100%'}}>저장</Button>
     </>
   );
 };

@@ -29,7 +29,7 @@ const ExerciseSelect = ({ getExerIdAndName }) => {
   return (
     <InputGroup compact>
       <Select
-        placeholder="운동"
+        placeholder="운동선택"
         style={{ width: 200 }}
         onChange={handleSelectExercise}
       >
