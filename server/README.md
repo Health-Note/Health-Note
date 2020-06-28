@@ -1,6 +1,3 @@
-# 동작화면 녹화 필요!
-![Alt Text](https://firebasestorage.googleapis.com/v0/b/doobooio-30e4d.appspot.com/o/talktalk-rn.gif?alt=media&token=688288b2-1b8f-4ddd-ab69-4c8597bce319)<br/>
-
 > Specification
 
 - node.js express
@@ -94,10 +91,15 @@ This runs the `{DBConfiguration}` script specified in our `package.json`.
 
 Typically the server runs at `http://localhost:8080`.
 
-# Testing the project
-Testing is also just swagger-ui
+# Database design
+Database schema is written by AqueryTool (https://aquerytool.com/)
 
-![Alt Text](https://firebasestorage.googleapis.com/v0/b/doobooio-30e4d.appspot.com/o/talktalk-rn.gif?alt=media&token=688288b2-1b8f-4ddd-ab69-4c8597bce319)<br/>
+![Alt Text](./doc/Health-Note-Schema.png)<br/>
+
+# Testing the project
+Testing is possible using swagger-ui
+
+![Alt Text](./doc/Health-Note-Swagger.png)<br/>
 
 ## Express version
 4.17.1

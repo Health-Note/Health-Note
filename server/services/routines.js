@@ -24,6 +24,7 @@ const createOrUpdate = async (body) => {
       weightArray.push({
         scheduleId: body.scheduleId,
         exerciseCode: item.exerciseCode,
+        memberId: item.memberId,
         setCount: item.setCount,
         repetitions: item.repetitions,
         maxWeight: item.maxWeight,
