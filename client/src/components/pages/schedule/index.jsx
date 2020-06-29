@@ -7,17 +7,18 @@ import { MembersContext } from '../../../contexts/members.context';
 import { AlertContext } from '../../../contexts/alert.context';
 import setAuthToken from '../../../utils/setAuthToken';
 import Routine from './routine2/Routine';
+import { RoutineContext } from '../../../contexts/routine.context';
 
 const Schedule = () => {
-  const { targetSchedule } = useContext(
-    ScheduleContext
-  );
-
+  const { targetSchedule } = useContext(ScheduleContext);
+  const { saveRoutines, getRoutines } = useContext(RoutineContext);
   const { target } = useContext(MembersContext);
   const { setAlert } = useContext(AlertContext);
 
+
+
   // 루틴 저장
-  const saveRoutines = async (delExerCodes, updateRoutine) => {
+  const handleSaveRoutines = async (delExerCodes, updateRoutine) => {
     const routines = {
       scheduleId: targetSchedule,
       deleteRoutine: [...delExerCodes],
@@ -28,7 +29,7 @@ const Schedule = () => {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.post('/api/routine', routines);
+      const res = await axios.post('/api/routines', routines);
       if (res.data) {
         setAlert('저장되었습니다.', 'success');
       }
@@ -36,6 +37,7 @@ const Schedule = () => {
       setAlert('저장실패', 'fail')
     }
   };
+
 
   return (
     <>
@@ -45,7 +47,7 @@ const Schedule = () => {
         </Col>
         <Col>
           <h2>운동루틴</h2>
-          <Routine saveRoutines={saveRoutines}/>
+          <Routine saveRoutines={handleSaveRoutines}/>
         </Col>
       </Row>
       <Row container justify="center">

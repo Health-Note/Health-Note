@@ -29,8 +29,8 @@ export const CREATE_ONE_SCHEDULE = 'CREATE_ONE_SCHEDULE';
 
 // 루틴
 export const SET_DATE = 'SET_DATE';
-export const GET_ROUTINE = 'GET_ROUTINE';
-export const SET_ROUTINE = 'SET_ROUTINE';
+export const GET_ROUTINES = 'GET_ROUTINES';
+export const SET_ROUTINES = 'SET_ROUTINES';
 
 // 회원분석
 

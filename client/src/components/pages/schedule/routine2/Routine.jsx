@@ -1,16 +1,27 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import ExerciseSelect from '../routine/ExerciseSelect';
 import RoutineRow from './RoutineRow';
 import { v4 as uuid } from 'uuid';
 import { Button } from 'antd';
 import RowHeader from './RowHeader';
+import { RoutineContext } from '../../../../contexts/routine.context';
+import { ScheduleContext } from '../../../../contexts/schedule.context';
 
 const Routine = ({ saveRoutines }) => {
+  const { getRoutines, routines, setRoutines } = useContext(RoutineContext);
+  const { targetSchedule } = useContext(ScheduleContext);
   const [updateRoutines, setUpdateRoutines] = useState([]);
   const [delExerCodes, setDelExerCodes] = useState(new Set());
 
+  useEffect(() => {
+    if(targetSchedule) {
+      getRoutines(targetSchedule);
+    }
+  }, [targetSchedule])
+
   // update routines 설정
   const getExerIdAndName = (exerciseCode, exerciseName, targetCode, targetName) => {
+    setRoutines(exerciseCode, exerciseName, targetCode, targetName, targetSchedule);
     setUpdateRoutines(prevState => ([
       ...prevState,
       {
@@ -19,10 +30,6 @@ const Routine = ({ saveRoutines }) => {
         exerciseName: exerciseName,
         targetCode: targetCode,
         targetName: targetName,
-        isCardio: 0,
-        setCount: 0,
-        repetitions: 0,
-        maxWeight: 0,
       },
     ]));
   };

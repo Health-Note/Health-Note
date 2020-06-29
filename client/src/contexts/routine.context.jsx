@@ -1,4 +1,4 @@
-import { GET_ROUTINE, SET_DATE } from '../reducers/types';
+import { GET_ROUTINES, SET_DATE, SET_ROUTINES } from '../reducers/types';
 import React, { createContext, useContext, useReducer, useState } from 'react';
 import axios from 'axios';
 import routineReducer from '../reducers/routine.reducer.js';
@@ -46,29 +46,43 @@ export const RoutineProvider = props => {
    *    recentWorkout: [],
    *  }
    */
-  const getRoutine = async (scheduleId, date) => {
+  const getRoutines = async (scheduleId, date) => {
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
     const res = await axios.get(`/api/routines/${scheduleId}`);
     console.log('getRoutine', res.data);
-    dispatch({ type: GET_ROUTINE, payload: res.data });
+    dispatch({ type: GET_ROUTINES, payload: res.data });
   };
+
+  const setRoutines = async (exerciseCode, exerciseName, targetCode, targetName) => {
+    dispatch({
+      type: SET_ROUTINES,
+      payload:{
+        exerciseCode, exerciseName, targetCode, targetName
+      }})
+  }
 
   const saveRoutines = async (deleteRoutine, updateRoutine) => {
     const routine = {
       scheduleId: targetSchedule.id,
-      deleteRoutine: deleteRoutine,
+      deleteRoutine: [...deleteRoutine],
       updateRoutine: updateRoutine,
     };
     console.log(routine);
-    const res = await axios.post(`/api/routine`);
+    const res = await axios.post(`/api/routines`);
     console.log(res);
   };
 
   return (
     <RoutineContext.Provider
-      value={{ setSelectedDate, getRoutine, saveRoutines, routineState }}
+      value={{
+        setSelectedDate: setSelectedDate,
+        getRoutines: getRoutines,
+        setRoutines: setRoutines,
+        saveRoutines: saveRoutines,
+        routines: routineState,
+      }}
     >
       {props.children}
     </RoutineContext.Provider>
