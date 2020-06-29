@@ -18,30 +18,15 @@ export const RoutineProvider = props => {
       exerciseCode: null, //멤버
       scheduleId: null, //멤버
       memberId: null, //루틴
-      setCount: null, //루틴
+      routineOrder: null,
+      isCardio: null,
+      cardioTime: null,
       repetitions: null, //루틴(모델링에 따라 변경)
+      setCount: null, //루틴
+      maxWeight: null,
+      targetCode: null,
     },
   ];
-
-  const initial = [{
-    'scheduleId': 0,
-    'deleteRoutine': [
-      0,
-    ],
-    'updateRoutine': [
-      {
-        'exerciseCode': 0,
-        'routineOrder': 0,
-        'memberId': 0,
-        'isCardio': 0,
-        'cardioTime': 'string',
-        'setCount': 0,
-        'repetitions': 0,
-        'targetCode': 0,
-        'maxWeight': 0,
-      },
-    ],
-  }];
 
   const [routineState, dispatch] = useReducer(routineReducer, initialState);
   const [scheduleId, setScheduleId] = useState('');
@@ -65,8 +50,9 @@ export const RoutineProvider = props => {
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
-    const res = await axios.get(`/api/routine/${scheduleId}`);
+    const res = await axios.get(`/api/routines/${scheduleId}`);
     console.log('getRoutine', res.data);
+    dispatch({ type: GET_ROUTINE, payload: res.data });
   };
 
   const saveRoutines = async (deleteRoutine, updateRoutine) => {
@@ -82,7 +68,7 @@ export const RoutineProvider = props => {
 
   return (
     <RoutineContext.Provider
-      value={{ setSelectedDate, getRoutine, saveRoutines }}
+      value={{ setSelectedDate, getRoutine, saveRoutines, routineState }}
     >
       {props.children}
     </RoutineContext.Provider>

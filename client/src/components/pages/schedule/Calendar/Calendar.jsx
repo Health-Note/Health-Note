@@ -28,7 +28,7 @@ function Calendar() {
     createOneSchedule,
     isChanging
   } = useContext(ScheduleContext);
-  const { setSelectedDate } = useContext(RoutineContext);
+  const { setSelectedDate, getRoutine } = useContext(RoutineContext);
   const { members } = useContext(MembersContext);
 
   // states
@@ -109,6 +109,7 @@ function Calendar() {
     setSelectedDate(date, memberId);
     setDrawer(true);
     setScheduleTarget(parseInt(id), parseInt(memberId));
+    getRoutine(id);
   };
 
   // 클릭으로 이벤트 만들기
