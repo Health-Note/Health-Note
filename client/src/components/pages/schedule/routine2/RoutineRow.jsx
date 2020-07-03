@@ -13,12 +13,12 @@ const RoutineRow = ({ routine, insertCounts, getDelExerCode }) => {
 
   const onChangeCount = value => {
     setCount(value);
-    insertCounts(routine.uuid, count, repetition);
+    insertCounts(routine.exerciseCode, count, repetition);
   };
 
   const onChangeRepetition = value => {
     setRepetition(value);
-    insertCounts(routine.uuid, count, repetition);
+    insertCounts(routine.exerciseCode, count, repetition);
   };
 
   const onClickDeleteButton = () => {

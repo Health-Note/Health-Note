@@ -31,6 +31,7 @@ export const CREATE_ONE_SCHEDULE = 'CREATE_ONE_SCHEDULE';
 export const SET_DATE = 'SET_DATE';
 export const GET_ROUTINES = 'GET_ROUTINES';
 export const SET_ROUTINES = 'SET_ROUTINES';
+export const INSERT_COUNT = 'INSERT_COUNT';
 
 // 회원분석
 

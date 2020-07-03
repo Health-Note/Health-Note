@@ -20,7 +20,7 @@ const Schedule = () => {
   // 루틴 저장
   const handleSaveRoutines = async (delExerCodes, updateRoutine) => {
     const routines = {
-      scheduleId: targetSchedule,
+      scheduleId: targetSchedule.scheduleId,
       deleteRoutine: [...delExerCodes],
       updateRoutine: updateRoutine,
     }

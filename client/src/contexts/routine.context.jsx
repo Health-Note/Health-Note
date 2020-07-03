@@ -1,4 +1,4 @@
-import { GET_ROUTINES, SET_DATE, SET_ROUTINES } from '../reducers/types';
+import { GET_ROUTINES, INSERT_COUNT, SET_DATE, SET_ROUTINES } from '../reducers/types';
 import React, { createContext, useContext, useReducer, useState } from 'react';
 import axios from 'axios';
 import routineReducer from '../reducers/routine.reducer.js';
@@ -8,14 +8,16 @@ import { ScheduleContext } from './schedule.context';
 export const RoutineContext = createContext();
 export const DispatchContext = createContext();
 
-
 export const RoutineProvider = props => {
   const { targetSchedule } = useContext(
     ScheduleContext,
   );
-  const initialState = [
-    {
+  const initialState = {
+    loaded:[],
+    routines: [{
       exerciseCode: null, //멤버
+      exerciseName: null,
+      targetName: null,
       scheduleId: null, //멤버
       memberId: null, //루틴
       routineOrder: null,
@@ -25,8 +27,8 @@ export const RoutineProvider = props => {
       setCount: null, //루틴
       maxWeight: null,
       targetCode: null,
-    },
-  ];
+    }]
+  }
 
   const [routineState, dispatch] = useReducer(routineReducer, initialState);
   const [scheduleId, setScheduleId] = useState('');
@@ -47,6 +49,7 @@ export const RoutineProvider = props => {
    *  }
    */
   const getRoutines = async (scheduleId, date) => {
+    console.log('scheduleId',scheduleId);
     if (localStorage.token) {
       setAuthToken(localStorage.token);
     }
@@ -74,6 +77,10 @@ export const RoutineProvider = props => {
     console.log(res);
   };
 
+  const insertCount = async (exerciseCode, setCount, repetitions) => {
+    dispatch({ type: INSERT_COUNT, payload: { exerciseCode, setCount, repetitions }})
+  }
+
   return (
     <RoutineContext.Provider
       value={{
@@ -81,7 +88,9 @@ export const RoutineProvider = props => {
         getRoutines: getRoutines,
         setRoutines: setRoutines,
         saveRoutines: saveRoutines,
-        routines: routineState,
+        insertCount: insertCount,
+        routines: routineState.routines,
+        loaded: routineState.loaded,
       }}
     >
       {props.children}
