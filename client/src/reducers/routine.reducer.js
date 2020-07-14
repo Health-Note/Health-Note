@@ -1,4 +1,4 @@
-import { SET_DATE, GET_ROUTINES, SET_ROUTINES, INSERT_COUNT } from './types';
+import { SET_DATE, GET_ROUTINES, SET_ROUTINES, INSERT_COUNT, DELETE_ROUTINE } from './types';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -6,31 +6,31 @@ const reducer = (state, action) => {
       return { ...state, date: action.payload };
     case GET_ROUTINES: // [{},{},{}]
       return {
+        scheduleId: action.scheduleId,
         loaded: action.payload.map(routine => routine.exerciseCode),
         routines: action.payload.map(routine => ({
-          routines: {
             cardioTime: routine.cardioTime,
             isCardio: routine.isCardio,
             routineOrder: routine.routineOrder,
             exerciseName: routine.exerciseName,
             targetName: routine.targetName,
             exerciseCode: routine.exerciseCode,
-            scheduleId: routine.scheduleId,
             memberId: routine.memberId,
             repetitions: routine.weightTraining.repetitions,
             setCount: routine.weightTraining.setCount,
             maxWeight: routine.weightTraining.maxWeight,
             targetCode: routine.weightTraining.targetCode,
-          },
         })),
+        deletedCode: []
       };
     case SET_ROUTINES:
       return {
         ...state,
+        loaded: [...state.loaded],
         routines: [
           ...state.routines,
           {
-            cardioTime: '0',
+            cardioTime: action.payload.cardioTime,
             isCardio: 0,
             routineOrder: 0,
             exerciseName: action.payload.exerciseName,
@@ -43,9 +43,13 @@ const reducer = (state, action) => {
             maxWeight: action.payload.maxWeight,
             targetCode: action.payload.targetCode,
           }],
+        deletedCode: state.deletedCode.filter(cv => cv !== action.payload.exerciseCode),
       };
     case INSERT_COUNT:
-      return state.routines.map(routine => {
+      return {
+        ...state,
+        loaded: [...state.loaded],
+        routines: state.routines.map(routine => {
           if (routine.exerciseCode === action.payload.exerciseCode) {
             return {
               ...routine,
@@ -57,11 +61,16 @@ const reducer = (state, action) => {
               ...routine,
             };
           }
-        });
-    case 'DELETE':
-      return state.routines.filter(
-        schedule => action.id !== schedule.phonenum + schedule.date
-      );
+        }),
+        deletedCode: [...state.deletedCode]
+      };
+    case DELETE_ROUTINE:
+      return {
+        ...state,
+        loaded: [...state.loaded],
+        routines: state.routines.filter(routine => action.payload.exerciseCode !== routine.exerciseCode),
+        deletedCode: state.loaded.includes(action.payload.exerciseCode) ? [...state.deletedCode, action.payload.exerciseCode]: [...state.deletedCode],
+      }
     default:
       return state;
   }

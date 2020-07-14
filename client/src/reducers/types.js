@@ -16,7 +16,6 @@ export const REMOVE_MEMBER = 'REMOVE_MEMBER';
 export const EDIT_MEMBER = 'EDIT_MEMBER';
 export const MEMBER_ERROR = 'MEMBER_ERROR';
 
-
 // 스케줄
 export const SET_FIXED_SCHEDULE = 'SET_FIXED_SCHEDULE';
 export const GET_FIXED_SCHEDULE = 'GET_FIXED_SCHEDULE';
@@ -32,6 +31,7 @@ export const SET_DATE = 'SET_DATE';
 export const GET_ROUTINES = 'GET_ROUTINES';
 export const SET_ROUTINES = 'SET_ROUTINES';
 export const INSERT_COUNT = 'INSERT_COUNT';
+export const DELETE_ROUTINE = 'DELETE_ROUTINE';
 
 // 회원분석
 

@@ -4,7 +4,7 @@ import { Button, Col, InputNumber, Row } from 'antd';
 const RowHeader = () => {
   return (
     <Row justify="start" align="middle"
-         style={{ width: 500, padding: 10, borderBottom: '1px solid lightgrey' }}
+         style={{ padding: 10, borderBottom: '1px solid lightgrey' }}
     >
       <Col md={3}>부위</Col>
       <Col md={9}>운동이름</Col>

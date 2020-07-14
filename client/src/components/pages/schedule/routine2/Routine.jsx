@@ -6,13 +6,14 @@ import { Button } from 'antd';
 import RowHeader from './RowHeader';
 import { RoutineContext } from '../../../../contexts/routine.context';
 import { ScheduleContext } from '../../../../contexts/schedule.context';
+import { MembersContext } from '../../../../contexts/members.context';
 
-const Routine = ({ saveRoutines }) => {
-  const { getRoutines, routines, setRoutines, insertCount } = useContext(RoutineContext);
+const Routine = () => {
+  const { saveRoutines, routines, setRoutines, insertCount, deleteRoutine } = useContext(RoutineContext);
   const { targetSchedule } = useContext(ScheduleContext);
   const [updateRoutines, setUpdateRoutines] = useState([]);
   const [delExerCodes, setDelExerCodes] = useState(new Set());
-  const [routineList, setRoutineList] = useState([]);
+  const [routineList, setRoutineList] = useState(null);
 
   useEffect(() => {
     setRoutineList(routines);
@@ -30,19 +31,22 @@ const Routine = ({ saveRoutines }) => {
 
   // deleted exercode 설정
   const getDelExerCode = (exerciseCode) => {
-    setDelExerCodes((prevState) => {
-      return new Set(prevState).add(exerciseCode);
-    });
-    const routines = routines.filter(routine => routine.exerciseCode !== exerciseCode);
-    setUpdateRoutines(routines);
+    console.log(exerciseCode)
+    // setDelExerCodes((prevState) => {
+    //   return new Set(prevState).add(exerciseCode);
+    // });
+    // const routines = routines.filter(routine => routine.exerciseCode !== exerciseCode);
+    // setUpdateRoutines(routines);
+    deleteRoutine(exerciseCode);
   };
 
   const onClickSave = () => {
-    saveRoutines(delExerCodes, updateRoutines);
+    saveRoutines(targetSchedule.id, delExerCodes);
   };
 
   return (
     <>
+      <h2>{targetSchedule.memberName ? targetSchedule.memberName + "님의 운동루틴" : "루틴을 추가하려면 달력안의 멤버을 클릭하세요" }</h2>
       <ExerciseSelect getExerIdAndName={getExerIdAndName}/>
       <RowHeader/>
       {routineList && routineList.map(routine => {

@@ -1,4 +1,4 @@
-import { GET_ROUTINES, INSERT_COUNT, SET_DATE, SET_ROUTINES } from '../reducers/types';
+import { DELETE_ROUTINE, GET_ROUTINES, INSERT_COUNT, SET_DATE, SET_ROUTINES } from '../reducers/types';
 import React, { createContext, useContext, useReducer, useState } from 'react';
 import axios from 'axios';
 import routineReducer from '../reducers/routine.reducer.js';
@@ -13,12 +13,12 @@ export const RoutineProvider = props => {
     ScheduleContext,
   );
   const initialState = {
+    scheduleId: null,
     loaded:[],
     routines: [{
       exerciseCode: null, //멤버
       exerciseName: null,
       targetName: null,
-      scheduleId: null, //멤버
       memberId: null, //루틴
       routineOrder: null,
       isCardio: null,
@@ -27,7 +27,8 @@ export const RoutineProvider = props => {
       setCount: null, //루틴
       maxWeight: null,
       targetCode: null,
-    }]
+    }],
+    deletedCode: []
   }
 
   const [routineState, dispatch] = useReducer(routineReducer, initialState);
@@ -55,30 +56,54 @@ export const RoutineProvider = props => {
     }
     const res = await axios.get(`/api/routines/${scheduleId}`);
     console.log('getRoutine', res.data);
-    dispatch({ type: GET_ROUTINES, payload: res.data });
+    dispatch({ type: GET_ROUTINES, payload: res.data, scheduleId: parseInt(scheduleId) });
   };
 
-  const setRoutines = async (exerciseCode, exerciseName, targetCode, targetName) => {
+  const setRoutines = async (exerciseCode, exerciseName, targetCode, targetName, targetSchedule) => {
+    console.log(exerciseCode, exerciseName, targetCode, targetName, targetSchedule)
     dispatch({
       type: SET_ROUTINES,
       payload:{
-        exerciseCode, exerciseName, targetCode, targetName
+        exerciseCode: parseInt(exerciseCode),
+        exerciseName: exerciseName,
+        targetCode: parseInt(targetCode),
+        targetName: targetName,
+        scheduleId: targetSchedule.id,
+        memberId: targetSchedule.memberId,
+        cardioTime: "00:00:00",
+        maxWeight: 0,
       }})
-  }
+  };
 
-  const saveRoutines = async (deleteRoutine, updateRoutine) => {
+  const saveRoutines = async () => {
     const routine = {
-      scheduleId: targetSchedule.id,
-      deleteRoutine: [...deleteRoutine],
-      updateRoutine: updateRoutine,
+      scheduleId: parseInt(routineState.scheduleId),
+      deleteRoutine: routineState.deletedCode,
+      updateRoutine: routineState.routines.map(routine => {
+        return {
+          exerciseCode: routine.exerciseCode,
+          routineOrder: routine.routineOrder,
+          memberId: routine.memberId,
+          isCardio: routine.isCardio,
+          cardioTime: routine.cardioTime,
+          setCount: routine.setCount,
+          repetitions: routine.repetitions,
+          targetCode: routine.targetCode,
+          maxWeight: routine.maxWeight,
+        };
+      }),
     };
-    console.log(routine);
-    const res = await axios.post(`/api/routines`);
+    console.log(routine)
+    const res = await axios.post(`/api/routines`, routine);
     console.log(res);
   };
 
   const insertCount = async (exerciseCode, setCount, repetitions) => {
     dispatch({ type: INSERT_COUNT, payload: { exerciseCode, setCount, repetitions }})
+  }
+
+  const deleteRoutine = async (exerciseCode) => {
+      dispatch({type: DELETE_ROUTINE, payload: {exerciseCode}})
   }
 
   return (
@@ -89,6 +114,7 @@ export const RoutineProvider = props => {
         setRoutines: setRoutines,
         saveRoutines: saveRoutines,
         insertCount: insertCount,
+        deleteRoutine: deleteRoutine,
         routines: routineState.routines,
         loaded: routineState.loaded,
       }}

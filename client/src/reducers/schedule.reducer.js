@@ -14,6 +14,7 @@ const reducer = (state, action) =>  {
           return produce(state, draft => {
             draft.selectedSchedule.id = action.payload.id;
             draft.selectedSchedule.memberId = action.payload.memberId;
+            draft.selectedSchedule.memberName = action.payload.memberName;
             draft.schedules.forEach(schedule => {
               if (schedule.id === action.payload.id) {
                 schedule.target = true;

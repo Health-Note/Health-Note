@@ -15,8 +15,6 @@ const Schedule = () => {
   const { target } = useContext(MembersContext);
   const { setAlert } = useContext(AlertContext);
 
-
-
   // 루틴 저장
   const handleSaveRoutines = async (delExerCodes, updateRoutine) => {
     const routines = {
@@ -41,20 +39,14 @@ const Schedule = () => {
 
   return (
     <>
-      <Row gutter={20}>
-        <Col span={12}>
+      <Row gutter={50}>
+        <Col xs={24} sm={24} md={24} lg={12} xl={12}>
           <Calendar/>
         </Col>
-        <Col>
-          <h2>운동루틴</h2>
+        <Col xs={24} sm={24} md={24} lg={8} xl={8}>
+
           <Routine saveRoutines={handleSaveRoutines}/>
         </Col>
-      </Row>
-      <Row container justify="center">
-        <Col xs={12} md={12} lg={12}></Col>
-      </Row>
-      <Row container justify="center">
-        <Col xs={8} lg={12}></Col>
       </Row>
     </>
   );

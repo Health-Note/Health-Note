@@ -40,10 +40,10 @@ const initialState = {
 export const ScheduleProvider = props => {
   const [drawerBoolean, setDrawer] = useState(false);
 
-  const setScheduleTarget = (id, memberId) => {
+  const setScheduleTarget = (id, memberId, memberName) => {
     dispatch({
       type: SET_SCHEDULE_TARGET,
-      payload: { id, memberId },
+      payload: { id, memberId, memberName },
     });
   };
 

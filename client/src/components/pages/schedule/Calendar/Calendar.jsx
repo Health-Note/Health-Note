@@ -99,6 +99,7 @@ function Calendar() {
    */
   const handleEventClick = eventClick => {
     const id = eventClick.event.id;
+    const memberName = eventClick.event.title;
     const memberId = eventClick.event.extendedProps.memberId;
     const date = moment(eventClick.event.start).format('YYYY-MM-DD');
 
@@ -108,7 +109,7 @@ function Calendar() {
     setStart(moment(eventClick.event.start).format('MM월 DD일'));
     setSelectedDate(date, memberId);
     setDrawer(true);
-    setScheduleTarget(parseInt(id), parseInt(memberId));
+    setScheduleTarget(parseInt(id), parseInt(memberId), memberName);
     getRoutines(id);
   };
 

@@ -1,6 +1,7 @@
 const { db, sequelize } = require('../models');
 
 const createOrUpdate = async (body) => {
+  console.log(body, "!!!!!!!!!!!!!!!!!!!!!")
   // Routine 과 WeightTraining Table이 분리되어 있기 때문에 비즈니스에서 분기 처리한다
   const cardioArray = [];
   const weightArray = [];

@@ -29,7 +29,7 @@ const RoutineRow = ({ routine, insertCounts, getDelExerCode }) => {
   return (
     <>
       <Row justify="start" align="middle"
-           style={{ width: 500, padding: 10 }}
+           style={{ padding: 10 }}
       >
         <Col md={3}><Tag color={targetColor[routine.targetCode -1]}>{routine.targetName}</Tag></Col>
         <Col md={9}>{routine.exerciseName}</Col>
