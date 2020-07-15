@@ -2,7 +2,7 @@ import {
   ADD_MEMBER,
   CLEAR_ERRORS,
   CLEAR_TARGET,
-  EDIT_MEMBER,
+  EDIT_MEMBER_DISPLAY,
   GET_MEMBER,
   MEMBER_ERROR,
   REMOVE_MEMBER,
@@ -14,6 +14,7 @@ import setAuthToken from '../utils/setAuthToken';
 
 const initialState = {
   loading: true,
+  editing: false,
   error: null,
   target: null,
   members: [
@@ -27,6 +28,7 @@ const initialState = {
       usedPT: null,
       totalPT: null,
       height: null,
+      age: 0,
     },
   ],
 };
@@ -63,6 +65,7 @@ export function MembersProvider(props) {
           usedPT: cv.usedPT,
           totalPT: cv.totalPT,
           height: cv.height,
+          age: cv.age,
         };
       });
       console.log(members)
@@ -97,7 +100,8 @@ export function MembersProvider(props) {
           endDate: formdata.endDate,
           usedPT: 0,
           totalPT: formdata.totalPT,
-          height: null
+          height: null,
+          age: formdata.age,
         }
         dispatch({ type: ADD_MEMBER, payload: addedMember });
       } else {
@@ -140,8 +144,9 @@ export function MembersProvider(props) {
     }
   };
 
-  const editMember = phoneNum => {
-    dispatch({ type: EDIT_MEMBER, payload: phoneNum });
+  const editMember = member => {
+    console.log(member)
+    dispatch({ type: EDIT_MEMBER_DISPLAY, payload: member });
   };
 
   const clearErrors = () => dispatch({ type: CLEAR_ERRORS });
@@ -159,6 +164,7 @@ export function MembersProvider(props) {
         targetMember: state.target,
         clearErrors,
         clearTarget,
+        editing: state.editing,
       }}
     >
         {props.children}

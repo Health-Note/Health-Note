@@ -13,7 +13,7 @@ export const LOGOUT = 'LOGOUT';
 export const GET_MEMBER = 'GET_MEMBER';
 export const ADD_MEMBER = 'ADD_MEMBER';
 export const REMOVE_MEMBER = 'REMOVE_MEMBER';
-export const EDIT_MEMBER = 'EDIT_MEMBER';
+export const EDIT_MEMBER_DISPLAY = 'EDIT_MEMBER_DISPLAY';
 export const MEMBER_ERROR = 'MEMBER_ERROR';
 
 // 스케줄

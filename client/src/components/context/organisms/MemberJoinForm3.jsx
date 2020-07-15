@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import locale from 'antd/es/date-picker/locale/ko_KR';
 import {
   Form,
@@ -61,7 +61,18 @@ const tailFormItemLayout = {
 
 const RegistrationForm = () => {
   const [form] = Form.useForm();
-  const { addMember } = useContext(MembersContext);
+  const { addMember, editing, targetMember } = useContext(MembersContext);
+
+  React.useEffect(() => {
+    if(editing === true && targetMember)
+    form.setFieldsValue({
+      name: targetMember.memberName,
+      phoneNum: targetMember.phoneNum,
+      age: parseInt(targetMember.age),
+      gender: "남" ? 1 : 0,
+      totalPT: targetMember.totalPT,
+    });
+  }, [editing, targetMember]);
 
   const onFinish = values => {
     const days = [];
@@ -118,6 +129,7 @@ const RegistrationForm = () => {
   }
 
   return (
+   <>
     <Form
       {...formItemLayout}
       form={form}
@@ -170,8 +182,8 @@ const RegistrationForm = () => {
         rules={[{ required: true, message: '성별을 선택하세요' },]}
       >
         <Radio.Group>
-          <Radio value={0}>여</Radio>
-          <Radio value={1}>남</Radio>
+          <Radio name={"woman"} value={0}>여</Radio>
+          <Radio name={"man"} value={1}>남</Radio>
         </Radio.Group>
       </Form.Item>
       <Form.Item
@@ -213,6 +225,7 @@ const RegistrationForm = () => {
         </Button>
       </Form.Item>
     </Form>
+     </>
   );
 };
 

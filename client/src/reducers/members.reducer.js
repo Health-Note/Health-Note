@@ -3,7 +3,7 @@ import {
   ADD_MEMBER,
   GET_MEMBER,
   REMOVE_MEMBER,
-  EDIT_MEMBER,
+  EDIT_MEMBER_DISPLAY,
   MEMBER_ERROR,
   CLEAR_ERRORS,
   CLEAR_TARGET,
@@ -19,13 +19,13 @@ const reducer = (state, action) => {
     case ADD_MEMBER:
       return produce(state, draft => {
         draft.loading = false;
-        draft.target = action.payload.memberName;
+        draft.target = action.payload;
         draft.members.push(action.payload); // 멤버 추가 (배열안에 객체 추가)
       });
     case REMOVE_MEMBER:
       return produce(state, draft => {
         draft.loading = false;
-        draft.target = 'deleted';
+        draft.target = action.payload;
         draft.members = state.members.filter(member => !action.payload.includes(member.id)); // filter an array from all elements of another array
       });
     case 'TOGGLE':
@@ -36,20 +36,31 @@ const reducer = (state, action) => {
           }
         })
       });
-    case EDIT_MEMBER:
+    case EDIT_MEMBER_DISPLAY:
       return produce(state, draft => {
-        draft.members.forEach(member => {
-          if (member.id === action.id) {
-            member.memberName = action.newName;
-            member.phonenum = action.newPhoneNum;
-            member.gender = action.newGender;
-            member.totalPT = action.newTotalPT;
-            member.startDate = action.newStartDate;
-            member.endDate = action.newEndDate;
-            member.height = action.newHeight;
-          }
-        })
+        draft.editing = true;
+        draft.target = action.payload;
       });
+    // case EDIT_MEMBER_REQUEST:
+    //   return produce(state, draft => {
+    //
+    //   })
+    // case EDIT_MEMBER_SUCCESS:
+    //   return produce(state, draft => {
+    //     draft.members.forEach(member => {
+    //       if (member.id === action.payload.id) {
+    //         member.memberName = action.payload.newName;
+    //         member.phonenum = action.newPhoneNum;
+    //         member.gender = action.newGender;
+    //         member.totalPT = action.newTotalPT;
+    //         member.startDate = action.newStartDate;
+    //         member.endDate = action.newEndDate;
+    //         member.height = action.newHeight;
+    //       }
+    //     })
+    //   })
+
+
     case MEMBER_ERROR:
       return produce(state, draft => {
           draft.error = action.payload;
