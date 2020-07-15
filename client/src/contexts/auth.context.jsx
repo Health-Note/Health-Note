@@ -14,8 +14,6 @@ import authReducer from '../reducers/auth.reducer';
 import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken';
 
-export const AuthContext = createContext();
-export const AuthProvider = props => {
   const initialState = {
     token: localStorage.getItem('token'),
     isAuthenticated: null,
@@ -99,22 +97,5 @@ export const AuthProvider = props => {
   // 에러 초기화
   const clearErrors = () => dispatch({ type: CLEAR_ERRORS });
 
-  return (
-    <AuthContext.Provider
-      value={{
-        token: state.token,
-        isAuthenticated: state.isAuthenticated,
-        loading: state.loading,
-        trainer: state.trainer,
-        error: state.error,
-        clearErrors,
-        register,
-        loadUser,
-        login,
-        logout,
-      }}
-    >
-      {props.children}
-    </AuthContext.Provider>
-  );
+
 };

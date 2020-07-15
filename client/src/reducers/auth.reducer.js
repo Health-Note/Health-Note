@@ -9,7 +9,15 @@ import {
   LOGOUT,
 } from './types';
 
-export default (state, action) => {
+const initialState = {
+  token: localStorage.getItem('token'),
+  isAuthenticated: null,
+  loading: true,
+  trainer: null,
+  error: null,
+};
+
+export default (initialState, action) => {
   switch (action.type) {
     case USER_LOADED:
       return {

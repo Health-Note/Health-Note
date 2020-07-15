@@ -6,11 +6,12 @@ import { showConfirm } from '../../../components/context/atoms/ComfirmModal';
 import { AlertContext } from '../../../contexts/alert.context';
 import { AuthContext } from '../../../contexts/auth.context';
 import useToggle from '../../../hooks/useToggle';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Register(props) {
-  const alertContext = useContext(AlertContext);
-  const authContext = useContext(AuthContext);
-  
+  const { isSigningUp } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
   const { setAlert } = alertContext;
   const { register, error, clearErrors, isAuthenticated } = authContext;
   
