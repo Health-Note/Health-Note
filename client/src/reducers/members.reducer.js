@@ -15,18 +15,21 @@ const reducer = (state, action) => {
         return produce(state, draft => {
           draft.loading = false;
           draft.members = action.payload; // 전체 멤버 (배열)
+          draft.editing = false;
     });
     case ADD_MEMBER:
       return produce(state, draft => {
         draft.loading = false;
         draft.target = action.payload;
         draft.members.push(action.payload); // 멤버 추가 (배열안에 객체 추가)
+        draft.editing = false;
       });
     case REMOVE_MEMBER:
       return produce(state, draft => {
         draft.loading = false;
         draft.target = action.payload;
         draft.members = state.members.filter(member => !action.payload.includes(member.id)); // filter an array from all elements of another array
+        draft.editing = false;
       });
     case 'TOGGLE':
       return produce(state, draft => {

@@ -221,7 +221,7 @@ const RegistrationForm = () => {
       ))}
       <Form.Item {...tailFormItemLayout}>
         <Button type="primary" htmlType="submit">
-          Register
+          {editing ? "수정하기" : "등록하기"}
         </Button>
       </Form.Item>
     </Form>

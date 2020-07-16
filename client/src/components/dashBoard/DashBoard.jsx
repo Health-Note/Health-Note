@@ -8,6 +8,7 @@ import { AuthContext } from '../../contexts/auth.context';
 import { AlertContext } from '../../contexts/alert.context';
 import { MembersContext } from '../../contexts/members.context';
 import { ScheduleContext } from '../../contexts/schedule.context';
+import './index.css'
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -76,19 +77,17 @@ const Dashboard = () => {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider
-        collapsible
-        collapsed={collapsed}
-        onCollapse={onCollapse}
-        style={{
-          overflow: 'auto',
-          height: '100vh',
-          position: 'fixed',
-          left: 0,
+        breakpoint="lg"
+        collapsedWidth="0"
+        onBreakpoint={broken => {
+          console.log(broken);
+        }}
+        onCollapse={(collapsed, type) => {
+          console.log(collapsed, type);
         }}
       >
         <div className="logo" />
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-          <Menu.Item></Menu.Item>
           <Menu.Item key="1">
             <span>Health Note</span>
             <Link to={'/'}></Link>
@@ -117,21 +116,15 @@ const Dashboard = () => {
           </Menu.Item>
         </Menu>
       </Sider>
-      <Layout style={{ marginLeft: 200 }}>
-        <Header style={{ background: '#fff', padding: 0 }} />
+      <Layout>
+        <Header className="site-layout-sub-header-background" style={{ padding: 0, background: 'white' }} />
         <Alerts />
-        <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
-          <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item></Breadcrumb.Item>
-            <Breadcrumb.Item></Breadcrumb.Item>
-          </Breadcrumb>
-          <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
-            <Routes />
+        <Content style={{ margin: '24px 16px 0' }}>
+          <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+              <Routes />
           </div>
         </Content>
-        <Footer style={{ textAlign: 'center' }}>
-          Ant Design ©2018 Created by Ant UED
-        </Footer>
+        <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
       </Layout>
     </Layout>
   );

@@ -6,11 +6,11 @@ const RowHeader = () => {
     <Row justify="start" align="middle"
          style={{ padding: 10, borderBottom: '1px solid lightgrey' }}
     >
-      <Col md={3}>부위</Col>
-      <Col md={9}>운동이름</Col>
-      <Col md={3}>세트수</Col>
-      <Col md={3}>반복수</Col>
-      <Col offset={3} md={3}>삭제</Col>
+      <Col xs={3} md={3}>부위</Col>
+      <Col xs={9} md={9}>운동</Col>
+      <Col xs={3} md={3}>세트</Col>
+      <Col xs={3} md={3}>반복</Col>
+      <Col offset={3} xs={3} md={3}>삭제</Col>
     </Row>
   )
 }
