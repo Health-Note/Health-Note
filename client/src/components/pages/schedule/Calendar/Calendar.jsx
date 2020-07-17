@@ -209,6 +209,17 @@ function Calendar() {
               dateClick={dateClick}
               eventDurationEditable={true}
               eventResize={eventResize}
+              eventTimeFormat={{ // like '14:30:00'
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+              }}
+              titleFormat={{
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+              }}
+
               // eventRender={eventRender}
               // ref={calendarComponentRef}
               // weekends={this.state.calendarWeekends}

@@ -67,12 +67,22 @@ const RegistrationForm = () => {
     if(editing === true && targetMember)
     form.setFieldsValue({
       name: targetMember.memberName,
-      phoneNum: targetMember.phoneNum,
+      phoneNum: targetMember.phoneNum.slice(3),
       age: parseInt(targetMember.age),
       gender: "남" ? 1 : 0,
       totalPT: targetMember.totalPT,
     });
   }, [editing, targetMember]);
+
+  const reset = () => {
+    form.setFieldsValue({
+      name: null,
+      phoneNum: null,
+      age: null,
+      gender: null,
+      totalPT: null,
+    });
+  }
 
   const onFinish = values => {
     const days = [];
@@ -222,6 +232,9 @@ const RegistrationForm = () => {
       <Form.Item {...tailFormItemLayout}>
         <Button type="primary" htmlType="submit">
           {editing ? "수정하기" : "등록하기"}
+        </Button>
+        <Button onClick={reset} type="primary" htmlType="submit" style={{marginLeft: 5}}>
+          {"되돌리기"}
         </Button>
       </Form.Item>
     </Form>
