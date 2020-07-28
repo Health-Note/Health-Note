@@ -1,45 +1,8 @@
-import {
-  AUTH_ERROR,
-  CLEAR_ERRORS,
-  LOGIN_FAIL,
-  LOGIN_SUCCESS,
-  LOGOUT,
-  REGISTER_FAIL,
-  REGISTER_SUCCESS,
-  USER_LOADED,
-} from '../reducers/types';
-import React, { createContext, useReducer } from 'react';
 
-import authReducer from '../reducers/auth.reducer';
 import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken';
 
-  const initialState = {
-    token: localStorage.getItem('token'),
-    isAuthenticated: null,
-    loading: true,
-    trainer: null,
-    error: null,
-  };
 
-  const [state, dispatch] = useReducer(authReducer, initialState);
-
-  // 유저 로드
-  // - 토큰을 글로벌 헤드에 담은 후 토큰에 담긴 email 정보를 통해 트레이너(유저) 전체 정보를 가져온다.
-  // - 유저정보를 가져온 후 state에 담는다.
-  const loadUser = async () => {
-    if (localStorage.token) {
-      setAuthToken(localStorage.token);
-    }
-    try {
-      const res = await axios.get('/api/auth/me');
-      await dispatch({ type: USER_LOADED, payload: res.data }); // payload는 찾은 trainer
-      console.log('loadUser', res.data);
-    } catch (err) {
-      console.log(err);
-      dispatch({ type: AUTH_ERROR });
-    }
-  };
 
   /**
    * @module auth.context
@@ -95,7 +58,6 @@ import setAuthToken from '../utils/setAuthToken';
   const logout = () => dispatch({ type: LOGOUT });
 
   // 에러 초기화
-  const clearErrors = () => dispatch({ type: CLEAR_ERRORS });
+  const clearErrors = () => dispatch({ type: CLEAR_ERRORS })
 
 
-};

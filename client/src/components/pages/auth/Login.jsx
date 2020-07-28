@@ -1,28 +1,21 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Input, Button, Row, Col } from 'antd';
 import { withRouter } from 'react-router-dom';
-import { AuthContext } from '../../../contexts/auth.context';
-import { AlertContext } from '../../../contexts/alert.context';
+import { useSelector, useDispatch } from 'react-redux';
+import { LOGIN_REQUEST } from '../../../reducers/types';
 
 function Login(props) {
-  const authContext = useContext(AuthContext);
-  const alertContext = useContext(AlertContext);
-
-  const { setAlert } = alertContext;
-  const { login, error, clearErrors, isAuthenticated, trainer } = authContext;
+  const { login, error, clearErrors, isAuthenticated, trainer } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (isAuthenticated && trainer) {
       // 로그인이 되어있으면 홈으로 보냄
       props.history.push('/');
-      setAlert(
-        `안녕하세요, ${trainer.trainerName}님! 헬스노트에 로그인 하셨습니다.`,
-        'success'
-      );
+
       console.log(trainer, isAuthenticated);
     }
     if (error === '잘못된 정보입니다.') {
-      setAlert(error, 'error');
       clearErrors();
     }
     // eslint-disable-next-line
@@ -43,11 +36,10 @@ function Login(props) {
 
   const onSubmit = e => {
     e.preventDefault();
-    if (email === '' || password === '') {
-      setAlert('모든 항목을 채우세요', 'danger');
-    } else {
-      login({ email, password });
-    }
+    dispatch({
+        type: LOGIN_REQUEST,
+        payload: { email, password }
+      });
   };
 
   return (

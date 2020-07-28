@@ -9,11 +9,8 @@ import useToggle from '../../../hooks/useToggle';
 import { useDispatch, useSelector } from 'react-redux';
 
 function Register(props) {
-  const { isSigningUp } = useSelector((state) => state.auth);
+  const { register, error, clearErrors, isAuthenticated, trainer } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
-  const { setAlert } = alertContext;
-  const { register, error, clearErrors, isAuthenticated } = authContext;
   
   useEffect(() => {
     if (isAuthenticated) {
@@ -21,7 +18,6 @@ function Register(props) {
       props.history.push('/');
     }
     if (error) {
-      setAlert(error, "error");
       clearErrors();
     }
     // eslint-disable-next-line
@@ -47,14 +43,11 @@ function Register(props) {
   const onSubmit = e => {
     e.preventDefault();
     if (trainerName === '' || email === '' || password === '') {
-      setAlert('모든 항목을 채우세요', 'error');
     } else if (password !== password2) {
-      setAlert('비밀번호가 일치하지 않습니다.', 'error');
     } else if (!agreement) {
-      setAlert('회원약관에 동의하지 않았습니다.')
     } else  {
       register({ trainerName, email, password, "agreementId": 1 });
-    } 
+    }
   };
 
   return (

@@ -4,28 +4,24 @@ import { UserAddOutlined, UserOutlined, LogoutOutlined, TeamOutlined, CalendarOu
 import { Link } from 'react-router-dom';
 import Routes from '../routing/Routes';
 import Alerts from '../context/atoms/Alerts';
-import { AuthContext } from '../../contexts/auth.context';
-import { AlertContext } from '../../contexts/alert.context';
 import { MembersContext } from '../../contexts/members.context';
 import { ScheduleContext } from '../../contexts/schedule.context';
+import { useDispatch, useSelector } from 'react-redux';
 
 const { Header, Content, Footer, Sider } = Layout;
 
 const Dashboard = () => {
   // context
-  const authContext = useContext(AuthContext);
-  const alertContext = useContext(AlertContext);
+
   const scheduleContext = useContext(ScheduleContext);
   const membersContext = useContext(MembersContext);
-  const { isAuthenticated, logout, trainer } = authContext;
-  const { setAlert } = alertContext;
+  const { logout, isAuthenticated, trainer } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   // state
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
-    authContext.loadUser();
-    membersContext.getMember();
     // eslint-disable-next-line
   }, []);
 
@@ -35,11 +31,6 @@ const Dashboard = () => {
 
   const handleLogout = () => {
     logout();
-    setAlert(
-      `${trainer.trainerName}님, 로그아웃 하셨습니다.`,
-      'success',
-      trainer.trainerName
-    );
   };
 
   const authLinks = (
