@@ -18,7 +18,6 @@ import setAuthToken from '../utils/setAuthToken';
 
 // 로그인
 function loginAPI(formData) {
-  console.log(formData)
 // 서버에 요청
   const config = {
     method: 'POST',
@@ -41,7 +40,7 @@ function* login(action) {
     yield delay(2000);
     yield put({
       type: LOGIN_SUCCESS,
-      payload: res.data, // res.data = token
+      payload: res.data.token, // res.data = token
     });
   } catch (e) {
     console.error(e);
@@ -54,7 +53,6 @@ function* login(action) {
 
 // takeLatest가 LOGIN 액션이 dispatch 되길 기다려서 dispatch될 때 login 제너레이터를 호출
 function* watchLogin() {
-  console.log("ddd")
   yield takeEvery(LOGIN_REQUEST, login);
   // while(true){
   //     yield take(LOGIN); // take: 해당 액션이 dispatch되면 제너레이터를 next하는 이펙트 (take함수 안에 next가 들어있다)

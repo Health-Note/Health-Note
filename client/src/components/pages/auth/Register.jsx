@@ -7,6 +7,7 @@ import { AlertContext } from '../../../contexts/alert.context';
 import { AuthContext } from '../../../contexts/auth.context';
 import useToggle from '../../../hooks/useToggle';
 import { useDispatch, useSelector } from 'react-redux';
+import { REGISTER_REQUEST } from '../../../reducers/types';
 
 function Register(props) {
   const { register, error, clearErrors, isAuthenticated, trainer } = useSelector((state) => state.auth);
@@ -24,6 +25,7 @@ function Register(props) {
   }, [error, isAuthenticated]);
   
   const [agreement, toggle] = useToggle();
+  const [passwordError, setPasswordError] = useState(false);
   const [user, setUser] = useState({
     trainerName: '',
     email: '',
@@ -34,19 +36,32 @@ function Register(props) {
 
   const { trainerName, email, password, password2 } = user;
 
-  const onChange = e =>
+  const onChange = e => {
     setUser({
-      ...user,
-      [e.target.name]: e.target.value,
-    });
+        ...user,
+        [e.target.name]: e.target.value,
+      },
+    );
+    // 패스워드 양방향 체크
+   setPasswordError(
+     user.password !== e.target.value && e.target.name === 'password2' ||
+     user.password2 !== e.target.value && e.target.name ==='password')
+  };
 
   const onSubmit = e => {
     e.preventDefault();
     if (trainerName === '' || email === '' || password === '') {
     } else if (password !== password2) {
+      alert('패스워드가 일치하지 않습니다.');
     } else if (!agreement) {
-    } else  {
-      register({ trainerName, email, password, "agreementId": 1 });
+      alert('약관에 동의하세요');
+    } else {
+      dispatch({
+        type: REGISTER_REQUEST,
+        payload: {
+          trainerName, email, password, 'agreementId': 1,
+        },
+      });
     }
   };
 
@@ -107,6 +122,7 @@ function Register(props) {
               onChange={onChange}
             />
           </div>
+          {passwordError && <div>패스워드가 일치하지 않습니다</div>}
           <Row type="flex" justify="end" style={{marginTop: "10px"}}>
             <Col>
               <Checkbox value={agreement} onChange={toggle}> </Checkbox>

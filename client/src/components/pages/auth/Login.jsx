@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { LOGIN_REQUEST } from '../../../reducers/types';
 
 function Login(props) {
-  const { login, error, clearErrors, isAuthenticated, trainer } = useSelector((state) => state.auth);
+  const { error, clearErrors, isAuthenticated, trainer } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
