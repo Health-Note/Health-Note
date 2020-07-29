@@ -110,7 +110,6 @@ const Dashboard = () => {
       </Sider>
       <Layout style={{ marginLeft: 200 }}>
         <Header style={{ background: '#fff', padding: 0 }} />
-        <Alerts />
         <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
             <Breadcrumb.Item></Breadcrumb.Item>

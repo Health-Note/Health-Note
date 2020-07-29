@@ -9,7 +9,25 @@ import {
   CLEAR_TARGET,
 } from './types';
 
-const reducer = (state, action) => {
+export const initialState = {
+  loading: true,
+  error: null,
+  target: null,
+  members: [
+    {
+      id: null,
+      memberName: null,
+      phoneNum: null,
+      gender: null,
+      startDate: null,
+      endDate: null,
+      usedPT: null,
+      totalPT: null,
+      height: null,
+    },
+  ],
+};
+const reducer = (state = initialState, action) => {
   switch (action.type) {
       case GET_MEMBER:
         return produce(state, draft => {

@@ -9,7 +9,7 @@ import {
   LOGOUT,
 } from './types';
 
-const initialState = {
+export const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: null,
   loading: true,
@@ -17,7 +17,7 @@ const initialState = {
   error: null,
 };
 
-export default (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case USER_LOADED:
       return {
@@ -54,6 +54,8 @@ export default (state = initialState, action) => {
         error: null,
       };
     default:
-      return;
+      return state;
   }
 };
+
+export default reducer;
