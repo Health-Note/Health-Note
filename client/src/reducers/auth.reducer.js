@@ -7,6 +7,7 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
+  LOGIN_REQUEST,
 } from './types';
 
 export const initialState = {
@@ -16,6 +17,19 @@ export const initialState = {
   trainer: null,
   error: null,
 };
+
+export const loginRequestAction = (user) => {
+  return {
+    type: LOGIN_REQUEST,
+    payload: user,
+  }
+}
+
+export const logoutRequestAction = () => {
+  return {
+    type: LOGOUT,
+  }
+}
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -28,7 +42,7 @@ const reducer = (state = initialState, action) => {
       };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
-      localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('token', action.payload);
       return {
         ...state,
         ...action.payload, // token

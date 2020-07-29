@@ -1,21 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Layout, Menu, Breadcrumb, Button } from 'antd';
 import { UserAddOutlined, UserOutlined, LogoutOutlined, TeamOutlined, CalendarOutlined, PieChartOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import Routes from '../routing/Routes';
 import Alerts from '../context/atoms/Alerts';
-import { MembersContext } from '../../contexts/members.context';
-import { ScheduleContext } from '../../contexts/schedule.context';
-import { useDispatch, useSelector } from 'react-redux';
+import { logoutRequestAction } from '../../reducers/auth.reducer';
 
 const { Header, Content, Footer, Sider } = Layout;
 
 const Dashboard = () => {
-  // context
 
-  const scheduleContext = useContext(ScheduleContext);
-  const membersContext = useContext(MembersContext);
-  const { logout, isAuthenticated, trainer } = useSelector((state) => state.auth);
+  // context
+  const { isAuthenticated, trainer } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   // state
@@ -30,7 +27,7 @@ const Dashboard = () => {
   };
 
   const handleLogout = () => {
-    logout();
+    dispatch(logoutRequestAction());
   };
 
   const authLinks = (

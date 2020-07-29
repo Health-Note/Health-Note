@@ -3,6 +3,7 @@ import { Input, Button, Row, Col } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { LOGIN_REQUEST } from '../../../reducers/types';
+import { loginRequestAction } from '../../../reducers/auth.reducer';
 
 function Login(props) {
   const { error, clearErrors, isAuthenticated, trainer } = useSelector((state) => state.auth);
@@ -36,10 +37,7 @@ function Login(props) {
 
   const onSubmit = e => {
     e.preventDefault();
-    dispatch({
-        type: LOGIN_REQUEST,
-        payload: { email, password }
-      });
+    dispatch(loginRequestAction(user));
   };
 
   return (

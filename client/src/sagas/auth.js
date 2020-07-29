@@ -33,7 +33,7 @@ function* login(action) {
   console.log(action)
   try {
     const res = yield call(loginAPI, action.payload);
-    console.log("token: ", res)
+    console.log("token: ", res.data.token)
     yield put({
       type: LOAD_USER
     });
@@ -76,7 +76,8 @@ function* loadUser () {
     setAuthToken(localStorage.token);
   }
   try {
-    const res = yield call(loadUserApi)
+    const res = yield call(loadUserApi);
+    console.log(res)
     yield put({
       type: USER_LOADED,
       payload: res.data // payload는 찾은 trainer
@@ -127,14 +128,6 @@ function* watchRegister() {
   yield takeEvery(REGISTER_REQUEST, register)
 }
 
-function* logout() {
-  yield put({ type: LOGOUT })
-}
-
-function* watchLogout() {
-  yield takeEvery(LOGOUT, logout)
-}
-
 // // 에러 초기화
 // const clearErrors = () => dispatch({ type: CLEAR_ERRORS })
 
@@ -143,6 +136,5 @@ export default function* userSaga() {
     fork(watchLogin), // fork안붙여도 되지만 붙이는 이유는 watchLogin, watchSignUp등 간에 비동기이기 때문에 의미론적으로 붙여놈
     fork(watchLoadUser),
     fork(watchRegister),
-    fork(watchLogout),
   ]);
 }
