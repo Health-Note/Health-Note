@@ -18,7 +18,6 @@ import setAuthToken from '../utils/setAuthToken';
 
 // 로그인
 function loginAPI(formData) {
-// 서버에 요청
   const config = {
     method: 'POST',
     headers: {

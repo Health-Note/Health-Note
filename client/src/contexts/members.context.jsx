@@ -12,65 +12,9 @@ import axios from 'axios';
 import memberReducer from '../reducers/members.reducer.js';
 import setAuthToken from '../utils/setAuthToken';
 
-const initialState = {
-  loading: true,
-  error: null,
-  target: null,
-  members: [
-    {
-      id: null,
-      memberName: null,
-      phoneNum: null,
-      gender: null,
-      startDate: null,
-      endDate: null,
-      usedPT: null,
-      totalPT: null,
-      height: null,
-    },
-  ],
-};
-
-export const MembersContext = createContext();
-export const DispatchContext = createContext();
-
 export function MembersProvider(props) {
   const [state, dispatch] = useReducer(memberReducer, initialState);
 
-  // 작성일: 2019.08.11
-  // 작성자: 박종열
-  // 기능: 트레이너들의 회원목록(이름, 등록일, 마감일, 남은pt수) 가져오기, 정적 스케줄 가져오기
-  const getMember = async () => {
-    if (localStorage.token) {
-      setAuthToken(localStorage.token);
-    }
-    const setting = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-    try {
-      const res = await axios.get('/api/members', setting);
-      console.log('[context] getMember res.data', res.data);
-      const members = res.data.map(cv => {
-        return {
-          id: cv.id,
-          memberName: cv.memberName,
-          phoneNum: cv.phoneNum,
-          gender: cv.gender,
-          startDate: cv.startDate,
-          endDate: cv.endDate,
-          usedPT: cv.usedPT,
-          totalPT: cv.totalPT,
-          height: cv.height,
-        };
-      });
-      console.log(members)
-      await dispatch({ type: GET_MEMBER, payload: members });
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   /**
    * @module members.context
@@ -80,33 +24,7 @@ export function MembersProvider(props) {
    */
 
   const addMember = async formdata => {
-    console.log('formdata', formdata)
-    if (localStorage.token) {
-      setAuthToken(localStorage.token);
-    }
-    try {
-      const res = await axios.post('/api/schedules/initializing', formdata);
-      console.log("res.data.id", res.data.id)
-      if (res.status === 201) {
-        const addedMember = {
-          id: res.data.id,
-          memberName: formdata.memberName,
-          phoneNum: formdata.phoneNum,
-          gender: formdata.gender,
-          startDate: formdata.startDate,
-          endDate: formdata.endDate,
-          usedPT: 0,
-          totalPT: formdata.totalPT,
-          height: null
-        }
-        dispatch({ type: ADD_MEMBER, payload: addedMember });
-      } else {
-        console.log('어떤 에러');
-      }
-    } catch (error) {
-      console.log(error);
-      // dispatch({ type: MEMBER_ERROR, payload: error.response.data.msg });
-    }
+
   };
 
   /**

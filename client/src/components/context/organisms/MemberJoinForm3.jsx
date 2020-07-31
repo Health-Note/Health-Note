@@ -15,6 +15,8 @@ import {
 } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { MembersContext } from '../../../contexts/members.context';
+import { useDispatch, useSelector } from 'react-redux';
+import { addMemberRequestAction } from '../../../reducers/members.reducer';
 
 const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
@@ -61,7 +63,7 @@ const tailFormItemLayout = {
 
 const RegistrationForm = () => {
   const [form] = Form.useForm();
-  const { addMember } = useContext(MembersContext);
+  const dispatch = useDispatch();
 
   const onFinish = values => {
     const days = [];
@@ -83,7 +85,7 @@ const RegistrationForm = () => {
     member.startTime = values.startTime.format('YYYY-MM-DD').toString();
     member.endTime = values.startTime.add(1, 'hours').format('YYYY-MM-DD').toString();
     member.days = days;
-    addMember(member);
+    dispatch(addMemberRequestAction(member));
   };
 
   const prefixSelector = (

@@ -18,7 +18,8 @@ export const LOAD_USER = 'LOAD_USER';
 
 // 멤버
 export const GET_MEMBER = 'GET_MEMBER';
-export const ADD_MEMBER = 'ADD_MEMBER';
+export const ADD_MEMBER_REQUEST = 'ADD_MEMBER_REQUEST';
+export const ADD_MEMBER_SUCCESS = 'ADD_MEMBER_SUCCESS';
 export const REMOVE_MEMBER = 'REMOVE_MEMBER';
 export const EDIT_MEMBER = 'EDIT_MEMBER';
 export const MEMBER_ERROR = 'MEMBER_ERROR';

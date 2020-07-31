@@ -1,12 +1,13 @@
 import produce from 'immer';
 import {
-  ADD_MEMBER,
   GET_MEMBER,
   REMOVE_MEMBER,
   EDIT_MEMBER,
   MEMBER_ERROR,
   CLEAR_ERRORS,
   CLEAR_TARGET,
+  ADD_MEMBER_REQUEST,
+  ADD_MEMBER_SUCCESS
 } from './types';
 
 export const initialState = {
@@ -27,6 +28,14 @@ export const initialState = {
     },
   ],
 };
+
+export const addMemberRequestAction = (member) => {
+  return {
+    type: ADD_MEMBER_REQUEST,
+    payload: member
+  }
+}
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
       case GET_MEMBER:
@@ -34,7 +43,7 @@ const reducer = (state = initialState, action) => {
           draft.loading = false;
           draft.members = action.payload; // 전체 멤버 (배열)
     });
-    case ADD_MEMBER:
+    case ADD_MEMBER_SUCCESS:
       return produce(state, draft => {
         draft.loading = false;
         draft.target = action.payload.memberName;
