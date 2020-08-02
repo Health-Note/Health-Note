@@ -1,13 +1,16 @@
 import produce from 'immer';
 import {
-  GET_MEMBER,
-  REMOVE_MEMBER,
+  GET_MEMBER_REQUEST,
+  GET_MEMBER_SUCCESS,
   EDIT_MEMBER,
   MEMBER_ERROR,
   CLEAR_ERRORS,
   CLEAR_TARGET,
   ADD_MEMBER_REQUEST,
-  ADD_MEMBER_SUCCESS
+  ADD_MEMBER_SUCCESS,
+  ADD_MEMBER_ERROR,
+  REMOVE_MEMBER_REQUEST,
+  REMOVE_MEMBER_SUCCESS,
 } from './types';
 
 export const initialState = {
@@ -29,27 +32,25 @@ export const initialState = {
   ],
 };
 
-export const addMemberRequestAction = (member) => {
-  return {
-    type: ADD_MEMBER_REQUEST,
-    payload: member
-  }
-}
+export const getMemberRequestAction = () => ({ type: GET_MEMBER_REQUEST });
+export const addMemberRequestAction = (member) => ({ type: ADD_MEMBER_REQUEST, payload: member });
+export const removeMemberRequestAction = (member) => ({ type: REMOVE_MEMBER_REQUEST, payload: member });
+export const clearTargetAction = () => ({ type: CLEAR_TARGET });
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-      case GET_MEMBER:
-        return produce(state, draft => {
-          draft.loading = false;
-          draft.members = action.payload; // 전체 멤버 (배열)
-    });
+    case GET_MEMBER_SUCCESS:
+      return produce(state, draft => {
+        draft.loading = false;
+        draft.members = action.payload; // 전체 멤버 (배열)
+      });
     case ADD_MEMBER_SUCCESS:
       return produce(state, draft => {
         draft.loading = false;
         draft.target = action.payload.memberName;
         draft.members.push(action.payload); // 멤버 추가 (배열안에 객체 추가)
       });
-    case REMOVE_MEMBER:
+    case REMOVE_MEMBER_SUCCESS:
       return produce(state, draft => {
         draft.loading = false;
         draft.target = 'deleted';
@@ -77,6 +78,7 @@ const reducer = (state = initialState, action) => {
           }
         })
       });
+    case ADD_MEMBER_ERROR:
     case MEMBER_ERROR:
       return produce(state, draft => {
           draft.error = action.payload;

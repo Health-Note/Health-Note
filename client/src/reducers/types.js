@@ -1,26 +1,30 @@
 // 로그인, 로그아웃
-
 export const REGISTER_REQUEST = 'REGISTER_REQUEST';
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 export const REGISTER_FAIL = 'REGISTER_FAIL';
-
-export const USER_LOADED = 'USER_LOADED';
-export const AUTH_ERROR = 'AUTH_ERROR';
-
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
-
+export const USER_LOADED = 'USER_LOADED';
+export const AUTH_ERROR = 'AUTH_ERROR';
 export const SET_ALERT = 'SET_ALERT';
 export const REMOVE_ALERT = 'REMOVE_ALERT';
 export const LOGOUT = 'LOGOUT';
 export const LOAD_USER = 'LOAD_USER';
 
 // 멤버
-export const GET_MEMBER = 'GET_MEMBER';
+export const GET_MEMBER_REQUEST = 'GET_MEMBER_REQUEST';
+export const GET_MEMBER_SUCCESS = 'GET_MEMBER_SUCCESS';
+export const GET_MEMBER_FAIL = 'GET_MEMBER_FAIL';
+
 export const ADD_MEMBER_REQUEST = 'ADD_MEMBER_REQUEST';
 export const ADD_MEMBER_SUCCESS = 'ADD_MEMBER_SUCCESS';
-export const REMOVE_MEMBER = 'REMOVE_MEMBER';
+export const ADD_MEMBER_ERROR = 'ADD_MEMBER_ERROR';
+
+export const REMOVE_MEMBER_REQUEST = 'REMOVE_MEMBER_REQUEST';
+export const REMOVE_MEMBER_SUCCESS = 'REMOVE_MEMBER_SUCCESS';
+export const REMOVE_MEMBER_FAIL= 'REMOVE_MEMBER_FAIL';
+
 export const EDIT_MEMBER = 'EDIT_MEMBER';
 export const MEMBER_ERROR = 'MEMBER_ERROR';
 

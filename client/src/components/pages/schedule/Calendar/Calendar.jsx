@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import moment from 'moment';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -9,7 +10,6 @@ import '@fullcalendar/core/main.css';
 import '@fullcalendar/timegrid/main.css';
 import { message } from 'antd';
 import { ScheduleContext } from '../../../../contexts/schedule.context';
-import { MembersContext } from '../../../../contexts/members.context';
 import { RoutineContext } from '../../../../contexts/routine.context';
 import AntdModal from '../../../context/organisms/CalendarModal';
 import useToggle from '../../../../hooks/useToggle';
@@ -29,7 +29,7 @@ function Calendar() {
     isChanging
   } = useContext(ScheduleContext);
   const { setSelectedDate, getRoutines } = useContext(RoutineContext);
-  const { members } = useContext(MembersContext);
+  const { members } = useSelector(state => state.member);
 
   // states
   const [clickedDate, setClickedDate] = useState(false);

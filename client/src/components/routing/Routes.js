@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 // import PrivateRoute from './components/routing/PrivateRoute';
 
 function Routes() {
-  const { members } = useSelector((state) => state.members)
+  const { members } = useSelector((state) => state.member);
   function getMember(props) {
     // 괄호안에 props는 라우터에서 넣어주는 프롭스
     const name = props.match.params.name; // 파라미터를 통해 멤버정보 가져오기

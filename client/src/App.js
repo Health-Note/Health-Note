@@ -21,13 +21,13 @@ import { AlertProvider } from './contexts/alert.context';
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
-const sagaMiddleware = createSagaMiddleware()
+const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
   rootReducer,
   composeWithDevTools(applyMiddleware(sagaMiddleware))
 );
 
-sagaMiddleware.run(rootSaga)
+sagaMiddleware.run(rootSaga);
 
 function App() {
   return (

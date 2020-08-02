@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import locale from 'antd/es/date-picker/locale/ko_KR';
 import {
   Form,
@@ -14,7 +14,6 @@ import {
   TimePicker
 } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { MembersContext } from '../../../contexts/members.context';
 import { useDispatch, useSelector } from 'react-redux';
 import { addMemberRequestAction } from '../../../reducers/members.reducer';
 
