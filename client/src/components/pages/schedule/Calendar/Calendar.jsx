@@ -1,35 +1,22 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
+import '@fullcalendar/core/main.css';
+import '@fullcalendar/timegrid/main.css';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import koLocale from '@fullcalendar/core/locales/ko';
-import '@fullcalendar/core/main.css';
-import '@fullcalendar/timegrid/main.css';
-import { message } from 'antd';
-import { ScheduleContext } from '../../../../contexts/schedule.context';
-import { RoutineContext } from '../../../../contexts/routine.context';
-import AntdModal from '../../../context/organisms/CalendarModal';
 import useToggle from '../../../../hooks/useToggle';
+import { message } from 'antd';
 import './Calendar.css';
-import { changeScheduleAction, setScheduleTargetAction } from '../../../../reducers/schedule.reducer';
 import { GET_SCHEDULES_REQUEST } from '../../../../reducers/types';
+import { changeScheduleAction, setScheduleTargetAction } from '../../../../reducers/schedule.reducer';
+import { getRoutinesAction } from '../../../../reducers/routine.reducer';
 
 // title, start, id가 포함되어야 함.
 function Calendar() {
-  // useContext
-  const {
-    setDrawer,
-    changeSchedule,
-    setScheduleTarget,
-    removeSchedule,
-    createOneSchedule,
-    isChanging
-  } = useContext(ScheduleContext);
-  const { setSelectedDate, getRoutines } = useContext(RoutineContext);
-
   const { schedules } = useSelector(state => state.schedule);
   const { members } = useSelector(state => state.member);
   const dispatch = useDispatch();
@@ -55,11 +42,6 @@ function Calendar() {
     setMember(exeMember);
   }, []);
 
-  const saveButton = (
-    <>
-      { isChanging && <button >저장하기</button>}  
-    </>
-  )
 
   // 달력에 표시될 스케줄 초기화
   const handleTargetId = id => {
@@ -109,10 +91,8 @@ function Calendar() {
     setEvt(eventClick.event);
     handleTargetId(eventClick.event.id);
     setStart(moment(eventClick.event.start).format('MM월 DD일'));
-    setSelectedDate(date, memberId);
-    setDrawer(true);
     dispatch(setScheduleTargetAction(parseInt(id), parseInt(memberId), memberName));
-    getRoutines(id);
+    dispatch(getRoutinesAction(id));
   };
 
   // 클릭으로 이벤트 만들기
@@ -164,7 +144,6 @@ function Calendar() {
   return (
     // 이벤트 창
     <div className="animated fadeIn p-4 demo-app">
-    {saveButton}
           {/*<div*/}
           {/*  id="external-events"*/}
           {/*  style={{*/}
@@ -180,14 +159,6 @@ function Calendar() {
           {/*      </div>*/}
           {/*    ))} *!/*/}
           {/*</div>*/}
-          <AntdModal
-            title={'스케줄 추가'}
-            modalState={modalState}
-            toggleModal={toggleModal}
-            clickedDate={clickedDate}
-            members={members}
-            createOneSchedule={createOneSchedule}
-          />
 
           <div className="demo-app-calendar" id="mycalendartest">
             <FullCalendar

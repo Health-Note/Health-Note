@@ -13,7 +13,7 @@ import {
   CREATE_ONE_SCHEDULE_SUCCESS,
 } from './types';
 
-export const initialState = {
+const initialState = {
   selectedSchedule: {
     id: null,
     memberId: null,

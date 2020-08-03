@@ -9,14 +9,8 @@ import DashBoard from './components/dashBoard/DashBoard';
 import rootReducer from './reducers';
 import './App.css';
 import rootSaga from './sagas';
-import { createLogger } from 'redux-logger'
+import logger from 'redux-logger'
 import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { RoutineProvider } from './contexts/routine.context';
-import { MembersProvider } from './contexts/members.context';
-import { ScheduleProvider } from './contexts/schedule.context';
-import { AuthProvider } from './contexts/auth.context';
-import { AlertProvider } from './contexts/alert.context';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -24,7 +18,7 @@ if (localStorage.token) {
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(sagaMiddleware))
+  composeWithDevTools(applyMiddleware(sagaMiddleware, logger))
 );
 
 sagaMiddleware.run(rootSaga);

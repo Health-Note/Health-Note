@@ -33,7 +33,7 @@ const RoutineRow = ({ routine, insertCounts, getDelExerCode }) => {
       >
         <Col md={3}><Tag color={targetColor[routine.targetCode -1]}>{routine.targetName}</Tag></Col>
         <Col md={9}>{routine.exerciseName}</Col>
-        <Col md={3}><InputNumber onChange={onChangeRepetition} style={{ width: 55 }}/></Col>
+        <Col md={3}><InputNumber defaultValue={routine.setCount} onChange={onChangeRepetition} style={{ width: 55 }}/></Col>
         <Col md={3}><InputNumber onChange={onChangeCount} style={{ width: 55 }}/></Col>
         <Col offset={3} md={3}><Button onClick={onClickDeleteButton}>삭제</Button></Col>
       </Row>
