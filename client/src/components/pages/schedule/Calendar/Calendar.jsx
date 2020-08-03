@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -14,13 +14,13 @@ import { RoutineContext } from '../../../../contexts/routine.context';
 import AntdModal from '../../../context/organisms/CalendarModal';
 import useToggle from '../../../../hooks/useToggle';
 import './Calendar.css';
+import { changeScheduleAction, setScheduleTargetAction } from '../../../../reducers/schedule.reducer';
+import { GET_SCHEDULES_REQUEST } from '../../../../reducers/types';
 
 // title, start, id가 포함되어야 함.
 function Calendar() {
   // useContext
   const {
-    schedules,
-    getAllSchedules,
     setDrawer,
     changeSchedule,
     setScheduleTarget,
@@ -29,7 +29,10 @@ function Calendar() {
     isChanging
   } = useContext(ScheduleContext);
   const { setSelectedDate, getRoutines } = useContext(RoutineContext);
+
+  const { schedules } = useSelector(state => state.schedule);
   const { members } = useSelector(state => state.member);
+  const dispatch = useDispatch();
 
   // states
   const [clickedDate, setClickedDate] = useState(false);
@@ -48,8 +51,7 @@ function Calendar() {
   
   // 외부 이벤트 초기화
   useEffect(() => {
-    console.log("!!!!")
-    getAllSchedules();
+    dispatch({type: GET_SCHEDULES_REQUEST});
     setMember(exeMember);
   }, []);
 
@@ -80,7 +82,7 @@ function Calendar() {
     const endTime = moment(info.event.end).format('HH:mm'); // 변경 후 시작 시간
     console.log("endtime", endTime)
     const memberId = info.event.extendedProps.memberId; // 멤버 아이디
-    changeSchedule(id, afterDate, startTime, endTime, memberId);
+    dispatch(changeScheduleAction(id, afterDate, startTime, endTime, memberId));
     message.success(
       `[${title}] 회원님의 스케줄이 ${moment(afterDate + ' ' + startTime).format(
         'MM월DD일 HH시mm분'
@@ -109,7 +111,7 @@ function Calendar() {
     setStart(moment(eventClick.event.start).format('MM월 DD일'));
     setSelectedDate(date, memberId);
     setDrawer(true);
-    setScheduleTarget(parseInt(id), parseInt(memberId), memberName);
+    dispatch(setScheduleTargetAction(parseInt(id), parseInt(memberId), memberName));
     getRoutines(id);
   };
 
@@ -126,7 +128,7 @@ function Calendar() {
     const afterStartTime = moment(info.event.start).format('HH:mm'); // 변경 후 시작 시간
     const afterEndTime = moment(info.event.end).format('HH:mm'); // 변경 후 시작 시간
     const memberId = info.event.extendedProps.memberId; // 멤버 아이디
-    changeSchedule(id, afterDate, afterStartTime, afterEndTime, memberId);
+    dispatch(changeScheduleAction(id, afterDate, afterStartTime, afterEndTime, memberId));
     // alert
     message.success(`[${title}] 회원 \n\n ${afterStartTime} ~ ${afterEndTime} 시간 변경!`);
   }

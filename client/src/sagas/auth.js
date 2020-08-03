@@ -5,13 +5,13 @@ import axios from 'axios';
 import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
-  LOGIN_FAIL,
+  LOGIN_ERROR,
   LOGOUT,
   LOAD_USER,
   USER_LOADED,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
-  REGISTER_FAIL,
+  REGISTER_ERROR,
   AUTH_ERROR,
 } from '../reducers/types';
 import setAuthToken from '../utils/setAuthToken';
@@ -44,7 +44,7 @@ function* login(action) {
   } catch (e) {
     console.error(e);
     yield put({
-      type: LOGIN_FAIL,
+      type: LOGIN_ERROR,
       payload: e.response.data.msg,
     });
   }
@@ -117,7 +117,7 @@ function* register(action) {
   } catch (e) {
     console.error(e);
     yield put({
-      type: REGISTER_FAIL,
+      type: REGISTER_ERROR,
       payload: e.response.data.msg,
     });
   }

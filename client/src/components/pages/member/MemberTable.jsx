@@ -43,7 +43,7 @@ const columns = [
 
 const MemberTable = ({ toggle }) => {
   const isMount = useIsMount();
-  const { targetMember, error, members } = useSelector(state => state.member);
+  const { target, error, members } = useSelector(state => state.member);
   const dispatch = useDispatch();
   const [memberData, setMemberData] = useState([]);
   const [checkedRows, setChedckedRows] = useState([]);
@@ -53,15 +53,15 @@ const MemberTable = ({ toggle }) => {
   }, []);
 
   useEffect(() => {
-    if (targetMember && targetMember !== "deleted") {
+    if (target && target !== "deleted") {
       dispatch(clearTargetAction());
     } 
-  }, [targetMember]);
+  }, [target]);
 
   useEffect(() => {
-    if(targetMember === "deleted"){
+    if(target === "deleted"){
     }
-  }, [targetMember]);
+  }, [target]);
 
 
   useEffect(() => {

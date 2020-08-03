@@ -1,11 +1,11 @@
 import {
   REGISTER_SUCCESS,
-  REGISTER_FAIL,
+  REGISTER_ERROR,
   CLEAR_ERRORS,
   USER_LOADED,
   AUTH_ERROR,
   LOGIN_SUCCESS,
-  LOGIN_FAIL,
+  LOGIN_ERROR,
   LOGOUT,
   LOGIN_REQUEST,
 } from './types';
@@ -49,9 +49,9 @@ const reducer = (state = initialState, action) => {
         isAuthenticated: true,
         loading: false,
       };
-    case REGISTER_FAIL:
+    case REGISTER_ERROR:
     case AUTH_ERROR:
-    case LOGIN_FAIL:
+    case LOGIN_ERROR:
     case LOGOUT:
       localStorage.removeItem('token');
       return {
