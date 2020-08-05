@@ -3,7 +3,7 @@ import {
   GET_ROUTINES_SUCCESS,
   INSERT_COUNT,
   DELETE_ROUTINE,
-  SET_UPDATE_ROUTINES, GET_ROUTINES_REQUEST,
+  SET_UPDATE_ROUTINES, GET_ROUTINES_REQUEST, SAVE_ROUTINES_SUCCESS,
 } from './types';
 
 const initialState = {
@@ -54,6 +54,13 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_DATE:
       return { ...state, date: action.payload };
+    case SAVE_ROUTINES_SUCCESS:
+      return {
+        ...state,
+        loaded: action.payload.updateRoutine.map(cv => cv.exerciseCode),
+        routines: [...action.payload.updateRoutine],
+        deleteRoutine: []
+      }
     case GET_ROUTINES_SUCCESS: // [{},{},{}]
       return {
         scheduleId: parseInt(action.payload.scheduleId),

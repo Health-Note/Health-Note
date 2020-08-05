@@ -43,12 +43,9 @@ const saveRoutinesApi = (routine) => {
 function* saveRoutines(action) {
   try {
     const res = yield call(saveRoutinesApi, action.payload);
-    put({
+    yield put({
       type: SAVE_ROUTINES_SUCCESS,
-      payload: {
-        routines: res.data,
-        scheduleId: parseInt(action.payload.scheduleId),
-      },
+      payload: action.payload
     });
   } catch (e) {
     put({ type: SAVE_ROUTINES_ERROR, payload: e });

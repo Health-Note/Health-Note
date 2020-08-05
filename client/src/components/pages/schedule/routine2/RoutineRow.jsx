@@ -11,19 +11,18 @@ const RoutineRow = ({ routine, insertCounts, getDelExerCode }) => {
   const [count, setCount] = useState(0);
   const [repetition, setRepetition] = useState(0);
 
-  const onChangeCount = value => {
+  const handleCount = value => {
     setCount(value);
-    insertCounts(routine.exerciseCode, count, repetition);
+    insertCounts(routine.exerciseCode, value, repetition)
   };
 
-  const onChangeRepetition = value => {
+  const handleRepetitions = value => {
     setRepetition(value);
-    insertCounts(routine.exerciseCode, count, repetition);
+    insertCounts(routine.exerciseCode, count, value)
   };
 
   const onClickDeleteButton = () => {
     getDelExerCode(routine.exerciseCode);
-
   };
 
   return (
@@ -33,8 +32,8 @@ const RoutineRow = ({ routine, insertCounts, getDelExerCode }) => {
       >
         <Col md={3}><Tag color={targetColor[routine.targetCode -1]}>{routine.targetName}</Tag></Col>
         <Col md={9}>{routine.exerciseName}</Col>
-        <Col md={3}><InputNumber defaultValue={routine.setCount} onChange={onChangeRepetition} style={{ width: 55 }}/></Col>
-        <Col md={3}><InputNumber onChange={onChangeCount} style={{ width: 55 }}/></Col>
+        <Col md={3}><InputNumber defaultValue={routine.setCount} onChange={handleCount} style={{ width: 55 }}/></Col>
+        <Col md={3}><InputNumber defaultValue={routine.repetitions} onChange={handleRepetitions} style={{ width: 55 }}/></Col>
         <Col offset={3} md={3}><Button onClick={onClickDeleteButton}>삭제</Button></Col>
       </Row>
     </>

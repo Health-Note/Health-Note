@@ -23,17 +23,17 @@ const Routine = () => {
   }, [routines])
 
   // update routines 설정
-  const getExerIdAndName = (exerciseCode, exerciseName, targetCode, targetName) => {
+  const getExerIdAndName = useCallback((exerciseCode, exerciseName, targetCode, targetName) => {
     dispatch(setUpdateRoutinesAction(exerciseCode, exerciseName, targetCode, targetName, selectedSchedule));
-  };
+  }, []);
 
   // update routines에서 카운트와 세트수 설정
-  const insertCounts = (exerciseCode, setCount, repetitions) => {
+  const insertCounts = useCallback((exerciseCode, setCount, repetitions) => {
     dispatch(insertCountAction(exerciseCode, setCount, repetitions));
-  }
+  }, []);
 
   // deleted exercode 설정
-  const getDelExerCode = (exerciseCode) => {
+  const getDelExerCode = useCallback((exerciseCode) => {
     console.log(exerciseCode)
     // setDelExerCodes((prevState) => {
     //   return new Set(prevState).add(exerciseCode);
@@ -41,7 +41,7 @@ const Routine = () => {
     // const routines = routines.filter(routine => routine.exerciseCode !== exerciseCode);
     // setUpdateRoutines(routines);
     dispatch(deleteRoutineAction(exerciseCode));
-  };
+  }, []);
 
   const onClickSave = () => {
     const finalRoutine = {
@@ -56,7 +56,7 @@ const Routine = () => {
           setCount: routine.setCount,
           repetitions: routine.repetitions,
           targetCode: routine.targetCode,
-          maxWeight: routine.maxWeight,
+          maxWeight: 0,
         };
       }),
       deleteRoutine: deleteRoutine,
