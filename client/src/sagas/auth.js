@@ -32,20 +32,18 @@ function* login(action) {
   console.log(action)
   try {
     const res = yield call(loginAPI, action.payload);
-    console.log("token: ", res.data.token)
-    yield put({
-      type: LOAD_USER
-    });
-    yield delay(2000);
     yield put({
       type: LOGIN_SUCCESS,
       payload: res.data.token, // res.data = token
+    });
+    yield put({
+      type: LOAD_USER,
     });
   } catch (e) {
     console.error(e);
     yield put({
       type: LOGIN_ERROR,
-      payload: e.response.data.msg,
+      payload: e,
     });
   }
 }
@@ -106,16 +104,16 @@ const registerApi = (formData) => {
 function* register(action) {
   try {
     const res = yield call(registerApi, action.payload);
-    yield delay(2000);
+    console.log("msg", res.data.message)
     yield put({
       type: REGISTER_SUCCESS,
-      payload: res.data,
+      payload: res.data.token,
     });
     yield put({
       type: LOAD_USER
     });
   } catch (e) {
-    console.error(e);
+    console.log(e);
     yield put({
       type: REGISTER_ERROR,
       payload: e.response.data.msg,

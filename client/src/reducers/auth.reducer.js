@@ -45,8 +45,8 @@ const reducer = (state = initialState, action) => {
       localStorage.setItem('token', action.payload);
       return {
         ...state,
-        ...action.payload, // token
-        isAuthenticated: true,
+        token: action.payload, // token
+        isAuthenticated: false,
         loading: false,
       };
     case REGISTER_ERROR:

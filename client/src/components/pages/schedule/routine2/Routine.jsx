@@ -11,36 +11,32 @@ import {
   deleteRoutineAction,
 } from '../../../../reducers/routine.reducer';
 import { SAVE_ROUTINES_REQUEST } from '../../../../reducers/types';
+import { v4 as uuidv4 } from 'uuid';
 
 const Routine = () => {
   const dispatch = useDispatch();
   const { selectedSchedule } = useSelector(state => state.schedule)
-  const { routines, deleteRoutine } = useSelector(state => state.routine)
-  const [routineList, setRoutineList] = useState(null);
-
-  useEffect(() => {
-    setRoutineList(routines);
-  }, [routines])
+  const { routines, deleteRoutine, scheduleId } = useSelector(state => state.routine)
 
   // update routines 설정
   const getExerIdAndName = useCallback((exerciseCode, exerciseName, targetCode, targetName) => {
-    dispatch(setUpdateRoutinesAction(exerciseCode, exerciseName, targetCode, targetName, selectedSchedule));
+    dispatch(setUpdateRoutinesAction(uuidv4(), exerciseCode, exerciseName, targetCode, targetName, selectedSchedule));
   }, []);
 
   // update routines에서 카운트와 세트수 설정
-  const insertCounts = useCallback((exerciseCode, setCount, repetitions) => {
-    dispatch(insertCountAction(exerciseCode, setCount, repetitions));
+  const insertCounts = useCallback((id, setCount, repetitions) => {
+    dispatch(insertCountAction(id, repetitions));
   }, []);
 
   // deleted exercode 설정
-  const getDelExerCode = useCallback((exerciseCode) => {
-    console.log(exerciseCode)
+  const getDelExerCode = useCallback((id) => {
+    console.log(id)
     // setDelExerCodes((prevState) => {
     //   return new Set(prevState).add(exerciseCode);
     // });
     // const routines = routines.filter(routine => routine.exerciseCode !== exerciseCode);
     // setUpdateRoutines(routines);
-    dispatch(deleteRoutineAction(exerciseCode));
+    dispatch(deleteRoutineAction(id));
   }, []);
 
   const onClickSave = () => {
@@ -48,6 +44,7 @@ const Routine = () => {
       scheduleId: parseInt(selectedSchedule.id),
       updateRoutine: routines.map(routine => {
         return {
+          id: routine.id,
           exerciseCode: routine.exerciseCode,
           routineOrder: routine.routineOrder,
           memberId: routine.memberId,
@@ -72,7 +69,7 @@ const Routine = () => {
       {routines.length > 0 && routines.map(routine => {
         return (
           <>
-            <RoutineRow key={routine.exerciseCode} routine={routine} insertCounts={insertCounts}
+            <RoutineRow key={routine.exerciseCode} routine={routine} scheduleId={scheduleId} insertCounts={insertCounts}
                         getDelExerCode={getDelExerCode}/>
           </>
         );

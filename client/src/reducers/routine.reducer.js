@@ -20,10 +20,13 @@ export const getRoutinesAction = (scheduleId) => {
   }
 }
 
-export const setUpdateRoutinesAction = (exerciseCode, exerciseName, targetCode, targetName, targetSchedule) => {
+// id = uuid/v4
+export const setUpdateRoutinesAction = (id, exerciseCode, exerciseName, targetCode, targetName, targetSchedule) => {
+  console.log(id, exerciseCode, exerciseName, targetCode, targetName, targetSchedule)
   return {
     type: SET_UPDATE_ROUTINES,
     payload: {
+      id: id,
       exerciseCode: parseInt(exerciseCode),
       exerciseName: exerciseName,
       targetCode: parseInt(targetCode),
@@ -36,17 +39,17 @@ export const setUpdateRoutinesAction = (exerciseCode, exerciseName, targetCode, 
   };
 };
 
-export const insertCountAction = (exerciseCode, setCount, repetitions) => {
+export const insertCountAction = (id, setCount, repetitions) => {
   return {
     type: INSERT_COUNT,
-    payload: {exerciseCode, setCount, repetitions}
+    payload: {id, setCount, repetitions}
   }
 }
 
-export const deleteRoutineAction = (exerciseCode) => {
+export const deleteRoutineAction = (id) => {
   return {
     type: DELETE_ROUTINE,
-    payload: { exerciseCode }
+    payload: { id }
   }
 }
 
@@ -57,15 +60,16 @@ const reducer = (state = initialState, action) => {
     case SAVE_ROUTINES_SUCCESS:
       return {
         ...state,
-        loaded: action.payload.updateRoutine.map(cv => cv.exerciseCode),
+        loaded: action.payload.updateRoutine.map(cv => cv.id),
         routines: [...action.payload.updateRoutine],
         deleteRoutine: []
       }
     case GET_ROUTINES_SUCCESS: // [{},{},{}]
       return {
         scheduleId: parseInt(action.payload.scheduleId),
-        loaded: action.payload.routines.map(routine => routine.exerciseCode),
+        loaded: action.payload.routines.map(routine => routine.id),
         routines: action.payload.routines.map(routine => ({
+            id: routine.id,
             cardioTime: routine.cardioTime,
             isCardio: routine.isCardio,
             routineOrder: routine.routineOrder,
@@ -87,6 +91,7 @@ const reducer = (state = initialState, action) => {
         routines: [
           ...state.routines,
           {
+            id: action.payload.id,
             cardioTime: action.payload.cardioTime,
             isCardio: 0,
             routineOrder: 0,
@@ -100,14 +105,14 @@ const reducer = (state = initialState, action) => {
             maxWeight: parseInt(action.payload.maxWeight),
             targetCode: parseInt(action.payload.targetCode),
           }],
-        deleteRoutine: state.deleteRoutine.filter(cv => cv !== action.payload.exerciseCode),
+        deleteRoutine: state.deleteRoutine.filter(cv => cv !== action.payload.id),
       };
     case INSERT_COUNT:
       return {
         ...state,
         loaded: [...state.loaded],
         routines: state.routines.map(routine => {
-          if (routine.exerciseCode === action.payload.exerciseCode) {
+          if (routine.id === action.payload.id) {
             return {
               ...routine,
               setCount: action.payload.setCount,
@@ -125,9 +130,9 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         loaded: [...state.loaded],
-        routines: state.routines.filter(routine => action.payload.exerciseCode !== routine.exerciseCode),
-        deleteRoutine: state.loaded.includes(action.payload.exerciseCode) ?
-          [...state.deleteRoutine, action.payload.exerciseCode] :
+        routines: state.routines.filter(routine => action.payload.id !== routine.id),
+        deleteRoutine: state.loaded.includes(action.payload.id) ?
+          [...state.deleteRoutine, action.payload.id] :
           [...state.deleteRoutine],
       }
     default:
