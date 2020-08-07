@@ -85,6 +85,7 @@ function Calendar() {
     const id = eventClick.event.id;
     const memberName = eventClick.event.title;
     const memberId = eventClick.event.extendedProps.memberId;
+    console.log("멤버아이디", memberId);
     const date = moment(eventClick.event.start).format('YYYY-MM-DD');
 
     setName(eventClick.event.title);

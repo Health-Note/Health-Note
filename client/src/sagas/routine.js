@@ -20,6 +20,7 @@ const getRoutinesApi = (scheduleId) => {
 function* getRoutines(action) {
   try {
     const res = yield call(getRoutinesApi, action.payload.scheduleId);
+    console.log("resresres", res)
     yield put({
       type: GET_ROUTINES_SUCCESS,
       payload: {
@@ -42,7 +43,7 @@ const saveRoutinesApi = (routine) => {
 
 function* saveRoutines(action) {
   try {
-    const res = yield call(saveRoutinesApi, action.payload);
+    yield call(saveRoutinesApi, action.payload);
     yield put({
       type: SAVE_ROUTINES_SUCCESS,
       payload: action.payload

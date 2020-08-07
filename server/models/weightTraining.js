@@ -14,28 +14,15 @@ module.exports = function (sequelize, DataTypes) {
       exerciseCode: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-          model: 'Routine',
-          key: 'exerciseCode',
-        },
       },
       scheduleId: {
         type: DataTypes.BIGINT,
         allowNull: false,
-        primaryKey: true,
-        references: {
-          model: 'Routine',
-          key: 'scheduleId',
-        },
-      },
+       },
       memberId: {
         type: DataTypes.BIGINT,
         allowNull: false,
-        references: {
-          model: 'Routine',
-          key: 'memberId'
-        }
-      },
+        },
       setCount: {
           type: DataTypes.INTEGER,
           allowNull: false

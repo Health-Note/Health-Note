@@ -75,7 +75,6 @@ const createOrUpdate = async (body) => {
       );
     }
   });
-  
 };
 
 const getByScheduleId = async (params) => {
@@ -84,10 +83,17 @@ const getByScheduleId = async (params) => {
   const result = await db.routine
     .findAll({
       where: { scheduleId: scheduleId },
-      include: { model: db.weightTraining, required: false },
-      raw: true,
-      nest: true
+      include: [{
+        model: db.weightTraining
+      }, {
+        model: db.exercise,
+        attributes: ['exerciseName', 'targetName']
+      }],
+      nest: true,
+      row: true
     })
+
+  console.log("routine result", result);
 
     for(item of result) {
       if(item['isCardio'] === 1) {
@@ -100,7 +106,7 @@ const getByScheduleId = async (params) => {
 const remove = async (query) => {
   const { scheduleId, exerciseCode, isCardio } = query;
 
-  if(isCardio != 1 ) {
+  if (isCardio !== 1 ) {
     await db.weightTraining
     .destroy({
       where: { scheduleId: scheduleId, exerciseCode: exerciseCode },
@@ -111,9 +117,6 @@ const remove = async (query) => {
     .destroy({
       where: { scheduleId: scheduleId, exerciseCode: exerciseCode },
     })
-
-  
-  
 };
 
 module.exports = { createOrUpdate, getByScheduleId, remove };

@@ -4,12 +4,16 @@ import axios from 'axios';
 import Calendar from './Calendar/Calendar';
 import setAuthToken from '../../../utils/setAuthToken';
 import Routine from './routine2/Routine';
-import { RoutineContext } from '../../../contexts/routine.context';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getMemberRequestAction } from '../../../reducers/members.reducer';
 
 const Schedule = () => {
   const { id } = useSelector(state => state.schedule.selectedSchedule);
-  // const { saveRoutines, getRoutines } = useContext(RoutineContext);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getMemberRequestAction());
+  }, [])
 
   // 루틴 저장
   const handleSaveRoutines = async (delExerCodes, updateRoutine) => {

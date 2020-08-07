@@ -21,11 +21,11 @@ const Routine = () => {
   // update routines 설정
   const getExerIdAndName = useCallback((exerciseCode, exerciseName, targetCode, targetName) => {
     dispatch(setUpdateRoutinesAction(uuidv4(), exerciseCode, exerciseName, targetCode, targetName, selectedSchedule));
-  }, []);
+  }, [selectedSchedule]);
 
   // update routines에서 카운트와 세트수 설정
   const insertCounts = useCallback((id, setCount, repetitions) => {
-    dispatch(insertCountAction(id, repetitions));
+    dispatch(insertCountAction(id, setCount, repetitions));
   }, []);
 
   // deleted exercode 설정
@@ -48,6 +48,8 @@ const Routine = () => {
           exerciseCode: routine.exerciseCode,
           routineOrder: routine.routineOrder,
           memberId: routine.memberId,
+          exerciseName: routine.exerciseName,
+          targetName: routine.targetName,
           isCardio: routine.isCardio,
           cardioTime: routine.cardioTime,
           setCount: routine.setCount,

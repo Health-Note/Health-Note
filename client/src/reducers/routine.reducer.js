@@ -21,8 +21,8 @@ export const getRoutinesAction = (scheduleId) => {
 }
 
 // id = uuid/v4
-export const setUpdateRoutinesAction = (id, exerciseCode, exerciseName, targetCode, targetName, targetSchedule) => {
-  console.log(id, exerciseCode, exerciseName, targetCode, targetName, targetSchedule)
+export const setUpdateRoutinesAction = (id, exerciseCode, exerciseName, targetCode, targetName, selectedSchedule) => {
+  console.log("selectedSchedule", selectedSchedule)
   return {
     type: SET_UPDATE_ROUTINES,
     payload: {
@@ -31,8 +31,8 @@ export const setUpdateRoutinesAction = (id, exerciseCode, exerciseName, targetCo
       exerciseName: exerciseName,
       targetCode: parseInt(targetCode),
       targetName: targetName,
-      scheduleId: parseInt(targetSchedule.id),
-      memberId: parseInt(targetSchedule.memberId),
+      scheduleId: parseInt(selectedSchedule.id),
+      memberId: parseInt(selectedSchedule.memberId),
       cardioTime: '00:00:00',
       maxWeight: 0,
     },
@@ -73,8 +73,8 @@ const reducer = (state = initialState, action) => {
             cardioTime: routine.cardioTime,
             isCardio: routine.isCardio,
             routineOrder: routine.routineOrder,
-            exerciseName: routine.exerciseName,
-            targetName: routine.targetName,
+            exerciseName: routine.exercise.exerciseName,
+            targetName: routine.exercise.targetName,
             exerciseCode: parseInt(routine.exerciseCode),
             memberId: parseInt(routine.memberId),
             repetitions: parseInt(routine.weightTraining.repetitions),
