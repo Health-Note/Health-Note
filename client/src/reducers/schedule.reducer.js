@@ -11,6 +11,7 @@ import {
   SET_SCHEDULE_REQUEST,
   SET_SCHEDULE_SUCCESS,
   CREATE_ONE_SCHEDULE_SUCCESS,
+  CLEAR_SELECTED_SCHEDULE,
 } from './types';
 
 const initialState = {
@@ -110,6 +111,10 @@ const reducer = (state = initialState, action) =>  {
                 schedule => parseInt(action.payload) !== schedule.id
             )
           });
+        case CLEAR_SELECTED_SCHEDULE:
+          return produce(state, draft => {
+            draft.selectedSchedule = {};
+          })
         default:
           return state;
       }

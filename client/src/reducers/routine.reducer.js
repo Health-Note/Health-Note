@@ -3,7 +3,9 @@ import {
   GET_ROUTINES_SUCCESS,
   INSERT_COUNT,
   DELETE_ROUTINE,
-  SET_UPDATE_ROUTINES, GET_ROUTINES_REQUEST, SAVE_ROUTINES_SUCCESS,
+  SET_UPDATE_ROUTINES,
+  GET_ROUTINES_REQUEST,
+  SAVE_ROUTINES_SUCCESS, CLEAR_ROUTINE,
 } from './types';
 
 const initialState = {
@@ -135,6 +137,14 @@ const reducer = (state = initialState, action) => {
           [...state.deleteRoutine, action.payload.id] :
           [...state.deleteRoutine],
       }
+    case CLEAR_ROUTINE:
+      return{
+        scheduleId: null,
+        loaded: [],
+        routines: [],
+        deleteRoutine: [],
+      }
+
     default:
       return state;
   }

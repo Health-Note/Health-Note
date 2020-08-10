@@ -6,6 +6,7 @@ import setAuthToken from '../../../utils/setAuthToken';
 import Routine from './routine2/Routine';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMemberRequestAction } from '../../../reducers/members.reducer';
+import { CLEAR_ROUTINE } from '../../../reducers/types';
 
 const Schedule = () => {
   const { id } = useSelector(state => state.schedule.selectedSchedule);
@@ -13,6 +14,7 @@ const Schedule = () => {
 
   useEffect(() => {
     dispatch(getMemberRequestAction());
+    dispatch({ type: CLEAR_ROUTINE });
   }, [])
 
   // 루틴 저장

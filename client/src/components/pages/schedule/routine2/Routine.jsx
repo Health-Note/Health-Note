@@ -10,13 +10,18 @@ import {
   insertCountAction,
   deleteRoutineAction,
 } from '../../../../reducers/routine.reducer';
-import { SAVE_ROUTINES_REQUEST } from '../../../../reducers/types';
+import { CLEAR_SELECTED_SCHEDULE, SAVE_ROUTINES_REQUEST } from '../../../../reducers/types';
 import { v4 as uuidv4 } from 'uuid';
 
 const Routine = () => {
   const dispatch = useDispatch();
   const { selectedSchedule } = useSelector(state => state.schedule)
   const { routines, deleteRoutine, scheduleId } = useSelector(state => state.routine)
+
+
+  useEffect(() => {
+    dispatch({ type: CLEAR_SELECTED_SCHEDULE })
+  }, [])
 
   // update routines 설정
   const getExerIdAndName = useCallback((exerciseCode, exerciseName, targetCode, targetName) => {
@@ -65,7 +70,8 @@ const Routine = () => {
 
   return (
     <>
-      <h2>{selectedSchedule.memberName ? selectedSchedule.memberName + "님의 운동루틴" : "루틴을 추가하려면 달력안의 멤버을 클릭하세요" }</h2>
+      <h3>{selectedSchedule.memberName ? selectedSchedule.memberName + "님의 운동루틴" : "루틴을 추가하려면 달력안의 멤버을 클릭하세요" }</h3>
+      <Button>삭제</Button>
       <ExerciseSelect getExerIdAndName={getExerIdAndName}/>
       <RowHeader/>
       {routines.length > 0 && routines.map(routine => {
