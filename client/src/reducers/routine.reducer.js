@@ -144,7 +144,6 @@ const reducer = (state = initialState, action) => {
         routines: [],
         deleteRoutine: [],
       }
-
     default:
       return state;
   }

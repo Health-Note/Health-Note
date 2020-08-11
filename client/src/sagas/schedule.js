@@ -136,13 +136,17 @@ function* watchChangeSchedule() {
 }
 
 // 달력서 직접 스케줄 생성
-const createOneScheduleApi = ({ date, selectedMember }) => {
+const createOneScheduleApi = (data) => {
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
   return axios.post('/api/schedules', {
-    date,
-    memberId: selectedMember.id,
+    memberId: data.memberId,
+    startTime: data.startTime,
+    endTime: data.endTime,
+    day: data.day,
+    isFinish: data.isFinish,
+    tooltipText: "string"
   });
 };
 
@@ -150,14 +154,14 @@ function* createOneSchedule(action) {
   try {
     const res = yield call(createOneScheduleApi, action.payload);
     let createdSchedule = {
-      title: action.payload.name,
-      start: res.data.startTime,
+      title: action.payload.memberName,
+      start: action.payload.startTime,
       id: res.data.id,
-      memberId: res.data.memberId,
-      color: 'red',
+      day: action.payload.day,
+      memberId: action.payload.memberId,
     };
     console.log('createdSchedule', createdSchedule);
-    yield put({ type: CREATE_ONE_SCHEDULE_SUCCESS, payload: createdSchedule });
+    yield put({ type: GET_SCHEDULES_REQUEST });
   } catch (e) {
     yield put({ type: CREATE_ONE_SCHEDULE_ERROR, payload: e });
   }

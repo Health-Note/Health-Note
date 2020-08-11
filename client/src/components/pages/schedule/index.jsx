@@ -39,7 +39,7 @@ const Schedule = () => {
   return (
     <>
       <Row gutter={50}>
-        <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+        <Col xs={24} sm={24} md={24} lg={13} xl={13}>
           <Calendar/>
         </Col>
         <Col xs={24} sm={24} md={24} lg={8} xl={8}>

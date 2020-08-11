@@ -11,8 +11,9 @@ import {
   SET_SCHEDULE_REQUEST,
   SET_SCHEDULE_SUCCESS,
   CREATE_ONE_SCHEDULE_SUCCESS,
-  CLEAR_SELECTED_SCHEDULE,
+  CLEAR_SELECTED_SCHEDULE, CREATE_ONE_SCHEDULE_REQUEST,
 } from './types';
+import seedColors from '../utils/seedColors';
 
 const initialState = {
   selectedSchedule: {
@@ -45,6 +46,13 @@ export const setScheduleTargetAction = (id, memberId, memberName) => {
   return {
     type: SET_SCHEDULE_TARGET,
     payload: {id, memberId, memberName}
+  }
+}
+
+export const createScheduleAction = (memberId, memberName, startTime, endTime, isFinish, day) => {
+  return {
+    type: CREATE_ONE_SCHEDULE_REQUEST,
+    payload: {memberId, memberName, startTime, endTime, isFinish, day}
   }
 }
 
@@ -88,7 +96,14 @@ const reducer = (state = initialState, action) =>  {
         case SET_SCHEDULE_SUCCESS:
         case CREATE_ONE_SCHEDULE_SUCCESS:
           return produce(state, draft => {
-            draft.schedules.push(action.payload);
+            draft.schedules.push({
+              title : action.payload.title,
+              id: action.payload.id,
+              start: action.payload.day + ' ' + action.payload.start,
+              end: action.payload.end,
+              memberId: action.payload.memberId,
+              color: state.schedules.find(cv => cv.memberId == action.payload.memberId).color
+            });
           });
         case UPDATE_SCHEDULE_SUCCESS:
           return produce(state, draft => {
