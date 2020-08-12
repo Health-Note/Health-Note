@@ -11,7 +11,7 @@ import {
   SET_SCHEDULE_REQUEST,
   SET_SCHEDULE_SUCCESS,
   CREATE_ONE_SCHEDULE_SUCCESS,
-  CLEAR_SELECTED_SCHEDULE, CREATE_ONE_SCHEDULE_REQUEST,
+  CLEAR_SELECTED_SCHEDULE, CREATE_ONE_SCHEDULE_REQUEST, REMOVE_SCHEDULE_REQUEST,
 } from './types';
 import seedColors from '../utils/seedColors';
 
@@ -53,6 +53,13 @@ export const createScheduleAction = (memberId, memberName, startTime, endTime, i
   return {
     type: CREATE_ONE_SCHEDULE_REQUEST,
     payload: {memberId, memberName, startTime, endTime, isFinish, day}
+  }
+}
+
+export const removeScheduleAction = (id, memberId) => {
+  return {
+    type: REMOVE_SCHEDULE_REQUEST,
+    payload: {id, memberId}
   }
 }
 
@@ -123,7 +130,7 @@ const reducer = (state = initialState, action) =>  {
         case REMOVE_SCHEDULE_SUCCESS:
           return produce(state, draft => {
             draft.schedules = state.schedules.filter(
-                schedule => parseInt(action.payload) !== schedule.id
+                schedule => parseInt(action.payload.id) !== schedule.id
             )
           });
         case CLEAR_SELECTED_SCHEDULE:

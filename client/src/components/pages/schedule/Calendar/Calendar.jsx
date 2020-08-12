@@ -12,6 +12,7 @@ import koLocale from '@fullcalendar/core/locales/ko';
 import useToggle from '../../../../hooks/useToggle';
 import { message } from 'antd';
 import './Calendar.css';
+import seedColors from '../../../../utils/seedColors';
 import { GET_SCHEDULES_REQUEST } from '../../../../reducers/types';
 import {
   changeScheduleAction,
@@ -36,10 +37,10 @@ function Calendar() {
   const [start, setStart] = useState([]);
   const [modalState, toggleModal] = useToggle(false);
 
-  // 내부 이벤트 초기화
-  useEffect(() => {
-    setScheduleList(schedules);
-  }, [members, schedules]);
+  // // 내부 이벤트 초기화
+  // useEffect(() => {
+  //   setScheduleList(schedules);
+  // }, [members, schedules]);
 
   // 외부 이벤트 초기화
   useEffect(() => {
@@ -50,12 +51,13 @@ function Calendar() {
       itemSelector: ".fc-event",
       eventData: function(eventEl) {
         let title = eventEl.getAttribute("title");
-        let id = eventEl.getAttribute("data");
+        let id = eventEl.getAttribute("id");
         let memberId = eventEl.getAttribute("memberId");
         return {
           title: title,
           id: id,
           memberId: memberId,
+          color: eventEl.style.background,
         };
       }
     });
@@ -141,6 +143,7 @@ function Calendar() {
     const startTime = moment(info.event.start).format('HH:mm'); // 시작 시간
     const endTime = moment(info.event.end).format('HH:mm'); // 끝 시간
     dispatch(createScheduleAction(memberId, memberName, startTime, '00:00:00',0,  day));
+    info.event.remove()
   }
 
   // const eventRender = ({event, el}) => {
@@ -183,8 +186,8 @@ function Calendar() {
           }}
         >
           <p align="center"><strong> 전체회원</strong></p>
-          {members.map(member => (
-            <div className="fc-event" title={member.memberName} memberId={member.id} key={member.id}>
+          {members.map((member, idx) => (
+            <div className="fc-event" title={member.memberName} memberId={member.id} key={member.id} style={{background: seedColors[1].colors[idx].color}}>
               {member.memberName}
             </div>
           ))}
@@ -208,7 +211,7 @@ function Calendar() {
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             droppable
             eventReceive={handleEventReceive}
-            events={scheduleList} // 달력안에 스케줄(events)이 표시된다.
+            events={schedules} // 달력안에 스케줄(events)이 표시된다.
             eventDrop={drop}
             eventClick={handleEventClick}
             dateClick={dateClick}
@@ -222,7 +225,6 @@ function Calendar() {
         </div>
       </Col>
     </Row>
-
   );
 }
 

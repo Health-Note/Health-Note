@@ -44,23 +44,21 @@ function* watchGetSchedule() {
   yield takeEvery(GET_SCHEDULES_REQUEST, getSchedule);
 }
 
-const removeScheduleApi = (id) => {
+const removeScheduleApi = (data) => {
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
-  return axios.post('/api/schedules/removeSchedule', {
-    id,
-  });
-}
+  return axios.delete(`/api/schedules?id=${data.id}&memberId=${data.memberId}`);
+};
 
 function* removeSchedule(action) {
   try {
-    const res = yield call(removeScheduleApi, action.payload.id);
-    if (res.data === 1) {
-      yield put({ type: REMOVE_SCHEDULE_SUCCESS, payload: action.payload.id })
+    const res = yield call(removeScheduleApi, action.payload);
+    if (res.status === 204) {
+      yield put({ type: REMOVE_SCHEDULE_SUCCESS, payload: {id: res.data.id }})
     }
   } catch (error) {
-      yield put({ type: REMOVE_SCHEDULE_ERROR })
+      yield put({ type: REMOVE_SCHEDULE_ERROR, payload: error })
   }
 }
 
@@ -161,7 +159,7 @@ function* createOneSchedule(action) {
       memberId: action.payload.memberId,
     };
     console.log('createdSchedule', createdSchedule);
-    yield put({ type: GET_SCHEDULES_REQUEST });
+    yield put({ type: CREATE_ONE_SCHEDULE_SUCCESS, payload: createdSchedule });
   } catch (e) {
     yield put({ type: CREATE_ONE_SCHEDULE_ERROR, payload: e });
   }
