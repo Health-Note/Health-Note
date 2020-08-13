@@ -1,15 +1,37 @@
 import {
   REGISTER_SUCCESS,
-  REGISTER_FAIL,
+  REGISTER_ERROR,
   CLEAR_ERRORS,
   USER_LOADED,
   AUTH_ERROR,
   LOGIN_SUCCESS,
-  LOGIN_FAIL,
+  LOGIN_ERROR,
   LOGOUT,
+  LOGIN_REQUEST,
 } from './types';
 
-export default (state, action) => {
+export const initialState = {
+  token: localStorage.getItem('token'),
+  isAuthenticated: null,
+  loading: true,
+  trainer: null,
+  error: null,
+};
+
+export const loginRequestAction = (user) => {
+  return {
+    type: LOGIN_REQUEST,
+    payload: user,
+  }
+}
+
+export const logoutRequestAction = () => {
+  return {
+    type: LOGOUT,
+  }
+}
+
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case USER_LOADED:
       return {
@@ -20,16 +42,16 @@ export default (state, action) => {
       };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
-      localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('token', action.payload);
       return {
         ...state,
-        ...action.payload, // token
-        isAuthenticated: true,
+        token: action.payload, // token
+        isAuthenticated: false,
         loading: false,
       };
-    case REGISTER_FAIL:
+    case REGISTER_ERROR:
     case AUTH_ERROR:
-    case LOGIN_FAIL:
+    case LOGIN_ERROR:
     case LOGOUT:
       localStorage.removeItem('token');
       return {
@@ -46,6 +68,8 @@ export default (state, action) => {
         error: null,
       };
     default:
-      return;
+      return state;
   }
 };
+
+export default reducer;

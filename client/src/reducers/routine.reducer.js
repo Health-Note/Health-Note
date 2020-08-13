@@ -1,56 +1,120 @@
-import { SET_DATE, GET_ROUTINES, SET_ROUTINES, INSERT_COUNT, DELETE_ROUTINE } from './types';
+import {
+  SET_DATE,
+  GET_ROUTINES_SUCCESS,
+  INSERT_COUNT,
+  DELETE_ROUTINE,
+  SET_UPDATE_ROUTINES,
+  GET_ROUTINES_REQUEST,
+  SAVE_ROUTINES_SUCCESS, CLEAR_ROUTINE,
+} from './types';
 
-const reducer = (state, action) => {
+const initialState = {
+  scheduleId: null,
+  loaded:[],
+  routines: [],
+  deleteRoutine: []
+}
+
+export const getRoutinesAction = (scheduleId) => {
+  return {
+    type: GET_ROUTINES_REQUEST,
+    payload: {scheduleId},
+  }
+}
+
+// id = uuid/v4
+export const setUpdateRoutinesAction = (id, exerciseCode, exerciseName, targetCode, targetName, selectedSchedule) => {
+  console.log("selectedSchedule", selectedSchedule)
+  return {
+    type: SET_UPDATE_ROUTINES,
+    payload: {
+      id: id,
+      exerciseCode: parseInt(exerciseCode),
+      exerciseName: exerciseName,
+      targetCode: parseInt(targetCode),
+      targetName: targetName,
+      scheduleId: parseInt(selectedSchedule.id),
+      memberId: parseInt(selectedSchedule.memberId),
+      cardioTime: '00:00:00',
+      maxWeight: 0,
+    },
+  };
+};
+
+export const insertCountAction = (id, setCount, repetitions) => {
+  return {
+    type: INSERT_COUNT,
+    payload: {id, setCount, repetitions}
+  }
+}
+
+export const deleteRoutineAction = (id) => {
+  return {
+    type: DELETE_ROUTINE,
+    payload: { id }
+  }
+}
+
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_DATE:
       return { ...state, date: action.payload };
-    case GET_ROUTINES: // [{},{},{}]
+    case SAVE_ROUTINES_SUCCESS:
       return {
-        scheduleId: action.scheduleId,
-        loaded: action.payload.map(routine => routine.exerciseCode),
-        routines: action.payload.map(routine => ({
+        ...state,
+        loaded: action.payload.updateRoutine.map(cv => cv.id),
+        routines: [...action.payload.updateRoutine],
+        deleteRoutine: []
+      }
+    case GET_ROUTINES_SUCCESS: // [{},{},{}]
+      return {
+        scheduleId: parseInt(action.payload.scheduleId),
+        loaded: action.payload.routines.map(routine => routine.id),
+        routines: action.payload.routines.map(routine => ({
+            id: routine.id,
             cardioTime: routine.cardioTime,
             isCardio: routine.isCardio,
             routineOrder: routine.routineOrder,
-            exerciseName: routine.exerciseName,
-            targetName: routine.targetName,
-            exerciseCode: routine.exerciseCode,
-            memberId: routine.memberId,
-            repetitions: routine.weightTraining.repetitions,
-            setCount: routine.weightTraining.setCount,
-            maxWeight: routine.weightTraining.maxWeight,
-            targetCode: routine.weightTraining.targetCode,
+            exerciseName: routine.exercise.exerciseName,
+            targetName: routine.exercise.targetName,
+            exerciseCode: parseInt(routine.exerciseCode),
+            memberId: parseInt(routine.memberId),
+            repetitions: parseInt(routine.weightTraining.repetitions),
+            setCount: parseInt(routine.weightTraining.setCount),
+            maxWeight: parseInt(routine.weightTraining.maxWeight),
+            targetCode: parseInt(routine.weightTraining.targetCode),
         })),
-        deletedCode: []
+        deleteRoutine: []
       };
-    case SET_ROUTINES:
+    case SET_UPDATE_ROUTINES:
       return {
-        ...state,
+        scheduleId: action.payload.scheduleId,
         loaded: [...state.loaded],
         routines: [
           ...state.routines,
           {
+            id: action.payload.id,
             cardioTime: action.payload.cardioTime,
             isCardio: 0,
             routineOrder: 0,
             exerciseName: action.payload.exerciseName,
             targetName: action.payload.targetName,
-            exerciseCode: action.payload.exerciseCode,
-            scheduleId: action.payload.scheduleId,
-            memberId: action.payload.memberId,
-            repetitions: action.payload.repetitions,
-            setCount: action.payload.setCount,
-            maxWeight: action.payload.maxWeight,
-            targetCode: action.payload.targetCode,
+            exerciseCode: parseInt(action.payload.exerciseCode),
+            scheduleId: parseInt(action.payload.scheduleId),
+            memberId: parseInt(action.payload.memberId),
+            repetitions: parseInt(action.payload.repetitions),
+            setCount: parseInt(action.payload.setCount),
+            maxWeight: parseInt(action.payload.maxWeight),
+            targetCode: parseInt(action.payload.targetCode),
           }],
-        deletedCode: state.deletedCode.filter(cv => cv !== action.payload.exerciseCode),
+        deleteRoutine: state.deleteRoutine.filter(cv => cv !== action.payload.id),
       };
     case INSERT_COUNT:
       return {
         ...state,
         loaded: [...state.loaded],
         routines: state.routines.map(routine => {
-          if (routine.exerciseCode === action.payload.exerciseCode) {
+          if (routine.id === action.payload.id) {
             return {
               ...routine,
               setCount: action.payload.setCount,
@@ -62,14 +126,23 @@ const reducer = (state, action) => {
             };
           }
         }),
-        deletedCode: [...state.deletedCode]
+        deleteRoutine: [...state.deleteRoutine]
       };
     case DELETE_ROUTINE:
       return {
         ...state,
         loaded: [...state.loaded],
-        routines: state.routines.filter(routine => action.payload.exerciseCode !== routine.exerciseCode),
-        deletedCode: state.loaded.includes(action.payload.exerciseCode) ? [...state.deletedCode, action.payload.exerciseCode]: [...state.deletedCode],
+        routines: state.routines.filter(routine => action.payload.id !== routine.id),
+        deleteRoutine: state.loaded.includes(action.payload.id) ?
+          [...state.deleteRoutine, action.payload.id] :
+          [...state.deleteRoutine],
+      }
+    case CLEAR_ROUTINE:
+      return{
+        scheduleId: null,
+        loaded: [],
+        routines: [],
+        deleteRoutine: [],
       }
     default:
       return state;
