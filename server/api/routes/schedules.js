@@ -182,8 +182,8 @@ module.exports = app => {
    */
   route.delete('/', middlewares.isAuth, async (req, res, next) => {
     try {
-      await scheduleService.remove(req.query);
-      res.status(204).end();
+      const deletedId = await scheduleService.remove(req.query);
+      res.status(200).json({ deletedId: deletedId });
     } catch(err) {
       return next(err);
     }

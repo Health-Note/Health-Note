@@ -54,8 +54,8 @@ const removeScheduleApi = (data) => {
 function* removeSchedule(action) {
   try {
     const res = yield call(removeScheduleApi, action.payload);
-    if (res.status === 204) {
-      yield put({ type: REMOVE_SCHEDULE_SUCCESS, payload: {id: res.data.id }})
+    if (res.status === 200) {
+      yield put({ type: REMOVE_SCHEDULE_SUCCESS, payload: {id: res.data.deletedId }})
     }
   } catch (error) {
       yield put({ type: REMOVE_SCHEDULE_ERROR, payload: error })
