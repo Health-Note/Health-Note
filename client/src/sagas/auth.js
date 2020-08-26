@@ -1,5 +1,5 @@
 import {
-  all, fork, put, takeEvery, take, call, delay,
+  all, fork, put, takeEvery, take, call, takeLatest,
 } from 'redux-saga/effects';
 import axios from 'axios';
 import {
@@ -50,7 +50,7 @@ function* login(action) {
 
 // takeLatest가 LOGIN 액션이 dispatch 되길 기다려서 dispatch될 때 login 제너레이터를 호출
 function* watchLogin() {
-  yield takeEvery(LOGIN_REQUEST, login);
+  yield takeLatest(LOGIN_REQUEST, login);
   // while(true){
   //     yield take(LOGIN); // take: 해당 액션이 dispatch되면 제너레이터를 next하는 이펙트 (take함수 안에 next가 들어있다)
   //     yield delay(2000);

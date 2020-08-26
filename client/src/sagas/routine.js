@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { fork, call, all, put, takeEvery } from 'redux-saga/effects';
+import { fork, call, all, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import setAuthToken from '../utils/setAuthToken';
 import {
   GET_ROUTINES_REQUEST,

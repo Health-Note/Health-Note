@@ -7,6 +7,7 @@ import {
   GET_ROUTINES_REQUEST,
   SAVE_ROUTINES_SUCCESS, CLEAR_ROUTINE,
 } from './types';
+import produce from 'immer';
 
 const initialState = {
   scheduleId: null,
@@ -56,43 +57,38 @@ export const deleteRoutineAction = (id) => {
 }
 
 const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case SET_DATE:
-      return { ...state, date: action.payload };
-    case SAVE_ROUTINES_SUCCESS:
-      return {
-        ...state,
-        loaded: action.payload.updateRoutine.map(cv => cv.id),
-        routines: [...action.payload.updateRoutine],
-        deleteRoutine: []
-      }
-    case GET_ROUTINES_SUCCESS: // [{},{},{}]
-      return {
-        scheduleId: parseInt(action.payload.scheduleId),
-        loaded: action.payload.routines.map(routine => routine.id),
-        routines: action.payload.routines.map(routine => ({
-            id: routine.id,
-            cardioTime: routine.cardioTime,
-            isCardio: routine.isCardio,
-            routineOrder: routine.routineOrder,
-            exerciseName: routine.exercise.exerciseName,
-            targetName: routine.exercise.targetName,
-            exerciseCode: parseInt(routine.exerciseCode),
-            memberId: parseInt(routine.memberId),
-            repetitions: parseInt(routine.weightTraining.repetitions),
-            setCount: parseInt(routine.weightTraining.setCount),
-            maxWeight: parseInt(routine.weightTraining.maxWeight),
-            targetCode: parseInt(routine.weightTraining.targetCode),
-        })),
-        deleteRoutine: []
-      };
-    case SET_UPDATE_ROUTINES:
-      return {
-        scheduleId: action.payload.scheduleId,
-        loaded: [...state.loaded],
-        routines: [
-          ...state.routines,
-          {
+  return produce(state, (draft) => {
+    switch (action.type) {
+      case SET_DATE:
+        draft.date = action.payload;
+        break;
+      case SAVE_ROUTINES_SUCCESS:
+        draft.loaded = action.payload.updateRoutine.map(cv => cv.id);
+        draft.routines = action.payload.updateRoutine;
+        draft.deleteRoutine = [];
+        break;
+      case GET_ROUTINES_SUCCESS: // [{},{},{}]
+        draft.scheduleId = parseInt(action.payload.scheduleId);
+        draft.loaded = action.payload.routines.map(routine => routine.id);
+        draft.routines = action.payload.routines.map(routine => ({
+          id: routine.id,
+          cardioTime: routine.cardioTime,
+          isCardio: routine.isCardio,
+          routineOrder: routine.routineOrder,
+          exerciseName: routine.exercise.exerciseName,
+          targetName: routine.exercise.targetName,
+          exerciseCode: parseInt(routine.exerciseCode),
+          memberId: parseInt(routine.memberId),
+          repetitions: parseInt(routine.weightTraining.repetitions),
+          setCount: parseInt(routine.weightTraining.setCount),
+          maxWeight: parseInt(routine.weightTraining.maxWeight),
+          targetCode: parseInt(routine.weightTraining.targetCode),
+        }));
+        draft.deleteRoutine = [];
+        break;
+      case SET_UPDATE_ROUTINES:
+        draft.scheduleId = action.payload.scheduleId;
+        draft.routines.push({
             id: action.payload.id,
             cardioTime: action.payload.cardioTime,
             isCardio: 0,
@@ -106,14 +102,11 @@ const reducer = (state = initialState, action) => {
             setCount: parseInt(action.payload.setCount),
             maxWeight: parseInt(action.payload.maxWeight),
             targetCode: parseInt(action.payload.targetCode),
-          }],
-        deleteRoutine: state.deleteRoutine.filter(cv => cv !== action.payload.id),
-      };
-    case INSERT_COUNT:
-      return {
-        ...state,
-        loaded: [...state.loaded],
-        routines: state.routines.map(routine => {
+          });
+        draft.deleteRoutine = state.deleteRoutine.filter(cv => cv !== action.payload.id);
+        break;
+      case INSERT_COUNT:
+        draft.routines = state.routines.map(routine => {
           if (routine.id === action.payload.id) {
             return {
               ...routine,
@@ -125,28 +118,24 @@ const reducer = (state = initialState, action) => {
               ...routine,
             };
           }
-        }),
-        deleteRoutine: [...state.deleteRoutine]
-      };
-    case DELETE_ROUTINE:
-      return {
-        ...state,
-        loaded: [...state.loaded],
-        routines: state.routines.filter(routine => action.payload.id !== routine.id),
-        deleteRoutine: state.loaded.includes(action.payload.id) ?
+        })
+        break;
+      case DELETE_ROUTINE:
+        draft.routines = state.routines.filter(routine => action.payload.id !== routine.id);
+        draft.deleteRoutine = state.loaded.includes(action.payload.id) ?
           [...state.deleteRoutine, action.payload.id] :
-          [...state.deleteRoutine],
-      }
-    case CLEAR_ROUTINE:
-      return{
-        scheduleId: null,
-        loaded: [],
-        routines: [],
-        deleteRoutine: [],
-      }
-    default:
-      return state;
-  }
+          [...state.deleteRoutine];
+        break;
+      case CLEAR_ROUTINE:
+        draft.scheduleId = null;
+        draft.loaded = [];
+        draft.routines = [];
+        draft.deleteRoutine = [];
+        break;
+      default:
+        return state;
+    }
+  });
 };
 
 export default reducer;
