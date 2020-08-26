@@ -1,14 +1,71 @@
 import produce from 'immer';
 import {
   SET_SCHEDULE,
-  GET_SCHEDULES,
+  GET_SCHEDULES_SUCCESS,
   SET_SCHEDULE_TARGET,
-  UPDATE_SCHEDULE,
-  REMOVE_SHCEDULE,
-  CREATE_ONE_SCHEDULE,
+  UPDATE_SCHEDULE_SUCCESS,
+  UPDATE_SCHEDULE_REQUEST,
+  UPDATE_SCHEDULE_ERROR,
+  REMOVE_SCHEDULE_SUCCESS,
+  REMOVE_SCHEDULE_ERROR,
+  SET_SCHEDULE_REQUEST,
+  SET_SCHEDULE_SUCCESS,
+  CREATE_ONE_SCHEDULE_SUCCESS,
+  CLEAR_SELECTED_SCHEDULE,
+  CREATE_ONE_SCHEDULE_REQUEST,
+  REMOVE_SCHEDULE_REQUEST,
 } from './types';
+import seedColors from '../utils/seedColors';
 
-const reducer = (state, action) =>  {
+const initialState = {
+  selectedSchedule: {
+    id: null,
+    memberId: null,
+  },
+  schedules: [
+    {
+      title: null, // memberName
+      id: null,
+      start: null,
+      end: null,
+      color: null,
+      finish_dncd: false,
+      target: null,
+      borderColor: null,
+      memberId: null,
+    },
+  ],
+  isChanging: false
+};
+
+export const changeScheduleAction = (id, afterDate, startTime, endTime, memberId ) => {
+  return {
+    type: UPDATE_SCHEDULE_REQUEST, payload: { id, afterDate, startTime, endTime, memberId }
+  }
+}
+
+export const setScheduleTargetAction = (id, memberId, memberName) => {
+  return {
+    type: SET_SCHEDULE_TARGET,
+    payload: {id, memberId, memberName}
+  }
+}
+
+export const createScheduleAction = (memberId, memberName, startTime, endTime, isFinish, day) => {
+  return {
+    type: CREATE_ONE_SCHEDULE_REQUEST,
+    payload: {memberId, memberName, startTime, endTime, isFinish, day}
+  }
+}
+
+export const removeScheduleAction = (id, memberId) => {
+  return {
+    type: REMOVE_SCHEDULE_REQUEST,
+    payload: {id, memberId}
+  }
+}
+
+const reducer = (state = initialState, action) =>  {
       switch (action.type) {
         case SET_SCHEDULE_TARGET:
           return produce(state, draft => {
@@ -25,7 +82,7 @@ const reducer = (state, action) =>  {
               }
             })
           });
-        case GET_SCHEDULES:
+        case GET_SCHEDULES_SUCCESS:
           return produce(state, draft => {
             const allSchedules = action.payload.data;
             const seedColors = action.payload.seedColors;
@@ -45,12 +102,19 @@ const reducer = (state, action) =>  {
             });
             // reduce((acc, cv) => acc.concat(cv), []); // 이중배열 => 일차원배열
           });
-        case SET_SCHEDULE:
-        case CREATE_ONE_SCHEDULE:
+        case SET_SCHEDULE_SUCCESS:
+        case CREATE_ONE_SCHEDULE_SUCCESS:
           return produce(state, draft => {
-            draft.schedules.push(action.payload);
+            draft.schedules.push({
+              title : action.payload.title,
+              id: action.payload.id,
+              start: action.payload.day + ' ' + action.payload.start,
+              end: action.payload.end,
+              memberId: action.payload.memberId,
+              color: state.schedules.find(cv => cv.memberId == action.payload.memberId).color
+            });
           });
-        case UPDATE_SCHEDULE:
+        case UPDATE_SCHEDULE_SUCCESS:
           return produce(state, draft => {
             draft.schedules.forEach(schedule => {
               if (schedule.id === action.payload.id) {
@@ -65,12 +129,16 @@ const reducer = (state, action) =>  {
                   ? {...schedule, finish_dncd: !schedule.finish_dncd}
                   : schedule
           );
-        case REMOVE_SHCEDULE:
+        case REMOVE_SCHEDULE_SUCCESS:
           return produce(state, draft => {
             draft.schedules = state.schedules.filter(
-                schedule => parseInt(action.payload) !== schedule.id
+                schedule => parseInt(action.payload.id) !== schedule.id
             )
           });
+        case CLEAR_SELECTED_SCHEDULE:
+          return produce(state, draft => {
+            draft.selectedSchedule = {};
+          })
         default:
           return state;
       }

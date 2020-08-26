@@ -29,12 +29,13 @@ db.memo.belongsTo(db.member, { foreignKey: 'id' });
 db.schedule.hasMany(db.routine, { foreignKey: 'scheduleId' })
 
 db.routine.belongsTo(db.exercise, { foreignKey: 'exerciseCode' });
-db.routine.hasOne(db.weightTraining, { foreignKey: 'scheduleId' });
-db.routine.hasOne(db.weightTraining, { foreignKey: 'exerciseCode' });
+db.routine.hasOne(db.weightTraining, { foreignKey: 'routineId' });
+// db.routine.hasOne(db.weightTraining, { foreignKey: 'scheduleId' });
+// db.routine.hasOne(db.weightTraining, { foreignKey: 'exerciseCode' });
 
 //db.exercise.hasMany(db.weightTraining, { foreignKey: 'targetCode' })
-db.weightTraining.belongsTo(db.routine, { foreignKey: 'memberId' })
-db.weightTraining.belongsTo(db.routine, { foreignKey: 'scheduleId' });
-db.weightTraining.belongsTo(db.routine, { foreignKey: 'exerciseCode' });
+db.weightTraining.belongsTo(db.routine, { foreignKey: 'routineId' })
+// db.weightTraining.belongsTo(db.routine, { foreignKey: 'scheduleId' });
+// db.weightTraining.belongsTo(db.routine, { foreignKey: 'exerciseCode' });
 
 module.exports = { sequelize, db };

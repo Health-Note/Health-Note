@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import locale from 'antd/es/date-picker/locale/ko_KR';
 import {
   Form,
@@ -14,7 +14,8 @@ import {
   TimePicker
 } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { MembersContext } from '../../../contexts/members.context';
+import { useDispatch, useSelector } from 'react-redux';
+import { addMemberRequestAction } from '../../../reducers/members.reducer';
 
 const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
@@ -61,28 +62,7 @@ const tailFormItemLayout = {
 
 const RegistrationForm = () => {
   const [form] = Form.useForm();
-  const { addMember, editing, targetMember } = useContext(MembersContext);
-
-  React.useEffect(() => {
-    if(editing === true && targetMember)
-    form.setFieldsValue({
-      name: targetMember.memberName,
-      phoneNum: targetMember.phoneNum.slice(3),
-      age: parseInt(targetMember.age),
-      gender: "남" ? 1 : 0,
-      totalPT: targetMember.totalPT,
-    });
-  }, [editing, targetMember]);
-
-  const reset = () => {
-    form.setFieldsValue({
-      name: null,
-      phoneNum: null,
-      age: null,
-      gender: null,
-      totalPT: null,
-    });
-  }
+  const dispatch = useDispatch();
 
   const onFinish = values => {
     const days = [];
@@ -104,7 +84,7 @@ const RegistrationForm = () => {
     member.startTime = values.startTime.format('YYYY-MM-DD').toString();
     member.endTime = values.startTime.add(1, 'hours').format('YYYY-MM-DD').toString();
     member.days = days;
-    addMember(member);
+    dispatch(addMemberRequestAction(member));
   };
 
   const prefixSelector = (
@@ -139,7 +119,6 @@ const RegistrationForm = () => {
   }
 
   return (
-   <>
     <Form
       {...formItemLayout}
       form={form}
@@ -192,8 +171,8 @@ const RegistrationForm = () => {
         rules={[{ required: true, message: '성별을 선택하세요' },]}
       >
         <Radio.Group>
-          <Radio name={"woman"} value={0}>여</Radio>
-          <Radio name={"man"} value={1}>남</Radio>
+          <Radio value={0}>여</Radio>
+          <Radio value={1}>남</Radio>
         </Radio.Group>
       </Form.Item>
       <Form.Item
@@ -231,14 +210,10 @@ const RegistrationForm = () => {
       ))}
       <Form.Item {...tailFormItemLayout}>
         <Button type="primary" htmlType="submit">
-          {editing ? "수정하기" : "등록하기"}
-        </Button>
-        <Button onClick={reset} type="primary" htmlType="submit" style={{marginLeft: 5}}>
-          {"되돌리기"}
+          Register
         </Button>
       </Form.Item>
     </Form>
-     </>
   );
 };
 

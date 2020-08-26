@@ -2,10 +2,14 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('routine', {
+    id: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      primaryKey: true,
+    },
     exerciseCode: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'Exercise',
         key: 'exerciseCode'

@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { AuthContext } from '../../../contexts/auth.context';
-import { MembersContext } from '../../../contexts/members.context';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Home = () => {
  

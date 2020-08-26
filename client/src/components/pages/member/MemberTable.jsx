@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Table, Button } from 'antd';
-import { UserAddOutlined, UserDeleteOutlined, UserSwitchOutlined } from '@ant-design/icons';
-import { v4 as uuid } from 'uuid';
-import { MembersContext } from '../../../contexts/members.context';
-import { AlertContext } from '../../../contexts/alert.context';
+import { UserAddOutlined, UserDeleteOutlined } from '@ant-design/icons';
 import { useIsMount } from '../../../hooks/useIsMount';
+import {
+  getMemberRequestAction, removeMemberRequestAction, clearTargetAction
+} from '../../../reducers/members.reducer'
 
 const onChange = (pagination, filters, sorter) => {
   console.log('params', pagination, filters, sorter);
@@ -27,11 +28,6 @@ const columns = [
     key: 'gender',
   },
   {
-    title: '나이',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
     title: '결제한PT수',
     dataIndex: 'totalPT',
     key: 'totalPT',
@@ -47,23 +43,26 @@ const columns = [
 
 const MemberTable = ({ toggle }) => {
   const isMount = useIsMount();
-  const { members, error, getMember, removeMember, editMember, clearErrors, clearTarget } = useContext(
-    MembersContext
-  );
-  const { setAlert } = useContext(AlertContext);
+  const { target, error, members } = useSelector(state => state.member);
+  const dispatch = useDispatch();
   const [memberData, setMemberData] = useState([]);
   const [checkedRows, setChedckedRows] = useState([]);
 
   useEffect(() => {
-    getMember();
+    dispatch(getMemberRequestAction());
   }, []);
 
-    useEffect(() => {
-    if (error) {
-      setAlert(error, 'error', uuid());
-      clearErrors();
+  useEffect(() => {
+    if (target && target !== "deleted") {
+      dispatch(clearTargetAction());
+    } 
+  }, [target]);
+
+  useEffect(() => {
+    if(target === "deleted"){
     }
-  }, [error]);
+  }, [target]);
+
 
   useEffect(() => {
     const memberRow = members.map(member => {
@@ -75,27 +74,21 @@ const MemberTable = ({ toggle }) => {
         phoneNum: member.phoneNum,
         usedPT: member.usedPT,
         totalPT: member.totalPT,
-        age: member.age,
       };
     });
     setMemberData(memberRow);
-  }, [MembersContext, members]);
+  }, [members]);
 
   const handleRemove = () => {
-    removeMember(checkedRows);
+    dispatch(removeMemberRequestAction(checkedRows));
   };
 
-  const handleEditing = () => {
-    editMember(checkedRows[0]);
-  }
-
   const rowSelection = {
-    type: 'radio',
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        'selectedRows: ',
-        selectedRows
-      );
+      // console.log(
+      //   'selectedRows: ',
+      //   selectedRows
+      // );
       setChedckedRows(selectedRows);
     },
     getCheckboxProps: record => ({
@@ -114,12 +107,8 @@ const MemberTable = ({ toggle }) => {
         <UserDeleteOutlined style={{ fontSize: '20px' }} />
         회원 삭제
       </Button>
-      <Button onClick={handleEditing}>
-        <UserSwitchOutlined style={{ fontSize: '20px' }} />
-        회원 수정
-      </Button>
       <Table
-        rowSelection={{ ...rowSelection}}
+        rowSelection={rowSelection}
         columns={columns}
         dataSource={memberData}
         onChange={onChange}

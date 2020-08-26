@@ -1,32 +1,24 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Layout, Menu, Breadcrumb, Button } from 'antd';
 import { UserAddOutlined, UserOutlined, LogoutOutlined, TeamOutlined, CalendarOutlined, PieChartOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import Routes from '../routing/Routes';
 import Alerts from '../context/atoms/Alerts';
-import { AuthContext } from '../../contexts/auth.context';
-import { AlertContext } from '../../contexts/alert.context';
-import { MembersContext } from '../../contexts/members.context';
-import { ScheduleContext } from '../../contexts/schedule.context';
-import './index.css'
+import { logoutRequestAction } from '../../reducers/auth.reducer';
 
 const { Header, Content, Footer, Sider } = Layout;
 
 const Dashboard = () => {
+
   // context
-  const authContext = useContext(AuthContext);
-  const alertContext = useContext(AlertContext);
-  const scheduleContext = useContext(ScheduleContext);
-  const membersContext = useContext(MembersContext);
-  const { isAuthenticated, logout, trainer } = authContext;
-  const { setAlert } = alertContext;
+  const { isAuthenticated, trainer } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   // state
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
-    authContext.loadUser();
-    membersContext.getMember();
     // eslint-disable-next-line
   }, []);
 
@@ -35,12 +27,7 @@ const Dashboard = () => {
   };
 
   const handleLogout = () => {
-    logout();
-    setAlert(
-      `${trainer.trainerName}님, 로그아웃 하셨습니다.`,
-      'success',
-      trainer.trainerName
-    );
+    dispatch(logoutRequestAction());
   };
 
   const authLinks = (
@@ -77,17 +64,19 @@ const Dashboard = () => {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider
-        breakpoint="lg"
-        collapsedWidth="0"
-        onBreakpoint={broken => {
-          console.log(broken);
-        }}
-        onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
+        collapsible
+        collapsed={collapsed}
+        onCollapse={onCollapse}
+        style={{
+          overflow: 'auto',
+          height: '100vh',
+          position: 'fixed',
+          left: 0,
         }}
       >
         <div className="logo" />
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+          <Menu.Item></Menu.Item>
           <Menu.Item key="1">
             <span>Health Note</span>
             <Link to={'/'}></Link>
@@ -116,15 +105,20 @@ const Dashboard = () => {
           </Menu.Item>
         </Menu>
       </Sider>
-      <Layout>
-        <Header className="site-layout-sub-header-background" style={{ padding: 0, background: 'white' }} />
-        <Alerts />
-        <Content style={{ margin: '24px 16px 0' }}>
-          <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-              <Routes />
+      <Layout style={{ marginLeft: 200 }}>
+        <Header style={{ background: '#fff', padding: 0 }} />
+        <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
+          <Breadcrumb style={{ margin: '16px 0' }}>
+            <Breadcrumb.Item></Breadcrumb.Item>
+            <Breadcrumb.Item></Breadcrumb.Item>
+          </Breadcrumb>
+          <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
+            <Routes />
           </div>
         </Content>
-        <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+        <Footer style={{ textAlign: 'center' }}>
+          Ant Design ©2018 Created by Ant UED
+        </Footer>
       </Layout>
     </Layout>
   );
