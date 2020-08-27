@@ -38,34 +38,30 @@ export const removeMemberRequestAction = (member) => ({ type: REMOVE_MEMBER_REQU
 export const clearTargetAction = () => ({ type: CLEAR_TARGET });
 
 const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case GET_MEMBER_SUCCESS:
-      return produce(state, draft => {
+  return produce(state, (draft) => {
+    switch (action.type) {
+      case GET_MEMBER_SUCCESS:
         draft.loading = false;
         draft.members = action.payload; // 전체 멤버 (배열)
-      });
-    case ADD_MEMBER_SUCCESS:
-      return produce(state, draft => {
+        break;
+      case ADD_MEMBER_SUCCESS:
         draft.loading = false;
         draft.target = action.payload.memberName;
         draft.members.push(action.payload); // 멤버 추가 (배열안에 객체 추가)
-      });
-    case REMOVE_MEMBER_SUCCESS:
-      return produce(state, draft => {
+        break;
+      case REMOVE_MEMBER_SUCCESS:
         draft.loading = false;
         draft.target = 'deleted';
         draft.members = state.members.filter(member => !action.payload.includes(member.id)); // filter an array from all elements of another array
-      });
-    case 'TOGGLE':
-      return produce(state, draft => {
+        break;
+      case 'TOGGLE':
         draft.forEach(member => {
           if (member.id === action.id) {
             member.completed = !member.completed;
           }
-        })
-      });
-    case EDIT_MEMBER:
-      return produce(state, draft => {
+        });
+        break;
+      case EDIT_MEMBER:
         draft.members.forEach(member => {
           if (member.id === action.id) {
             member.memberName = action.newName;
@@ -76,26 +72,24 @@ const reducer = (state = initialState, action) => {
             member.endDate = action.newEndDate;
             member.height = action.newHeight;
           }
-        })
-      });
-    case ADD_MEMBER_ERROR:
-    case MEMBER_ERROR:
-      return produce(state, draft => {
-          draft.error = action.payload;
-          draft.members.forEach(member => {
+        });
+        break;
+      case ADD_MEMBER_ERROR:
+      case MEMBER_ERROR:
+        draft.error = action.payload;
+        draft.members.forEach(member => {
           member.loading = false;
           member.target = null;
         });
-      });
-    case CLEAR_ERRORS:
-    case CLEAR_TARGET:
-        return produce(state, draft => {
-          draft.target = null;
-          draft.error = null;
-        });
-    default:
-      return state;
-  }
+        break;
+      case CLEAR_ERRORS:
+      case CLEAR_TARGET:
+        draft.target = null;
+        draft.error = null;
+        break;
+      default:
+        return state;
+    }
+  });
 };
-
 export default reducer;
