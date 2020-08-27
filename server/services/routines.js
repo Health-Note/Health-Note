@@ -1,12 +1,14 @@
 const { db, sequelize } = require('../models');
 
 const createOrUpdate = async (body) => {
+  console.log(body, "!!!!!!!!!!!!!!!!!!!!!")
   // Routine 과 WeightTraining Table이 분리되어 있기 때문에 비즈니스에서 분기 처리한다
   const cardioArray = [];
   const weightArray = [];
   for (let item of body.updateRoutine) {
     if (item['isCardio'] === 1) {
       cardioArray.push({
+        id: item.id,
         scheduleId: body.scheduleId,
         exerciseCode: item.exerciseCode,
         memberId: item.memberId,
@@ -16,14 +18,16 @@ const createOrUpdate = async (body) => {
       });
     } else {
       cardioArray.push({
-        scheduleId: body.scheduleId,
+        id: item.id,
         exerciseCode: item.exerciseCode,
+        scheduleId: body.scheduleId,
         memberId: item.memberId,
         routineOrder: item.routineOrder,
       });
       weightArray.push({
-        scheduleId: body.scheduleId,
+        routineId: item.id,
         exerciseCode: item.exerciseCode,
+        scheduleId: body.scheduleId,
         memberId: item.memberId,
         setCount: item.setCount,
         repetitions: item.repetitions,
@@ -32,6 +36,7 @@ const createOrUpdate = async (body) => {
       });
     }
   }
+
   // 아래 단계는 트랜잭션 처리 필수
   const result = await sequelize.transaction(async (t) => {
     await db.routine.bulkCreate(
@@ -39,7 +44,7 @@ const createOrUpdate = async (body) => {
       {
         updateOnDuplicate: ['routineOrder', 'cardioTime'],
       },
-      { transaction: t }
+      { transaction: t },
     );
 
     await db.weightTraining.bulkCreate(
@@ -54,8 +59,7 @@ const createOrUpdate = async (body) => {
       await db.weightTraining.destroy(
         {
           where: {
-            scheduleId: body.scheduleId,
-            exerciseCode: body.deleteRoutine,
+            routineId: body.deleteRoutine,
           },
         },
         { transaction: t }
@@ -64,15 +68,13 @@ const createOrUpdate = async (body) => {
       await db.routine.destroy(
         {
           where: {
-            scheduleId: body.scheduleId,
-            exerciseCode: body.deleteRoutine,
+            id: body.deleteRoutine,
           },
         },
         { transaction: t }
       );
     }
   });
-  
 };
 
 const getByScheduleId = async (params) => {
@@ -81,10 +83,17 @@ const getByScheduleId = async (params) => {
   const result = await db.routine
     .findAll({
       where: { scheduleId: scheduleId },
-      include: { model: db.weightTraining, required: false },
-      raw: true,
-      nest: true
+      include: [{
+        model: db.weightTraining
+      }, {
+        model: db.exercise,
+        attributes: ['exerciseName', 'targetName']
+      }],
+      nest: true,
+      row: true
     })
+
+  console.log("routine result", result);
 
     for(item of result) {
       if(item['isCardio'] === 1) {
@@ -97,7 +106,7 @@ const getByScheduleId = async (params) => {
 const remove = async (query) => {
   const { scheduleId, exerciseCode, isCardio } = query;
 
-  if(isCardio != 1 ) {
+  if (isCardio !== 1 ) {
     await db.weightTraining
     .destroy({
       where: { scheduleId: scheduleId, exerciseCode: exerciseCode },
@@ -108,9 +117,6 @@ const remove = async (query) => {
     .destroy({
       where: { scheduleId: scheduleId, exerciseCode: exerciseCode },
     })
-
-  
-  
 };
 
 module.exports = { createOrUpdate, getByScheduleId, remove };

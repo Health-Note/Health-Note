@@ -1,35 +1,31 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {Row, Col} from 'antd';
 import moment from 'moment';
+import '@fullcalendar/core/main.css';
+import '@fullcalendar/timegrid/main.css';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
+import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
 import koLocale from '@fullcalendar/core/locales/ko';
-import '@fullcalendar/core/main.css';
-import '@fullcalendar/timegrid/main.css';
-import { message } from 'antd';
-import { ScheduleContext } from '../../../../contexts/schedule.context';
-import { MembersContext } from '../../../../contexts/members.context';
-import { RoutineContext } from '../../../../contexts/routine.context';
-import AntdModal from '../../../context/organisms/CalendarModal';
 import useToggle from '../../../../hooks/useToggle';
+import { message } from 'antd';
 import './Calendar.css';
+import seedColors from '../../../../utils/seedColors';
+import { GET_SCHEDULES_REQUEST } from '../../../../reducers/types';
+import {
+  changeScheduleAction,
+  createScheduleAction,
+  setScheduleTargetAction,
+} from '../../../../reducers/schedule.reducer';
+import { getRoutinesAction } from '../../../../reducers/routine.reducer';
 
 // title, start, id가 포함되어야 함.
 function Calendar() {
-  // useContext
-  const {
-    schedules,
-    getAllSchedules,
-    setDrawer,
-    changeSchedule,
-    setScheduleTarget,
-    removeSchedule,
-    createOneSchedule,
-    isChanging
-  } = useContext(ScheduleContext);
-  const { setSelectedDate } = useContext(RoutineContext);
-  const { members } = useContext(MembersContext);
+  const { schedules } = useSelector(state => state.schedule);
+  const { members } = useSelector(state => state.member);
+  const dispatch = useDispatch();
 
   // states
   const [clickedDate, setClickedDate] = useState(false);
@@ -41,23 +37,33 @@ function Calendar() {
   const [start, setStart] = useState([]);
   const [modalState, toggleModal] = useToggle(false);
 
-  // 내부 이벤트 초기화
-  useEffect(() => {
-    setScheduleList(schedules);
-  }, [members, schedules]);
-  
+  // // 내부 이벤트 초기화
+  // useEffect(() => {
+  //   setScheduleList(schedules);
+  // }, [members, schedules]);
+
   // 외부 이벤트 초기화
   useEffect(() => {
-    console.log("!!!!")
-    getAllSchedules();
-    setMember(exeMember);
+    let draggableEl = document.getElementById("external-events");
+    new Draggable(draggableEl, {
+      revert: true,
+      zIndex: 999,
+      itemSelector: ".fc-event",
+      eventData: function(eventEl) {
+        let title = eventEl.getAttribute("title");
+        let id = eventEl.getAttribute("id");
+        let memberId = eventEl.getAttribute("memberId");
+        return {
+          title: title,
+          id: id,
+          memberId: memberId,
+          color: eventEl.style.background,
+        };
+      }
+    });
+    dispatch({type: GET_SCHEDULES_REQUEST});
   }, []);
 
-  const saveButton = (
-    <>
-      { isChanging && <button >저장하기</button>}  
-    </>
-  )
 
   // 달력에 표시될 스케줄 초기화
   const handleTargetId = id => {
@@ -80,7 +86,7 @@ function Calendar() {
     const endTime = moment(info.event.end).format('HH:mm'); // 변경 후 시작 시간
     console.log("endtime", endTime)
     const memberId = info.event.extendedProps.memberId; // 멤버 아이디
-    changeSchedule(id, afterDate, startTime, endTime, memberId);
+    dispatch(changeScheduleAction(id, afterDate, startTime, endTime, memberId));
     message.success(
       `[${title}] 회원님의 스케줄이 ${moment(afterDate + ' ' + startTime).format(
         'MM월DD일 HH시mm분'
@@ -99,16 +105,17 @@ function Calendar() {
    */
   const handleEventClick = eventClick => {
     const id = eventClick.event.id;
+    const memberName = eventClick.event.title;
     const memberId = eventClick.event.extendedProps.memberId;
+    console.log("멤버아이디", memberId);
     const date = moment(eventClick.event.start).format('YYYY-MM-DD');
 
     setName(eventClick.event.title);
     setEvt(eventClick.event);
     handleTargetId(eventClick.event.id);
     setStart(moment(eventClick.event.start).format('MM월 DD일'));
-    setSelectedDate(date, memberId);
-    setDrawer(true);
-    setScheduleTarget(parseInt(id), parseInt(memberId));
+    dispatch(setScheduleTargetAction(parseInt(id), parseInt(memberId), memberName));
+    dispatch(getRoutinesAction(id));
   };
 
   // 클릭으로 이벤트 만들기
@@ -124,9 +131,19 @@ function Calendar() {
     const afterStartTime = moment(info.event.start).format('HH:mm'); // 변경 후 시작 시간
     const afterEndTime = moment(info.event.end).format('HH:mm'); // 변경 후 시작 시간
     const memberId = info.event.extendedProps.memberId; // 멤버 아이디
-    changeSchedule(id, afterDate, afterStartTime, afterEndTime, memberId);
+    dispatch(changeScheduleAction(id, afterDate, afterStartTime, afterEndTime, memberId));
     // alert
     message.success(`[${title}] 회원 \n\n ${afterStartTime} ~ ${afterEndTime} 시간 변경!`);
+  }
+
+  const handleEventReceive = (info) => {
+    const memberId = info.event.extendedProps.memberId; // 멤버 아이디
+    const memberName = info.event.title; // 멤버 아이디
+    const day = moment(info.event.start).format('YYYY-MM-DD'); // 날짜
+    const startTime = moment(info.event.start).format('HH:mm'); // 시작 시간
+    const endTime = moment(info.event.end).format('HH:mm'); // 끝 시간
+    dispatch(createScheduleAction(memberId, memberName, startTime, '00:00:00',0,  day));
+    info.event.remove()
   }
 
   // const eventRender = ({event, el}) => {
@@ -159,61 +176,55 @@ function Calendar() {
   // }
   return (
     // 이벤트 창
-    <div className="animated fadeIn p-4 demo-app">
-    {saveButton}
-          {/*<div*/}
-          {/*  id="external-events"*/}
-          {/*  style={{*/}
-          {/*    padding: '10px',*/}
-          {/*    height: '500px',*/}
-          {/*    maxHeight: '-webkit-fill-available',*/}
-          {/*  }}*/}
-          {/*>*/}
-          {/*  /!* <p align="center"><strong> 전체회원</strong></p>*/}
-          {/*     {exeMember.map(member => (*/}
-          {/*      <div className="fc-event" title={member.title} key={member.id} >*/}
-          {/*        {member.title}*/}
-          {/*      </div>*/}
-          {/*    ))} *!/*/}
-          {/*</div>*/}
-          <AntdModal
-            title={'스케줄 추가'}
-            modalState={modalState}
-            toggleModal={toggleModal}
-            clickedDate={clickedDate}
-            members={members}
-            createOneSchedule={createOneSchedule}
+    <Row>
+      <Col xl={3}>
+        <div
+          id="external-events"
+          style={{
+            padding: '10px',
+            maxHeight: '-webkit-fill-available',
+          }}
+        >
+          <p align="center"><strong> 전체회원</strong></p>
+          {members.map((member, idx) => (
+            <div className="fc-event" title={member.memberName} memberId={member.id} key={member.id} style={{background: seedColors[1].colors[idx].color}}>
+              {member.memberName}
+            </div>
+          ))}
+        </div>
+      </Col>
+      <Col xl={21}>
+        <div className="demo-app-calendar" id="mycalendartest">
+          <FullCalendar
+            selectable={true}
+            nowIndicator={true}
+            editable={true}
+            minTime="09:00:00"
+            defaultView="timeGridWeek"
+            header={{
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth, timeGridWeek, listWeek',
+            }}
+            locale={koLocale}
+            rerenderDelay={10}
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            droppable
+            eventReceive={handleEventReceive}
+            events={schedules} // 달력안에 스케줄(events)이 표시된다.
+            eventDrop={drop}
+            eventClick={handleEventClick}
+            dateClick={dateClick}
+            eventDurationEditable={true}
+            eventResize={eventResize}
+            // eventRender={eventRender}
+            // ref={calendarComponentRef}
+            // weekends={this.state.calendarWeekends}
+            // drop={this.drop}
           />
-
-          <div className="demo-app-calendar" id="mycalendartest">
-            <FullCalendar
-              selectable={true}
-              nowIndicator={true}
-              editable={true}
-              minTime="09:00:00"
-              defaultView="timeGridWeek"
-              header={{
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth, timeGridWeek, listWeek',
-              }}
-              locale={koLocale}
-              rerenderDelay={10}
-              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-              droppable
-              events={scheduleList} // 달력안에 스케줄(events)이 표시된다.
-              eventDrop={drop}
-              eventClick={handleEventClick}
-              dateClick={dateClick}
-              eventDurationEditable={true}
-              eventResize={eventResize}
-              // eventRender={eventRender}
-              // ref={calendarComponentRef}
-              // weekends={this.state.calendarWeekends}
-              // drop={this.drop}
-            />
-          </div>
-    </div>
+        </div>
+      </Col>
+    </Row>
   );
 }
 

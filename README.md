@@ -15,6 +15,16 @@
 2. PT 세부 계획 작성 기능
 3. 회원 운동 기록 분석 기능
 
+<<<<<<< HEAD
 # 동작화면
 ![Alt Text](./server/doc/Health-Note1.gif)<br/>
 ![Alt Text](./server/doc/Health-Note2.gif)<br/>
+=======
+**사용기술**
+
+client: Javascript, React.js(hooks, context-api, useReducers based)
+
+server: Node.js, Express.js 
+
+database: mySql, AWS RDS
+>>>>>>> ebf8405413d17135e6cf55fdb42c41e9e3eabc3f

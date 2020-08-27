@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Table, Button } from 'antd';
 import { UserAddOutlined, UserDeleteOutlined } from '@ant-design/icons';
-import { v4 as uuid } from 'uuid';
-import { MembersContext } from '../../../contexts/members.context';
-import { AlertContext } from '../../../contexts/alert.context';
 import { useIsMount } from '../../../hooks/useIsMount';
+import {
+  getMemberRequestAction, removeMemberRequestAction, clearTargetAction
+} from '../../../reducers/members.reducer'
 
 const onChange = (pagination, filters, sorter) => {
   console.log('params', pagination, filters, sorter);
@@ -42,36 +43,26 @@ const columns = [
 
 const MemberTable = ({ toggle }) => {
   const isMount = useIsMount();
-  const { members, error, getMember, removeMember, targetMember, clearErrors, clearTarget } = useContext(
-    MembersContext
-  );
-  const { setAlert } = useContext(AlertContext);
+  const { target, error, members } = useSelector(state => state.member);
+  const dispatch = useDispatch();
   const [memberData, setMemberData] = useState([]);
   const [checkedRows, setChedckedRows] = useState([]);
 
   useEffect(() => {
-    getMember();
+    dispatch(getMemberRequestAction());
   }, []);
 
   useEffect(() => {
-    if (targetMember && targetMember !== "deleted") {
-      setAlert(targetMember + '회원님이 목록에 추가되었습니다.', 'success', uuid());
-      clearTarget();
+    if (target && target !== "deleted") {
+      dispatch(clearTargetAction());
     } 
-  }, [targetMember]);
+  }, [target]);
 
   useEffect(() => {
-    if(targetMember === "deleted"){
-      setAlert('삭제에 성공했습니다.', 'success', uuid());
+    if(target === "deleted"){
     }
-  }, [targetMember]);
+  }, [target]);
 
-  useEffect(() => {
-    if (error) {
-      setAlert(error, 'error', uuid());
-      clearErrors();
-    }
-  }, [error]);
 
   useEffect(() => {
     const memberRow = members.map(member => {
@@ -86,10 +77,10 @@ const MemberTable = ({ toggle }) => {
       };
     });
     setMemberData(memberRow);
-  }, [MembersContext, members]);
+  }, [members]);
 
   const handleRemove = () => {
-    removeMember(checkedRows);
+    dispatch(removeMemberRequestAction(checkedRows));
   };
 
   const rowSelection = {

@@ -120,15 +120,19 @@ const get = async (id) => {
 // 스케줄 삭제
 const remove = async (query) => {
   const { id, memberId } = query;
-  const count = await db.schedule.destroy({
+  const row = await db.schedule.findOne({
     where: { id: id, memberId: memberId },
+    attributes: ['id']
   });
+  const result = db.schedule.destroy({ where: { id: id, memberId: memberId }});
+  if (result) {
+    return row.id;
+  }
 };
 
 // 스케줄 변경
 const update = async (body, id) => {
   const { memberId, startTime, endTime, isFinish, day, tooltipText } = body;
-
   await db.schedule.update(
     {
       startTime: startTime, //moment(afterDate + ' ' + afterTime).format('YYYY-MM-DD HH:mm'),

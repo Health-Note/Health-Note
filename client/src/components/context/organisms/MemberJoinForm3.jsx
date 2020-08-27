@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import locale from 'antd/es/date-picker/locale/ko_KR';
 import {
   Form,
@@ -14,7 +14,8 @@ import {
   TimePicker
 } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { MembersContext } from '../../../contexts/members.context';
+import { useDispatch, useSelector } from 'react-redux';
+import { addMemberRequestAction } from '../../../reducers/members.reducer';
 
 const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
@@ -61,7 +62,7 @@ const tailFormItemLayout = {
 
 const RegistrationForm = () => {
   const [form] = Form.useForm();
-  const { addMember } = useContext(MembersContext);
+  const dispatch = useDispatch();
 
   const onFinish = values => {
     const days = [];
@@ -69,8 +70,8 @@ const RegistrationForm = () => {
     values.days.forEach((day, i) => {
       days.push({
         day: parseInt(day),
-        hour: parseInt(values.startTime.format('HH')),
-        min: parseInt(values.startTime.format('mm')),
+        hour: parseInt(values['time_'+day].format('HH')),
+        min: parseInt(values['time_'+day].format('mm')),
       });
     });
 
@@ -83,7 +84,7 @@ const RegistrationForm = () => {
     member.startTime = values.startTime.format('YYYY-MM-DD').toString();
     member.endTime = values.startTime.add(1, 'hours').format('YYYY-MM-DD').toString();
     member.days = days;
-    addMember(member);
+    dispatch(addMemberRequestAction(member));
   };
 
   const prefixSelector = (
@@ -110,6 +111,11 @@ const RegistrationForm = () => {
 
   function onChange(checkedValues) {
     setCheck(checkedValues)
+  }
+
+  const disabledHours = () => {
+    const hours = [0,1,2,3,4,5,6,7,8,9];
+    return hours
   }
 
   return (
@@ -199,7 +205,7 @@ const RegistrationForm = () => {
       </Form.Item>
       {check.map(time => (
         <Form.Item name={"time_" + time} label={options[time].label} rules={[{ type: 'object', required: true, message: 'Please select time!' }]}>
-          <TimePicker minuteStep={30} format = 'HH:mm'/>
+          <TimePicker disabledHours={disabledHours} hideDisabledOptions={true} minuteStep={30} format = 'HH:mm'/>
         </Form.Item>
       ))}
       <Form.Item {...tailFormItemLayout}>

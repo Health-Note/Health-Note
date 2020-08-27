@@ -1,31 +1,24 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Layout, Menu, Breadcrumb, Button } from 'antd';
 import { UserAddOutlined, UserOutlined, LogoutOutlined, TeamOutlined, CalendarOutlined, PieChartOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import Routes from '../routing/Routes';
 import Alerts from '../context/atoms/Alerts';
-import { AuthContext } from '../../contexts/auth.context';
-import { AlertContext } from '../../contexts/alert.context';
-import { MembersContext } from '../../contexts/members.context';
-import { ScheduleContext } from '../../contexts/schedule.context';
+import { logoutRequestAction } from '../../reducers/auth.reducer';
 
 const { Header, Content, Footer, Sider } = Layout;
 
 const Dashboard = () => {
+
   // context
-  const authContext = useContext(AuthContext);
-  const alertContext = useContext(AlertContext);
-  const scheduleContext = useContext(ScheduleContext);
-  const membersContext = useContext(MembersContext);
-  const { isAuthenticated, logout, trainer } = authContext;
-  const { setAlert } = alertContext;
+  const { isAuthenticated, trainer } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   // state
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
-    authContext.loadUser();
-    membersContext.getMember();
     // eslint-disable-next-line
   }, []);
 
@@ -34,12 +27,7 @@ const Dashboard = () => {
   };
 
   const handleLogout = () => {
-    logout();
-    setAlert(
-      `${trainer.trainerName}님, 로그아웃 하셨습니다.`,
-      'success',
-      trainer.trainerName
-    );
+    dispatch(logoutRequestAction());
   };
 
   const authLinks = (
@@ -119,7 +107,6 @@ const Dashboard = () => {
       </Sider>
       <Layout style={{ marginLeft: 200 }}>
         <Header style={{ background: '#fff', padding: 0 }} />
-        <Alerts />
         <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
             <Breadcrumb.Item></Breadcrumb.Item>
