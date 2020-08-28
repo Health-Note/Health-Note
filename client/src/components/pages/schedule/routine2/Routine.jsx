@@ -19,7 +19,6 @@ const Routine = () => {
   const { selectedSchedule } = useSelector(state => state.schedule)
   const { routines, deleteRoutine, scheduleId } = useSelector(state => state.routine)
 
-
   useEffect(() => {
     dispatch({ type: CLEAR_SELECTED_SCHEDULE })
   }, [])
@@ -75,7 +74,7 @@ const Routine = () => {
 
   return (
     <>
-      <Row style={{marginBottom: 25}}>
+      <Row type={'flex'} justify={'space-between'} style={{marginBottom: 25}}>
         <h3>{selectedSchedule.memberName ? selectedSchedule.memberName + '님의 운동루틴' : '루틴을 추가하려면 달력안의 멤버을 클릭하세요'}</h3>
         <Button onClick={onclickRemove}>삭제</Button>
       </Row>

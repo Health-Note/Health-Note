@@ -210,7 +210,7 @@ const RegistrationForm = () => {
       ))}
       <Form.Item {...tailFormItemLayout}>
         <Button type="primary" htmlType="submit">
-          Register
+          등록
         </Button>
       </Form.Item>
     </Form>

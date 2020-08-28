@@ -2,6 +2,7 @@ import { Input, InputNumber, Select } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import setAuthToken from '../../../../utils/setAuthToken';
+import { useSelector } from 'react-redux';
 
 const { Option, OptGroup } = Select;
 
@@ -15,15 +16,21 @@ const ExerciseSelect = ({ getExerIdAndName }) => {
     fetchData();
   }, []);
 
+  const selectedScheduleId = useSelector(state => state.schedule.selectedSchedule.id);
+
   const InputGroup = Input.Group;
   const [exercises, setExercises] = useState([]); // 최초 fetch용
 
   const handleSelectExercise = value => {
-    const exerciseCode = value.split("|")[0];
-    const exerciseName = value.split("|")[1];
-    const targetCode = value.split("|")[2];
-    const targetName = value.split("|")[3];
-    getExerIdAndName(exerciseCode, exerciseName, targetCode, targetName);
+    if (selectedScheduleId) {
+      const exerciseCode = value.split("|")[0];
+      const exerciseName = value.split("|")[1];
+      const targetCode = value.split("|")[2];
+      const targetName = value.split("|")[3];
+      getExerIdAndName(exerciseCode, exerciseName, targetCode, targetName);
+    } else {
+      alert("달력에서 스케줄을 먼저 선택하세요")
+    }
   };
 
   return (

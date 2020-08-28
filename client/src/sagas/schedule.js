@@ -15,7 +15,7 @@ import {
   UPDATE_SCHEDULE_ERROR,
   CREATE_ONE_SCHEDULE_REQUEST,
   CREATE_ONE_SCHEDULE_SUCCESS,
-  CREATE_ONE_SCHEDULE_ERROR,
+  CREATE_ONE_SCHEDULE_ERROR, CLEAR_ROUTINE,
 } from '../reducers/types';
 import setAuthToken from '../utils/setAuthToken';
 import seedColors from '../utils/seedColors';
@@ -55,7 +55,8 @@ function* removeSchedule(action) {
   try {
     const res = yield call(removeScheduleApi, action.payload);
     if (res.status === 200) {
-      yield put({ type: REMOVE_SCHEDULE_SUCCESS, payload: {id: res.data.deletedId }})
+      yield put({ type: REMOVE_SCHEDULE_SUCCESS, payload: {id: res.data.deletedId }});
+      yield put({ type: CLEAR_ROUTINE});
     }
   } catch (error) {
       yield put({ type: REMOVE_SCHEDULE_ERROR, payload: error })

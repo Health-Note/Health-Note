@@ -64,7 +64,6 @@ function Calendar() {
     dispatch({type: GET_SCHEDULES_REQUEST});
   }, []);
 
-
   // 달력에 표시될 스케줄 초기화
   const handleTargetId = id => {
     // fullcalendar state에서 날짜형식은 ISO // 2017-03-16T17:40:00+09:00 이여야 함
@@ -140,11 +139,17 @@ function Calendar() {
     const memberId = info.event.extendedProps.memberId; // 멤버 아이디
     const memberName = info.event.title; // 멤버 아이디
     const day = moment(info.event.start).format('YYYY-MM-DD'); // 날짜
-    const startTime = moment(info.event.start).format('HH:mm'); // 시작 시간
-    const endTime = moment(info.event.end).format('HH:mm'); // 끝 시간
-    dispatch(createScheduleAction(memberId, memberName, startTime, '00:00:00',0,  day));
-    info.event.remove()
-  }
+    if (info.view.type === 'dayGridMonth') {
+      const startTime = '20:00'; // 시작 시간
+      const endTime = moment(info.event.start).add(1, 'hours').format('HH:mm'); // 끝 시간
+      dispatch(createScheduleAction(memberId, memberName, startTime, endTime, 0, day));
+    } else {
+      const startTime = moment(info.event.start).format('HH:mm'); // 시작 시간
+      const endTime = moment(info.event.start).add(1, 'hours').format('HH:mm'); // 끝 시간
+      dispatch(createScheduleAction(memberId, memberName, startTime, endTime, 0, day));
+    }
+      info.event.remove();
+  };
 
   // const eventRender = ({event, el}) => {
   //
@@ -182,12 +187,16 @@ function Calendar() {
           id="external-events"
           style={{
             padding: '10px',
+            marginRight: '15px',
             maxHeight: '-webkit-fill-available',
+            background: 'lightYellow',
+            eventTextColor: 'white',
+            border: '1px solid black'
           }}
         >
           <p align="center"><strong> 전체회원</strong></p>
           {members.map((member, idx) => (
-            <div className="fc-event" title={member.memberName} memberId={member.id} key={member.id} style={{background: seedColors[1].colors[idx].color}}>
+            <div className="fc-event" title={member.memberName} memberId={member.id} key={member.id} style={{background: seedColors[1].colors[idx].color, color: 'white', textAlign: 'center'}}>
               {member.memberName}
             </div>
           ))}
@@ -217,6 +226,7 @@ function Calendar() {
             dateClick={dateClick}
             eventDurationEditable={true}
             eventResize={eventResize}
+            allDaySlot={true}
             // eventRender={eventRender}
             // ref={calendarComponentRef}
             // weekends={this.state.calendarWeekends}
