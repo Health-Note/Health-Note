@@ -11,10 +11,10 @@ import Grid from '@material-ui/core/Grid';
 // import { DatePicker } from '@material-ui/pickers';
 
 import SearchSelect from '../../context/molecules/SearchSelect';
-import { MembersContext } from '../../../contexts/members.context';
 import CustomLineChart from '../../context/molecules/CustomLineChart';
 import CustomRadarChart from '../../context/molecules/CustomRadarChart';
 import RangeMonthPicker from '../../context/molecules/RangeMonthPicker';
+import {useSelector} from "react-redux";
 
 function TabPanel(props) {
   const { children, value, tabValue, ...other } = props;
@@ -60,7 +60,7 @@ const initFilter = {
 function Statistics({ member: curMember, history }) {
   // Routes.js에서 오는 member
   // let memberIndex = 0;
-  const { members } = useContext(MembersContext);
+  const { members } = useSelector(state => state.member);
   if (typeof curMember === 'undefined') {
     curMember = members[0];
   }

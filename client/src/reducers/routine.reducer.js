@@ -56,6 +56,9 @@ export const deleteRoutineAction = (id) => {
   }
 }
 
+// loaded[]: db에 이미 저장되어 있어 불러와진 루틴의 id
+// routines[]: 새로 추가된 루틴 id
+// deleteRoutine[]: 삭제할 루틴 id
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
@@ -103,7 +106,7 @@ const reducer = (state = initialState, action) => {
             maxWeight: parseInt(action.payload.maxWeight),
             targetCode: parseInt(action.payload.targetCode),
           });
-        draft.deleteRoutine = state.deleteRoutine.filter(cv => cv !== action.payload.id);
+        draft.deleteRoutine = state.deleteRoutine.filter(cv => cv !== action.payload.id); // 삭제 배열에 있는 id를 다시 업데이트 할 경우
         break;
       case INSERT_COUNT:
         draft.routines = state.routines.map(routine => {

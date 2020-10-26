@@ -3,8 +3,6 @@ import { Input, Button, Row, Col, Checkbox } from 'antd';
 import { UserAddOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { showConfirm } from '../../../components/context/atoms/ComfirmModal';
-import { AlertContext } from '../../../contexts/alert.context';
-import { AuthContext } from '../../../contexts/auth.context';
 import useToggle from '../../../hooks/useToggle';
 import { useDispatch, useSelector } from 'react-redux';
 import { REGISTER_REQUEST } from '../../../reducers/types';
