@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import Schedule from '../pages/schedule';
-import Statistics from '../pages/statistic';
+import Statistics from '../pages/statistic2';
 import Members from '../pages/member';
 import Login from '../pages/auth/Login';
 import Register from '../pages/auth/Register';
@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 
 function Routes() {
   const { members } = useSelector((state) => state.member);
+
   function getMember(props) {
     // 괄호안에 props는 라우터에서 넣어주는 프롭스
     const name = props.match.params.name; // 파라미터를 통해 멤버정보 가져오기

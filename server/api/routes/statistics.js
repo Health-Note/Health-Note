@@ -37,9 +37,12 @@ module.exports = app => {
       const result = await statisticsService.get();
       res.json(result);
     } catch(err) {
-      logger.error('error: %o', err);
+      console.log(err)
+      // logger.error('error: %o', err);
       return next(err);
     }
 
   });
+
+
 };

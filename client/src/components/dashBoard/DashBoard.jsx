@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import Routes from '../routing/Routes';
 import Alerts from '../context/atoms/Alerts';
 import { logoutRequestAction } from '../../reducers/auth.reducer';
+import {LOAD_USER} from "../../reducers/types";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -20,6 +21,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     // eslint-disable-next-line
+      dispatch({type: LOAD_USER})
   }, []);
 
   const onCollapse = collapsed => {
@@ -74,6 +76,7 @@ const Dashboard = () => {
           left: 0,
         }}
       >
+        
         <div className="logo" />
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
           <Menu.Item></Menu.Item>
