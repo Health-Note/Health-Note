@@ -32,9 +32,10 @@ module.exports = app => {
    *      200:
    *        description: success to get statistics
    */
-  route.get('/', async (req, res, next) => {
+  route.post('/', async (req, res, next) => {
     try {
-      const result = await statisticsService.get();
+      const { memberId } = req.body;
+      const result = await statisticsService.getStatistics(memberId);
       res.json(result);
     } catch(err) {
       console.log(err)

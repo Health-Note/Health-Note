@@ -2,10 +2,10 @@ const logger = require('../loaders/logger');
 const { db, sequelize } = require('../models');
 const Op = sequelize.Op;
 
-const get = async (memberId) => {
+const getStatistics = async (memberId) => {
   const result = await db.weightTraining.findAndCountAll({
     where: {
-      memberId: 10,
+      memberId: memberId,
     },
   })
   .catch(err => {
@@ -17,4 +17,4 @@ const get = async (memberId) => {
 
 
 
-module.exports = { get }
+module.exports = { getStatistics }
