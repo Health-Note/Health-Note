@@ -29,4 +29,5 @@ const Statistics = ({ member: curMember, history }) => {
     )
 }
 
+
 export default Statistics;
