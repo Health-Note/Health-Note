@@ -87,7 +87,7 @@ const reducer = (state = initialState, action) => {
         const seedColors = action.payload.seedColors;
         let colorIdx = 0;
         draft.schedules = allSchedules.map((cv, i) => {
-          if (i < allSchedules.length - 1 && cv.id !== allSchedules[i + 1].id) {
+          if (i > 0 && i < allSchedules.length - 1 && allSchedules[i-1].id !== allSchedules[i].id) {
             colorIdx++;
           }
           return {
