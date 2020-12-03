@@ -18,11 +18,36 @@ const Dashboard = () => {
 
   // state
   const [collapsed, setCollapsed] = useState(false);
+  const [key, setKey] = useState('');
 
   useEffect(() => {
     // eslint-disable-next-line
+    const firstSegment = location.pathname.split('/')[1];
+    switch (firstSegment) {
+      case 'login' :
+        setKey('2');
+        break;
+      case 'register' :
+        setKey('3');
+        break;
+      case 'member' :
+        setKey('9');
+        break;
+      case 'schedule' :
+        setKey('10');
+        break;
+      case 'statistic':
+        setKey('11');
+      default:
+        setKey('1');
+        return
+    }
       dispatch({type: LOAD_USER})
   }, []);
+
+  const handleClick = (e) => {
+    setKey(e.key)
+  }
 
   const onCollapse = collapsed => {
     setCollapsed(collapsed);
@@ -76,9 +101,8 @@ const Dashboard = () => {
           left: 0,
         }}
       >
-        
         <div className="logo" />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+        <Menu theme="dark" onClick={handleClick} selectedKeys={[key]} mode="inline">
           <Menu.Item></Menu.Item>
           <Menu.Item key="1">
             <span>Health Note</span>
