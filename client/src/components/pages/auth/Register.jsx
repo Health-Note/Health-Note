@@ -4,6 +4,7 @@ import { UserAddOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons
 import { withRouter } from 'react-router-dom';
 import { showConfirm } from '../../../components/context/atoms/ComfirmModal';
 import useToggle from '../../../hooks/useToggle';
+import useInputState from '../../../hooks/useInputState';
 import { useDispatch, useSelector } from 'react-redux';
 import { REGISTER_REQUEST } from '../../../reducers/types';
 
@@ -21,18 +22,37 @@ function Register(props) {
     }
     // eslint-disable-next-line
   }, [error, isAuthenticated]);
-  
+
+  // 약관동의 custom hook
   const [agreement, toggle] = useToggle();
+
+  // 트레이너 이름 custom hook
+  const [trainerName, onChangeTrainerNameName, isNameError] = useInputState({
+    type: 'string',
+    maxLength: 5,
+    minLength: 2,
+    autoFix: false,
+    initialValue: ''
+  });
+
+  // 트레이너 이메일 custom hook
+  const [email, onChangeEmail, isEmailError] = useInputState({
+    type: 'email',
+    maxLength: 50,
+    minLength: 7,
+    autoFix: false,
+    initialValue: ''
+  });
+
+  // 비밀번호 체크
   const [passwordError, setPasswordError] = useState(false);
   const [user, setUser] = useState({
-    trainerName: '',
-    email: '',
     password: '',
     password2: '',
     agreementId: 1
   });
 
-  const { trainerName, email, password, password2 } = user;
+  const { password, password2 } = user;
 
   const onChange = e => {
     setUser({
@@ -48,20 +68,27 @@ function Register(props) {
 
   const onSubmit = e => {
     e.preventDefault();
-    if (trainerName === '' || email === '' || password === '') {
-    } else if (password !== password2) {
-      alert('패스워드가 일치하지 않습니다.');
-    } else if (!agreement) {
-      alert('약관에 동의하세요');
-    } else {
-      dispatch({
-        type: REGISTER_REQUEST,
-        payload: {
-          trainerName, email, password, 'agreementId': 1,
-        },
-      });
+    if (isNameError === '' && isEmailError === '') {
+      if (password !== password2) {
+        alert('패스워드가 일치하지 않습니다.');
+      } else if (!agreement) {
+        alert('약관에 동의하세요');
+      } else {
+        dispatch({
+          type: REGISTER_REQUEST,
+          payload: {
+            trainerName, email, password, 'agreementId': 1,
+          },
+        });
+      }
     }
   };
+
+  const errorMsg = (errorMsg) => {
+    return(
+      <span style={{color: 'red'}}>{errorMsg}</span>
+    )
+  }
 
   return (
     <div>
@@ -82,9 +109,10 @@ function Register(props) {
               value={trainerName}
               placeholder="트레이너 이름"
               required
-              onChange={onChange}
+              onChange={onChangeTrainerNameName}
             />
           </div>
+          {isNameError === 'MIN_LENGTH_ERROR' && errorMsg('2자 이상 입력해주세요')}
           <div>
             <label htmlFor="email">이메일</label>
             <Input
@@ -93,9 +121,11 @@ function Register(props) {
               value={email}
               placeholder="이메일"
               required
-              onChange={onChange}
+              onChange={onChangeEmail}
             />
           </div>
+            {isEmailError === 'MIN_LENGTH_ERROR' && errorMsg('5자 이상 입력해주세요.')}
+            {isEmailError === 'TYPE_ERROR' && errorMsg('이메일 형식을 지켜주세요')}
           <div>
             <label htmlFor="password">비밀번호</label>
             <Input
