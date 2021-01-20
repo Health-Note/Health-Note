@@ -23,6 +23,9 @@ const Dashboard = () => {
   useEffect(() => {
     // eslint-disable-next-line
     const firstSegment = location.pathname.split('/')[1];
+
+    dispatch({ type: LOAD_USER })
+
     switch (firstSegment) {
       case 'login' :
         setKey('2');
@@ -42,7 +45,6 @@ const Dashboard = () => {
         setKey('1');
         return
     }
-      dispatch({type: LOAD_USER})
   }, []);
 
   const handleClick = (e) => {
