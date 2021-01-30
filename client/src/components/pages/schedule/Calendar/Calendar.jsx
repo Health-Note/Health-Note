@@ -149,6 +149,9 @@ function Calendar() {
       dispatch(createScheduleAction(memberId, memberName, startTime, endTime, 0, day));
     }
       info.event.remove();
+    message.success(
+        `[${memberName}] 회원님의 스케줄이 ${day}에 추가되었습니다`
+    );
   };
 
   // const eventRender = ({event, el}) => {
