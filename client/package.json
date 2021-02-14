@@ -21,6 +21,7 @@
     "array-move": "^2.2.1",
     "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
+    "emotion": "^11.0.0",
     "immer": "^6.0.5",
     "material-table": "^1.57.2",
     "moment": "^2.25.3",
