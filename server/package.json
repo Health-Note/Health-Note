@@ -4,10 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "aws": "cross-env DEBUG=log NODE_ENV=aws node app",
+    "aws": "cross-env DEBUG=log NODE_ENV=aws nodemon app",
     "local": "cross-env NODE_ENV=local node app",
     "start": "node app",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "nodemon --watch app.js"
   },
   "author": "",
   "license": "ISC",
@@ -31,5 +31,8 @@
     "swagger-ui-express": "^4.1.4",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^4.4.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }
