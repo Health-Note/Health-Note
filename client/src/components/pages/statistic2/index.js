@@ -5,10 +5,25 @@ import CustomRadarChart from '../../context/molecules/CustomRadarChart';
 
 const { Option } = Select;
 
+// 기간에 따른 빈도수
+const dummyData = {
+  pieChart: {
+    name: {
+      exerciseName1: 10,
+      exerciseName2: 20,
+      exerciseName3: 30,
+    },
+    name2: {
+      exerciseName1: 15,
+      exerciseName2: 20,
+      exerciseName3: 35,
+    }
+  },
+
+};
+
 const Statistics = ({ member: curMember, history }) => {
     const { members } = useSelector(state => state.member);
-
-
 
   if (typeof curMember === 'undefined') {
     curMember = members[0];
