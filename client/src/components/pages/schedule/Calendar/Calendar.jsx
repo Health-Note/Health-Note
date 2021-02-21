@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {Row, Col} from 'antd';
 import moment from 'moment';
+import { css, jsx } from '@emotion/core'
+
+// 풀 캘린더 라이브러리 import
 import '@fullcalendar/core/main.css';
 import '@fullcalendar/timegrid/main.css';
 import FullCalendar from '@fullcalendar/react';
@@ -9,6 +12,8 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
 import koLocale from '@fullcalendar/core/locales/ko';
+
+// 컴포넌트 import
 import useToggle from '../../../../hooks/useToggle';
 import { message } from 'antd';
 import './Calendar.css';
@@ -37,6 +42,16 @@ function Calendar() {
   const [start, setStart] = useState([]);
   const [modalState, toggleModal] = useToggle(false);
 
+  const spanStyle = css`
+  background-color: hotpink;
+  font-size: 24px;
+  border-radius: 4px;
+  padding: 32px;
+  text-align: center;
+  &:hover {
+    color: white;
+  }
+`
   // // 내부 이벤트 초기화
   // useEffect(() => {
   //   setScheduleList(schedules);
@@ -139,6 +154,7 @@ function Calendar() {
     const memberId = info.event.extendedProps.memberId; // 멤버 아이디
     const memberName = info.event.title; // 멤버 아이디
     const day = moment(info.event.start).format('YYYY-MM-DD'); // 날짜
+
     if (info.view.type === 'dayGridMonth') {
       const startTime = '20:00'; // 시작 시간
       const endTime = moment(info.event.start).add(1, 'hours').format('HH:mm'); // 끝 시간
@@ -148,7 +164,12 @@ function Calendar() {
       const endTime = moment(info.event.start).add(1, 'hours').format('HH:mm'); // 끝 시간
       dispatch(createScheduleAction(memberId, memberName, startTime, endTime, 0, day));
     }
-      info.event.remove();
+
+    info.event.remove();
+
+    message.success(
+        `[${memberName}] 회원님의 스케줄이 ${day}에 추가되었습니다`
+    );
   };
 
   // const eventRender = ({event, el}) => {

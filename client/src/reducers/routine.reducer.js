@@ -5,7 +5,9 @@ import {
   DELETE_ROUTINE,
   SET_UPDATE_ROUTINES,
   GET_ROUTINES_REQUEST,
-  SAVE_ROUTINES_SUCCESS, CLEAR_ROUTINE,
+  SAVE_ROUTINES_SUCCESS,
+  SAVE_ROUTINES_ERROR,
+  CLEAR_ROUTINE,
 } from './types';
 import produce from 'immer';
 
@@ -13,7 +15,9 @@ const initialState = {
   scheduleId: null,
   loaded:[],
   routines: [],
-  deleteRoutine: []
+  deleteRoutine: [],
+  saveRoutineDone: false,
+  routineError: null
 }
 
 export const getRoutinesAction = (scheduleId) => {
@@ -69,6 +73,12 @@ const reducer = (state = initialState, action) => {
         draft.loaded = action.payload.updateRoutine.map(cv => cv.id);
         draft.routines = action.payload.updateRoutine;
         draft.deleteRoutine = [];
+        draft.routineError = null;
+        draft.saveRoutineDone = true;
+        break;
+      case SAVE_ROUTINES_ERROR:
+        draft.saveRoutineDone = false;
+        draft.routineError = action.payload.e;
         break;
       case GET_ROUTINES_SUCCESS: // [{},{},{}]
         draft.scheduleId = parseInt(action.payload.scheduleId);
@@ -88,6 +98,7 @@ const reducer = (state = initialState, action) => {
           targetCode: parseInt(routine.weightTraining.targetCode),
         }));
         draft.deleteRoutine = [];
+        draft.saveRoutineDone = false;
         break;
       case SET_UPDATE_ROUTINES:
         draft.scheduleId = action.payload.scheduleId;
@@ -122,18 +133,21 @@ const reducer = (state = initialState, action) => {
             };
           }
         })
+          draft.saveRoutineDone = false;
         break;
       case DELETE_ROUTINE:
         draft.routines = state.routines.filter(routine => action.payload.id !== routine.id);
         draft.deleteRoutine = state.loaded.includes(action.payload.id) ?
           [...state.deleteRoutine, action.payload.id] :
           [...state.deleteRoutine];
+        draft.saveRoutineDone = false;
         break;
       case CLEAR_ROUTINE:
         draft.scheduleId = null;
         draft.loaded = [];
         draft.routines = [];
         draft.deleteRoutine = [];
+        draft.saveRoutineDone = false;
         break;
       default:
         return state;
