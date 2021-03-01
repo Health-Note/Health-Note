@@ -38,4 +38,6 @@ db.weightTraining.belongsTo(db.routine, { foreignKey: 'routineId' })
 // db.weightTraining.belongsTo(db.routine, { foreignKey: 'scheduleId' });
 // db.weightTraining.belongsTo(db.routine, { foreignKey: 'exerciseCode' });
 
+db.weightTraining.belongsTo(db.exercise, { foreignKey: 'exerciseCode' })
+
 module.exports = { sequelize, db };
