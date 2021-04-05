@@ -8,10 +8,10 @@ const getStatistics = async (memberId) => {
       where: {
         memberId: memberId,
       },
-      group: ['exerciseCode'],
+      group: ['weightTraining.exerciseCode'],
       include: [{
         model: db.exercise,
-        attributes: ['exerciseName'],
+        attributes: ['exerciseName', [sequelize.fn('count', sequelize.col('memberId')), 'count'],],
       }],
     });
 
