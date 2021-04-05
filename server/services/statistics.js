@@ -3,16 +3,24 @@ const { db, sequelize } = require('../models');
 const Op = sequelize.Op;
 
 const getStatistics = async (memberId) => {
-  const result = await db.weightTraining.findAndCountAll({
-    where: {
-      memberId: memberId,
-    },
-  })
-  .catch(err => {
-    throw new Error(err);
-  });
-  console.dir(result);
-  return result;
+  try {
+    const result = await db.weightTraining.findAll({
+      where: {
+        memberId: memberId,
+      },
+      group: ['exerciseCode'],
+      include: [{
+        model: db.exercise,
+        attributes: ['exerciseName'],
+      }],
+    });
+
+    console.dir(result);
+    return result;
+  } catch (err) {
+    console.log(err)
+    throw err;
+  }
 };
 
 
